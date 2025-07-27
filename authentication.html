@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f2f2f2; }
+    .modal-overlay {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none; justify-content: center; align-items: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: white; padding: 20px;
+      width: 100%; max-width: 400px;
+      border-radius: 10px; position: relative;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .modal h3 { margin-top: 0; }
+    .modal input {
+      width: 100%; padding: 10px;
+      margin: 10px 0; border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .btn-primary {
+      background: #007bff; color: white;
+      padding: 10px; border: none;
+      width: 100%; border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #0056b3; }
+    .link { color: #007bff; cursor: pointer; display: block; margin: 10px 0; text-align: center; }
+    .close-btn {
+      position: absolute; top: 10px; right: 10px;
+      font-size: 20px; background: none; border: none; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginOverlay">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('loginOverlay')">&times;</button>
+    <h3>Login</h3>
+    <input type="text" id="loginInput" placeholder="Username, Email or Mobile Number">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button class="btn-primary" onclick="loginUser()">Login</button>
+    <span class="link" onclick="switchModal('loginOverlay','registerOverlay')">New member? Register here</span>
+    <span class="link" onclick="switchModal('loginOverlay','forgotOverlay')">Forgot password? Click here</span>
+  </div>
+</div>
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="registerOverlay">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('registerOverlay')">&times;</button>
+    <h3>Register</h3>
+    <input type="text" id="regName" placeholder="Full Name">
+    <input type="text" id="regUsername" placeholder="Username">
+    <input type="tel" id="regPhone" placeholder="Phone (e.g. +254712345678)">
+    <input type="email" id="regEmail" placeholder="Email Address">
+    <input type="password" id="regPass" placeholder="Password">
+    <input type="password" id="regConfirmPass" placeholder="Confirm Password">
+    <button class="btn-primary" onclick="registerUser()">Register</button>
+    <span class="link" onclick="switchModal('registerOverlay','loginOverlay')">Already have an account? Login</span>
+    <span class="link" onclick="switchModal('registerOverlay','forgotOverlay')">Forgot password? Click here</span>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD MODAL -->
+<div class="modal-overlay" id="forgotOverlay">
+  <div class="modal" id="forgotStep1">
+    <button class="close-btn" onclick="closeModal('forgotOverlay')">&times;</button>
+    <h3>Forgot Password</h3>
+    <input type="tel" id="forgotPhone" placeholder="Enter your mobile number (e.g. +254...)">
+    <button class="btn-primary" onclick="sendResetCode()">Send Reset Code</button>
+  </div>
+  <div class="modal" id="forgotStep2" style="display:none;">
+    <h3>Enter Reset Code</h3>
+    <input type="text" id="resetCode" placeholder="6-digit code">
+    <button class="btn-primary" onclick="verifyCode()">Verify Code</button>
+  </div>
+  <div class="modal" id="forgotStep3" style="display:none;">
+    <h3>Set New Password</h3>
+    <input type="password" id="newPass" placeholder="New Password">
+    <input type="password" id="confirmNewPass" placeholder="Confirm Password">
+    <button class="btn-primary" onclick="setNewPassword()">Set Password</button>
+  </div>
+</div>
+
+<!-- OPTIONAL LOGOUT BUTTON (for testing) -->
+<div style="text-align: center; margin-top: 2rem;">
+  <button onclick="logoutUser()" class="btn-primary" style="width: 200px;">Logout</button>
+</div>
+
+<script>
+function openModal(id) {
+  document.getElementById(id).style.display = 'flex';
+}
+
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+function switchModal(closeId, openId) {
+  closeModal(closeId);
+  openModal(openId);
+}
+
+function loginUser() {
+  var user = document.getElementById("loginInput").value;
+  var pass = document.getElementById("loginPassword").value;
+  if (!user || !pass) return alert("Please fill all fields");
+
+  localStorage.setItem("user", JSON.stringify({ username: user }));
+  alert("Login successful!");
+  window.location.href = "index.html";
+}
+
+function registerUser() {
+  var name = document.getElementById("regName").value;
+  var user = document.getElementById("regUsername").value;
+  var phone = document.getElementById("regPhone").value;
+  var email = document.getElementById("regEmail").value;
+  var pass = document.getElementById("regPass").value;
+  var confirm = document.getElementById("regConfirmPass").value;
+  if (!name || !user || !phone || !email || !pass || !confirm) return alert("Please fill all fields");
+  if (pass !== confirm) return alert("Passwords do not match");
+
+  localStorage.setItem("user", JSON.stringify({ username: user }));
+  alert("Registration successful!");
+  window.location.href = "index.html";
+}
+
+var generatedCode = "";
+
+function sendResetCode() {
+  var phone = document.getElementById("forgotPhone").value;
+  if (!phone) return alert("Enter your phone number");
+
+  generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+  alert("Code sent to " + phone + ": " + generatedCode);
+
+  document.getElementById("forgotStep1").style.display = 'none';
+  document.getElementById("forgotStep2").style.display = 'block';
+}
+
+function verifyCode() {
+  var code = document.getElementById("resetCode").value;
+  if (code !== generatedCode) return alert("Invalid code");
+
+  document.getElementById("forgotStep2").style.display = 'none';
+  document.getElementById("forgotStep3").style.display = 'block';
+}
+
+function setNewPassword() {
+  var newPass = document.getElementById("newPass").value;
+  var confirmNew = document.getElementById("confirmNewPass").value;
+  if (!newPass || !confirmNew) return alert("Fill all fields");
+  if (newPass !== confirmNew) return alert("Passwords do not match");
+
+  alert("Password reset successfully!");
+  closeModal('forgotOverlay');
+  openModal('loginOverlay');
+}
+
+function logoutUser() {
+  localStorage.removeItem("user");
+  alert("You have been logged out.");
+  window.location.href = "index.html";
+}
+
+// Auto open login modal on load
+window.onload = function () {
+  openModal('loginOverlay');
+};
+</script>
+</body>
+</html>

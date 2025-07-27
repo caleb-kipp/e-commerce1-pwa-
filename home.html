@@ -1,0 +1,1328 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+  <title>3D E-Commerce Site</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1d1d1d;
+      --secondary: #494949;
+      --accent: #3498db;
+      --white: #fff;
+      --dark: #1a1a1a;
+    }body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #E6E6FA; /* Lavender - soft light violet */
+}
+ 
+.hero {
+  position: relative;
+  height: 20vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: background-image 1s ease-in-out;
+}
+
+.hero-content {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 40px;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 700px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.buy-button {
+  background: var(--accent);
+  color: var(--white);
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+.buy-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+section {
+  padding: 5px 5px;
+}
+
+h2.section-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 5px;
+  color: var(--primary);
+}
+
+.carousel {
+  overflow-x: auto;
+  display: flex;
+  gap: 20px;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  min-width: 250px;
+  flex: 0 0 auto;
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.3s;
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: perspective(800px) rotateY(2deg) scale(1.03);
+}
+
+.card img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 5px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.card-price {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.product-category {
+  margin-top: 10px;
+}
+
+footer.bottom-nav {
+  background: var(--primary);
+  color: var(--white);
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+}
+
+.top-nav, .main-nav {
+  padding: 10px 20px;
+  background-color: #222;
+  color: white;
+}
+
+.top-nav a, .main-nav a {
+  margin-right: 15px;
+  color: white;
+  text-decoration: none;
+}
+
+.search-bar {
+  display: flex;
+  margin-left: auto;
+}
+
+.search-bar select,
+.search-bar input,
+.search-bar button {
+  margin-left: 5px;
+  padding: 5px;
+}
+
+.vertical-nav {
+  width: 200px;
+  padding: 20px;
+  background-color: #f3f3f3;
+}
+
+
+/* Button Styles */
+.product button {
+  background-color: #ff9900;
+  color: white;
+  border: none;
+  padding: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.product button:hover {
+  background-color: #e68a00;
+}
+
+/* Wishlist Button */
+
+wishlist-btn {  
+  background-color: #e6005c;  
+  margin-left: 10px;  
+  margin-top: 0px;  
+}  
+  
+.wishlist-btn:hover {
+  background-color: #cc0052;
+}
+
+/* Star Rating */
+.rating {
+  color: gold;
+  font-size: 16px;
+  margin: 5px 0;
+}
+.product {
+  border: 1px solid #ccc;
+  padding: 15px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 370px; /* Set a height to align buttons at same level */
+  position: relative;
+}
+
+
+
+.product .btn-group {
+  margin-top: auto;
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+  width: 100%;
+}
+
+.product button {
+  padding: 8px;
+  border: none;
+  background-color: #777777;
+  color: white;
+  cursor: pointer;
+  width: 50%;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.product button:hover {
+  background-color: #0056b3;
+}
+   
+
+    .cart-sidebar, .wishlist-sidebar {
+      position: fixed; top: 0; right: -350px; width: 300px; height: 100%;
+      background: #f9f9f9; box-shadow: -2px 0 5px rgba(128, 128, 128, 1);
+      padding: 15px; transition: right 0.3s ease-in-out; overflow-y: auto;
+    }
+    .cart-sidebar.open, .wishlist-sidebar.open { right: 0; }
+    .close-btn { background: red; color: white; border: none; font-size: 18px; float: right; cursor: pointer; }
+    .cart-btn, .wishlist-toggle {
+      position: fixed; margin-top: 0px; right: 20px; padding: 10px 15px;
+      font-size: 16px; background: #000; color: #fff; border: none; border-radius: 5px;
+      cursor: pointer;
+    }
+    .wishlist-toggle { right: 120px; }
+    .cart-count { background: red; border-radius: 50%; padding: 3px 8px; margin-left: 5px; }
+    .notification {
+      position: fixed; top: 20px; right: 20px; background: green;
+      color: white; padding: 10px 15px; display: none; border-radius: 5px;
+    }
+    .cart-item, .wishlist-item {
+      display: flex; gap: 10px; margin-bottom: 10px;
+    }
+    .qty-controls button {
+      padding: 2px 5px;
+      
+    }
+    .footer {
+  background-color: #222;
+  color: #fff;
+  padding: 40px 20px 20px;
+  font-size: 14px;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-between;
+}
+
+.footer-column {
+  flex: 1 1 200px;
+  min-width: 180px;
+}
+
+.footer-column h4 {
+  margin-bottom: 10px;
+  color: #ff9900;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+  color: #fff;
+}
+
+.payment-icons img,
+.security-icons img,
+.social-icons img {
+  width: 40px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.social-icons a {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.footer-bottom {
+  border-top: 1px solid #444;
+  text-align: center;
+  padding-top: 15px;
+  margin-top: 20px;
+  color: #aaa;
+}
+
+.footer-bottom a {
+  color: #ff9900;
+  text-decoration: none;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+header {
+  background: #333;
+  color: white;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  display: none;
+}
+
+
+
+.vertical-nav {
+  width: 250px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.vertical-nav h3,
+.vertical-nav h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.vertical-nav ul {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+.vertical-nav li {
+  margin-bottom: 8px;
+}
+
+.vertical-nav a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+.vertical-nav a:hover {
+  color: #007bff;
+}
+
+.sidebar-section {
+  margin-bottom: 25px;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .toggle-btn {
+    display: block;
+  }
+
+  .vertical-nav {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    height: 100%;
+    transform: translateX(-100%);
+    z-index: 999;
+  }
+
+  .vertical-nav.active {
+    transform: translateX(0);
+    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+  }
+
+  .layout.d-flex {
+    flex-direction: column;
+  }
+
+  .content {
+    margin-top: 20px;
+  }
+}
+
+
+.carousel-container {
+  height: 450px;
+  width: 1400px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.carousel-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.carousel-track {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 16px;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 8px;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  flex: 0 0 calc(100% / 6 - 16px);
+  max-width: 400px;
+  background: #fff;
+  border-radius: 8px;
+  scroll-snap-align: start;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.card img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+.card-content {
+  padding: 8px;
+  text-align: center;
+}
+
+@media (max-width: 1200px) {
+  .card { flex: 0 0 calc(100% / 5 - 16px); }
+}
+@media (max-width: 992px) {
+  .card { flex: 0 0 calc(100% / 4 - 16px); }
+}
+@media (max-width: 768px) {
+  .card { flex: 0 0 calc(100% / 3 - 16px); }
+}
+@media (max-width: 576px) {
+  .card { flex: 0 0 calc(100% / 2 - 16px); }
+}
+@media (max-width: 400px) {
+  .card { flex: 0 0 100%; }
+}
+.products-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  background-color: #fafafa;
+}
+
+/* Shared Product Box */
+.product, .single-product {
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  box-sizing: border-box;
+  text-align: center;
+  width: 100%;
+  height: 550px;
+}
+
+/* Product Title */
+.product-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Grid for Multiple Items */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  justify-items: center;
+}
+
+.product-item img {
+  width: 198px;
+  height: 199px;
+  object-fit: cover;
+  border-radius: 1px;
+}
+
+.product-item p {
+  margin-top: 3px;
+  font-size: 10px;
+  color: #333;
+}
+
+/* Single Product Box */
+.single-product {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+
+.single-product img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+.single-product-info {
+  padding: 15px;
+  text-align: center;
+}
+
+.single-product-info h2 {
+  margin: 10px 0 5px;
+  font-size: 20px;
+  color: #222;
+}
+
+.single-product-info p {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .products-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .products-section {
+    grid-template-columns: 1fr;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-item img {
+    width: 100%;
+    height: auto;
+  }
+}
+  </style>
+</head>
+<body>
+  <!-- Secondary Navbar -->
+  <div class="top-nav d-flex justify-content-between">
+    <div>
+      <a href="#">Help & Support</a>
+      <a href="#">Quick Links</a>
+      <a href="#">AI Shopping Assistant</a>
+    </div>
+    <div>
+      <a href="#">EN</a>
+      <a href="#">$ USD</a>
+    </div>
+  </div>
+
+  <!-- Main Navbar -->
+  <div class="main-nav d-flex align-items-center">
+    <a href="#" class="navbar-brand text-white">Amazon</a>
+    <a href="#" class="text-white ms-3">Deliver to Riwo</a>
+    <div class="search-bar">
+      <select>
+        <option>All</option>
+        <option>Electronics</option>
+        <option>Books</option>
+      </select>
+<input type="text" placeholder="Search products...">
+      <button>Search</button>
+    </div>  <!-- Wishlist Toggle Button -->
+  <button class="wishlist-toggle" onclick="toggleWishlist()">Wishlist</button>
+      <!-- Cart Button -->
+  <button class="cart-btn" onclick="toggleCart()">
+    <span class="cart-icon">🛒</span>
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+    <div class="icon-tools">
+      <i class="fas fa-heart"></i>
+      <i class="fas fa-shopping-cart" onclick="toggleCart()"></i>
+    </div>
+  </div>
+
+<header>
+  <button class="toggle-btn" onclick="document.querySelector('.vertical-nav').classList.toggle('active')">
+    ☰ Categories
+  </button>
+</header>
+
+ <section class="hero" id="hero">
+    <div class="hero-content">
+      <h1 id="hero-title">Welcome to Our Shop</h1>
+      <p id="hero-description">Discover the best fashion, gadgets, and more.</p>
+      <a href="#products" class="buy-button">Shop Now</a>
+    </div>
+  </section>  
+  <div class="products-section">
+
+  <!-- Container 1: Multiple products -->
+  <div class="product">
+    <div class="product-title">Men's Casual Wear</div>
+    <div class="product-grid">
+      <div class="product-item" onclick="redirectToCategory('Fashion')">
+        <img src="fashion.jpg" alt="Jeans">
+        <p>Jeans</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Fashion')">
+        <img src="fashion1.jpg" alt="Sneakers">
+        <p>Sneakers</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Fashion')">
+        <img src="fashion2.jpg" alt="T-shirt">
+        <p>T-shirt</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Fashion')">
+        <img src="fashion3.jpg" alt="Jacket">
+        <p>Jacket</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container 2: Multiple products -->
+  <div class="product">
+    <div class="product-title">Women's Casual Wear</div>
+    <div class="product-grid">
+      <div class="product-item" onclick="redirectToCategory('Fashion')">
+        <img src="fashion4.jpg" alt="Dress">
+        <p>Dress</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Fashion')">
+        <img src="fashion5.jpg" alt="Heels">
+        <p>Heels</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Fashion')">
+        <img src="fashion6.jpg" alt="Blouse">
+        <p>Blouse</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Fashion')">
+        <img src="fashion7.jpg" alt="Bag">
+        <p>Bag</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Container 3: Single product full width -->
+ 
+  <div class="product">
+    <div class="product-title">Men's Casual Wear</div>
+    <div class="product-grid">
+      <div class="product-item" onclick="redirectToCategory('Fashion')">
+        <img src="fashion8.jpg" alt="Jeans">
+        <p>Jeans</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Elecronics')">
+        <img src="e.jpg" alt="Sneakers">
+        <p>Sneakers</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home.jpg" alt="T-shirt">
+        <p>T-shirt</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Elecronics')">
+        <img src="e1.jpg" alt="Jacket">
+        <p>Jacket</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+<section class="products-section">
+  <!-- Product Container 1 - Single Image -->
+  <div class="single-product">
+       <div class="single-product-info">
+      <h2>Special Offer</h2>
+      <p>Up to 50% off on selected items</p>
+    <img src="home1.jpg" alt="Big Banner">
+    </div>
+  </div>
+
+  <!-- Product Container 2 - Multiple Products -->
+  <div class="product">
+    <div class="product-title">Casual Wear</div>
+    <div class="product-grid">
+      <div class="product-item" onclick="redirectToCategory('Fashion')">
+        <img src="fashion9.jpg" alt="Jeans">
+        <p>Jeans</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e2.jpg" alt="Sneakers">
+        <p>Sneakers</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e3.jpg" alt="T-shirt">
+        <p>T-shirts</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e4.jpg" alt="Jacket">
+        <p>Jackets</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Container 3 - Single Image -->
+  <div class="single-product">
+       <div class="single-product-info">
+      <h2>Special Offer</h2>
+      <p>Up to 50% off on selected items</p>
+    <img src="home2.jpg" alt="Big Banner">
+    </div>
+  </div>
+
+  <!-- Unaweza kuongeza zaidi hapa chini... -->
+</section>
+      <!-- Extra Products Section -->
+<section class="product-category">
+  <div class="carousel-container">
+    <h2 class="carousel-title">More You May Like</h2>
+
+    <div class="carousel-track">
+      <div class="card" onclick="redirectToCategory('Home')">
+        <img src="home3.jpg" alt="Backpack">
+        <div class="card-content">
+          <h3 class="card-title">Casual Backpack</h3>
+          <p class="card-price">$39.99</p>
+        </div>
+      </div>
+
+           <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e5.jpg" alt="Jacket">
+        <div class="card-content">
+          <h3 class="card-title">Winter Jacket</h3>
+          <p class="card-price">$59.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e6.jpg" alt="Smartwatch">
+        <div class="card-content">
+          <h3 class="card-title">Smart Watch</h3>
+          <p class="card-price">$120.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Home')">
+        <img src="home4.jpg" alt="Sneakers">
+        <div class="card-content">
+          <h3 class="card-title">Sneakers</h3>
+          <p class="card-price">$75.00</p>
+        </div>
+      </div>
+                 <div class="card" onclick="redirectToCategory('Home')">
+        <img src="home5.jpg" alt="Jacket">
+        <div class="card-content">
+          <h3 class="card-title">Winter Jacket</h3>
+          <p class="card-price">$59.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e7.jpg" alt="Smartwatch">
+        <div class="card-content">
+          <h3 class="card-title">Smart Watch</h3>
+          <p class="card-price">$120.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Home')">
+        <img src="home6.jpg" alt="Sneakers">
+        <div class="card-content">
+          <h3 class="card-title">Sneakers</h3>
+          <p class="card-price">$75.00</p>
+        </div>
+      </div>
+    
+      <!-- Repeat for more cards -->
+    </div>
+  </div>
+</section>
+<section class="products-section">
+  <!-- Product Container 3 - Single Image -->
+  <div class="single-product">
+       <div class="single-product-info">
+      <h2>Special Offer</h2>
+      <p>Up to 50% off on selected items</p>
+    <img src="e8.jpg" alt="Big Banner">
+
+    </div>
+  </div>
+  
+  <!-- Product Container 2 - Multiple Products -->
+  <div class="product">
+    <div class="product-title">Casual Wear</div>
+    <div class="product-grid">
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home7.jpg" alt="Jeans">
+        <p>Jeans</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e9.jpg" alt="Sneakers">
+        <p>Sneakers</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e10.jpg" alt="T-shirt">
+        <p>T-shirts</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e11.jpg" alt="Jacket">
+        <p>Jackets</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Container 3 - Multiple Products -->
+  <div class="product">
+    <div class="product-title">Casual Wear</div>
+    <div class="product-grid">
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home9.jpg" alt="Jeans">
+        <p>Jeans</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home10.jpg" alt="Sneakers">
+        <p>Sneakers</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home11.jpg" alt="T-shirt">
+        <p>T-shirts</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e12.jpg" alt="Jacket">
+        <p>Jackets</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unaweza kuongeza zaidi hapa chini... -->
+</section>
+<section class="product-category">
+<section class="product-category">
+  <div class="carousel-container">
+    <h2 class="carousel-title">More You May Like</h2>
+
+    <div class="carousel-track">
+      <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e13.jpg" alt="Backpack">
+        <div class="card-content">
+          <h3 class="card-title">Casual Backpack</h3>
+          <p class="card-price">$39.99</p>
+        </div>
+      </div>
+
+           <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e14.jpg" alt="Jacket">
+        <div class="card-content">
+          <h3 class="card-title">Winter Jacket</h3>
+          <p class="card-price">$59.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e15.jpg" alt="Smartwatch">
+        <div class="card-content">
+          <h3 class="card-title">Smart Watch</h3>
+          <p class="card-price">$120.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion5.jpg" alt="Sneakers">
+        <div class="card-content">
+          <h3 class="card-title">Sneakers</h3>
+          <p class="card-price">$75.00</p>
+        </div>
+      </div>
+                 <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion6.jpg" alt="Jacket">
+        <div class="card-content">
+          <h3 class="card-title">Winter Jacket</h3>
+          <p class="card-price">$59.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion7.jpg" alt="Smartwatch">
+        <div class="card-content">
+          <h3 class="card-title">Smart Watch</h3>
+          <p class="card-price">$120.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion8.jpg" alt="Sneakers">
+        <div class="card-content">
+          <h3 class="card-title">Sneakers</h3>
+          <p class="card-price">$75.00</p>
+        </div>
+      </div>
+    
+      <!-- Repeat for more cards -->
+    </div>
+  </div>
+</section>
+<section class="products-section">
+
+  <!-- Product Container 1 - Multiple Products -->
+  <div class="product">
+    <div class="product-title">Casual Wear</div>
+    <div class="product-grid">
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home1.jpg" alt="Jeans">
+        <p>Jeans</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home2.jpg" alt="Sneakers">
+        <p>Sneakers</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home3.jpg" alt="T-shirt">
+        <p>T-shirts</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home4.jpg" alt="Jacket">
+        <p>Jackets</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Container 2 - Multiple Products -->
+  <div class="product">
+    <div class="product-title">Casual Wear</div>
+    <div class="product-grid">
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e.jpg" alt="Jeans">
+        <p>Jeans</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e1.jpg" alt="Sneakers">
+        <p>Sneakers</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e2.jpg" alt="T-shirt">
+        <p>T-shirts</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e3.jpg" alt="Jacket">
+        <p>Jackets</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Container 3 - Single Image -->
+  <div class="single-product">
+    <img src="home7.jpg" alt="Big Banner">
+    <div class="single-product-info">
+      <h2>Special Offer</h2>
+      <p>Up to 50% off on selected items</p>
+    </div>
+  </div>
+
+  <!-- Unaweza kuongeza zaidi hapa chini... -->
+</section>
+<section class="product-category">
+  <div class="carousel-container">
+    <h2 class="carousel-title">More You May Like</h2>
+
+    <div class="carousel-track">
+      <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e6.jpg" alt="Backpack">
+        <div class="card-content">
+          <h3 class="card-title">Casual Backpack</h3>
+          <p class="card-price">$39.99</p>
+        </div>
+      </div>
+
+           <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e7.jpg" alt="Jacket">
+        <div class="card-content">
+          <h3 class="card-title">Winter Jacket</h3>
+          <p class="card-price">$59.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e8.jpg" alt="Smartwatch">
+        <div class="card-content">
+          <h3 class="card-title">Smart Watch</h3>
+          <p class="card-price">$120.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e9.jpg" alt="Sneakers">
+        <div class="card-content">
+          <h3 class="card-title">Sneakers</h3>
+          <p class="card-price">$75.00</p>
+        </div>
+      </div>
+                 <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e10.jpg" alt="Jacket">
+        <div class="card-content">
+          <h3 class="card-title">Winter Jacket</h3>
+          <p class="card-price">$59.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e4.jpg" alt="Smartwatch">
+        <div class="card-content">
+          <h3 class="card-title">Smart Watch</h3>
+          <p class="card-price">$120.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Electronics')">
+        <img src="e3.jpg" alt="Sneakers">
+        <div class="card-content">
+          <h3 class="card-title">Sneakers</h3>
+          <p class="card-price">$75.00</p>
+        </div>
+      </div>
+    
+      <!-- Repeat for more cards -->
+    </div>
+  </div>
+</section>
+<section class="products-section">
+
+  <!-- Product Container 1 - Multiple Products -->
+  <div class="product">
+    <div class="product-title">Casual Wear</div>
+    <div class="product-grid">
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home4.jpg" alt="Jeans">
+        <p>Jeans</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home3.jpg" alt="Sneakers">
+        <p>Sneakers</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home1.jpg" alt="T-shirt">
+        <p>T-shirts</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Home')">
+        <img src="home.jpg" alt="Jacket">
+        <p>Jackets</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Container 2 - Single Image -->
+  <div class="single-product">
+    <img src="home10.jpg" alt="Big Banner">
+    <div class="single-product-info">
+      <h2>Special Offer</h2>
+      <p>Up to 50% off on selected items</p>
+    </div>
+  </div>
+
+  <!-- Unaweza kuongeza zaidi hapa chini... -->
+    <!-- Product Container 1 - Multiple Products -->
+  <div class="product">
+    <div class="product-title">Casual Wear</div>
+    <div class="product-grid">
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e3.jpg" alt="Jeans">
+        <p>Jeans</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e2.jpg" alt="Sneakers">
+        <p>Sneakers</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e1.jpg" alt="T-shirt">
+        <p>T-shirts</p>
+      </div>
+      <div class="product-item" onclick="redirectToCategory('Electronics')">
+        <img src="e.jpg" alt="Jacket">
+        <p>Jackets</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="product-category">
+  <div class="carousel-container">
+    <h2 class="carousel-title">More You May Like</h2>
+
+    <div class="carousel-track">
+      <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion2.jpg" alt="Backpack">
+        <div class="card-content">
+          <h3 class="card-title">Casual Backpack</h3>
+          <p class="card-price">$39.99</p>
+        </div>
+      </div>
+
+           <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion3.jpg" alt="Jacket">
+        <div class="card-content">
+          <h3 class="card-title">Winter Jacket</h3>
+          <p class="card-price">$59.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion4.jpg" alt="Smartwatch">
+        <div class="card-content">
+          <h3 class="card-title">Smart Watch</h3>
+          <p class="card-price">$120.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion5.jpg" alt="Sneakers">
+        <div class="card-content">
+          <h3 class="card-title">Sneakers</h3>
+          <p class="card-price">$75.00</p>
+        </div>
+      </div>
+                 <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion6.jpg" alt="Jacket">
+        <div class="card-content">
+          <h3 class="card-title">Winter Jacket</h3>
+          <p class="card-price">$59.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion7.jpg" alt="Smartwatch">
+        <div class="card-content">
+          <h3 class="card-title">Smart Watch</h3>
+          <p class="card-price">$120.00</p>
+        </div>
+      </div>
+           <div class="card" onclick="redirectToCategory('Fashion')">
+        <img src="fashion8.jpg" alt="Sneakers">
+        <div class="card-content">
+          <h3 class="card-title">Sneakers</h3>
+          <p class="card-price">$75.00</p>
+        </div>
+      </div>
+    
+      <!-- Repeat for more cards -->
+    </div>
+  </div>
+</section>
+<footer class="footer">
+  <div class="footer-container">
+    <!-- Customer Service -->
+    <div class="footer-column">
+      <h4>Customer Service</h4>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Shipping Information</a></li>
+        <li><a href="#">Returns & Exchanges</a></li>
+        <li><a href="#">Payment Methods</a></li>
+        <li><a href="#">Size Guides</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms & Conditions</a></li>
+      </ul>
+    </div>
+
+    <!-- About the Company -->
+    <div class="footer-column">
+      <h4>About Us</h4>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Sustainability</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="footer-column">
+      <h4>Contact & Support</h4>
+      <ul>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Live Chat</a></li>
+      </ul>
+    </div>
+
+    <!-- My Account -->
+    <div class="footer-column">
+      <h4>My Account</h4>
+      <ul>
+        <li><a href="#">Order History</a></li>
+        <li><a href="#">Account Details</a></li>
+        <li><a href="#">Address Book</a></li>
+      </ul>
+    </div>
+
+    <!-- Payment Methods & Trust -->
+    <div class="footer-column">
+      <h4>We Accept</h4>
+      <div class="payment-icons">
+        <img src="visa.png" alt="Visa">
+        <img src="mastercard.png" alt="Mastercard">
+        <img src="paypal.png" alt="PayPal">
+      </div>
+      <h4>Trusted By</h4>
+      <div class="security-icons">
+        <img src="secure.png" alt="Secure Checkout">
+      </div>
+    </div>
+
+    <!-- Social Media -->
+    <div class="footer-column">
+      <h4>Follow Us</h4>
+      <div class="social-icons">
+        <a href="#"><img src="facebook.svg" alt="Facebook"></a>
+        <a href="#"><img src="instagram.svg" alt="Instagram"></a>
+        <a href="#"><img src="twitter.svg" alt="Twitter"></a>
+        <a href="#"><img src="youtube.svg" alt="YouTube"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2025 Amazon Clone. All rights reserved. | <a href="#">Sitemap</a></p>
+  </div>
+</footer>
+  <script>
+    const heroImages = [
+      { url: 'e.jpg', title: "Explore Men's Collection", description: "Trendy and classy wear for every man." },
+      { url: 'home.jpg', title: "Elegant Women's Fashion", description: "Fresh styles for the season." },
+      { url: 'fashion.jpg', title: "Jewellery that Shines", description: "Sparkle in every occasion." },
+      { url: 'e3.jpg', title: "Latest Electronics", description: "Stay updated with tech." },
+    ];
+
+    let index = 0;
+    const hero = document.getElementById('hero');
+    const title = document.getElementById('hero-title');
+    const desc = document.getElementById('hero-description');
+
+    function changeHero() {
+      const current = heroImages[index];
+      hero.style.backgroundImage = `url(${current.url})`;
+      title.textContent = current.title;
+      desc.textContent = current.description;
+      index = (index + 1) % heroImages.length;
+    }
+// Change every 30 seconds (30000ms)
+    setInterval(changeHero, 30000);
+    changeHero();
+
+    function redirectToCategory(category) {
+      
+    // Redirect to eShop.html with category as query parameter
+    window.location.href = `eShop.html?category=${encodeURIComponent(category)}`;
+  }
+
+  const carousel = document.querySelector('.carousel');
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  carousel.addEventListener('mousedown', (e) => {
+    isDown = true;
+    carousel.classList.add('active');
+    startX = e.pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+  });
+
+  carousel.addEventListener('mouseleave', () => {
+    isDown = false;
+    carousel.classList.remove('active');
+  });
+
+  carousel.addEventListener('mouseup', () => {
+    isDown = false;
+    carousel.classList.remove('active');
+  });
+
+  carousel.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 1; // scroll speed
+    carousel.scrollLeft = scrollLeft - walk;
+  });
+  </script></section></body>
+</html>
+

@@ -1,0 +1,578 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://unpkg.com/@bigdatacloud/client-side-reverse-geocoding"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4CAF50">
+    <script src="modals.js"></script>
+        <link rel="stylesheet" href="modals.css">
+  <title>E‑Shop</title>
+
+  <meta name="description" content="Responsive AI‑powered online shop with smart filters, cart, wishlist and product 360° view.">
+  <style>
+    :root {
+      --primary: #0d6efd;
+      --secondary: #6c757d;
+      --accent: #f8f9fa;
+      --danger: #dc3545;
+      --success: #28a745;
+    }
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {font-family:'Segoe UI',Tahoma,Verdana,sans-serif;background:#f2f2f2;line-height:1.4;overflow-x:hidden;}
+    /* ─── TOP NAV ───────────────────────────────────────────── */
+    .top-nav{display:flex;justify-content:space-between;align-items:center;padding:.5rem 1rem;background:var(--primary);color:#fff}
+    .top-nav a,.top-nav button{color:#fff;text-decoration:none;margin:0 .5rem;background:none;border:none;cursor:pointer;font-size:.9rem}
+    .account-dropdown{position:relative}
+    .dropdown-menu{position:absolute;top:100%;right:0;background:#fff;color:#000;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.2);display:none;flex-direction:column;min-width:160px;z-index:10}
+    .dropdown-menu a{padding:.5rem 1rem;color:#333}
+    .dropdown-menu a:hover{background:var(--accent)}
+    .account-dropdown:hover .dropdown-menu{display:flex}
+    /* ─── MAIN NAV & SEARCH ────────────────────────────────── */
+    .main-nav{display:flex;align-items:center;padding:.5rem 1rem;background:#fff;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:20}
+    .logo{font-weight:700;font-size:1.2rem;margin-right:1rem;color:var(--primary)}
+    .search-bar{flex:1;position:relative}
+    .search-bar input{width:100%;padding:.5rem 1rem;border:1px solid #ccc;border-radius:20px;outline:none}
+    .search-bar button{position:absolute;right:5px;top:50%;transform:translateY(-50%);background:var(--primary);color:#fff;border:none;padding:.4rem 1rem;border-radius:20px;cursor:pointer}
+    .popular-searches{margin-left:1rem;display:flex;flex-wrap:wrap;gap:.5rem}
+    .popular-searches button{padding:.25rem .75rem;border-radius:15px;border:1px solid var(--primary);background:#fff;color:var(--primary);cursor:pointer;font-size:.75rem}
+    .popular-searches button:hover{background:var(--primary);color:#fff}
+    /* ─── BREADCRUMBS ───────────────────────────────────────── */
+    .breadcrumbs{padding:.5rem 1rem;font-size:.85rem;background:#f9f9f9;border-bottom:1px solid #eee}
+    .breadcrumbs a{color:var(--primary);text-decoration:none}
+    .breadcrumbs span{margin:0 .3rem}
+    /* ─── SIDEBAR FILTERS ──────────────────────────────────── */
+    .sidebar{position:fixed;top:118px;left:0;width:250px;height:calc(100% - 118px);overflow-y:auto;background:#fff;border-right:1px solid #ddd;padding:1rem}
+    .sidebar h3{margin-bottom:.5rem}
+    .filter-group{margin-bottom:1rem}
+    .filter-group label{display:block;margin:.25rem 0;font-size:.85rem}
+    #products-container{margin-top:0;margin-left:275px;padding:1rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+    @media(max-width:768px){#products-container{margin-left:0}.sidebar{position:static;width:100%;height:auto}}
+    @media(max-width:576px){#products-container{grid-template-columns:repeat(3,1fr)}}
+    /* ─── PRODUCT CARD ─────────────────────────────────────── */
+    .product-card{background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.1);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s ease}
+    .product-card:hover{transform:translateY(-3px)}
+    .product-card img{width:100%;height:180px;object-fit:cover}
+    .product-card .info{padding:.5rem .75rem;flex:1;display:flex;flex-direction:column;gap:.3rem}
+    .product-card .name{font-size:.9rem;font-weight:600}
+    .product-card .price{color:var(--success);font-weight:700}
+    .product-card .stock{font-size:.75rem}
+    .product-card .actions{margin-top:auto;display:flex;gap:.25rem}
+    .product-card .btn{flex:1;padding:.4rem;font-size:.8rem;border:none;cursor:pointer;border-radius:4px}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-outline{background:#fff;color:var(--primary);border:1px solid var(--primary)}
+    /* ─── PRODUCT MODAL ────────────────────────────────────── */
+    .product-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:999}
+    .modal-content{background:#fff;width:100%;max-width:1800px;height:100%; max-height:2100px;overflow-y:auto;border-radius:8px;display:flex;flex-wrap:wrap;padding:1rem;gap:1rem;position:relative;animation:fadeIn .3s ease}
+    @keyframes fadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+    .close-btn{position:absolute;top:10px;right:10px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;cursor:pointer}
+    .modal-left{flex:1 1 60%;min-width:300px;display:flex;flex-direction:column;gap:1rem;align-items:center}
+    .viewer{width:100%;aspect-ratio:16/9;background:#000;position:relative;overflow:hidden;border-radius:8px}
+    .viewer img{width:100%;height:100%;object-fit:cover;transition:transform .2s ease}
+    .modal-right{flex:1 1 35%;min-width:260px;display:flex;flex-direction:column;gap:.75rem}
+    .modal-right h2{margin-bottom:.5rem}
+    .related-carousel{width:100%;overflow-x:auto;display:flex;gap:1rem;padding:.5rem 0}
+    .related-card{min-width:140px;background:#fff;border:1px solid #eee;border-radius:6px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.1);cursor:pointer}
+    .related-card img{width:100%;height:100px;object-fit:cover}
+    .datasheet,.reviews,.comments-section{margin-top:1rem}
+    .datasheet table{width:100%;border-collapse:collapse}
+    .datasheet th,.datasheet td{border:1px solid #ccc;padding:.4rem;font-size:.85rem}
+    /* ─── CART MODAL ───────────────────────────────────────── */
+    .cart-modal{position:fixed;right:0;top:0;width:350px;height:100%;background:#fff;box-shadow:-2px 0 6px rgba(0,0,0,.2);transform:translateX(100%);transition:transform .3s ease;z-index:1000;display:flex;flex-direction:column}
+    .cart-modal.open{transform:translateX(0)}
+    .cart-header{padding:1rem;background:var(--primary);color:#fff;display:flex;justify-content:space-between;align-items:center}
+    .cart-items{flex:1;overflow-y:auto;padding:.5rem}
+    .cart-item{display:flex;gap:.5rem;margin-bottom:.75rem;border-bottom:1px solid #eee;padding-bottom:.5rem}
+    .cart-item img{width:70px;height:70px;object-fit:cover;border-radius:4px}
+    .cart-item .details{flex:1;font-size:.8rem}
+    .cart-footer{padding:1rem;border-top:1px solid #eee}
+    .recently-viewed, .similar-products {
+  margin-top: 1rem;
+}
+.recently-viewed h2, .similar-products h2 {
+  font-size: 1rem;
+  margin-bottom: .5rem;
+}
+.recent-scroll, .similar-grid {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding-bottom: .5rem;
+}
+.recent-scroll::-webkit-scrollbar, .similar-grid::-webkit-scrollbar {
+  height: 6px;
+}
+.recent-scroll::-webkit-scrollbar-thumb, .similar-grid::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+
+/* ─────── FILTER SIDEBAR ─────── */
+.sidebar h3 {
+  margin-bottom: 10px;
+}
+.filter-group {
+  margin-bottom: 20px;
+}
+.filter-group label {
+  display: block;
+  margin-top: 5px;
+}
+.btn-primary {
+  background: #333;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* ─────── RESPONSIVE FOR MOBILE ─────── */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
+
+  .top-nav,
+  .main-nav,
+  .breadcrumbs,
+  .search-bar,
+  .popular-searches {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .top-nav .left,
+  .top-nav .center,
+  .top-nav .right {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 5px 0;
+  }
+
+  .main-nav {
+    padding: 10px;
+  }
+
+  .search-bar {
+    flex-direction: row;
+    margin: 10px 0;
+   
+  }
+
+  .sidebar {
+    width: 100%;
+    display: none;
+    margin-left: 0;
+    padding: 10px;
+  }
+
+  .sidebar.active {
+    display: block;
+  }
+
+  main {
+    margin-left: 0;
+  }
+
+  .toggle-sidebar-btn {
+    display: block;
+    background: #444;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+  }
+}
+.popular-searches {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;       /* Enable horizontal scroll if needed */
+  white-space: nowrap;    /* Prevent button wrap */
+  padding: 10px 0;
+}
+
+.popular-searches button {
+  flex: 0 0 auto;         /* Prevent button from stretching */
+  background: #eee;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+  .custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+
+  .custom-modal .modal-content {
+    background: #fff;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 8px;
+    padding: 1rem;
+    position: relative;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .custom-modal .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--danger, red);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .dropdown-menu.show { display: flex; }
+  .dropdown-menu a {
+    padding: 0.5rem;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+  }
+  .profile-summary {
+    text-align: center;
+  }
+  .profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: .5rem;
+  }
+  /* Parent container */
+.parent-dropdown-container {
+  position: relative;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute; /* or fixed, if you want full overlay */
+  right: 1rem;
+  top: 60px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: .75rem;
+  display: none;
+  flex-direction: column;
+  z-index: 9999;
+  width: 200px;
+}
+  </style>
+</head>
+<body>
+
+  <!-- ─── TOP NAV ──────────────────────────────────────────── -->
+<nav class="top-nav">
+  <div class="left">
+    <a href="home.html" id="homeBtn">Home</a>
+    <a href="#" id="locationBtn">Location</a>
+<a href="modals.html?modal=chat">Chat Support</a>
+  </div>
+
+  <div class="center">
+    <button id="cartToggle">Cart (<span id="cartCount">0</span>)</button>
+<a href="modals.html?modal=wishlist">View Wishlist</a>
+<a href="modals.html?modal=orders">View Orders</a>
+  </div>
+
+  <div class="right">
+    <div class="account-dropdown">
+      <button id="accountBtn">Account ▾</button>
+      <div class="dropdown-menu">
+  <a href="authentication.html?modal=login">Login</a>
+  <a href="authentication.html?modal=register">Register</a>
+
+        <a href="#" id="forgotBtn">Forgot Password</a>
+        <a href="#">User Profile</a>
+        <a href="#">Settings</a>
+  <a href="authentication.html?modal=logout">Logout</a>
+      </div>
+    </div>
+  </div>
+</nav>
+  <!-- ─── MAIN NAV & SEARCH ───────────────────────────────── -->
+  <nav class="main-nav">
+    <div class="logo">E‑Shop</div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <button id="searchBtn">Search</button>
+    </div>
+    <div class="popular-searches" id="popularSearches">
+      <button data-search="Festival">Festival</button>
+      <button data-search="Season">Season</button>
+      <button data-search="Special">Special Occasion</button>
+    </div>
+  </nav>
+  <!-- ─── BREADCRUMBS ─────────────────────────────────────── -->
+  <div class="breadcrumbs" id="breadcrumbs">
+    <a href="#">Home</a><span>›</span><span>Shop</span>
+  </div>
+  <!-- ─── SIDEBAR FILTERS ─────────────────────────────────── -->
+  <aside class="sidebar">
+    <h3>Filter</h3>
+    <div class="filter-group">
+      <strong>Price</strong>
+      <label><input type="radio" name="price" value="all" checked> All</label>
+      <label><input type="radio" name="price" value="under2000"> Under 2000</label>
+      <label><input type="radio" name="price" value="2000to5000"> 2000 – 5000</label>
+      <label><input type="radio" name="price" value="above5000"> Above 5000</label>
+    </div>
+    <div class="filter-group">
+      <strong>Brand</strong>
+      <label><input type="checkbox" name="brand" value="BrandA"> Brand A</label>
+      <label><input type="checkbox" name="brand" value="BrandB"> Brand B</label>
+      <label><input type="checkbox" name="brand" value="BrandC"> Brand C</label>
+    </div>
+    <div class="filter-group">
+      <strong>Category</strong>
+      <label><input type="checkbox" name="category" value="Electronics"> Electronics</label>
+      <label><input type="checkbox" name="category" value="Fashion"> Fashion</label>
+      <label><input type="checkbox" name="category" value="Home"> Home</label>
+    </div>
+    <button id="applyFilters" class="btn btn-primary" style="width:100%">Apply Filters</button>
+  </aside>
+<section id="products-container">
+  <h2>Our Products</h2>
+  <!-- yaliyomo ya bidhaa hapa -->
+</section>
+<div class="product-modal" id="productModal">
+    <div class="modal-content">
+      <button class="close-btn" id="modalClose">&times;</button>
+      <div class="modal-left" id="modalLeft">
+        <div class="viewer" id="viewer"><img src="placeholder.jpg" alt="Product image" id="viewerImg"></div>
+        <div class="related-carousel" id="relatedCarousel"><!-- related items --></div>
+      </div>
+      
+      <div class="modal-right" id="modalRight">
+<h2 id="modalName" style="display:none;">Loading...</h2>
+        <p id="modalPrice" class="price"></p>
+        <p id="modalDesc"></p>
+        <div class="datasheet"><h3>Tech Specs</h3><table><tbody id="datasheetBody"></tbody></table></div>
+        <div class="actions"><button id="modalAddCart" class="btn btn-primary">Add to Cart</button><button id="modalWishlist" class="btn btn-outline">Wishlist</button></div>
+        
+<!-- Product Description -->
+<section class="product-description">
+  <h2>Product Description</h2>
+  <p id="modalFullDesc"></p>
+</section>
+
+<!-- Recently Viewed Products -->
+<section class="recently-viewed">
+  <h2>Recently Viewed</h2>
+  <div class="recent-scroll" id="recentViewedContainer"></div>
+</section>
+
+<!-- Similar Products -->
+<section class="similar-products">
+  <h2>Similar Products</h2>
+  <div class="similar-grid" id="similarProductsContainer"></div>
+</section>
+        <div class="reviews"><h3>Reviews</h3><div id="reviewList"></div><textarea id="reviewInput" placeholder="Write a review..." style="width:100%;margin-top:.5rem"></textarea><button id="submitReview" class="btn btn-primary" style="margin-top:.25rem">Submit</button></div>
+        <div class="comments-section"><h3>Comments</h3><textarea placeholder="Leave a comment..." style="width:100%"></textarea></div>
+      </div>
+    </div>
+  </div>
+  <!-- ─── CART MODAL ──────────────────────────────────────── -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-header"><h3>Your Cart</h3><button class="close-btn" style="position:static" id="cartClose">&times;</button></div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer"><p>Total: <strong id="cartTotal">0</strong></p><button id="checkoutBtn" class="btn btn-primary" style="width:100%">Checkout</button></div>
+  </div>
+<!-- ========== CUSTOMER CARE CHAT MODAL ========== -->
+<div class="custom-modal" id="chatModal">
+  <div class="modal-content">
+    <button class="close-btn" id="chatCloseBtn">&times;</button>
+    <h2>Customer Care Chat</h2>
+    <textarea id="chatMessage" placeholder="Type your message..." style="width: 100%; height: 100px;"></textarea>
+    <button id="chatSendBtn" class="btn btn-primary" style="margin-top: 1rem;">Send</button>
+  </div>
+</div>
+
+<!-- ========== WISHLIST MODAL ========== -->
+<div class="custom-modal" id="wishlistModal">
+  <div class="modal-content">
+    <button class="close-btn" id="wishlistCloseBtn">&times;</button>
+    <h2>Your Wishlist</h2>
+    <ul id="wishlistContent"></ul>
+  </div>
+</div>
+
+<!-- ========== ORDERS MODAL ========== -->
+<div class="custom-modal" id="ordersModal">
+  <div class="modal-content">
+    <button class="close-btn" id="ordersCloseBtn">&times;</button>
+    <h2>Your Orders</h2>
+    <div id="ordersContent"></div>
+  </div>
+</div>
+
+
+
+  <!-- ─── SCRIPTS ─────────────────────────────────────────── -->
+ 
+  <script>
+    
+    // Register service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(function (registration) {
+        console.log('✅ Service Worker registered with scope:', registration.scope);
+      })
+      .catch(function (error) {
+        console.error('❌ Service Worker registration failed:', error);
+      });
+  });
+}
+    /* ── SAMPLE DATA ──────────────────────────────────────── */
+    const products=[{id:1,name:"Smartphone X1",price:1500,brand:"BrandA",category:"Electronics",stock:30,desc:"Latest smartphone with amazing features.",img:"https://picsum.photos/seed/p1/400/300"},{id:2,name:"Laptop Pro 15",price:4500,brand:"BrandB",category:"Electronics",stock:15,desc:"High performance laptop.",img:"https://picsum.photos/seed/p2/400/300"},{id:3,name:"Designer Jacket",price:2500,brand:"BrandC",category:"Fashion",stock:22,desc:"Stylish jacket for all seasons.",img:"https://picsum.photos/seed/p3/400/300"},{id:4,name:"Bluetooth Speaker",price:800,brand:"BrandA",category:"Electronics",stock:40,desc:"Portable speaker with deep bass.",img:"https://picsum.photos/seed/p4/400/300"},{id:5,name:"Coffee Maker",price:1800,brand:"BrandB",category:"Home",stock:12,desc:"Brew perfect coffee every morning.",img:"https://picsum.photos/seed/p5/400/300"},{id:6,name:"Sneakers Classic",price:1200,brand:"BrandC",category:"Fashion",stock:35,desc:"Comfortable everyday sneakers.",img:"https://picsum.photos/seed/p6/400/300"},{id:7,name:"Smartwatch Z",price:2200,brand:"BrandA",category:"Electronics",stock:25,desc:"Track fitness and notifications.",img:"https://picsum.photos/seed/p7/400/300"},{id:8,name:"Microwave Oven",price:3500,brand:"BrandB",category:"Home",stock:10,desc:"Quick heating microwave oven.",img:"https://picsum.photos/seed/p8/400/300"},{id:9,name:"Elegant Dress",price:1700,brand:"BrandC",category:"Fashion",stock:18,desc:"Evening party dress.",img:"https://picsum.photos/seed/p9/400/300"},{id:10,name:"Headphones HD",price:900,brand:"BrandA",category:"Electronics",stock:27,desc:"High definition sound headphones.",img:"https://picsum.photos/seed/p10/400/300"},{id:11,name:"Sofa Cushion",price:600,brand:"BrandB",category:"Home",stock:50,desc:"Soft cushion for sofa.",img:"https://picsum.photos/seed/p11/400/300"},{id:12,name:"Leather Belt",price:400,brand:"BrandC",category:"Fashion",stock:60,desc:"Premium leather belt.",img:"https://picsum.photos/seed/p12/400/300"}];
+    
+    let cart=JSON.parse(localStorage.getItem("cart")||"[]");
+    
+    /* ── DOM ELEMENTS ─────────────────────────────────────── */
+    const productsContainer=document.getElementById("products-container"),searchInput=document.getElementById("searchInput"),searchBtn=document.getElementById("searchBtn"),popularSearches=document.getElementById("popularSearches"),applyFiltersBtn=document.getElementById("applyFilters"),productModal=document.getElementById("productModal"),viewerImg=document.getElementById("viewerImg"),modalName=document.getElementById("modalName"),modalPrice=document.getElementById("modalPrice"),modalDesc=document.getElementById("modalDesc"),datasheetBody=document.getElementById("datasheetBody"),relatedCarousel=document.getElementById("relatedCarousel"),modalAddCart=document.getElementById("modalAddCart"),modalWishlist=document.getElementById("modalWishlist"),modalClose=document.getElementById("modalClose"),cartModal=document.getElementById("cartModal"),cartToggle=document.getElementById("cartToggle"),cartClose=document.getElementById("cartClose"),cartItems=document.getElementById("cartItems"),cartTotal=document.getElementById("cartTotal"),cartCount=document.getElementById("cartCount"),checkoutBtn=document.getElementById("checkoutBtn");
+    /* ── RENDER PRODUCTS ──────────────────────────────────── */
+    function renderProducts(list){productsContainer.innerHTML="";list.forEach(p=>{const card=document.createElement("div");card.className="product-card";card.innerHTML=`<img src="${p.img}" alt=""><div class="info"><div class="name">${p.name}</div><div class="price">KES ${p.price}</div><div class="stock">${p.stock} in stock</div><div class="actions"><button class="btn btn-primary" data-id="${p.id}" data-action="add-cart">Cart</button><button class="btn btn-outline" data-id="${p.id}" data-action="wishlist">♥</button></div></div>`;card.addEventListener("click",e=>{if(e.target.dataset.action)return;openProductModal(p.id)});card.querySelector("[data-action='add-cart']").addEventListener("click",e=>{e.stopPropagation();addToCart(p.id)});productsContainer.appendChild(card)})}
+    /* ── FILTER & SEARCH ─────────────────────────────────── */
+    function applyFilters(){let filtered=[...products];const priceVal=document.querySelector("input[name='price']:checked").value;"under2000"===priceVal&&(filtered=filtered.filter(p=>p.price<2000)),"2000to5000"===priceVal&&(filtered=filtered.filter(p=>p.price>=2000&&p.price<=5000)),"above5000"===priceVal&&(filtered=filtered.filter(p=>p.price>5000));const brandChecked=[...document.querySelectorAll("input[name='brand']:checked")].map(cb=>cb.value);brandChecked.length&&(filtered=filtered.filter(p=>brandChecked.includes(p.brand)));const catChecked=[...document.querySelectorAll("input[name='category']:checked")].map(cb=>cb.value);catChecked.length&&(filtered=filtered.filter(p=>catChecked.includes(p.category)));const keyword=searchInput.value.trim().toLowerCase();keyword&&(filtered=filtered.filter(p=>p.name.toLowerCase().includes(keyword)||p.desc.toLowerCase().includes(keyword)));renderProducts(filtered)}
+    /* ── PRODUCT MODAL ───────────────────────────────────── */
+    
+  function openProductModal(id) {
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+
+    // Set product image and basic details
+    viewerImg.src = p.img;
+    viewerImg.style.transform = "rotateY(0deg)";
+    modalName.textContent = p.name;
+    modalPrice.textContent = "KES " + p.price;
+    modalDesc.textContent = p.desc;
+    document.getElementById("modalFullDesc").textContent = p.desc;
+
+    datasheetBody.innerHTML = `
+      <tr><th>Brand</th><td>${p.brand}</td></tr>
+      <tr><th>Category</th><td>${p.category}</td></tr>
+      <tr><th>Price</th><td>KES ${p.price}</td></tr>
+    `;
+
+    // Related products carousel (unchanged)
+    relatedCarousel.innerHTML = "";
+    products.filter(x => x.category === p.category && x.id !== p.id)
+      .slice(0, 6).forEach(r => {
+        const rel = document.createElement("div");
+        rel.className = "related-card";
+        rel.innerHTML = `<img src="${r.img}"><div style="padding:.25rem;font-size:.75rem">${r.name}</div>`;
+        rel.addEventListener("click", () => openProductModal(r.id));
+        relatedCarousel.appendChild(rel);
+      });
+
+    // Recently viewed logic
+    let recentlyViewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
+    recentlyViewed = recentlyViewed.filter(pid => pid !== id);
+    recentlyViewed.unshift(id);
+    if (recentlyViewed.length > 10) recentlyViewed.pop();
+    localStorage.setItem("recentlyViewed", JSON.stringify(recentlyViewed));
+
+    const recentDiv = document.getElementById("recentViewedContainer");
+    recentDiv.innerHTML = "";
+    recentlyViewed.filter(pid => pid !== id).slice(0, 10).forEach(pid => {
+      const rp = products.find(pr => pr.id === pid);
+      if (!rp) return;
+      const card = document.createElement("div");
+      card.className = "related-card";
+      card.innerHTML = `<img src="${rp.img}"><div style="padding:.25rem;font-size:.75rem">${rp.name}</div>`;
+      card.addEventListener("click", () => openProductModal(rp.id));
+      recentDiv.appendChild(card);
+    });
+
+    // Similar products logic
+    const simDiv = document.getElementById("similarProductsContainer");
+    simDiv.innerHTML = "";
+    products.filter(sp => sp.category === p.category && sp.id !== p.id)
+      .slice(0, 10).forEach(sp => {
+        const card = document.createElement("div");
+        card.className = "related-card";
+        card.innerHTML = `<img src="${sp.img}"><div style="padding:.25rem;font-size:.75rem">${sp.name}</div>`;
+        card.addEventListener("click", () => openProductModal(sp.id));
+        simDiv.appendChild(card);
+      });
+
+    modalAddCart.onclick = () => addToCart(id);
+    productModal.style.display = "flex";
+  }
+
+  modalClose.addEventListener("click", () => productModal.style.display = "none");
+
+  // 360° VIEW (simple drag rotate)
+  let isDragging = false, startX = 0;
+  document.getElementById("viewer").addEventListener("mousedown", e => {
+    isDragging = true; startX = e.pageX;
+  });
+  document.addEventListener("mouseup", () => isDragging = false);
+  document.addEventListener("mousemove", e => {
+    if (isDragging) viewerImg.style.transform = `rotateY(${(e.pageX - startX) / 5}deg)`;
+  });
+    
+    /* ── SEARCH & POPULAR TAGS ───────────────────────────── */
+    searchBtn.onclick=applyFilters,searchInput.addEventListener("input",applyFilters),popularSearches.addEventListener("click",e=>{"BUTTON"===e.target.tagName&&(searchInput.value=e.target.dataset.search,applyFilters())});
+    /* ── SIDEBAR FILTERS ─────────────────────────────────── */
+    applyFiltersBtn.onclick=applyFilters;
+    /* ── CART ─────────────────────────────────────────────── */
+    function addToCart(id){const existing=cart.find(x=>x.id===id);existing?existing.qty+=1:cart.push({id,qty:1}),localStorage.setItem("cart",JSON.stringify(cart)),updateCartUI()}
+    function removeFromCart(id){cart=cart.filter(x=>x.id!==id),localStorage.setItem("cart",JSON.stringify(cart)),updateCartUI()}
+    function updateCartUI(){cartCount.textContent=cart.reduce((s,c)=>s+c.qty,0),cartItems.innerHTML="";let total=0;cart.forEach(item=>{const p=products.find(x=>x.id===item.id);if(!p)return;total+=p.price*item.qty;const div=document.createElement("div");div.className="cart-item",div.innerHTML=`<img src="${p.img}"><div class="details"><div>${p.name}</div><div>KES ${p.price} x <input type="number" min="1" value="${item.qty}" style="width:50px" data-id="${item.id}"></div><div style="margin-top:.25rem"><button data-id="${item.id}" class="btn btn-outline btn-sm">Remove</button></div></div>`,div.querySelector("input").addEventListener("change",e=>{const qty=parseInt(e.target.value);cart.find(x=>x.id===item.id).qty=qty,localStorage.setItem("cart",JSON.stringify(cart)),updateCartUI()}),div.querySelector("button").addEventListener("click",()=>removeFromCart(item.id)),cartItems.appendChild(div)}),cartTotal.textContent="KES "+total}
+    cartToggle.onclick=()=>{cartModal.classList.add("open"),updateCartUI()},cartClose.onclick=()=>cartModal.classList.remove("open"),checkoutBtn.onclick = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) {
+    alert("Please log in to proceed to checkout.");
+    window.location.href = "authentication.html";
+    return;
+  }
+
+  // User is logged in, proceed to checkout
+  alert("Order placed successfully!");
+  cart = [];
+  localStorage.setItem("cart", "[]");
+  updateCartUI();
+  cartModal.classList.remove("open");
+};
+    /* ── INITIALISE ───────────────────────────────────────── */
+    renderProducts(products),updateCartUI(),
+  
+  window.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedCategory = urlParams.get('category');
+
+    const filteredProducts = selectedCategory
+      ? products.filter(p => p.category.toLowerCase() === selectedCategory.toLowerCase())
+      : products;
+
+    renderProducts(filteredProducts);
+    updateCartUI();
+  });
+
+</script>
+</body>
+</html>
