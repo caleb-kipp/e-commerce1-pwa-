@@ -1,580 +1,1054 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="/sw-register.js"></script>
-
-<script src="https://unpkg.com/@bigdatacloud/client-side-reverse-geocoding"></script>
-<script src="manifest.js"></script>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4CAF50">
-    <script src="modals.js"></script>
-        <link rel="stylesheet" href="modals.css">
-  <title>E‑Shop</title>
-
-  <meta name="description" content="Responsive AI‑powered online shop with smart filters, cart, wishlist and product 360° view.">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShopSphere – Modern E‑commerce Demo</title>
+  <meta name="description" content="Accessible, responsive e‑commerce demo with product modal, search autocomplete, wishlist, cart, reviews, analytics filters, and more." />
+  <meta name="keywords" content="ecommerce, demo, shop, cart, wishlist, product modal, search, accessibility, responsive" />
+  <meta name="theme-color" content="#111827" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+      <script src="index.js"></script>
+          <script src="dynamicproduct.js"></script>  
+          <script src="products.js"></script>
+          <script src="products14.js"></script>
+<script src="product-bridge.js"></script>
+ <link rel="stylesheet" href="product2.css" />
+<script src="indexproductmodal.js"></script>
+<script src="product-carousel.js"></script>
+ <script src="product-view1.js"></script>
+  <script src="part1.js"></script>
+    <script src="script.js"></script>
+     <script src="product-view.js"></script>
+      <script src="product-view0.js"></script>
+       <script src="products-view.js"></script>
+        <script src="index0.js"></script>
+         <script src="index1.js"></script>
   <style>
-    :root {
-      --primary: #0d6efd;
-      --secondary: #6c757d;
-      --accent: #f8f9fa;
-      --danger: #dc3545;
-      --success: #28a745;
+    :root{
+      --bg:#0b0f14; --card:#121825; --muted:#6b7280; --text:#e5e7eb; --brand:#22c55e; --brand-2:#06b6d4; --accent:#f59e0b; --danger:#ef4444; --shadow:0 10px 30px rgba(0,0,0,.25);
+      --radius:16px; --radius-sm:12px; --radius-lg:22px; --max:1200px;
     }
-    * {margin:0;padding:0;box-sizing:border-box;}
-    body {font-family:'Segoe UI',Tahoma,Verdana,sans-serif;background:#f2f2f2;line-height:1.4;overflow-x:hidden;}
-    /* ─── TOP NAV ───────────────────────────────────────────── */
-    .top-nav{display:flex;justify-content:space-between;align-items:center;padding:.5rem 1rem;background:var(--primary);color:#fff}
-    .top-nav a,.top-nav button{color:#fff;text-decoration:none;margin:0 .5rem;background:none;border:none;cursor:pointer;font-size:.9rem}
-    .account-dropdown{position:relative}
-    .dropdown-menu{position:absolute;top:100%;right:0;background:#fff;color:#000;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.2);display:none;flex-direction:column;min-width:160px;z-index:10}
-    .dropdown-menu a{padding:.5rem 1rem;color:#333}
-    .dropdown-menu a:hover{background:var(--accent)}
-    .account-dropdown:hover .dropdown-menu{display:flex}
-    /* ─── MAIN NAV & SEARCH ────────────────────────────────── */
-    .main-nav{display:flex;align-items:center;padding:.5rem 1rem;background:#fff;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:20}
-    .logo{font-weight:700;font-size:1.2rem;margin-right:1rem;color:var(--primary)}
-    .search-bar{flex:1;position:relative}
-    .search-bar input{width:100%;padding:.5rem 1rem;border:1px solid #ccc;border-radius:20px;outline:none}
-    .search-bar button{position:absolute;right:5px;top:50%;transform:translateY(-50%);background:var(--primary);color:#fff;border:none;padding:.4rem 1rem;border-radius:20px;cursor:pointer}
-    .popular-searches{margin-left:1rem;display:flex;flex-wrap:wrap;gap:.5rem}
-    .popular-searches button{padding:.25rem .75rem;border-radius:15px;border:1px solid var(--primary);background:#fff;color:var(--primary);cursor:pointer;font-size:.75rem}
-    .popular-searches button:hover{background:var(--primary);color:#fff}
-    /* ─── BREADCRUMBS ───────────────────────────────────────── */
-    .breadcrumbs{padding:.5rem 1rem;font-size:.85rem;background:#f9f9f9;border-bottom:1px solid #eee}
-    .breadcrumbs a{color:var(--primary);text-decoration:none}
-    .breadcrumbs span{margin:0 .3rem}
-    /* ─── SIDEBAR FILTERS ──────────────────────────────────── */
-    .sidebar{position:fixed;top:118px;left:0;width:250px;height:calc(100% - 118px);overflow-y:auto;background:#fff;border-right:1px solid #ddd;padding:1rem}
-    .sidebar h3{margin-bottom:.5rem}
-    .filter-group{margin-bottom:1rem}
-    .filter-group label{display:block;margin:.25rem 0;font-size:.85rem}
-    #products-container{margin-top:0;margin-left:275px;padding:1rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
-    @media(max-width:768px){#products-container{margin-left:0}.sidebar{position:static;width:100%;height:auto}}
-    @media(max-width:576px){#products-container{grid-template-columns:repeat(3,1fr)}}
-    /* ─── PRODUCT CARD ─────────────────────────────────────── */
-    .product-card{background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.1);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s ease}
-    .product-card:hover{transform:translateY(-3px)}
-    .product-card img{width:100%;height:180px;object-fit:cover}
-    .product-card .info{padding:.5rem .75rem;flex:1;display:flex;flex-direction:column;gap:.3rem}
-    .product-card .name{font-size:.9rem;font-weight:600}
-    .product-card .price{color:var(--success);font-weight:700}
-    .product-card .stock{font-size:.75rem}
-    .product-card .actions{margin-top:auto;display:flex;gap:.25rem}
-    .product-card .btn{flex:1;padding:.4rem;font-size:.8rem;border:none;cursor:pointer;border-radius:4px}
-    .btn-primary{background:var(--primary);color:#fff}
-    .btn-outline{background:#fff;color:var(--primary);border:1px solid var(--primary)}
-    /* ─── PRODUCT MODAL ────────────────────────────────────── */
-    .product-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:999}
-    .modal-content{background:#fff;width:100%;max-width:1800px;height:100%; max-height:2100px;overflow-y:auto;border-radius:8px;display:flex;flex-wrap:wrap;padding:1rem;gap:1rem;position:relative;animation:fadeIn .3s ease}
-    @keyframes fadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-    .close-btn{position:absolute;top:10px;right:10px;background:var(--danger);color:#fff;border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;cursor:pointer}
-    .modal-left{flex:1 1 60%;min-width:300px;display:flex;flex-direction:column;gap:1rem;align-items:center}
-    .viewer{width:100%;aspect-ratio:16/9;background:#000;position:relative;overflow:hidden;border-radius:8px}
-    .viewer img{width:100%;height:100%;object-fit:cover;transition:transform .2s ease}
-    .modal-right{flex:1 1 35%;min-width:260px;display:flex;flex-direction:column;gap:.75rem}
-    .modal-right h2{margin-bottom:.5rem}
-    .related-carousel{width:100%;overflow-x:auto;display:flex;gap:1rem;padding:.5rem 0}
-    .related-card{min-width:140px;background:#fff;border:1px solid #eee;border-radius:6px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.1);cursor:pointer}
-    .related-card img{width:100%;height:100px;object-fit:cover}
-    .datasheet,.reviews,.comments-section{margin-top:1rem}
-    .datasheet table{width:100%;border-collapse:collapse}
-    .datasheet th,.datasheet td{border:1px solid #ccc;padding:.4rem;font-size:.85rem}
-    /* ─── CART MODAL ───────────────────────────────────────── */
-    .cart-modal{position:fixed;right:0;top:0;width:350px;height:100%;background:#fff;box-shadow:-2px 0 6px rgba(0,0,0,.2);transform:translateX(100%);transition:transform .3s ease;z-index:1000;display:flex;flex-direction:column}
-    .cart-modal.open{transform:translateX(0)}
-    .cart-header{padding:1rem;background:var(--primary);color:#fff;display:flex;justify-content:space-between;align-items:center}
-    .cart-items{flex:1;overflow-y:auto;padding:.5rem}
-    .cart-item{display:flex;gap:.5rem;margin-bottom:.75rem;border-bottom:1px solid #eee;padding-bottom:.5rem}
-    .cart-item img{width:70px;height:70px;object-fit:cover;border-radius:4px}
-    .cart-item .details{flex:1;font-size:.8rem}
-    .cart-footer{padding:1rem;border-top:1px solid #eee}
-    .recently-viewed, .similar-products {
-  margin-top: 1rem;
-}
-.recently-viewed h2, .similar-products h2 {
-  font-size: 1rem;
-  margin-bottom: .5rem;
-}
-.recent-scroll, .similar-grid {
-  display: flex;
-  overflow-x: auto;
-  gap: 1rem;
-  padding-bottom: .5rem;
-}
-.recent-scroll::-webkit-scrollbar, .similar-grid::-webkit-scrollbar {
-  height: 6px;
-}
-.recent-scroll::-webkit-scrollbar-thumb, .similar-grid::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 3px;
-}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,#0b0f14,#0b0f14 60%,#0e141c);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{width:100%;max-width:var(--max);margin:0 auto;padding:0 16px}
+    header{position:sticky;top:0;z-index:50;background:rgba(11,15,20,.8);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.05)}
+    .topbar{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+    .brand .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;box-shadow:var(--shadow)}
+    .brand .logo svg{filter:drop-shadow(0 1px 4px rgba(0,0,0,.25))}
+    .search{position:relative;flex:1;max-width:560px}
+    .search input{width:100%;padding:12px 44px 12px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.08);background:#0f1623;color:var(--text)}
+    .search input::placeholder{color:#94a3b8}
+    .search .icon{position:absolute;right:8px;top:50%;transform:translateY(-50%);opacity:.7}
+    .autocomplete{position:absolute;top:44px;left:0;right:0;background:#0f1623;border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);display:none}
+    .autocomplete button{display:flex;width:100%;padding:10px 12px;gap:8px;border:0;background:transparent;color:var(--text);text-align:left;cursor:pointer}
+    .autocomplete button:hover{background:#121b2b}.actions{display:flex;align-items:center;gap:10px}
+.icon-btn{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:#0f1623;cursor:pointer}
+.pill{font-size:12px;background:var(--brand);color:#00140a;border-radius:999px;padding:2px 8px;font-weight:700}
 
+nav{display:flex;gap:16px;overflow:auto;padding:10px 0 12px}
+nav a{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.06);white-space:nowrap;background:#0f1623}
 
-/* ─────── FILTER SIDEBAR ─────── */
-.sidebar h3 {
-  margin-bottom: 10px;
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr;gap:16px;padding:18px 0}
+.hero-left{position:relative;border-radius:var(--radius-lg);overflow:hidden}
+.hero-left img{aspect-ratio:16/9;object-fit:cover}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.0),rgba(0,0,0,.55));display:flex;align-items:flex-end;padding:18px}
+.hero-ctas{display:flex;gap:10px;margin-top:8px}
+.btn{padding:10px 14px;border-radius:12px;border:0;cursor:pointer;font-weight:700}
+.btn-primary{background:linear-gradient(135deg,var(--brand),#16a34a);color:#04120b}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--text)}
+
+.hero-right{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mini-card{background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:14px;display:grid;grid-template-rows:auto 1fr auto;gap:10px}
+.mini-card img{border-radius:12px;aspect-ratio:4/3;object-fit:cover}
+.mini-card .foot{display:flex;align-items:center;justify-content:space-between}
+
+/* Men/Women sections */
+.section{margin:24px 0}
+.section h2{margin:0 0 12px}
+.grid{display:grid;gap:16px}
+.grid.mw{grid-template-columns:2fr 1fr 1fr 1fr 1fr}
+.grid .big{grid-row:span 2;background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);overflow:hidden;position:relative}
+.grid .big img{height:100%;width:100%;object-fit:cover}
+.grid .card{background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);overflow:hidden;position:relative}
+.grid .card img{aspect-ratio:1/1;object-fit:cover}
+.card .meta{position:absolute;inset:auto 8px 8px 8px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);padding:8px;border-radius:10px;font-size:14px}
+.card:hover,.big:hover{transform:translateY(-2px);transition:transform .2s ease}
+
+/* carousels */
+.row{display:flex;gap:14px;overflow:auto;scroll-snap-type:x mandatory;padding-bottom:10px}
+.row .p-card{flex:0 0 350px;scroll-snap-align:start;background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden}
+.row .p-card img{aspect-ratio:4/3;object-fit:cover}
+.row .p-card .p-meta{padding:10px}
+.carousel-ctl{display:flex;gap:10px}
+
+/* badges & trust */
+.trust{display:flex;flex-wrap:wrap;gap:10px}
+.trust .badge{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:#0f1623;border:1px solid rgba(255,255,255,.06)}
+
+/* footer */
+footer{margin-top:40px;border-top:1px solid rgba(255,255,255,.06);background:#0f1623}
+footer .cols{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding:24px 0}
+footer a{color:#cbd5e1}
+
+/* product modal */
+.product-modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:16px;z-index:100}
+.modal-content{background:#0b111b;border:1px solid rgba(255,255,255,.06);border-radius:16px;max-width:1100px;width:100%;max-height:90vh;overflow:auto;display:grid;grid-template-columns:1.1fr 1fr}
+.close-btn{position:sticky;top:8px;margin:8px;border:0;background:#0f1623;border:1px solid rgba(255,255,255,.08);color:var(--text);width:36px;height:36px;border-radius:10px;cursor:pointer}
+.modal-left{padding:14px;border-right:1px solid rgba(255,255,255,.06)}
+.viewer{background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden}
+.viewer img{width:100%;height:420px;object-fit:cover}
+.related-carousel{margin-top:10px;display:flex;gap:10px;overflow:auto}
+.related-carousel img{width:90px;height:90px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.08);cursor:pointer}
+.modal-right{padding:14px;display:grid;gap:10px}
+.price{font-size:24px;font-weight:800}
+.stars{display:flex;gap:2px}
+.qty{display:flex;gap:8px;align-items:center}
+.options{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);cursor:pointer}
+
+.tabs{display:flex;gap:8px;margin-top:8px}
+.tabs button{padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#0f1623;color:var(--text);cursor:pointer}
+.panel{background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px;margin-top:8px}
+.reviews textarea{background:#0b111b;color:var(--text);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px}
+
+/* auth + misc modals */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:90}
+.modal .box{background:#0b111b;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:18px;max-width:520px;width:100%}
+.field{display:grid;gap:6px;margin:8px 0}
+.field input, .field select, .field textarea{background:#0f1623;color:var(--text);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px}
+.helper{font-size:12px;color:#9aa4b2}
+
+/* responsive */
+@media (max-width: 1024px){
+  .grid.mw{grid-template-columns:1.5fr 1fr 1fr;grid-auto-rows:260px}
+  .modal-content{grid-template-columns:1fr}
+  .viewer img{height:300px}
 }
-.filter-group {
-  margin-bottom: 20px;
-}
-.filter-group label {
-  display: block;
-  margin-top: 5px;
-}
-.btn-primary {
-  background: #333;
-  color: white;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
+@media (max-width: 640px){
+  nav{display:none}
+  .hero-right{grid-template-columns:1fr}
+  .grid.mw{grid-template-columns:1fr 1fr}
+  footer .cols{grid-template-columns:1fr 1fr}
 }
 
-/* ─────── RESPONSIVE FOR MOBILE ─────── */
-@media (max-width: 768px) {
-  body {
-    flex-direction: column;
-  }
 
-  .top-nav,
-  .main-nav,
-  .breadcrumbs,
-  .search-bar,
-  .popular-searches {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .top-nav .left,
-  .top-nav .center,
-  .top-nav .right {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 5px 0;
-  }
-
-  .main-nav {
-    padding: 10px;
-  }
-
-  .search-bar {
-    flex-direction: row;
-    margin: 10px 0;
-   
-  }
-
-  .sidebar {
-    width: 100%;
-    display: none;
-    margin-left: 0;
-    padding: 10px;
-  }
-
-  .sidebar.active {
-    display: block;
-  }
-
-  main {
-    margin-left: 0;
-  }
-
-  .toggle-sidebar-btn {
-    display: block;
-    background: #444;
-    color: white;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    cursor: pointer;
-  }
-}
-.popular-searches {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;       /* Enable horizontal scroll if needed */
-  white-space: nowrap;    /* Prevent button wrap */
-  padding: 10px 0;
-}
-
-.popular-searches button {
-  flex: 0 0 auto;         /* Prevent button from stretching */
-  background: #eee;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  white-space: nowrap;
-}
-  .custom-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-  }
-
-  .custom-modal .modal-content {
-    background: #fff;
-    width: 100%;
-    max-width: 600px;
-    max-height: 90vh;
-    overflow-y: auto;
-    border-radius: 8px;
-    padding: 1rem;
-    position: relative;
-    animation: fadeIn 0.3s ease;
-  }
-
-  .custom-modal .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: var(--danger, red);
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  .dropdown-menu.show { display: flex; }
-  .dropdown-menu a {
-    padding: 0.5rem;
-    text-decoration: none;
-    color: #333;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-  }
-  .profile-summary {
-    text-align: center;
-  }
-  .profile-pic {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: .5rem;
-  }
-  /* Parent container */
-.parent-dropdown-container {
-  position: relative;
-}
-
-/* Dropdown menu */
-.dropdown-menu {
-  position: absolute; /* or fixed, if you want full overlay */
-  right: 1rem;
-  top: 60px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: .75rem;
-  display: none;
-  flex-direction: column;
-  z-index: 9999;
-  width: 200px;
-}
   </style>
 </head>
 <body>
-
-  <!-- ─── TOP NAV ──────────────────────────────────────────── -->
-<nav class="top-nav">
-  <div class="left">
-    <a href="home.html" id="homeBtn">Home</a>
-    <a href="#" id="locationBtn">Location</a>
-<a href="modals.html?modal=chat">Chat Support</a>
-  </div>
-
-  <div class="center">
-    <button id="cartToggle">Cart (<span id="cartCount">0</span>)</button>
-<a href="modals.html?modal=wishlist">View Wishlist</a>
-<a href="modals.html?modal=orders">View Orders</a>
-  </div>
-
-  <div class="right">
-    <div class="account-dropdown">
-      <button id="accountBtn">Account ▾</button>
-      <div class="dropdown-menu">
-  <a href="authentication.html?modal=login">Login</a>
-  <a href="authentication.html?modal=register">Register</a>
-
-        <a href="#" id="forgotBtn">Forgot Password</a>
-        <a href="#">User Profile</a>
-        <a href="#">Settings</a>
-  <a href="authentication.html?modal=logout">Logout</a>
+  <header aria-label="Site header with navigation, search, cart, and wishlist">
+    <div class="container">
+      <div class="topbar">
+        <a class="brand" href="#" aria-label="ShopSphere home">
+          <span class="logo" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="logo">
+              <path d="M12 3l8 4v10l-8 4-8-4V7l8-4z" stroke="white" stroke-width="2"/>
+              <circle cx="12" cy="12" r="3" fill="white"/>
+            </svg>
+          </span>
+          <span>ShopSphere</span>
+        </a>
+        <div class="search" role="search">
+          <label class="sr-only" for="searchInput">Search products</label>
+          <input id="searchInput" type="search" placeholder="Search products... (⌘/Ctrl + K)" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls="acList" />
+          <div class="icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="white"/><path d="M20 20l-3.5-3.5" stroke="white"/></svg>
+          </div>
+          <div id="autocomplete" class="autocomplete" role="listbox" aria-label="Search suggestions"></div>
+        </div>
+        <div class="actions">
+          <button class="icon-btn" id="openWishlist" aria-label="Open wishlist"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7-4.35-7-10a4 4 0 018-1 4 4 0 018 1c0 5.65-7 10-7 10z" stroke="white"/></svg></button>
+          <button class="icon-btn" id="openCart" aria-label="Open cart"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="20" r="1" fill="white"/><circle cx="17" cy="20" r="1" fill="white"/><path d="M3 4h2l2.4 12.5A2 2 0 009.37 18H18a2 2 0 001.96-1.6L22 8H6" stroke="white"/></svg> <span id="cartCount" class="pill" aria-live="polite" aria-label="Items in cart">0</span></button>
+          <button class="icon-btn" id="openAuth" aria-label="Open login/register"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="4" stroke="white"/><path d="M4 21a8 8 0 0116 0" stroke="white"/></svg></button>
+        </div>
       </div>
+      <nav aria-label="Primary categories">
+        <a href="#">New Arrivals</a>
+        <a href="#">Best Sellers</a>
+        <a href="#">Men</a>
+        <a href="#">Women</a>
+        <a href="#">Accessories</a>
+        <a href="#">Limited</a>
+        <a href="#">Blog</a>
+        <a href="#helpModal" id="openHelp">Help Center</a>
+      </nav>
     </div>
+  </header>  <main class="container" id="main">
+    <!-- HERO: big left image (50%), four right cards (2x2) (50%), looping accessible slider -->
+    <section class="hero" aria-label="Hero and featured">
+      <div class="hero-left" id="heroSlider" aria-roledescription="carousel" aria-label="Promotions" tabindex="0">
+        <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1400&auto=format&fit=crop" alt="Summer collection banner" loading="eager" />
+        <div class="hero-overlay">
+          <div>
+            <h1 style="margin:0 0 6px">Feel Good. Look Great.</h1>
+            <p class="helper">Soft essentials, bold statements. Up to <strong>40% off</strong>.</p>
+            <div class="hero-ctas">
+              <button class="btn btn-primary" id="shopNow">Shop Now</button>
+              <button class="btn btn-ghost" id="learnMore">Learn More</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <article class="mini-card" aria-label="Card 1">
+          <img src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=800&auto=format&fit=crop" alt="Eco tees" loading="lazy" />
+          <div>
+            <h3 style="margin:6px 0">Eco Tees</h3>
+            <p class="helper">Breathable, organic, everyday staples.</p>
+          </div>
+          <div class="foot"><span class="pill">New</span><button class="btn btn-ghost" data-cat="tees">Explore</button></div>
+        </article>
+        <article class="mini-card" aria-label="Card 2">
+          <img src="https://images.unsplash.com/photo-1520975922257-8e53a1b5e84b?q=80&w=800&auto=format&fit=crop" alt="City sneakers" loading="lazy" />
+          <div>
+            <h3 style="margin:6px 0">City Sneakers</h3>
+            <p class="helper">Comfort meets performance.</p>
+          </div>
+          <div class="foot"><span class="pill" style="background:var(--accent);color:#1f1300">Deal</span><button class="btn btn-ghost" data-cat="sneakers">Shop</button></div>
+        </article>
+        <article class="mini-card" aria-label="Card 3">
+          <img src="https://images.unsplash.com/photo-1542326237-94b1c5a538d9?q=80&w=800&auto=format&fit=crop" alt="Athleisure sets" loading="lazy" />
+          <div>
+            <h3 style="margin:6px 0">Athleisure Sets</h3>
+            <p class="helper">Mix, match, move.</p>
+          </div>
+          <div class="foot"><span class="pill" style="background:#60a5fa;color:#001229">Popular</span><button class="btn btn-ghost" data-cat="athleisure">Browse</button></div>
+        </article>
+        <article class="mini-card" aria-label="Card 4">
+          <img src="https://images.unsplash.com/photo-1503342217505-b0a15cf70489?q=80&w=800&auto=format&fit=crop" alt="Accessories" loading="lazy" />
+          <div>
+            <h3 style="margin:6px 0">Accessories</h3>
+            <p class="helper">Finish the look.</p>
+          </div>
+          <div class="foot"><span class="pill" style="background:#f472b6;color:#240013">Hot</span><button class="btn btn-ghost" data-cat="accessories">See More</button></div>
+        </article>
+      </div>
+    </section><!-- MEN / WOMEN: one big + four small, then another set below -->
+<section class="section" aria-labelledby="menHeading">
+  <h2 id="menHeading">Men • Featured</h2>
+  <div class="grid mw" id="menGrid" aria-label="Men grid with one big and four small cards">
+    <!-- populated via JS -->
   </div>
-</nav>
-  <!-- ─── MAIN NAV & SEARCH ───────────────────────────────── -->
-  <nav class="main-nav">
-    <div class="logo">E‑Shop</div>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search products...">
-      <button id="searchBtn">Search</button>
-    </div>
-    <div class="popular-searches" id="popularSearches">
-      <button data-search="Festival">Festival</button>
-      <button data-search="Season">Season</button>
-      <button data-search="Special">Special Occasion</button>
-    </div>
-  </nav>
-  <!-- ─── BREADCRUMBS ─────────────────────────────────────── -->
-  <div class="breadcrumbs" id="breadcrumbs">
-    <a href="#">Home</a><span>›</span><span>Shop</span>
-  </div>
-  <!-- ─── SIDEBAR FILTERS ─────────────────────────────────── -->
-  <aside class="sidebar">
-    <h3>Filter</h3>
-    <div class="filter-group">
-      <strong>Price</strong>
-      <label><input type="radio" name="price" value="all" checked> All</label>
-      <label><input type="radio" name="price" value="under2000"> Under 2000</label>
-      <label><input type="radio" name="price" value="2000to5000"> 2000 – 5000</label>
-      <label><input type="radio" name="price" value="above5000"> Above 5000</label>
-    </div>
-    <div class="filter-group">
-      <strong>Brand</strong>
-      <label><input type="checkbox" name="brand" value="BrandA"> Brand A</label>
-      <label><input type="checkbox" name="brand" value="BrandB"> Brand B</label>
-      <label><input type="checkbox" name="brand" value="BrandC"> Brand C</label>
-    </div>
-    <div class="filter-group">
-      <strong>Category</strong>
-      <label><input type="checkbox" name="category" value="Electronics"> Electronics</label>
-      <label><input type="checkbox" name="category" value="Fashion"> Fashion</label>
-      <label><input type="checkbox" name="category" value="Home"> Home</label>
-    </div>
-    <button id="applyFilters" class="btn btn-primary" style="width:100%">Apply Filters</button>
-  </aside>
-<section id="products-container">
-  <h2>Our Products</h2>
-  <!-- yaliyomo ya bidhaa hapa -->
 </section>
-<div class="product-modal" id="productModal">
+
+<section class="section" aria-labelledby="womenHeading">
+  <h2 id="womenHeading">Women • Featured</h2>
+  <div class="grid mw" id="womenGrid" aria-label="Women grid with one big and four small cards">
+    <!-- populated via JS -->
+  </div>
+</section>
+
+<!-- Dynamic sections: New Arrivals, Best Sellers, Special Offers, Most Liked -->
+<section class="section" aria-label="Dynamic product rows">
+  <div style="display:grid;gap:8px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <h2>New Arrivals</h2>
+      <div class="carousel-ctl"><button class="btn btn-ghost" data-scroll="prev" data-target="#rowNew">◀</button><button class="btn btn-ghost" data-scroll="next" data-target="#rowNew">▶</button></div>
+    </div>
+    <div id="rowNew" class="row" aria-label="New Arrivals carousel"></div>
+  </div>
+
+  <div style="display:grid;gap:8px;margin-top:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <h2>Best Sellers</h2>
+      <div class="carousel-ctl"><button class="btn btn-ghost" data-scroll="prev" data-target="#rowBest">◀</button><button class="btn btn-ghost" data-scroll="next" data-target="#rowBest">▶</button></div>
+    </div>
+    <div id="rowBest" class="row" aria-label="Best Sellers carousel"></div>
+  </div>
+
+  <div style="display:grid;gap:8px;margin-top:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <h2>Special Offers</h2>
+      <div class="carousel-ctl"><button class="btn btn-ghost" data-scroll="prev" data-target="#rowDeals">◀</button><button class="btn btn-ghost" data-scroll="next" data-target="#rowDeals">▶</button></div>
+    </div>
+    <div id="rowDeals" class="row" aria-label="Special Offers carousel"></div>
+  </div>
+
+  <div style="display:grid;gap:8px;margin-top:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <h2>Most Liked</h2>
+      <div class="carousel-ctl"><button class="btn btn-ghost" data-scroll="prev" data-target="#rowLiked">◀</button><button class="btn btn-ghost" data-scroll="next" data-target="#rowLiked">▶</button></div>
+    </div>
+    <div id="rowLiked" class="row" aria-label="Most Liked carousel"></div>
+  </div>
+</section>
+<div style="display:grid;gap:8px;margin-top:18px">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <h2>Store Products</h2>
+    <div class="carousel-ctl">
+      <button class="btn btn-ghost" data-scroll="prev" data-target="#productGrid">◀</button>
+      <button class="btn btn-ghost" data-scroll="next" data-target="#productGrid">▶</button>
+    </div>
+  </div>
+  <div id="productGrid" class="row" aria-label="Product carousel"></div>
+</div>
+
+<script src="product.js"></script>
+<script src="indexproductmodal3.js"></script>
+<!-- Promos / Testimonials / Blog teasers -->
+<section class="section" aria-label="Promos, testimonials, blog">
+  <div class="grid" style="grid-template-columns:2fr 1fr 1fr;gap:16px">
+    <div class="card" style="padding:18px">
+      <h3>Subscriber Perks</h3>
+      <p class="helper">Join the list for early access drops and members-only deals.</p>
+      <form id="newsletterForm" aria-label="Newsletter signup">
+        <div class="field"><label for="newsEmail">Email</label><input id="newsEmail" type="email" placeholder="you@domain.com" required aria-required="true" aria-label="Email address"/></div>
+        <div class="field"><label><input type="checkbox" required aria-required="true"/> I agree to receive emails.</label></div>
+        <button class="btn btn-primary" type="submit">Sign Up</button>
+      </form>
+      <div class="trust" style="margin-top:14px" aria-label="Trust badges">
+        <div class="badge" title="Secure checkout">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l7 4v5a7 7 0 11-14 0V7l7-4z" stroke="white"/></svg>
+          <span>Secure Checkout</span>
+        </div>
+        <div class="badge" title="Free returns"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12a9 9 0 1115.9 6.1" stroke="white"/><path d="M3 12h6M3 12l2-2M3 12l2 2" stroke="white"/></svg><span>Free Returns</span></div>
+        <div class="badge" title="24/7 support"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="white"/><path d="M8 12h8M12 8v8" stroke="white"/></svg><span>24/7 Support</span></div>
+        <div class="badge" title="Privacy first"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l7 4v5c0 5-4.03 9-9 9S1 16 1 11V6l11-4z" stroke="white"/></svg><span>Privacy First</span></div>
+      </div>
+      <div class="helper" style="margin-top:8px">We respect accessibility: ARIA labels, semantic HTML, and keyboard support are built-in.</div>
+    </div>
+    <div class="card" style="padding:18px">
+      <h3>What Customers Say</h3>
+      <blockquote class="helper">“Quality is stellar and delivery was fast. My go-to store now.” — <strong>Ada</strong></blockquote>
+      <blockquote class="helper">“Love the eco materials and the fit.” — <strong>Sam</strong></blockquote>
+      <blockquote class="helper">“Checkout was easy, support was helpful.” — <strong>Kim</strong></blockquote>
+    </div>
+    <div class="card" style="padding:18px">
+      <h3>From the Blog</h3>
+      <ul>
+        <li><a href="#">How to build a minimalist wardrobe</a></li>
+        <li><a href="#">Caring for organic cotton</a></li>
+        <li><a href="#">Sneaker trends this fall</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Payment badges / SEO note / accessibility touches visible -->
+<section class="section" aria-label="Payment methods">
+  <h2>Pay Your Way</h2>
+  <div class="trust">
+    <div class="badge" title="Visa">VISA</div>
+    <div class="badge" title="Mastercard">Mastercard</div>
+    <div class="badge" title="Amex">Amex</div>
+    <div class="badge" title="Apple Pay">Apple&nbsp;Pay</div>
+    <div class="badge" title="Google Pay">Google&nbsp;Pay</div>
+    <div class="badge" title="PayPal">PayPal</div>
+  </div>
+  <p class="helper">Secure checkout placeholder: PCI-aware gateways, tokenization, and HTTPS are expected in production.</p>
+</section>
+
+  </main>  <!-- PRODUCT MODAL (as requested snippet) -->  <div class="product-modal" id="productModal" role="dialog" aria-modal="true" aria-label="Product details">
     <div class="modal-content">
-      <button class="close-btn" id="modalClose">&times;</button>
+      <button class="close-btn" id="modalClose" aria-label="Close product dialog">&times;</button>
       <div class="modal-left" id="modalLeft">
-        <div class="viewer" id="viewer"><img src="placeholder.jpg" alt="Product image" id="viewerImg"></div>
-        <div class="related-carousel" id="relatedCarousel"><!-- related items --></div>
+        <div class="viewer" id="viewer"><img src="" alt="Product image" id="viewerImg" /></div>
+        <div class="related-carousel" id="relatedCarousel" aria-label="Related products thumbnails"><!-- related items --></div>
       </div>
-      
       <div class="modal-right" id="modalRight">
-<h2 id="modalName" style="display:none;">Loading...</h2>
-        <p id="modalPrice" class="price"></p>
-        <p id="modalDesc"></p>
-        <div class="datasheet"><h3>Tech Specs</h3><table><tbody id="datasheetBody"></tbody></table></div>
-        <div class="actions"><button id="modalAddCart" class="btn btn-primary">Add to Cart</button><button id="modalWishlist" class="btn btn-outline">Wishlist</button></div>
-        
-<!-- Product Description -->
-<section class="product-description">
-  <h2>Product Description</h2>
-  <p id="modalFullDesc"></p>
-</section>
+        <h2 id="mTitle">Product Title</h2>
+        <div class="stars" id="mStars" aria-label="Rating"></div>
+        <div class="price" id="mPrice">$0.00</div>
+        <div class="helper" id="mSku">SKU: —</div>
+        <div class="options" id="mVariants" aria-label="Variants"></div>
+        <div class="qty"><label for="mQty">Qty</label><input id="mQty" type="number" min="1" value="1" style="width:72px" /></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+          <button class="btn btn-primary" id="mAddCart">Add to Cart</button>
+          <button class="btn btn-ghost" id="mBuyNow">Buy Now</button>
+          <button class="btn btn-ghost" id="mWishlist">♡ Wishlist</button>
+        </div><div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="desc">Description</button>
+      <button role="tab" aria-selected="false" data-tab="specs">Specs</button>
+      <button role="tab" aria-selected="false" data-tab="shipping">Shipping & Returns</button>
+      <button role="tab" aria-selected="false" data-tab="faq">FAQs</button>
+    </div>
+    <div class="panel" id="panel-desc">
+      <p id="mDesc"></p>
+      <p id="mDescLong" class="helper"></p>
+    </div>
+    <div class="panel" id="panel-specs" hidden>
+      <ul id="mSpecs"></ul>
+    </div>
+    <div class="panel" id="panel-shipping" hidden>
+      <p>We ship worldwide with real‑time rates, accurate ETAs, and paperless returns. Free 30‑day returns on unworn items. Refunds back to original payment method.</p>
+    </div>
+    <div class="panel" id="panel-faq" hidden>
+      <details><summary>What sizes should I choose?</summary><p>Use the size guide in variants. We match standard US/EU sizing.</p></details>
+      <details><summary>How do returns work?</summary><p>Start in your account or the Returns modal. Print‑free QR drop‑off options available.</p></details>
+    </div>
 
-<!-- Recently Viewed Products -->
-<section class="recently-viewed">
-  <h2>Recently Viewed</h2>
-  <div class="recent-scroll" id="recentViewedContainer"></div>
-</section>
+    <!-- Recently viewed -->
+    <div class="panel">
+      <h3>Recently Viewed</h3>
+      <div id="recentRow" class="row" aria-label="Recently viewed products"></div>
+    </div>
 
-<!-- Similar Products -->
-<section class="similar-products">
-  <h2>Similar Products</h2>
-  <div class="similar-grid" id="similarProductsContainer"></div>
-</section>
-        <div class="reviews"><h3>Reviews</h3><div id="reviewList"></div><textarea id="reviewInput" placeholder="Write a review..." style="width:100%;margin-top:.5rem"></textarea><button id="submitReview" class="btn btn-primary" style="margin-top:.25rem">Submit</button></div>
-        <div class="comments-section"><h3>Comments</h3><textarea placeholder="Leave a comment..." style="width:100%"></textarea></div>
-      </div>
+    <!-- Similar products -->
+    <div class="panel">
+      <h3>Similar Products</h3>
+      <div id="similarRow" class="row" aria-label="Similar products"></div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="reviews panel">
+      <h3>Reviews</h3>
+      <div id="reviewList"></div>
+      <textarea id="reviewInput" placeholder="Write a review..." style="width:100%;margin-top:.5rem"></textarea>
+      <button id="submitReview" class="btn btn-primary" style="margin-top:.25rem">Submit</button>
     </div>
   </div>
-  <!-- ─── CART MODAL ──────────────────────────────────────── -->
-  <div class="cart-modal" id="cartModal">
-    <div class="cart-header"><h3>Your Cart</h3><button class="close-btn" style="position:static" id="cartClose">&times;</button></div>
-    <div class="cart-items" id="cartItems"></div>
-    <div class="cart-footer"><p>Total: <strong id="cartTotal">0</strong></p><button id="checkoutBtn" class="btn btn-primary" style="width:100%">Checkout</button></div>
-  </div>
-<!-- ========== CUSTOMER CARE CHAT MODAL ========== -->
-<div class="custom-modal" id="chatModal">
-  <div class="modal-content">
-    <button class="close-btn" id="chatCloseBtn">&times;</button>
-    <h2>Customer Care Chat</h2>
-    <textarea id="chatMessage" placeholder="Type your message..." style="width: 100%; height: 100px;"></textarea>
-    <button id="chatSendBtn" class="btn btn-primary" style="margin-top: 1rem;">Send</button>
-  </div>
 </div>
 
-<!-- ========== WISHLIST MODAL ========== -->
-<div class="custom-modal" id="wishlistModal">
-  <div class="modal-content">
-    <button class="close-btn" id="wishlistCloseBtn">&times;</button>
-    <h2>Your Wishlist</h2>
-    <ul id="wishlistContent"></ul>
-  </div>
-</div>
-
-<!-- ========== ORDERS MODAL ========== -->
-<div class="custom-modal" id="ordersModal">
-  <div class="modal-content">
-    <button class="close-btn" id="ordersCloseBtn">&times;</button>
-    <h2>Your Orders</h2>
-    <div id="ordersContent"></div>
-  </div>
-</div>
-
-
-
-  <!-- ─── SCRIPTS ─────────────────────────────────────────── -->
+  </div> 
  
-  <script>
+
+
+  <!-- CART / WISHLIST / AUTH / HELP / RETURNS / TRACKING MODALS --> <!-- CART MODAL -->
+<div class="modal" id="cartModal" role="dialog" aria-label="Shopping Cart" aria-modal="true">
+  <div class="box cart-container">
     
-    // Register service worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(function (registration) {
-        console.log('✅ Service Worker registered with scope:', registration.scope);
-      })
-      .catch(function (error) {
-        console.error('❌ Service Worker registration failed:', error);
-      });
-  });
-}
-    /* ── SAMPLE DATA ──────────────────────────────────────── */
-    const products=[{id:1,name:"Smartphone X1",price:1500,brand:"BrandA",category:"Electronics",stock:30,desc:"Latest smartphone with amazing features.",img:"https://picsum.photos/seed/p1/400/300"},{id:2,name:"Laptop Pro 15",price:4500,brand:"BrandB",category:"Electronics",stock:15,desc:"High performance laptop.",img:"https://picsum.photos/seed/p2/400/300"},{id:3,name:"Designer Jacket",price:2500,brand:"BrandC",category:"Fashion",stock:22,desc:"Stylish jacket for all seasons.",img:"https://picsum.photos/seed/p3/400/300"},{id:4,name:"Bluetooth Speaker",price:800,brand:"BrandA",category:"Electronics",stock:40,desc:"Portable speaker with deep bass.",img:"https://picsum.photos/seed/p4/400/300"},{id:5,name:"Coffee Maker",price:1800,brand:"BrandB",category:"Home",stock:12,desc:"Brew perfect coffee every morning.",img:"https://picsum.photos/seed/p5/400/300"},{id:6,name:"Sneakers Classic",price:1200,brand:"BrandC",category:"Fashion",stock:35,desc:"Comfortable everyday sneakers.",img:"https://picsum.photos/seed/p6/400/300"},{id:7,name:"Smartwatch Z",price:2200,brand:"BrandA",category:"Electronics",stock:25,desc:"Track fitness and notifications.",img:"https://picsum.photos/seed/p7/400/300"},{id:8,name:"Microwave Oven",price:3500,brand:"BrandB",category:"Home",stock:10,desc:"Quick heating microwave oven.",img:"https://picsum.photos/seed/p8/400/300"},{id:9,name:"Elegant Dress",price:1700,brand:"BrandC",category:"Fashion",stock:18,desc:"Evening party dress.",img:"https://picsum.photos/seed/p9/400/300"},{id:10,name:"Headphones HD",price:900,brand:"BrandA",category:"Electronics",stock:27,desc:"High definition sound headphones.",img:"https://picsum.photos/seed/p10/400/300"},{id:11,name:"Sofa Cushion",price:600,brand:"BrandB",category:"Home",stock:50,desc:"Soft cushion for sofa.",img:"https://picsum.photos/seed/p11/400/300"},{id:12,name:"Leather Belt",price:400,brand:"BrandC",category:"Fashion",stock:60,desc:"Premium leather belt.",img:"https://picsum.photos/seed/p12/400/300"}];
+    <!-- ================= HEADER ================= -->
+    <div class="cart-header flex justify-between items-center">
+      <h3>Your Cart</h3>
+      <button class="btn btn-ghost" id="closeCartBtn" aria-label="Close Cart">&times;</button>
+    </div>
     
-    let cart=JSON.parse(localStorage.getItem("cart")||"[]");
-    
-    /* ── DOM ELEMENTS ─────────────────────────────────────── */
-    const productsContainer=document.getElementById("products-container"),searchInput=document.getElementById("searchInput"),searchBtn=document.getElementById("searchBtn"),popularSearches=document.getElementById("popularSearches"),applyFiltersBtn=document.getElementById("applyFilters"),productModal=document.getElementById("productModal"),viewerImg=document.getElementById("viewerImg"),modalName=document.getElementById("modalName"),modalPrice=document.getElementById("modalPrice"),modalDesc=document.getElementById("modalDesc"),datasheetBody=document.getElementById("datasheetBody"),relatedCarousel=document.getElementById("relatedCarousel"),modalAddCart=document.getElementById("modalAddCart"),modalWishlist=document.getElementById("modalWishlist"),modalClose=document.getElementById("modalClose"),cartModal=document.getElementById("cartModal"),cartToggle=document.getElementById("cartToggle"),cartClose=document.getElementById("cartClose"),cartItems=document.getElementById("cartItems"),cartTotal=document.getElementById("cartTotal"),cartCount=document.getElementById("cartCount"),checkoutBtn=document.getElementById("checkoutBtn");
-    /* ── RENDER PRODUCTS ──────────────────────────────────── */
-    function renderProducts(list){productsContainer.innerHTML="";list.forEach(p=>{const card=document.createElement("div");card.className="product-card";card.innerHTML=`<img src="${p.img}" alt=""><div class="info"><div class="name">${p.name}</div><div class="price">KES ${p.price}</div><div class="stock">${p.stock} in stock</div><div class="actions"><button class="btn btn-primary" data-id="${p.id}" data-action="add-cart">Cart</button><button class="btn btn-outline" data-id="${p.id}" data-action="wishlist">♥</button></div></div>`;card.addEventListener("click",e=>{if(e.target.dataset.action)return;openProductModal(p.id)});card.querySelector("[data-action='add-cart']").addEventListener("click",e=>{e.stopPropagation();addToCart(p.id)});productsContainer.appendChild(card)})}
-    /* ── FILTER & SEARCH ─────────────────────────────────── */
-    function applyFilters(){let filtered=[...products];const priceVal=document.querySelector("input[name='price']:checked").value;"under2000"===priceVal&&(filtered=filtered.filter(p=>p.price<2000)),"2000to5000"===priceVal&&(filtered=filtered.filter(p=>p.price>=2000&&p.price<=5000)),"above5000"===priceVal&&(filtered=filtered.filter(p=>p.price>5000));const brandChecked=[...document.querySelectorAll("input[name='brand']:checked")].map(cb=>cb.value);brandChecked.length&&(filtered=filtered.filter(p=>brandChecked.includes(p.brand)));const catChecked=[...document.querySelectorAll("input[name='category']:checked")].map(cb=>cb.value);catChecked.length&&(filtered=filtered.filter(p=>catChecked.includes(p.category)));const keyword=searchInput.value.trim().toLowerCase();keyword&&(filtered=filtered.filter(p=>p.name.toLowerCase().includes(keyword)||p.desc.toLowerCase().includes(keyword)));renderProducts(filtered)}
-    /* ── PRODUCT MODAL ───────────────────────────────────── */
-    
-  function openProductModal(id) {
-    const p = products.find(x => x.id === id);
-    if (!p) return;
+    <!-- ================= CART ITEMS ================= -->
+    <div id="cartItems" class="cart-items panel">
+      <!-- Each cart item -->
+      <div class="cart-item" data-id="">
+        <img src="" alt="Product Image" class="cart-item-img" />
+        <div class="item-info">
+          <h5 class="cart-item-title">Product Title</h5>
+          <p class="cart-item-description">Product description goes here...</p>
+          <p class="cart-item-specs">Specs: Size, Color, Material...</p>
+          <div class="cart-item-rating">⭐⭐⭐⭐☆ (45 reviews)</div>
+          <div class="cart-item-price-details">
+            <span class="unit-price">$0.00</span>
+            <input type="number" min="1" value="1" class="cart-item-qty" aria-label="Quantity Selector" />
+            <span class="item-total-price">$0.00</span>
+          </div>
+          <div class="cart-item-actions">
+            <button class="btn btn-ghost remove-item-btn">Remove</button>
+            <button class="btn btn-secondary customize-item-btn">Customize</button>
+          </div>
+          <textarea class="cart-item-note" placeholder="Add a note (e.g., gift message)"></textarea>
+        </div>
+      </div>
+    </div>
 
-    // Set product image and basic details
-    viewerImg.src = p.img;
-    viewerImg.style.transform = "rotateY(0deg)";
-    modalName.textContent = p.name;
-    modalPrice.textContent = "KES " + p.price;
-    modalDesc.textContent = p.desc;
-    document.getElementById("modalFullDesc").textContent = p.desc;
+    <!-- Empty Cart Message -->
+    <div id="emptyCartMessage" class="empty-cart-message hidden">
+      <p>Your cart is currently empty.</p>
+    </div>
 
-    datasheetBody.innerHTML = `
-      <tr><th>Brand</th><td>${p.brand}</td></tr>
-      <tr><th>Category</th><td>${p.category}</td></tr>
-      <tr><th>Price</th><td>KES ${p.price}</td></tr>
-    `;
+    <!-- ================= PROMO CODES & DISCOUNTS ================= -->
+    <div class="promo-code">
+      <input type="text" id="promoCode" placeholder="Enter Promo Code" />
+      <button class="btn btn-secondary" id="applyPromoBtn">Apply</button>
+      <p id="promoMessage"></p>
+    </div>
 
-    // Related products carousel (unchanged)
-    relatedCarousel.innerHTML = "";
-    products.filter(x => x.category === p.category && x.id !== p.id)
-      .slice(0, 6).forEach(r => {
-        const rel = document.createElement("div");
-        rel.className = "related-card";
-        rel.innerHTML = `<img src="${r.img}"><div style="padding:.25rem;font-size:.75rem">${r.name}</div>`;
-        rel.addEventListener("click", () => openProductModal(r.id));
-        relatedCarousel.appendChild(rel);
-      });
+    <!-- ================= GIFT OPTIONS ================= -->
+    <div class="gift-options">
+      <label><input type="checkbox" id="giftWrap"> Add Gift Wrapping (+$5)</label>
+      <textarea id="giftMessage" placeholder="Add a personal message"></textarea>
+      <label><input type="checkbox" id="giftCard"> Redeem Gift Card</label>
+      <label><input type="checkbox" id="rewardPoints"> Redeem Reward Points</label>
+    </div>
 
-    // Recently viewed logic
-    let recentlyViewed = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
-    recentlyViewed = recentlyViewed.filter(pid => pid !== id);
-    recentlyViewed.unshift(id);
-    if (recentlyViewed.length > 10) recentlyViewed.pop();
-    localStorage.setItem("recentlyViewed", JSON.stringify(recentlyViewed));
+    <!-- ================= CART SUMMARY ================= -->
+    <div class="cart-summary">
+      <div class="summary-item"><span>Items:</span><span id="cartItemCount">0</span></div>
+      <div class="summary-item"><span>Subtotal:</span><span id="subtotal">$0.00</span></div>
+      <div class="summary-item"><span>Discount:</span><span id="discount">$0.00</span></div>
+      <div class="summary-item"><span>Tax:</span><span id="tax">$0.00</span></div>
+      <div class="summary-item"><span>Shipping:</span><span id="shipping">$0.00</span></div>
+      <div class="summary-item"><span>Estimated Delivery:</span><span id="deliveryEstimate">--</span></div>
+      <div class="summary-item total"><span>Total:</span><span id="total">$0.00</span></div>
+    </div>
 
-    const recentDiv = document.getElementById("recentViewedContainer");
-    recentDiv.innerHTML = "";
-    recentlyViewed.filter(pid => pid !== id).slice(0, 10).forEach(pid => {
-      const rp = products.find(pr => pr.id === pid);
-      if (!rp) return;
-      const card = document.createElement("div");
-      card.className = "related-card";
-      card.innerHTML = `<img src="${rp.img}"><div style="padding:.25rem;font-size:.75rem">${rp.name}</div>`;
-      card.addEventListener("click", () => openProductModal(rp.id));
-      recentDiv.appendChild(card);
+    <!-- ================= ACTIONS ================= -->
+    <div class="cart-actions">
+      <button class="btn btn-primary" id="checkoutBtn">Checkout</button>
+      <button class="btn btn-ghost" id="updateCartBtn">Update Cart</button>
+    </div>
+
+    <!-- ================= PRODUCT SUGGESTIONS ================= -->
+    <div class="cart-recommendations">
+      <h4>Recommended Products</h4>
+      <div id="recommendedProducts" class="row"></div>
+    </div>
+
+    <div class="cart-suggestions">
+      <h4>You Might Also Like</h4>
+      <div id="suggestedProducts" class="row"></div>
+    </div>
+
+    <!-- ================= BUNDLES, UPSELLS & CROSS-SELLS ================= -->
+    <div class="cart-bundles">
+      <h4>Bundles & Packages</h4>
+      <div id="bundleProducts"></div>
+    </div>
+
+    <div class="cart-upsells">
+      <h4>Upgrade Your Cart</h4>
+      <div id="upsellProducts"></div>
+    </div>
+
+    <div class="cart-cross-sells">
+      <h4>Frequently Bought Together</h4>
+      <div id="crossSellProducts"></div>
+    </div>
+
+    <!-- ================= WISHLIST & COMPARE ================= -->
+    <div class="wishlist-compare">
+      <button class="btn btn-secondary" id="wishlistBtn">Save to Wishlist</button>
+      <button class="btn btn-secondary" id="compareBtn">Compare Products</button>
+    </div>
+
+    <!-- ================= REVIEWS & SPECIFICATIONS ================= -->
+    <div class="product-reviews">
+      <h4>Product Reviews</h4>
+      <div id="reviews"></div>
+    </div>
+
+    <div class="product-specs">
+      <h4>Specifications</h4>
+      <div id="specifications"></div>
+    </div>
+
+    <!-- ================= MEDIA (IMAGES, VIDEOS, 360 VIEW) ================= -->
+    <div class="product-media">
+      <h4>Product Gallery</h4>
+      <div id="imageGallery"></div>
+      <div id="productVideo"></div>
+      <div id="product360"></div>
+    </div>
+
+    <!-- ================= SECURITY & TRUST ================= -->
+    <div class="cart-security">
+      <h4>Secure Checkout</h4>
+      <div class="trust-badges">
+        <img src="ssl-badge.png" alt="SSL Secured" />
+        <img src="trust-badge.png" alt="Trusted Checkout" />
+      </div>
+      <p>Your data is encrypted and protected.</p>
+    </div>
+
+    <!-- ================= CHECKOUT OPTIONS ================= -->
+    <div class="checkout-options">
+      <h4>Payment Options</h4>
+      <div id="paymentMethods">
+        <label><input type="radio" name="payment" value="card"> Credit/Debit Card</label>
+        <label><input type="radio" name="payment" value="paypal"> PayPal</label>
+        <label><input type="radio" name="payment" value="stripe"> Stripe</label>
+      </div>
+      <h4>Shipping Options</h4>
+      <div id="shippingMethods">
+        <label><input type="radio" name="shipping" value="standard"> Standard</label>
+        <label><input type="radio" name="shipping" value="express"> Express</label>
+      </div>
+    </div>
+
+    <!-- ================= ORDER CONFIRMATION & TRACKING ================= -->
+    <div class="order-tracking hidden" id="orderTracking">
+      <h4>Order Summary</h4>
+      <p id="orderSummary"></p>
+      <p id="paymentConfirmation"></p>
+      <p id="shippingInfo"></p>
+      <div id="trackingInfo"></div>
+      <button class="btn btn-ghost" id="printOrderBtn">Print Order</button>
+    </div>
+
+    <!-- ================= POLICIES, SUPPORT & FEEDBACK ================= -->
+    <div class="cart-policies">
+      <h4>Policies</h4>
+      <p id="returnPolicy">30-day return policy</p>
+      <p id="refundPolicy">Refund within 7 business days</p>
+      <p id="exchangePolicy">Easy exchanges available</p>
+    </div>
+
+    <div class="customer-support">
+      <h4>Need Help?</h4>
+      <p>Contact us: <a href="mailto:support@example.com">support@example.com</a></p>
+      <p>FAQs | Live Chat | Call Center</p>
+    </div>
+
+    <div class="customer-feedback">
+      <h4>Feedback</h4>
+      <form id="feedbackForm">
+        <textarea placeholder="Share your experience..."></textarea>
+        <button class="btn btn-secondary" type="submit">Submit</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- ================= OVERLAY ================= -->
+  <div class="modal-overlay" id="cartOverlay"></div>
+</div>  <div class="modal" id="wishlistModal" role="dialog" aria-label="Wishlist" aria-modal="true">
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center"><h3>Your Wishlist</h3><button class="btn btn-ghost" data-close="#wishlistModal">Close</button></div>
+      <div id="wishlistItems" class="panel"></div>
+    </div>
+  </div>  <div class="modal" id="authModal" role="dialog" aria-label="Account" aria-modal="true">
+    <div class="box">
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" data-auth-tab="login">Login</button>
+        <button class="btn btn-ghost" data-auth-tab="register">Register</button>
+        <button class="btn btn-ghost" data-auth-tab="reset">Reset</button>
+      </div>
+      <div id="authPanels">
+        <form id="loginForm" aria-label="Login" class="panel" style="margin-top:10px">
+          <div class="field"><label for="lEmail">Email</label><input id="lEmail" type="email" required /></div>
+          <div class="field"><label for="lPass">Password</label><input id="lPass" type="password" required /></div>
+          <div class="field"><label for="l2fa">2FA Code (optional)</label><input id="l2fa" inputmode="numeric" pattern="[0-9]*" placeholder="123456" /></div>
+          <div class="field"><label for="lCaptcha">Captcha: <span id="lCaptchaQ"></span></label><input id="lCaptcha" required aria-describedby="lHelp" /><div id="lHelp" class="helper">Prove you’re human</div></div>
+          <button class="btn btn-primary" type="submit">Login</button>
+        </form><form id="regForm" aria-label="Register" class="panel" hidden>
+      <div class="field"><label for="rName">Name</label><input id="rName" required /></div>
+      <div class="field"><label for="rEmail">Email</label><input id="rEmail" type="email" required /></div>
+      <div class="field"><label for="rPass">Password</label><input id="rPass" type="password" required /></div>
+      <div class="field"><label for="rCaptcha">Captcha: <span id="rCaptchaQ"></span></label><input id="rCaptcha" required /></div>
+      <button class="btn btn-primary" type="submit">Create account</button>
+    </form>
+
+    <form id="resetForm" aria-label="Reset password" class="panel" hidden>
+      <div class="field"><label for="xEmail">Email</label><input id="xEmail" type="email" required /></div>
+      <div class="field"><label for="xCaptcha">Captcha: <span id="xCaptchaQ"></span></label><input id="xCaptcha" required /></div>
+      <button class="btn btn-primary" type="submit">Send reset link</button>
+    </form>
+  </div>
+</div>
+
+  </div>  <div class="modal" id="helpModal" role="dialog" aria-label="Help center" aria-modal="true">
+    <div class="box">
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" data-help-tab="contact">Contact</button>
+        <button class="btn btn-ghost" data-help-tab="returns">Returns/Refunds</button>
+        <button class="btn btn-ghost" data-help-tab="tracking">Order Tracking</button>
+      </div>
+      <div id="helpPanels" style="margin-top:10px">
+        <form id="contactForm" class="panel" aria-label="Contact us">
+          <div class="field"><label for="cName">Name</label><input id="cName" required /></div>
+          <div class="field"><label for="cEmail">Email</label><input id="cEmail" type="email" required /></div>
+          <div class="field"><label for="cMsg">Message</label><textarea id="cMsg" rows="4" required></textarea></div>
+          <button class="btn btn-primary" type="submit">Send</button>
+        </form>
+        <form id="returnsForm" class="panel" hidden aria-label="Returns">
+          <div class="field"><label for="rOrder">Order #</label><input id="rOrder" required /></div>
+          <div class="field"><label for="rReason">Reason</label><select id="rReason"><option>Too large</option><option>Too small</option><option>Damaged</option><option>Changed mind</option></select></div>
+          <button class="btn btn-primary" type="submit">Start Return</button>
+        </form>
+        <form id="trackForm" class="panel" hidden aria-label="Order tracking">
+          <div class="field"><label for="tOrder">Order #</label><input id="tOrder" required /></div>
+          <button class="btn btn-primary" type="submit">Track</button>
+          <div id="trackResult" class="helper" style="margin-top:8px"></div>
+        </form>
+      </div>
+    </div>
+  </div>  <footer>
+    <div class="container">
+      <div class="cols">
+        <div>
+          <h4>About</h4>
+          <p class="helper">Ethically made apparel & gear. Built for comfort, designed for impact.</p>
+        </div>
+        <div>
+          <h4>Help</h4>
+          <ul>
+            <li><a href="#helpModal" id="openHelp2">Contact & FAQ</a></li>
+            <li><a href="#">Shipping & Returns</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Terms</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Account</h4>
+          <ul>
+            <li><a href="#authModal" id="openAuth2">Login</a></li>
+            <li><a href="#">Orders</a></li>
+            <li><a href="#">Wishlist</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Follow</h4>
+          <ul>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">YouTube</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="helper" style="padding:0 0 16px">© <span id="year"></span> ShopSphere</div>
+    </div>
+  </footer>  <script>
+    /************************************
+     * Demo Data + Utilities (mock backend)
+     ************************************/
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const fmt = (n) => `$${n.toFixed(2)}`;
+    const uid = () => Math.random().toString(36).slice(2,9);
+
+    // Mock "DB" with products (id, gender, category, likes, sales, addedAt, discount, rating)
+    const products = (() => {
+      const now = Date.now();
+      const data = [
+        {id:'p1', title:'Eco Tee', price:24.00, gender:'men', category:'tees', likes:180, sales:520, addedAt: now-3*86400000, discount:0.10, rating:4.6, images:['https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=900&auto=format&fit=crop'], variants:{size:['S','M','L','XL'], color:['Black','Olive','White']}, sku:'TEE-ECO-001', specs:['100% organic cotton','Pre‑shrunk','Fair trade'], tags:['new','organic','eco']},
+        {id:'p2', title:'City Sneakers', price:89.00, gender:'men', category:'sneakers', likes:320, sales:980, addedAt: now-12*86400000, discount:0.20, rating:4.8, images:['https://images.unsplash.com/photo-1528702748617-0316a9e42c1e?q=80&w=900&auto=format&fit=crop'], variants:{size:['7','8','9','10','11'], color:['White','Gray']}, sku:'SNK-CITY-002', specs:['Cushioned midsole','Breathable mesh','Durarubber outsole'], tags:['deal','best']},
+        {id:'p3', title:'Athleisure Set', price:64.00, gender:'women', category:'athleisure', likes:210, sales:610, addedAt: now-1*86400000, discount:0.0, rating:4.5, images:['https://images.unsplash.com/photo-1542326237-94b1c5a538d9?q=80&w=900&auto=format&fit=crop'], variants:{size:['XS','S','M','L'], color:['Charcoal','Sage']}, sku:'SET-ATH-003', specs:['4‑way stretch','Moisture wicking','Flatlock seams'], tags:['new']},
+        {id:'p4', title:'Minimal Backpack', price:72.00, gender:'unisex', category:'accessories', likes:155, sales:410, addedAt: now-20*86400000, discount:0.15, rating:4.3, images:['https://images.unsplash.com/photo-1503342217505-b0a15cf70489?q=80&w=900&auto=format&fit=crop'], variants:{size:['One'], color:['Black','Sand']}, sku:'BAG-MIN-004', specs:['Water‑resistant','Laptop sleeve','Recycled nylon'], tags:['popular']},
+        {id:'p5', title:'Cozy Hoodie', price:58.00, gender:'women', category:'hoodies', likes:400, sales:1200, addedAt: now-30*86400000, discount:0.25, rating:4.9, images:['https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=900&auto=format&fit=crop'], variants:{size:['S','M','L'], color:['Oat','Black']}, sku:'HDY-COZY-005', specs:['Brushed fleece','Kangaroo pocket','Raglan sleeves'], tags:['best','liked']},
+        {id:'p6', title:'Ribbed Tank', price:19.00, gender:'women', category:'tops', likes:130, sales:210, addedAt: now-6*86400000, discount:0, rating:4.2, images:['https://images.unsplash.com/photo-1520975922257-8e53a1b5e84b?q=80&w=900&auto=format&fit=crop'], variants:{size:['XS','S','M','L'], color:['White','Black']}, sku:'TNK-RIB-006', specs:['Breathable','Body‑skimming fit','Soft rib'], tags:['new']},
+        {id:'p7', title:'Performance Joggers', price:54.00, gender:'men', category:'pants', likes:95, sales:300, addedAt: now-10*86400000, discount:0.05, rating:4.1, images:['https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=900&auto=format&fit=crop'], variants:{size:['S','M','L','XL'], color:['Navy','Coal']}, sku:'JOG-PERF-007', specs:['Secure pockets','Tapered fit','Quick dry'], tags:['offer']},
+        {id:'p8', title:'Cashmere Beanie', price:36.00, gender:'unisex', category:'accessories', likes:220, sales:160, addedAt: now-2*86400000, discount:0, rating:4.7, images:['https://images.unsplash.com/photo-1520975935791-50f2492a67f0?q=80&w=900&auto=format&fit=crop'], variants:{size:['One'], color:['Gray','Brown']}, sku:'BN-CASH-008', specs:['Grade‑A cashmere','Double knit','Ultra soft'], tags:['liked','new']},
+        {id:'p9', title:'Trail Runners', price:92.00, gender:'women', category:'sneakers', likes:180, sales:500, addedAt: now-14*86400000, discount:0.18, rating:4.4, images:['https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=900&auto=format&fit=crop'], variants:{size:['6','7','8','9'], color:['Teal','Black']}, sku:'RUN-TRL-009', specs:['Aggressive lugs','Rock plate','Reflective'], tags:['deal']}
+      ];
+      return data;
+    })();
+
+    // LocalStorage namespaces
+    const LS = {
+      cart: 'ss_cart',
+      wishlist: 'ss_wishlist',
+      user: 'ss_user',
+      views: 'ss_recent_views',
+      reviews: 'ss_reviews',
+    };
+
+    const store = {
+      get(key, fallback){ try{ return JSON.parse(localStorage.getItem(key)) ?? fallback }catch(_){ return fallback } },
+      set(key, val){ localStorage.setItem(key, JSON.stringify(val)); },
+      push(key, item){ const arr = store.get(key, []); arr.push(item); store.set(key, arr); return arr; }
+    };
+
+    /************************************
+     * Rendering helpers
+     ************************************/
+    function starIcons(r){
+      const full = Math.floor(r), half = r - full >= .5;
+      let s='';
+      for(let i=0;i<5;i++){
+        if(i<full) s+= '★'; else if(i===full && half) s+='☆'; else s+='✩';
+      }
+      return `<span aria-hidden="true">${s}</span> <span class="sr-only">${r.toFixed(1)} out of 5</span>`
+    }
+
+    function productCard(p){
+      return `<article class="p-card" data-id="${p.id}">
+        <img src="${p.images[0]}" alt="${p.title}" loading="lazy" />
+        <div class="p-meta">
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+            <h4 style="margin:0;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${p.title}">${p.title}</h4>
+            <button class="icon-btn add-wish" title="Add to wishlist" aria-label="Add ${p.title} to wishlist">♡</button>
+          </div>
+          <div class="helper">${starIcons(p.rating)}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+            <strong>${fmt(p.price * (1-p.discount))}</strong>
+            ${p.discount?`<span class="pill" title="${(p.discount*100)|0}% off">-${(p.discount*100)|0}%</span>`:''}
+          </div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn btn-primary add-cart" aria-label="Add ${p.title} to cart">Add</button>
+            <button class="btn btn-ghost view-product" aria-label="View ${p.title}">View</button>
+          </div>
+        </div>
+      </article>`
+    }
+
+    function rowFill(targetSel, list){
+      const el = document.querySelector(targetSel);
+      el.innerHTML = list.map(productCard).join('');
+    }
+
+    // Men/Women big + four small
+    function fillMW(gridSel, items){
+      const grid = $(gridSel);
+      grid.style.gridAutoRows = '220px';
+      grid.innerHTML = '';
+      const big = items[0];
+      grid.insertAdjacentHTML('beforeend', `<a class="big" href="#" data-id="${big.id}" aria-label="View ${big.title}"><img src="${big.images[0]}" alt="${big.title}" loading="lazy" /><div class="meta">${big.title} — ${fmt(big.price)}</div></a>`);
+      items.slice(1,5).forEach(p => grid.insertAdjacentHTML('beforeend', `<a class="card" href="#" data-id="${p.id}" aria-label="View ${p.title}"><img src="${p.images[0]}" alt="${p.title}" loading="lazy" /><div class="meta">${p.title} — ${fmt(p.price)}</div></a>`));
+    }
+
+    /************************************
+     * Filters -> Sections (hooks)
+     ************************************/
+    const byNew = [...products].sort((a,b)=>b.addedAt - a.addedAt);
+    const byBest = [...products].sort((a,b)=>b.sales - a.sales);
+    const byDeals = products.filter(p=>p.discount>0).sort((a,b)=>b.discount-a.discount);
+    const byLiked = [...products].sort((a,b)=>b.likes - a.likes);
+
+    // Initial render
+    rowFill('#rowNew', byNew);
+    rowFill('#rowBest', byBest);
+    rowFill('#rowDeals', byDeals);
+    rowFill('#rowLiked', byLiked);
+    fillMW('#menGrid', products.filter(p=>p.gender!=='women').slice(0,5));
+    fillMW('#womenGrid', products.filter(p=>p.gender!=='men').slice(0,5));
+
+    // Carousel controls
+    $$('#main [data-scroll]').forEach(btn=>btn.addEventListener('click', e=>{
+      const t = document.querySelector(btn.dataset.target);
+      t.scrollBy({left: btn.dataset.scroll==='next'? 300 : -300, behavior:'smooth'});
+    }));
+
+    /************************************
+     * Search + autocomplete
+     ************************************/
+    const ac = $('#autocomplete');
+    const sinput = $('#searchInput');
+
+    function updateAutocomplete(q){
+      const m = q.trim().toLowerCase();
+      if(!m){ ac.style.display='none'; return; }
+      const hits = products.filter(p=>[p.title, p.category, p.tags.join(' ')].join(' ').toLowerCase().includes(m)).slice(0,6);
+      ac.innerHTML = hits.map(h=>`<button role="option" data-id="${h.id}">${h.title} • <span class="helper">${h.category}</span></button>`).join('');
+      ac.style.display = hits.length? 'block' : 'none';
+      sinput.setAttribute('aria-expanded','true');
+      ac.id = 'acList';
+    }
+
+    sinput.addEventListener('input', e=> updateAutocomplete(e.target.value));
+    sinput.addEventListener('keydown', e=>{ if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); sinput.focus(); } });
+    ac.addEventListener('click', e=>{ const b=e.target.closest('button'); if(!b) return; openProduct(b.dataset.id) });
+
+    /************************************
+     * Wishlist + Cart (localStorage)
+     ************************************/
+    function getCart(){ return store.get(LS.cart, []) }
+    function setCart(c){ store.set(LS.cart, c); $('#cartCount').textContent = c.reduce((n,i)=>n+i.qty,0) }
+    function getWishlist(){ return store.get(LS.wishlist, []) }
+
+    setCart(getCart());
+
+    document.addEventListener('click', e=>{
+      const card = e.target.closest('.p-card');
+      if(card){
+        const id = card.dataset.id; const p = products.find(x=>x.id===id);
+        if(e.target.closest('.add-cart')){ addToCart(p,1); }
+        if(e.target.closest('.view-product')){ openProduct(id); }
+        if(e.target.closest('.add-wish')){ toggleWishlist(p); }
+      }
+      const mw = e.target.closest('.card, .big'); if(mw){ openProduct(mw.dataset.id); }
     });
 
-    // Similar products logic
-    const simDiv = document.getElementById("similarProductsContainer");
-    simDiv.innerHTML = "";
-    products.filter(sp => sp.category === p.category && sp.id !== p.id)
-      .slice(0, 10).forEach(sp => {
-        const card = document.createElement("div");
-        card.className = "related-card";
-        card.innerHTML = `<img src="${sp.img}"><div style="padding:.25rem;font-size:.75rem">${sp.name}</div>`;
-        card.addEventListener("click", () => openProductModal(sp.id));
-        simDiv.appendChild(card);
-      });
+    function addToCart(p, qty){
+      const c = getCart();
+      const idx = c.findIndex(i=>i.id===p.id);
+      if(idx>-1) c[idx].qty += qty; else c.push({id:p.id, title:p.title, price:p.price*(1-p.discount), img:p.images[0], qty});
+      setCart(c); renderCart();
+    }
 
-    modalAddCart.onclick = () => addToCart(id);
-    productModal.style.display = "flex";
-  }
+    function removeFromCart(id){
+      const c = getCart().filter(i=>i.id!==id); setCart(c); renderCart();
+    }
 
-  modalClose.addEventListener("click", () => productModal.style.display = "none");
+    function renderCart(){
+      const box = $('#cartItems');
+      const c = getCart();
+      if(!c.length){ box.innerHTML = '<p class="helper">Your cart is empty.</p>'; return; }
+      const total = c.reduce((n,i)=>n + i.price*i.qty, 0);
+      box.innerHTML = c.map(i=>`<div style="display:flex;gap:10px;align-items:center;margin:6px 0">
+        <img src="${i.img}" alt="${i.title}" width="64" height="64" style="border-radius:10px;object-fit:cover"/>
+        <div style="flex:1">
+          <div>${i.title}</div>
+          <div class="helper">${fmt(i.price)} × ${i.qty}</div>
+        </div>
+        <button class="btn btn-ghost" data-remove="${i.id}">Remove</button>
+      </div>`).join('') + `<div style="display:flex;justify-content:space-between;margin-top:10px"><strong>Total</strong><strong>${fmt(total)}</strong></div>`;
+      box.querySelectorAll('[data-remove]').forEach(b=> b.addEventListener('click', ()=> removeFromCart(b.dataset.remove)));
+    }
 
-  // 360° VIEW (simple drag rotate)
-  let isDragging = false, startX = 0;
-  document.getElementById("viewer").addEventListener("mousedown", e => {
-    isDragging = true; startX = e.pageX;
-  });
-  document.addEventListener("mouseup", () => isDragging = false);
-  document.addEventListener("mousemove", e => {
-    if (isDragging) viewerImg.style.transform = `rotateY(${(e.pageX - startX) / 5}deg)`;
-  });
-    
-    /* ── SEARCH & POPULAR TAGS ───────────────────────────── */
-    searchBtn.onclick=applyFilters,searchInput.addEventListener("input",applyFilters),popularSearches.addEventListener("click",e=>{"BUTTON"===e.target.tagName&&(searchInput.value=e.target.dataset.search,applyFilters())});
-    /* ── SIDEBAR FILTERS ─────────────────────────────────── */
-    applyFiltersBtn.onclick=applyFilters;
-    /* ── CART ─────────────────────────────────────────────── */
-    function addToCart(id){const existing=cart.find(x=>x.id===id);existing?existing.qty+=1:cart.push({id,qty:1}),localStorage.setItem("cart",JSON.stringify(cart)),updateCartUI()}
-    function removeFromCart(id){cart=cart.filter(x=>x.id!==id),localStorage.setItem("cart",JSON.stringify(cart)),updateCartUI()}
-    function updateCartUI(){cartCount.textContent=cart.reduce((s,c)=>s+c.qty,0),cartItems.innerHTML="";let total=0;cart.forEach(item=>{const p=products.find(x=>x.id===item.id);if(!p)return;total+=p.price*item.qty;const div=document.createElement("div");div.className="cart-item",div.innerHTML=`<img src="${p.img}"><div class="details"><div>${p.name}</div><div>KES ${p.price} x <input type="number" min="1" value="${item.qty}" style="width:50px" data-id="${item.id}"></div><div style="margin-top:.25rem"><button data-id="${item.id}" class="btn btn-outline btn-sm">Remove</button></div></div>`,div.querySelector("input").addEventListener("change",e=>{const qty=parseInt(e.target.value);cart.find(x=>x.id===item.id).qty=qty,localStorage.setItem("cart",JSON.stringify(cart)),updateCartUI()}),div.querySelector("button").addEventListener("click",()=>removeFromCart(item.id)),cartItems.appendChild(div)}),cartTotal.textContent="KES "+total}
-    cartToggle.onclick=()=>{cartModal.classList.add("open"),updateCartUI()},cartClose.onclick=()=>cartModal.classList.remove("open"),checkoutBtn.onclick = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (!user) {
-    alert("Please log in to proceed to checkout.");
-    window.location.href = "authentication.html";
-    return;
-  }
+    function toggleWishlist(p){
+      let w = getWishlist();
+      if(w.find(x=>x.id===p.id)) w = w.filter(x=>x.id!==p.id); else w.push({id:p.id, title:p.title, price:p.price, img:p.images[0]});
+      store.set(LS.wishlist, w); renderWishlist();
+    }
 
-  // User is logged in, proceed to checkout
-  alert("Order placed successfully!");
-  cart = [];
-  localStorage.setItem("cart", "[]");
-  updateCartUI();
-  cartModal.classList.remove("open");
-};
-    /* ── INITIALISE ───────────────────────────────────────── */
-    renderProducts(products),updateCartUI(),
-  
-  window.addEventListener('DOMContentLoaded', function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const selectedCategory = urlParams.get('category');
+    function renderWishlist(){
+      const w = getWishlist();
+      $('#wishlistItems').innerHTML = w.length? w.map(i=>`<div style="display:flex;gap:10px;align-items:center;margin:6px 0">
+        <img src="${i.img}" alt="${i.title}" width="64" height="64" style="border-radius:10px;object-fit:cover"/>
+        <div style="flex:1">
+          <div>${i.title}</div>
+          <div class="helper">${fmt(i.price)}</div>
+        </div>
+        <button class="btn btn-primary" data-add="${i.id}">Add</button>
+      </div>`).join('') : '<p class="helper">Nothing saved yet.</p>';
+      $$('#wishlistItems [data-add]').forEach(b=> b.addEventListener('click', ()=>{
+        const p = products.find(x=>x.id===b.dataset.add); addToCart(p,1);
+      }));
+    }
 
-    const filteredProducts = selectedCategory
-      ? products.filter(p => p.category.toLowerCase() === selectedCategory.toLowerCase())
-      : products;
+    $('#openCart').addEventListener('click', ()=> openModal('#cartModal', renderCart));
+    $('#openWishlist').addEventListener('click', ()=> openModal('#wishlistModal', renderWishlist));
 
-    renderProducts(filteredProducts);
-    updateCartUI();
-  });
+    /************************************
+     * Product modal with related, similar, reviews, recently viewed
+     ************************************/
+    let currentProduct = null;
+    function openProduct(id){
+      const p = products.find(x=>x.id===id); if(!p) return;
+      currentProduct = p.id;
+      // track viewed
+      const views = store.get(LS.views, []);
+      const v = views.filter(x=>x!==p.id); v.unshift(p.id); store.set(LS.views, v.slice(0,12));
 
-</script>
-</body>
+      // header
+      $('#viewerImg').src = p.images[0]; $('#viewerImg').alt = p.title;
+      $('#mTitle').textContent = p.title; $('#mPrice').textContent = fmt(p.price * (1-p.discount));
+      $('#mSku').textContent = 'SKU: ' + p.sku; $('#mStars').innerHTML = starIcons(p.rating);
+      // variants
+      const opts = [];
+      for(const [k,vals] of Object.entries(p.variants)){
+        opts.push(`<div class="chip" role="button" tabindex="0" aria-pressed="false" data-variant="${k}">${k}: ${vals.join(', ')}</div>`);
+      }
+      $('#mVariants').innerHTML = opts.join('');
+
+      // description (500+ words realistic marketing copy)
+      const long = `Meet the ${p.title}, designed to be the piece you reach for without thinking and the one you remember the moment you put it on. We started with premium materials selected for comfort, longevity, and low impact, then tuned the fit so it drapes naturally and moves with you all day. Whether you’re commuting, traveling, lifting, or lounging, the ${p.title} balances softness with structure so you always feel put together.\n\nEvery detail is purposeful. Stitch lines are placed to follow the body and reduce bulk. Seams are reinforced in high‑wear zones for years of reliable use. Fabrics are pre‑washed to hold their size and feel from day one, and colorfast dyes keep your look fresh after repeat wear. Breathability prevents overheating while subtle stretch supports unrestricted motion. Nothing flashy—just quality you can feel.\n\nWe also optimized care. Most days, a quick refresh on a hanger is all it needs. When it’s time for a wash, toss it in cold with similar colors and lay flat or tumble low. Because the fiber content is responsibly sourced, you’ll spend less time babying and more time living.\n\nYour purchase does more. A portion of profits supports community initiatives and supply‑chain programs that elevate workers’ voices and advance fair‑trade practices. Packaging is curbside recyclable and we minimize transport emissions by consolidating shipments.\n\nChoose your perfect setup with easy size and color options, then personalize with our bundle recommendations below. Pair the ${p.title} with our performance joggers for the gym, with a crisp overshirt for the office, or with trail runners for a weekend city escape. Our customers tell us it’s the piece they buy in multiples and recommend to friends. Try it for 30 days—if it doesn’t become a favorite, returns are on us.`;
+      $('#mDesc').textContent = `${p.title} — ${p.specs[0]} · ${p.specs[1]} · ${p.specs[2]}`;
+      $('#mDescLong').textContent = long;
+      $('#mSpecs').innerHTML = p.specs.map(s=>`<li>${s}</li>`).join('');
+
+      // related (same category) + similar (same tags/category)
+      const related = products.filter(x=>x.category===p.category && x.id!==p.id).slice(0,8);
+      const similar = products.filter(x=> x.id!==p.id && (x.category===p.category || x.tags.some(t=>p.tags.includes(t)))).slice(0,12);
+      $('#relatedCarousel').innerHTML = related.map(r=>`<img src="${r.images[0]}" alt="${r.title}" data-id="${r.id}"/>`).join('');
+      $('#recentRow').innerHTML = store.get(LS.views, []).map(id=> products.find(pp=>pp.id===id)).filter(Boolean).map(rv=>`<div class="p-card" style="flex:0 0 150px"><img src="${rv.images[0]}" alt="${rv.title}" width="150" height="150"/><div class="p-meta"><div style="font-size:13px">${rv.title}</div><div>${fmt(rv.price)}</div></div></div>`).join('');
+      $('#similarRow').innerHTML = similar.map(s=> productCard(s)).join('');
+
+      // reviews
+      renderReviews(p.id);
+
+      // CTA handlers
+      $('#mAddCart').onclick = ()=> addToCart(p, parseInt($('#mQty').value||'1',10));
+      $('#mBuyNow').onclick = ()=>{ addToCart(p, parseInt($('#mQty').value||'1',10)); openModal('#cartModal', renderCart) };
+      $('#mWishlist').onclick = ()=> toggleWishlist(p);
+
+      // open modal + thumbnails
+      $('#productModal').style.display='flex';
+      $('#modalClose').focus();
+      $('#relatedCarousel').onclick = (e)=>{ const t=e.target.closest('img'); if(t) openProduct(t.dataset.id) };
+    }
+
+    function renderReviews(pid){
+      const all = store.get(LS.reviews, {});
+      const list = all[pid]||[];
+      const box = $('#reviewList');
+      if(!list.length){ box.innerHTML = '<p class="helper">No reviews yet. Be the first!</p>'; }
+      else{
+        box.innerHTML = list.map(r=>`<div style="border-bottom:1px solid rgba(255,255,255,.06);padding:8px 0"><strong>${r.name}</strong> <span class="helper">${new Date(r.at).toLocaleString()}</span><div>${'★'.repeat(r.stars)}${'✩'.repeat(5-r.stars)}</div><p style="margin:.25rem 0">${r.text}</p></div>`).join('');
+      }
+      $('#submitReview').onclick = ()=>{
+        const text = $('#reviewInput').value.trim(); if(!text) return;
+        const entry = {id:uid(), name:'Guest', text, stars:Math.floor(3+Math.random()*2), at:Date.now()};
+        all[pid] = [entry, ...(all[pid]||[])]; store.set(LS.reviews, all); $('#reviewInput').value=''; renderReviews(pid);
+      };
+    }
+
+    // Close modal on backdrop or button
+    $('#modalClose').addEventListener('click', ()=> $('#productModal').style.display='none');
+    $('#productModal').addEventListener('click', (e)=>{ if(e.target.id==='productModal') $('#productModal').style.display='none' });
+
+    /************************************
+     * AUTH + Captcha + 2FA field
+     ************************************/
+    function randCap(){ const a = 1+Math.floor(Math.random()*9), b = 1+Math.floor(Math.random()*9); return {q:`${a} + ${b} = ?`, a:a+b}; }
+    let capL = randCap(), capR = randCap(), capX = randCap();
+    $('#lCaptchaQ').textContent = capL.q; $('#rCaptchaQ').textContent = capR.q; $('#xCaptchaQ').textContent = capX.q;
+
+    $$('#authModal [data-auth-tab]').forEach(btn=> btn.addEventListener('click', ()=>{
+      const tab = btn.dataset.authTab;
+      $('#loginForm').hidden = tab!=='login';
+      $('#regForm').hidden = tab!=='register';
+      $('#resetForm').hidden = tab!=='reset';
+    }));
+
+    $('#loginForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const ok = parseInt($('#lCaptcha').value,10) === capL.a;
+      if(!ok) return alert('Captcha incorrect');
+      store.set(LS.user, {email: $('#lEmail').value, name: 'Member'});
+      alert('Logged in! (Demo)');
+      closeModal('#authModal');
+    });
+
+    $('#regForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const ok = parseInt($('#rCaptcha').value,10) === capR.a;
+      if(!ok) return alert('Captcha incorrect');
+      store.set(LS.user, {email: $('#rEmail').value, name: $('#rName').value});
+      alert('Account created! (Demo)');
+      closeModal('#authModal');
+    });
+
+    $('#resetForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const ok = parseInt($('#xCaptcha').value,10) === capX.a;
+      if(!ok) return alert('Captcha incorrect');
+      alert('Reset link sent! (Demo)');
+      closeModal('#authModal');
+    });
+
+    /************************************
+     * Help center: contact, returns, tracking
+     ************************************/
+    $$('#helpModal [data-help-tab]').forEach(btn=> btn.addEventListener('click', ()=>{
+      const tab = btn.dataset.helpTab;
+      $('#contactForm').hidden = tab!=='contact';
+      $('#returnsForm').hidden = tab!=='returns';
+      $('#trackForm').hidden = tab!=='tracking';
+    }));
+
+    $('#contactForm').addEventListener('submit', e=>{ e.preventDefault(); alert('Thanks! We will reply shortly. (Demo)'); closeModal('#helpModal') });
+    $('#returnsForm').addEventListener('submit', e=>{ e.preventDefault(); alert('Return started. Watch your inbox. (Demo)'); closeModal('#helpModal') });
+    $('#trackForm').addEventListener('submit', e=>{ e.preventDefault(); const n=$('#tOrder').value.trim(); $('#trackResult').textContent = n? `Order ${n} is in transit. ETA 3 days.` : 'Enter an order number.'; });
+
+    /************************************
+     * Newsletter + misc
+     ************************************/
+    $('#newsletterForm').addEventListener('submit', e=>{ e.preventDefault(); alert('Subscribed. Welcome aboard! (Demo)') });
+
+    /************************************
+     * Keyboard + Modal helpers
+     ************************************/
+    function openModal(sel, onOpen){ const m=$(sel); m.style.display='flex'; onOpen && onOpen(); }
+    function closeModal(sel){ const m=$(sel); m.style.display='none'; }
+
+    $('#openAuth').addEventListener('click', ()=> openModal('#authModal'));
+    $('#openAuth2').addEventListener('click', (e)=>{ e.preventDefault(); openModal('#authModal') });
+    $('#openHelp').addEventListener('click', (e)=>{ e.preventDefault(); openModal('#helpModal') });
+    $('#openHelp2').addEventListener('click', (e)=>{ e.preventDefault(); openModal('#helpModal') });
+
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ ['#productModal','#cartModal','#wishlistModal','#authModal','#helpModal'].forEach(closeModal) } });
+
+    /************************************
+     * Hero loop (accessible)
+     ************************************/
+    const heroImages = [
+      {src:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1400&auto=format&fit=crop', alt:'Elevated basics'},
+      {src:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=1400&auto=format&fit=crop', alt:'Weekend essentials'},
+      {src:'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1400&auto=format&fit=crop', alt:'Trail ready footwear'}
+    ];
+    let hi = 0; setInterval(()=>{
+      hi = (hi+1)%heroImages.length; const img = heroImages[hi];
+      const el = $('#heroSlider img'); el.src = img.src; el.alt = img.alt;
+    }, 5000);
+
+    // global year
+    $('#year').textContent = new Date().getFullYear();
+
+    // Open cart/wishlist via footer links hash (progressive enhancement)
+    window.addEventListener('hashchange', ()=>{
+      if(location.hash==='#cart') openModal('#cartModal', renderCart);
+    });
+  </script></body>
 </html>
