@@ -1,0 +1,1084 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Account • CalebStore</title>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<script src="auth.js"></script>
+<script src="protect.js"></script>
+<script>
+  protectPage(); // Prevent unauthorized access
+</script>
+<!-- Embedded CSS -->
+<style>
+  :root{
+    --bg1: linear-gradient(180deg,#071025 0%, #04111b 100%);
+    --glass-bg: rgba(255,255,255,0.03);
+    --card-bg: rgba(255,255,255,0.025);
+    --muted: rgba(255,255,255,0.6);
+    --accent: #00b4ff; /* electric blue */
+    --accent-2: #0ae6ff;
+    --glass-border: rgba(255,255,255,0.06);
+    --radius: 14px;
+    --blur: 12px;
+    --glass-shadow: 0 8px 30px rgba(0,180,255,0.06);
+    --glass-hover: rgba(255,255,255,0.04);
+    color-scheme: dark;
+  }
+
+  /* Reset */
+  *{box-sizing:border-box}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: var(--bg1);
+    color:#eaf6ff;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:28px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:20px;
+  }
+
+  /* Page wrapper */
+  .wrap{
+    display:flex;
+    gap:20px;
+    width:min(1200px,95%);
+  }
+
+  /* Sidebar */
+  .sidebar{
+    width:260px;
+    padding:18px;
+    border-radius:16px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    backdrop-filter: blur(var(--blur));
+    border:1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .profile-short{display:flex;gap:12px;align-items:center}
+  .avatar{width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid rgba(255,255,255,0.06)}
+  .profile-short .name{font-weight:600}
+  .muted{color:var(--muted);font-size:13px}
+
+  .nav{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+  .nav button{
+    background:transparent;border:0;padding:10px;border-radius:10px;text-align:left;
+    color:inherit;font-size:15px;cursor:pointer;
+    transition:all .18s ease;display:flex;align-items:center;gap:8px;
+  }
+  .nav button:hover{background:var(--glass-hover);transform:translateY(-2px)}
+  .nav button.active{background:linear-gradient(90deg, rgba(0,180,255,0.08), rgba(10,230,255,0.03));box-shadow:0 6px 18px rgba(0,180,255,0.06);border:1px solid rgba(0,180,255,0.12)}
+
+  .right{margin-left:auto}
+
+  /* Main */
+  .main{flex:1;display:flex;flex-direction:column;gap:14px}
+  .card{
+    padding:16px;border-radius:var(--radius);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid var(--glass-border);
+    backdrop-filter: blur(var(--blur));
+    box-shadow: 0 8px 30px rgba(2,10,25,0.6);
+  }
+
+  h2,h3,h4{margin:0;color:#eaf6ff}
+  h3{font-size:18px}
+  .small-muted{color:var(--muted);font-size:13px}
+  .section{transition:opacity .22s ease, transform .22s ease}
+
+  /* Dashboard top */
+  #dashboard .grid-2{display:grid;grid-template-columns:1fr 360px;gap:12px;margin-top:12px}
+  .grid-2 .card{padding:14px}
+  .stat-grid{display:flex;gap:12px}
+  .stat-grid .card{padding:12px;border-radius:12px;text-align:center;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01))}
+  .small-muted{color:var(--muted)}
+
+  /* Buttons */
+  .btn{padding:8px 12px;border-radius:10px;border:0;background:rgba(255,255,255,0.04);cursor:pointer;color:inherit}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+  .btn-primary{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#00232a;font-weight:600;border:0;
+    box-shadow: 0 6px 20px rgba(0,180,255,0.08);
+  }
+
+  /* layout: tables and inputs */
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:8px;text-align:left;border-bottom:1px dashed rgba(255,255,255,0.02)}
+  input,select,textarea{background:transparent;border:1px solid rgba(255,255,255,0.05);padding:10px;border-radius:8px;color:inherit;width:100%;outline:none}
+  input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.35)}
+  label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+
+  /* hidden class */
+  .hidden{display:none}
+
+  /* Responsive */
+  @media (max-width:980px){
+    .wrap{flex-direction:column;align-items:stretch}
+    .sidebar{width:100%;flex-direction:row;align-items:center;padding:12px}
+    .profile-short{display:flex;gap:8px}
+    .main{width:100%}
+    #dashboard .grid-2{grid-template-columns:1fr}
+    .sidebar .nav{flex-direction:row;overflow:auto;padding-bottom:6px}
+    .nav button{white-space:nowrap}
+  }
+
+  /* Modal */
+  .modal{
+    position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.98);
+    width:min(620px,94%);z-index:9999;padding:16px;border-radius:12px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.06);backdrop-filter:blur(10px);
+    box-shadow:0 30px 80px rgba(2,10,25,0.7);
+  }
+  .modal h4{margin-bottom:8px}
+  .modal .row{display:flex;gap:8px}
+  .modal .row .col{flex:1}
+
+  /* neon outline for focus */
+  :focus{outline:none;box-shadow:0 0 0 4px rgba(0,180,255,0.06), 0 6px 18px rgba(0,180,255,0.04)}
+
+  /* subtle animated accent */
+  .accent-bar{
+    height:4px;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    box-shadow:0 8px 18px rgba(0,180,255,0.12);margin-top:8px;
+    animation:glow 3.5s ease-in-out infinite;
+  }
+  @keyframes glow{
+    0%{filter:brightness(0.95)}
+    50%{filter:brightness(1.15)}
+    100%{filter:brightness(0.95)}
+  }
+
+  /* chip */
+  .chip{padding:6px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.03);font-size:13px}
+
+  /* small helpers */
+  .muted-inline{color:var(--muted);font-size:13px}
+  .flex{display:flex;gap:8px;align-items:center}
+  .gap-12{gap:12px}
+  .center{text-align:center}
+  .mr-auto{margin-right:auto}
+  .pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);font-weight:600}
+
+  /* tiny soft tooltip-ish */
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+</style>
+</head>
+<body>
+  <div class="wrap" role="application" aria-label="Account page">
+    <!-- SIDEBAR -->
+    <aside class="sidebar card" aria-label="Account navigation">
+      <div class="profile-short" id="sidebarProfile">
+        <img id="sideAvatar" class="avatar" src="default-avatar.png" alt="avatar">
+        <div>
+          <div class="name" id="sideName">Guest</div>
+          <div class="muted" id="sideEmail">Not signed in</div>
+        </div>
+      </div>
+
+      <div class="accent-bar" aria-hidden="true"></div>
+
+      <nav class="nav" role="navigation" aria-label="Account sections">
+        <button data-section="dashboard" class="active" aria-pressed="true">🏠 Dashboard</button>
+        <button data-section="personal">👤 Personal Info</button>
+        <button data-section="addresses">🏠 Address Book</button>
+        <button data-section="orders">📦 Orders & Tracking</button>
+        <button data-section="payments">💳 Payment Methods</button>
+        <button data-section="wishlist">💖 Wishlist</button>
+        <button data-section="notifications">🔔 Email & SMS</button>
+        <button data-section="returns">↩️ Returns & Exchanges</button>
+        <button data-section="security">🔒 Security & Trust</button>
+        <button data-section="rewards">🏆 Rewards & Referrals</button>
+        <button data-section="help">❓ Help & Support</button>
+        <button data-section="logout" style="margin-top:10px;color:#ffdcdc">⎋ Logout</button>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main" id="mainContent">
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="card section" aria-labelledby="dashHeader">
+        <div style="display:flex;align-items:center;gap:12px">
+          <img src="default-avatar.png" alt="avatar" width="72" height="72" id="dashAvatar" style="border-radius:50%;border:1px solid rgba(255,255,255,0.04)">
+          <div>
+            <h2 id="dashName">Welcome, Guest</h2>
+            <div class="small-muted" id="dashEmail">Sign in to personalize your experience</div>
+          </div>
+          <div class="right">
+            <button class="btn btn-ghost" id="editQuickBtn">Edit Profile</button>
+          </div>
+        </div>
+
+        <hr style="margin:12px 0;border:none;border-top:1px dashed rgba(255,255,255,.03)">
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Account Summary</h3>
+            <p class="small-muted">Quick stats about your account</p>
+            <div class="stat-grid" style="margin-top:12px">
+              <div class="card">
+                <div class="small-muted">Orders</div>
+                <div id="statOrders" style="font-size:20px;font-weight:700">0</div>
+              </div>
+              <div class="card">
+                <div class="small-muted">Wishlist</div>
+                <div id="statWishlist" style="font-size:20px;font-weight:700">0</div>
+              </div>
+              <div class="card">
+                <div class="small-muted">Rewards</div>
+                <div id="statRewards" style="font-size:20px;font-weight:700">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Security Snapshot</h3>
+            <p class="small-muted">Two-Factor: <span id="snap2fa">Disabled</span> · Email Verified: <span id="snapEmailVerified">No</span></p>
+            <div style="margin-top:8px">
+              <button class="btn btn-primary" id="manageSecurity">Manage Security</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PERSONAL INFO -->
+      <section id="personal" class="card section hidden" aria-hidden="true">
+        <h3>Personal Information & Profile Settings</h3>
+        <p class="small-muted">Edit your name, email, phone, password, profile picture, and account type.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:12px;margin-top:12px">
+          <div>
+            <label for="inputName">Full name</label>
+            <input id="inputName" placeholder="Your full name">
+            <label style="margin-top:8px">Username</label>
+            <input id="inputUsername" placeholder="Unique username">
+            <label style="margin-top:8px">Email</label>
+            <div style="display:flex;gap:8px"><input id="inputEmail" placeholder="you@example.com"><button id="verifyEmailBtn" class="btn btn-ghost">Verify Email</button></div>
+            <div id="emailVerificationMsg" class="small-muted"></div>
+
+            <label style="margin-top:8px">Phone number</label>
+            <div style="display:flex;gap:8px"><input id="inputPhone" placeholder="+2547..."><button id="verifyPhoneBtn" class="btn btn-ghost">Verify Phone</button></div>
+            <div id="phoneVerificationMsg" class="small-muted"></div>
+
+            <label style="margin-top:8px">Account type</label>
+            <select id="inputAccountType"><option>Customer</option><option>Seller</option><option>Admin</option></select>
+
+            <label style="margin-top:8px">Language</label>
+            <select id="inputLanguage"><option>English (EN)</option><option>Swahili (SW)</option></select>
+
+            <label style="margin-top:8px">Time zone</label>
+            <select id="inputTimezone"></select>
+
+            <label style="margin-top:8px">Currency</label>
+            <select id="inputCurrency"><option>USD</option><option>EUR</option><option>KES</option></select>
+
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button id="savePersonal" class="btn btn-primary">Save</button>
+              <button id="resetPersonal" class="btn btn-ghost">Reset</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="card" style="text-align:center;padding:18px">
+              <img id="previewAvatar" src="default-avatar.png" class="avatar" style="width:120px;height:120px;border-radius:16px">
+              <div style="margin-top:10px">
+                <input id="avatarInput" type="file" accept="image/*" class="hidden" aria-hidden="true">
+                <button id="uploadAvatar" class="btn btn-ghost">Upload Profile Picture</button>
+                <button id="removeAvatar" class="btn" style="background:#ff6b6b;color:#fff">Remove</button>
+              </div>
+
+              <hr style="margin:12px 0;border:none;border-top:1px dashed rgba(255,255,255,.03)">
+              <label>Password</label>
+              <input id="inputPassword" type="password" placeholder="New password">
+              <div class="small-muted" style="margin-top:6px">Password strength: <span id="pwStrength">—</span></div>
+              <div style="display:flex;gap:8px;margin-top:8px"><button id="changePassword" class="btn btn-primary">Change Password</button><button id="forgotPassword" class="btn btn-ghost">Reset Password</button></div>
+
+              <hr style="margin:12px 0;border:none;border-top:1px dashed rgba(255,255,255,.03)">
+              <label>Security questions</label>
+              <select id="secQuestion"><option>What is your mother's maiden name?</option><option>What is the name of your first pet?</option></select>
+              <input id="secAnswer" placeholder="Answer">
+              <div style="display:flex;gap:8px;margin-top:8px"><button id="saveSec" class="btn btn-primary">Save Security Qs</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADDRESSES -->
+      <section id="addresses" class="card section hidden" aria-hidden="true">
+        <h3>Address Book</h3>
+        <p class="small-muted">Add, edit, delete, and set default shipping & billing addresses. Addresses are validated and auto-formatted where possible.</p>
+        <div style="display:flex;gap:12px;margin-top:12px">
+          <div style="flex:1">
+            <button id="addAddressBtn" class="btn btn-primary">+ Add Address</button>
+            <div style="margin-top:12px;overflow:auto;max-height:420px">
+              <table id="addressesTable" aria-live="polite"><thead><tr><th>Label</th><th>Address</th><th>Country</th><th>Type</th><th>Actions</th></tr></thead><tbody></tbody></table>
+            </div>
+          </div>
+          <div style="width:320px">
+            <div class="card">
+              <h4>Address Tools</h4>
+              <div class="small-muted">Auto-complete & formatting are applied when possible.</div>
+              <div style="margin-top:8px"><button id="importAddress" class="btn btn-ghost">Import from Profile</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address Modal -->
+        <div id="addressModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="addrModalTitle">
+          <h4 id="addrModalTitle">Add Address</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div><label>Label (e.g., Home)</label><input id="addrLabel"></div>
+            <div><label>Country</label><select id="addrCountry"><option>Kenya</option><option>United Kingdom</option><option>United States</option><option>Other</option></select></div>
+            <div style="grid-column:1/3"><label>Street Address</label><input id="addrLine1"></div>
+            <div><label>City / Town</label><input id="addrCity"></div>
+            <div><label>State / County</label><input id="addrState"></div>
+            <div><label>Postal Code</label><input id="addrPost"></div>
+          </div>
+          <label style="margin-top:8px">Type</label>
+          <select id="addrType"><option>Shipping</option><option>Billing</option></select>
+          <div style="display:flex;gap:8px;margin-top:10px"><button id="saveAddr" class="btn btn-primary">Save</button><button id="cancelAddr" class="btn btn-ghost">Cancel</button></div>
+        </div>
+      </section>
+
+      <!-- ORDERS -->
+      <section id="orders" class="card section hidden" aria-hidden="true">
+        <h3>Order History & Tracking</h3>
+        <p class="small-muted">View order details, tracking, cancel orders, and see status updates in real-time (mocked here).</p>
+        <div style="margin-top:12px;overflow:auto;max-height:520px">
+          <table id="ordersTable" aria-live="polite"><thead><tr><th>Order #</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table>
+        </div>
+      </section>
+
+      <!-- PAYMENTS -->
+      <section id="payments" class="card section hidden" aria-hidden="true">
+        <h3>Payment Settings & Methods</h3>
+        <p class="small-muted">Add, edit, delete, set default payment methods. Secure storage is simulated and PCI compliance indicator is shown.</p>
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:12px;margin-top:12px">
+          <div>
+            <button id="addPaymentBtn" class="btn btn-primary">+ Add Payment Method</button>
+            <table id="paymentsTable" style="margin-top:12px"><thead><tr><th>Type</th><th>Details</th><th>Default</th><th>Actions</th></tr></thead><tbody></tbody></table>
+            <div style="margin-top:8px" class="small-muted">Payment history and disputes available below.</div>
+            <div id="paymentHistory" style="margin-top:12px"></div>
+          </div>
+          <div>
+            <div class="card">
+              <h4>Security</h4>
+              <div class="small-muted">Secure payment storage: <span id="pci">Enabled</span></div>
+              <div style="margin-top:8px"><button id="viewPCI" class="btn btn-ghost">View PCI Info</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Modal -->
+        <div id="paymentModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="payModalTitle">
+          <h4 id="payModalTitle">Add Payment Method</h4>
+          <label>Method</label>
+          <select id="payMethod"><option>Credit Card</option><option>PayPal</option><option>Mobile Money</option></select>
+
+          <div id="payDetails" style="margin-top:8px">
+            <label>Cardholder name</label><input id="cardName">
+            <label>Card number</label><input id="cardNumber" placeholder="4242 4242 4242 4242">
+            <label>Expiry (MM/YY)</label><input id="cardExpiry">
+            <label>CVC</label><input id="cardCVC">
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:8px"><button id="savePay" class="btn btn-primary">Save</button><button id="cancelPay" class="btn btn-ghost">Cancel</button></div>
+        </div>
+      </section>
+
+      <!-- WISHLIST -->
+      <section id="wishlist" class="card section hidden" aria-hidden="true">
+        <h3>Wishlist</h3>
+        <p class="small-muted">Add products to wishlist, share, edit, and delete.</p>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:12px">
+          <input id="wishInput" placeholder="Product name or URL"><button id="addWish" class="btn btn-primary">Add</button>
+          <button id="shareWish" class="btn btn-ghost">Share Wishlist</button>
+        </div>
+        <div style="margin-top:12px"><table id="wishTable"><thead><tr><th>Product</th><th>Notes</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+      </section>
+
+      <!-- NOTIFICATIONS -->
+      <section id="notifications" class="card section hidden" aria-hidden="true">
+        <h3>Email & SMS Preferences</h3>
+        <p class="small-muted">Manage newsletter, promotional emails, SMS, frequency and notification types.</p>
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:12px;margin-top:12px">
+          <div>
+            <label><input type="checkbox" id="optNewsletter"> Subscribe to newsletter</label>
+            <label><input type="checkbox" id="optPromos"> Promotional Emails</label>
+            <label><input type="checkbox" id="optSms"> SMS Notifications</label>
+            <label style="margin-top:8px">Email frequency</label>
+            <select id="emailFreq"><option>Daily</option><option>Weekly</option><option>Monthly</option></select>
+            <label style="margin-top:8px">Notification types</label>
+            <select id="notifTypes" multiple style="height:100px"><option>Order updates</option><option>Promotions</option><option>Security alerts</option><option>Product recommendations</option></select>
+            <div style="display:flex;gap:8px;margin-top:12px"><button id="saveNotif" class="btn btn-primary">Save</button></div>
+          </div>
+          <div>
+            <div class="card">
+              <h4>Preview</h4>
+              <div class="small-muted">How notifications will appear.</div>
+              <div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.02);border-radius:8px">Sample: <strong id="sampleNotif">You have a new order update.</strong></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RETURNS -->
+      <section id="returns" class="card section hidden" aria-hidden="true">
+        <h3>Returns & Exchanges</h3>
+        <p class="small-muted">Initiate return/exchange requests, track status, and view history.</p>
+        <div style="margin-top:12px;display:flex;gap:12px">
+          <div style="flex:1">
+            <button id="newReturnBtn" class="btn btn-primary">Initiate Return / Exchange</button>
+            <div id="returnsList" style="margin-top:12px"></div>
+          </div>
+          <div style="width:320px">
+            <div class="card"><h4>Policy</h4>
+            <div class="small-muted">Return policy: 30 days from delivery. Exchanges accepted for faulty items.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECURITY -->
+      <section id="security" class="card section hidden" aria-hidden="true">
+        <h3>Security & Trust</h3>
+        <p class="small-muted">Manage 2FA, password strength, account lockout, trust badges, privacy, terms and data protection.</p>
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:12px;margin-top:12px">
+          <div>
+            <label>Two-Factor Authentication</label>
+            <div style="display:flex;gap:8px;align-items:center"><label class="small-muted">Enable 2FA</label><input type="checkbox" id="toggle2fa"></div>
+
+            <label style="margin-top:8px">Password strength</label>
+            <div class="small-muted">Current: <span id="currentPwStrength">—</span></div>
+
+            <label style="margin-top:8px">Account lockout policy</label>
+            <select id="lockoutPolicy"><option>Lock after 5 failed attempts</option><option>Lock after 10 failed attempts</option></select>
+
+            <label style="margin-top:8px">Trust badges</label>
+            <div style="display:flex;gap:6px;margin-top:6px"><span class="chip">SSL</span><span class="chip">PCI</span><span class="chip">GDPR</span></div>
+
+            <label style="margin-top:8px">Cookie policy</label>
+            <div class="small-muted">Allow essential cookies by default.</div>
+
+            <div style="display:flex;gap:8px;margin-top:12px"><button id="saveSecurity" class="btn btn-primary">Save</button></div>
+          </div>
+          <div>
+            <div class="card">
+              <h4>Privacy & Terms</h4>
+              <div style="max-height:220px;overflow:auto;font-size:13px;color:var(--muted)">This area would show Privacy Policy, Terms and Conditions and Data Protection information. For demo purposes, the full text is abbreviated.</div>
+              <div style="margin-top:8px"><button id="viewPrivacy" class="btn btn-ghost">View Privacy Policy</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REWARDS -->
+      <section id="rewards" class="card section hidden" aria-hidden="true">
+        <h3>Rewards, Membership & Referrals</h3>
+        <p class="small-muted">View loyalty tiers, referral codes, and membership benefits.</p>
+        <div style="display:flex;gap:12px;margin-top:12px">
+          <div style="flex:1">
+            <div class="card"><h4>Membership</h4><div id="memTier">Bronze</div><div class="small-muted">Points: <span id="memPoints">0</span></div></div>
+            <div style="margin-top:12px" class="card"><h4>Referral</h4><div class="small-muted">Your referral code: <strong id="refCode">—</strong></div><button id="copyReferral" class="btn btn-ghost" style="margin-top:8px">Copy</button></div>
+          </div>
+          <div style="width:320px">
+            <div class="card"><h4>Rewards Program</h4><div class="small-muted">Earn points, redeem for discounts, and check available offers.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HELP -->
+      <section id="help" class="card section hidden" aria-hidden="true">
+        <h3>Help & Support</h3>
+        <p class="small-muted">Contact support, view FAQs, submit feedback and participate in surveys.</p>
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:12px;margin-top:12px">
+          <div>
+            <h4>Contact</h4>
+            <p class="small-muted">support@calebstore.com · +254 700 000 000</p>
+            <h4>FAQs</h4>
+            <div class="small-muted">Common questions about orders, returns, payments are shown here.</div>
+            <h4 style="margin-top:12px">Feedback</h4>
+            <textarea id="feedback" placeholder="Share your feedback" style="height:120px"></textarea>
+            <div style="margin-top:8px"><button id="sendFeedback" class="btn btn-primary">Send Feedback</button></div>
+          </div>
+          <div>
+            <div class="card"><h4>Surveys</h4><div class="small-muted">Occasional surveys to help improve service.</div><button id="takeSurvey" class="btn btn-ghost" style="margin-top:8px">Take Survey</button></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+<!-- Embedded JS -->
+<script>
+/* ==========================
+   Simple client-side "app" to wire up UI
+   - Data is mocked and persisted in localStorage
+   - Accessible, responsive, animated UI interactions
+   ========================== */
+
+(function(){
+  // Utilities
+  const $ = (sel, ctx=document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+  const saveLS = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+  const loadLS = (k,def) => {
+    try{const t=JSON.parse(localStorage.getItem(k)); return t===null?def:t||def}catch(e){return def}
+  };
+
+  // Default mock state
+  const state = {
+    profile: loadLS('cs_profile', {
+      name: 'Guest',
+      email: 'Not signed in',
+      avatar: 'default-avatar.png',
+      username: '',
+      phone: '',
+      accountType: 'Customer',
+      language: 'English (EN)',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+      currency: 'USD'
+    }),
+    addresses: loadLS('cs_addresses', []),
+    payments: loadLS('cs_payments', []),
+    wishlist: loadLS('cs_wishlist', []),
+    orders: loadLS('cs_orders', [
+      // mock order sample
+      {id:'ORD-1001', date:'2025-11-01', items:2, total:'$29.99', status:'Delivered', tracking:'DELIVERED'}
+    ]),
+    notifications: loadLS('cs_notifs', {newsletter:false,promos:false,sms:false,frequency:'Weekly',types:['Order updates']}),
+    rewards: loadLS('cs_rewards', {tier:'Bronze',points:0,ref:'—'}),
+    security: loadLS('cs_security', {twoFA:false})
+  };
+
+  // DOM refs
+  const sections = $$('.section');
+  const navBtns = $$('.nav button');
+  const sideName = $('#sideName');
+  const sideEmail = $('#sideEmail');
+  const dashName = $('#dashName');
+  const dashEmail = $('#dashEmail');
+  const dashAvatar = $('#dashAvatar');
+  const sideAvatar = $('#sideAvatar');
+  const previewAvatar = $('#previewAvatar');
+  const inputTimezone = $('#inputTimezone');
+  const statOrders = $('#statOrders');
+  const statWishlist = $('#statWishlist');
+  const statRewards = $('#statRewards');
+  const snap2fa = $('#snap2fa');
+  const snapEmailVerified = $('#snapEmailVerified');
+
+  // Initialize UI
+  function init(){
+    // Fill profile UI
+    renderProfile();
+    populateTimezones();
+    renderStats();
+    renderAddresses();
+    renderPayments();
+    renderWishlist();
+    renderOrders();
+    renderRewards();
+    renderNotifications();
+    bindEvents();
+  }
+
+  function renderProfile(){
+    const p=state.profile;
+    sideName.textContent = p.name || 'Guest';
+    sideEmail.textContent = p.email || 'Not signed in';
+    dashName.textContent = p.name ? `Welcome, ${p.name}` : 'Welcome, Guest';
+    dashEmail.textContent = p.email ? p.email : 'Sign in to personalize your experience';
+    dashAvatar.src = p.avatar || 'default-avatar.png';
+    sideAvatar.src = p.avatar || 'default-avatar.png';
+    previewAvatar.src = p.avatar || 'default-avatar.png';
+    $('#inputName').value = p.name || '';
+    $('#inputEmail').value = p.email || '';
+    $('#inputUsername').value = p.username || '';
+    $('#inputPhone').value = p.phone || '';
+    $('#inputAccountType').value = p.accountType || 'Customer';
+    $('#inputLanguage').value = p.language || 'English (EN)';
+    $('#inputCurrency').value = p.currency || 'USD';
+    $('#pwStrength').textContent = '—';
+    $('#currentPwStrength').textContent = '—';
+    $('#secAnswer').value = '';
+    $('#memTier').textContent = state.rewards.tier || 'Bronze';
+    $('#memPoints').textContent = (state.rewards.points||0);
+    $('#refCode').textContent = state.rewards.ref || '—';
+    $('#snap2fa').textContent = state.security.twoFA ? 'Enabled' : 'Disabled';
+    $('#toggle2fa').checked = !!state.security.twoFA;
+    snapEmailVerified.textContent = false ? 'Yes' : 'No'; // placeholder
+  }
+
+  function renderStats(){
+    statOrders.textContent = state.orders.length;
+    statWishlist.textContent = state.wishlist.length;
+    statRewards.textContent = state.rewards.points || 0;
+  }
+
+  // Timezone populate (common list)
+  function populateTimezones(){
+    const zones = [
+      'Africa/Nairobi','Europe/London','Europe/Berlin','America/New_York','America/Los_Angeles','Asia/Kolkata','Asia/Tokyo','UTC'
+    ];
+    inputTimezone.innerHTML = zones.map(z=>`<option ${z===state.profile.timezone? 'selected':''}>${z}</option>`).join('');
+  }
+
+  /* ======= Addresses ======= */
+  const addrTBody = $('#addressesTable tbody');
+  function renderAddresses(){
+    addrTBody.innerHTML = '';
+    if(state.addresses.length===0){
+      addrTBody.innerHTML = '<tr><td colspan="5" class="muted-inline">No saved addresses</td></tr>';
+      return;
+    }
+    state.addresses.forEach((a,i)=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${escapeHtml(a.label)}</td>
+        <td>${escapeHtml(a.line1)}, ${escapeHtml(a.city)} ${a.post?('- '+escapeHtml(a.post)) : ''}</td>
+        <td>${escapeHtml(a.country)}</td>
+        <td>${escapeHtml(a.type)}</td>
+        <td>
+          <button data-i="${i}" class="btn btn-ghost editAddr">Edit</button>
+          <button data-i="${i}" class="btn" style="background:#ff6b6b;color:#fff" title="Delete">Delete</button>
+        </td>
+      `;
+      addrTBody.appendChild(tr);
+    });
+  }
+
+  /* ======= Payments ======= */
+  const paymentsTBody = $('#paymentsTable tbody');
+  function renderPayments(){
+    paymentsTBody.innerHTML='';
+    if(state.payments.length===0){
+      paymentsTBody.innerHTML = '<tr><td colspan="4" class="muted-inline">No payment methods</td></tr>';
+      return;
+    }
+    state.payments.forEach((p,i)=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML = `<td>${escapeHtml(p.method)}</td><td>${escapeHtml(p.details||'—')}</td><td>${p.default?'<span class="pill">Default</span>':''}</td><td>
+        <button data-i="${i}" class="btn btn-ghost editPay">Edit</button>
+        <button data-i="${i}" class="btn" style="background:#ff6b6b;color:#fff">Delete</button>
+      </td>`;
+      paymentsTBody.appendChild(tr);
+    });
+  }
+
+  /* ======= Wishlist ======= */
+  const wishTBody = $('#wishTable tbody');
+  function renderWishlist(){
+    wishTBody.innerHTML='';
+    if(state.wishlist.length===0){
+      wishTBody.innerHTML = '<tr><td colspan="3" class="muted-inline">Your wishlist is empty</td></tr>';
+      return;
+    }
+    state.wishlist.forEach((w,i)=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML = `<td>${escapeHtml(w.title)}</td><td>${escapeHtml(w.note||'')}</td><td>
+        <button data-i="${i}" class="btn btn-ghost viewWish">View</button>
+        <button data-i="${i}" class="btn" style="background:#ff6b6b;color:#fff">Remove</button>
+      </td>`;
+      wishTBody.appendChild(tr);
+    });
+  }
+
+  /* ======= Orders ======= */
+  const ordersTBody = $('#ordersTable tbody');
+  function renderOrders(){
+    ordersTBody.innerHTML='';
+    if(state.orders.length===0){
+      ordersTBody.innerHTML = '<tr><td colspan="6" class="muted-inline">No orders yet</td></tr>';
+      return;
+    }
+    state.orders.forEach((o,i)=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML = `<td>${escapeHtml(o.id)}</td><td>${escapeHtml(o.date)}</td><td>${o.items}</td><td>${escapeHtml(o.total)}</td><td>${escapeHtml(o.status)}</td><td>
+        <button data-i="${i}" class="btn btn-ghost viewOrder">Details</button>
+        <button data-i="${i}" class="btn btn-ghost" ${o.status!=='Pending'?'disabled':''}>Cancel</button>
+      </td>`;
+      ordersTBody.appendChild(tr);
+    });
+  }
+
+  /* ======= Notifications ======= */
+  function renderNotifications(){
+    const n = state.notifications;
+    $('#optNewsletter').checked = !!n.newsletter;
+    $('#optPromos').checked = !!n.promos;
+    $('#optSms').checked = !!n.sms;
+    $('#emailFreq').value = n.frequency || 'Weekly';
+    // set types
+    const opts = Array.from($('#notifTypes').options);
+    opts.forEach(o=> o.selected = (n.types||[]).includes(o.value));
+    $('#sampleNotif').textContent = 'You have a new order update.';
+  }
+
+  /* ======= Rewards ======= */
+  function renderRewards(){ /* already in renderProfile */ }
+
+  /* ======= Bind events ======= */
+  function bindEvents(){
+    // Navigation
+    navBtns.forEach(b=>{
+      b.addEventListener('click', e=>{
+        const section = b.getAttribute('data-section');
+        if(section==='logout'){ doLogout(); return; }
+        navBtns.forEach(x=>{x.classList.remove('active');x.setAttribute('aria-pressed','false')});
+        b.classList.add('active');
+        b.setAttribute('aria-pressed','true');
+        sections.forEach(s=>{
+          if(s.id===section){ s.classList.remove('hidden'); s.removeAttribute('aria-hidden'); s.style.opacity=1; s.style.transform='translateY(0)' }
+          else { s.classList.add('hidden'); s.setAttribute('aria-hidden','true'); s.style.opacity=0; s.style.transform='translateY(6px)' }
+        });
+        // if quick link
+        if(section==='security') document.activeElement.blur();
+      });
+    });
+
+    // quick edit profile
+    $('#editQuickBtn').addEventListener('click', ()=> {
+      document.querySelector('[data-section="personal"]').click();
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+
+    // Save personal
+    $('#savePersonal').addEventListener('click', ()=>{
+      state.profile.name = $('#inputName').value.trim() || 'Guest';
+      state.profile.email = $('#inputEmail').value.trim();
+      state.profile.username = $('#inputUsername').value.trim();
+      state.profile.phone = $('#inputPhone').value.trim();
+      state.profile.accountType = $('#inputAccountType').value;
+      state.profile.language = $('#inputLanguage').value;
+      state.profile.timezone = $('#inputTimezone').value;
+      state.profile.currency = $('#inputCurrency').value;
+      saveLS('cs_profile', state.profile);
+      renderProfile();
+      renderStats();
+      toast('Profile saved');
+    });
+
+    $('#resetPersonal').addEventListener('click', ()=>{
+      $('#inputName').value = state.profile.name || '';
+      $('#inputEmail').value = state.profile.email || '';
+    });
+
+    // Avatar upload logic
+    $('#uploadAvatar').addEventListener('click', ()=> $('#avatarInput').click());
+    $('#avatarInput').addEventListener('change', (ev)=>{
+      const f = ev.target.files && ev.target.files[0];
+      if(!f) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        state.profile.avatar = e.target.result;
+        saveLS('cs_profile', state.profile);
+        renderProfile();
+        toast('Avatar updated');
+      }
+      reader.readAsDataURL(f);
+    });
+    $('#removeAvatar').addEventListener('click', ()=>{
+      state.profile.avatar = 'default-avatar.png';
+      saveLS('cs_profile', state.profile);
+      renderProfile();
+      toast('Avatar removed');
+    });
+
+    // Password strength
+    $('#inputPassword').addEventListener('input', e=>{
+      const s = scorePassword(e.target.value);
+      $('#pwStrength').textContent = s.label;
+      $('#currentPwStrength').textContent = s.label;
+    });
+
+    $('#changePassword').addEventListener('click', ()=>{
+      const pw = $('#inputPassword').value;
+      if(pw.length<6){ toast('Password too short'); return; }
+      // in real app: call API
+      $('#inputPassword').value='';
+      $('#pwStrength').textContent='—';
+      toast('Password changed (mock)');
+    });
+
+    // Security toggles
+    $('#toggle2fa').addEventListener('change', e=>{
+      state.security.twoFA = e.target.checked;
+      saveLS('cs_security', state.security);
+      $('#snap2fa').textContent = state.security.twoFA ? 'Enabled' : 'Disabled';
+      toast('Two-Factor Authentication '+(state.security.twoFA?'enabled':'disabled'));
+    });
+
+    // Addresses modal
+    $('#addAddressBtn').addEventListener('click', ()=> openAddrModal());
+    $('#cancelAddr').addEventListener('click', ()=> closeAddrModal());
+    $('#saveAddr').addEventListener('click', ()=> {
+      const a = {
+        label: $('#addrLabel').value || 'Address',
+        country: $('#addrCountry').value,
+        line1: $('#addrLine1').value || '',
+        city: $('#addrCity').value || '',
+        state: $('#addrState').value || '',
+        post: $('#addrPost').value || '',
+        type: $('#addrType').value
+      };
+      // simple validation
+      if(!a.line1 || !a.city){ toast('Please enter street address and city'); return; }
+      state.addresses.push(a);
+      saveLS('cs_addresses', state.addresses);
+      renderAddresses();
+      closeAddrModal();
+      renderStats();
+      toast('Address saved');
+    });
+
+    // edit/delete address via table (delegation)
+    addrTBody.addEventListener('click', (e)=>{
+      const t = e.target;
+      if(t.classList.contains('editAddr')){
+        const i = Number(t.getAttribute('data-i'));
+        openAddrModal(state.addresses[i], i);
+      } else if(t.tagName==='BUTTON' && t.style.background.includes('#ff6b6b')){
+        const i = Number(t.getAttribute('data-i'));
+        if(confirm('Delete address?')) {
+          state.addresses.splice(i,1);
+          saveLS('cs_addresses', state.addresses);
+          renderAddresses();
+          renderStats();
+        }
+      }
+    });
+
+    // Payments
+    $('#addPaymentBtn').addEventListener('click', ()=> $('#paymentModal').classList.remove('hidden'));
+    $('#cancelPay').addEventListener('click', ()=> $('#paymentModal').classList.add('hidden'));
+    $('#savePay').addEventListener('click', ()=>{
+      const method = $('#payMethod').value;
+      const details = method==='Credit Card' ? `${$('#cardName').value} • ${$('#cardNumber').value.slice(-4)}` : $('#cardName').value || method;
+      const p = {method,details,default: state.payments.length===0};
+      state.payments.push(p);
+      saveLS('cs_payments', state.payments);
+      renderPayments();
+      $('#paymentModal').classList.add('hidden');
+      toast('Payment method added (mock)');
+    });
+
+    paymentsTBody.addEventListener('click', (e)=>{
+      if(e.target.classList.contains('editPay')) {
+        const i=Number(e.target.getAttribute('data-i'));
+        // simple edit: mark default
+        state.payments.forEach((p,idx)=>p.default = idx===i);
+        saveLS('cs_payments', state.payments);
+        renderPayments();
+        toast('Payment updated (mock)');
+      } else if(e.target.tagName==='BUTTON' && e.target.style.background.includes('#ff6b6b')){
+        const i=Number(e.target.getAttribute('data-i'));
+        if(confirm('Delete payment method?')) {
+          state.payments.splice(i,1);
+          saveLS('cs_payments', state.payments);
+          renderPayments();
+        }
+      }
+    });
+
+    // Wishlist add
+    $('#addWish').addEventListener('click', ()=>{
+      const title = $('#wishInput').value.trim();
+      if(!title){ toast('Enter product or URL'); return; }
+      state.wishlist.push({title, note:''});
+      saveLS('cs_wishlist', state.wishlist);
+      $('#wishInput').value='';
+      renderWishlist();
+      renderStats();
+    });
+    wishTBody.addEventListener('click', (e)=>{
+      const btn = e.target;
+      if(btn.classList.contains('viewWish')){
+        const i = Number(btn.getAttribute('data-i'));
+        alert('Wishlist item: '+state.wishlist[i].title);
+      } else if(btn.tagName==='BUTTON' && btn.style.background.includes('#ff6b6b')){
+        const i = Number(btn.getAttribute('data-i'));
+        if(confirm('Remove from wishlist?')) {
+          state.wishlist.splice(i,1);
+          saveLS('cs_wishlist', state.wishlist);
+          renderWishlist();
+          renderStats();
+        }
+      }
+    });
+
+    // Orders sample actions
+    ordersTBody.addEventListener('click', (e)=>{
+      if(e.target.classList.contains('viewOrder')){
+        const i = Number(e.target.getAttribute('data-i'));
+        const o = state.orders[i];
+        alert('Order '+o.id+' — Status: '+o.status);
+      }
+    });
+
+    // Notifications save
+    $('#saveNotif').addEventListener('click', ()=>{
+      state.notifications.newsletter = $('#optNewsletter').checked;
+      state.notifications.promos = $('#optPromos').checked;
+      state.notifications.sms = $('#optSms').checked;
+      state.notifications.frequency = $('#emailFreq').value;
+      state.notifications.types = Array.from($('#notifTypes').selectedOptions).map(x=>x.value);
+      saveLS('cs_notifs', state.notifications);
+      toast('Notification preferences saved');
+    });
+
+    // Feedback
+    $('#sendFeedback').addEventListener('click', ()=>{
+      const txt = $('#feedback').value.trim();
+      if(txt) { $('#feedback').value=''; toast('Thanks for your feedback!'); }
+      else toast('Write something first');
+    });
+
+    // Help: survey
+    $('#takeSurvey').addEventListener('click', ()=> alert('Survey (mock) — thanks!'));
+
+    // Manage security quick link
+    $('#manageSecurity').addEventListener('click', ()=> document.querySelector('[data-section="security"]').click());
+
+    // copy referral
+    $('#copyReferral').addEventListener('click', ()=>{
+      const code = state.rewards.ref || 'REF-000';
+      navigator.clipboard?.writeText(code).then(()=>toast('Referral code copied'), ()=>toast('Copy failed'));
+    });
+
+    // Import address from profile
+    $('#importAddress').addEventListener('click', ()=>{
+      const p = state.profile;
+      const a = {label:'Home',line1:(p.address||''),city:(p.city||''),state:'',post:'',country:'Kenya',type:'Shipping'};
+      state.addresses.push(a);
+      saveLS('cs_addresses', state.addresses);
+      renderAddresses();
+      toast('Imported address from profile (mock)');
+    });
+
+    // view privacy (open new window)
+    $('#viewPrivacy').addEventListener('click', ()=> window.open('about:blank','_blank'));
+
+    // PCI info
+    $('#viewPCI').addEventListener('click', ()=> alert('PCI compliance: simulated for demo purposes'));
+
+    // Verify email/phone (mock)
+    $('#verifyEmailBtn').addEventListener('click', ()=>{
+      $('#emailVerificationMsg').textContent = 'Verification email sent (mock)';
+    });
+    $('#verifyPhoneBtn').addEventListener('click', ()=>{
+      $('#phoneVerificationMsg').textContent = 'Verification SMS sent (mock)';
+    });
+
+    // quick toast auto-dismiss
+    document.body.insertAdjacentHTML('beforeend','<div id="toastWrap" style="position:fixed;right:18px;bottom:18px;z-index:99999"></div>');
+  }
+
+  /* ======= Modal helpers ======= */
+  function openAddrModal(data=null, idx=null){
+    const m = $('#addressModal');
+    m.classList.remove('hidden');
+    if(data){
+      $('#addrLabel').value = data.label;
+      $('#addrLine1').value = data.line1;
+      $('#addrCity').value = data.city;
+      $('#addrState').value = data.state;
+      $('#addrPost').value = data.post;
+      $('#addrCountry').value = data.country;
+      $('#addrType').value = data.type;
+      $('#addrModalTitle').textContent = 'Edit Address';
+    } else {
+      $('#addrLabel').value='';$('#addrLine1').value='';$('#addrCity').value='';$('#addrState').value='';$('#addrPost').value='';$('#addrType').value='Shipping';
+      $('#addrModalTitle').textContent = 'Add Address';
+    }
+    // if idx provided, save will replace
+    const saveBtn = $('#saveAddr');
+    saveBtn.onclick = ()=>{
+      const a = {
+        label: $('#addrLabel').value || 'Address',
+        country: $('#addrCountry').value,
+        line1: $('#addrLine1').value || '',
+        city: $('#addrCity').value || '',
+        state: $('#addrState').value || '',
+        post: $('#addrPost').value || '',
+        type: $('#addrType').value
+      };
+      if(!a.line1 || !a.city) { toast('Please enter address and city'); return; }
+      if(idx!=null){
+        state.addresses[idx] = a;
+      } else state.addresses.push(a);
+      saveLS('cs_addresses', state.addresses);
+      renderAddresses();
+      closeAddrModal();
+      toast('Address saved');
+    };
+  }
+  function closeAddrModal(){ $('#addressModal').classList.add('hidden'); }
+
+  /* ======= Tiny helpers ======= */
+  function escapeHtml(t){ return String(t||'').replace(/[&<>"']/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
+  function toast(msg, timeout=2400){
+    const wrap = $('#toastWrap');
+    const el = document.createElement('div');
+    el.className='card';
+    el.style.marginTop='8px';
+    el.style.padding='10px 14px';
+    el.style.minWidth='180px';
+    el.style.borderRadius='10px';
+    el.style.background='linear-gradient(90deg, rgba(0,180,255,0.08), rgba(10,230,255,0.02))';
+    el.style.color='#eaf6ff';
+    el.style.boxShadow='0 8px 30px rgba(0,180,255,0.06)';
+    el.textContent = msg;
+    wrap.appendChild(el);
+    setTimeout(()=>{ el.style.transition='opacity .2s ease, transform .2s ease'; el.style.opacity=0; el.style.transform='translateY(6px)'; setTimeout(()=>el.remove(),220)}, timeout);
+  }
+
+  // Simple password strength estimator
+  function scorePassword(pw){
+    let score=0;
+    if(!pw) return {score:0,label:'—'};
+    if(pw.length>=8) score+=2;
+    if(/[A-Z]/.test(pw)) score+=1;
+    if(/[0-9]/.test(pw)) score+=1;
+    if(/[^A-Za-z0-9]/.test(pw)) score+=1;
+    if(pw.length>=12) score+=1;
+    if(score<=1) return {score,label:'Very weak'};
+    if(score===2) return {score,label:'Weak'};
+    if(score===3) return {score,label:'Fair'};
+    if(score===4) return {score,label:'Good'};
+    return {score,label:'Strong'};
+  }
+
+  function doLogout(){
+    if(confirm('Log out?')){
+      // clear mock profile email to simulate
+      state.profile.email = '';
+      state.profile.name = 'Guest';
+      saveLS('cs_profile', state.profile);
+      renderProfile();
+      toast('Logged out (mock)');
+      document.querySelector('[data-section="dashboard"]').click();
+    }
+  }
+
+  // initialize app
+  init();
+
+  // expose state to window for dev/debugging (optional)
+  window.CS_STATE = state;
+})();
+</script>
+</body>
+</html>
