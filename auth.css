@@ -1,0 +1,116 @@
+/* ============================
+   ADVANCED MOBILE RESPONSIVE CSS
+   Never modifies your main layout
+   Only adjusts sizing + spacing
+===============================*/
+
+/* Android Small Phones - 360px */
+@media (max-width: 360px) {
+  body {
+    padding: 0;
+    overflow-y: auto;
+  }
+  .auth-wrapper {
+    width: 98%;
+    height: auto;
+    border-radius: 20px;
+  }
+  input {
+    max-width: 260px;
+  }
+}
+
+/* Android Medium Phones - 390px */
+@media (max-width: 390px) {
+  input { max-width: 280px; }
+}
+
+/* Android Large 412px */
+@media (max-width: 412px) {
+  .left-panel h1 { font-size: 1.8rem; }
+}
+
+/* Android 480px */
+@media (max-width: 480px) {
+  input { max-width: 300px; }
+}
+
+/* Android 520px */
+@media (max-width: 520px) {
+  .slide-form { padding: 45px 25px; }
+}
+
+/* Android/Small Tablets 560px */
+@media (max-width: 560px) {
+  .left-panel h1 { font-size: 2rem; }
+}
+
+/* 600px */
+@media (max-width: 600px) {
+  .left-panel h1 { font-size: 2.2rem; }
+}
+
+/* 640px */
+@media (max-width: 640px) {
+  input { max-width: 320px; }
+}
+
+/* 680px */
+@media (max-width: 680px) {
+  .left-panel p { font-size: 0.95rem; }
+}
+
+/* 720px */
+@media (max-width: 720px) {
+  .auth-wrapper { padding-bottom: 20px; }
+}
+
+/* 760px */
+@media (max-width: 760px) {
+  .slide-form h2 { font-size: 1.7rem; }
+}
+
+/* 800px */
+@media (max-width: 800px) {
+  .left-panel { padding: 60px 20px; }
+}
+
+/* 840px */
+@media (max-width: 840px) {
+  input { padding: 10px; }
+}
+
+/* 880px */
+@media (max-width: 880px) {
+  .left-panel button { padding: 10px 20px; }
+}
+
+/* iPad Mini 912px */
+@media (max-width: 912px) {
+  .slide-form { padding: 40px 35px; }
+}
+
+/* iPad Air / Tablets 1024px */
+@media (max-width: 1024px) {
+  .auth-wrapper { width: 90%; }
+}
+
+/* 1080px */
+@media (max-width: 1080px) {
+  input { max-width: 330px; }
+}
+
+/* 1180px */
+@media (max-width: 1180px) {
+  .left-panel h1 { font-size: 2.4rem; }
+}
+
+/* 1280px */
+@media (max-width: 1280px) {
+  .slide-form { padding: 50px 40px; }
+}
+
+/* 1366px */
+@media (max-width: 1366px) {
+  .auth-wrapper { width: 85%; }
+}
