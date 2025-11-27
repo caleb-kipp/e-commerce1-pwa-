@@ -1,20 +1,21 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ShopSphere – Modern E‑commerce Demo</title>
-  <meta name="description" content="Accessible, responsive e‑commerce demo with product modal, search autocomplete, wishlist, cart, reviews, analytics filters, and more." />
-  <meta name="keywords" content="ecommerce, demo, shop, cart, wishlist, product modal, search, accessibility, responsive" />
-  <meta name="theme-color" content="#111827" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-      <script src="index.js"></script>
+  <meta name="description" content="Accessible, responsive e‑commerce demo with product modal, search autocomplete, wishlist, cart, reviews, analytics filters, and more.">
+  <meta name="keywords" content="ecommerce, demo, shop, cart, wishlist, product modal, search, accessibility, responsive">
+  <meta name="theme-color" content="#111827">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+       <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+      <script src="indx.js"></script>
           <script src="dynamicproduct.js"></script>  
           <script src="products.js"></script>
           <script src="products14.js"></script>
 <script src="product-bridge.js"></script>
- <link rel="stylesheet" href="product2.css" />
+ <link rel="stylesheet" href="product2.css">
 <script src="indexproductmodal.js"></script>
 <script src="product-carousel.js"></script>
  <script src="product-view1.js"></script>
@@ -24,7 +25,12 @@
       <script src="product-view0.js"></script>
        <script src="products-view.js"></script>
         <script src="index0.js"></script>
-         <script src="cart-modal.js"></script>
+         <script src="index1.js"></script>
+         <script src="protect.js" defer></script>
+         <script src="auth.js"></script>
+
+
+
   <style>
     :root{
       --bg:#0b0f14; --card:#121825; --muted:#6b7280; --text:#e5e7eb; --brand:#22c55e; --brand-2:#06b6d4; --accent:#f59e0b; --danger:#ef4444; --shadow:0 10px 30px rgba(0,0,0,.25);
@@ -67,19 +73,19 @@ nav a{padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.06
 .mini-card{background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:14px;display:grid;grid-template-rows:auto 1fr auto;gap:10px}
 .mini-card img{border-radius:12px;aspect-ratio:4/3;object-fit:cover}
 .mini-card .foot{display:flex;align-items:center;justify-content:space-between}
-
 /* Men/Women sections */
 .section{margin:24px 0}
 .section h2{margin:0 0 12px}
 .grid{display:grid;gap:16px}
-.grid.mw{grid-template-columns:2fr 1fr 1fr 1fr 1fr}
+.grid.mw{grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+    gap: 1px;
+    width:100%;}
 .grid .big{grid-row:span 2;background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);overflow:hidden;position:relative}
 .grid .big img{height:100%;width:100%;object-fit:cover}
 .grid .card{background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);overflow:hidden;position:relative}
 .grid .card img{aspect-ratio:1/1;object-fit:cover}
 .card .meta{position:absolute;inset:auto 8px 8px 8px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);padding:8px;border-radius:10px;font-size:14px}
 .card:hover,.big:hover{transform:translateY(-2px);transition:transform .2s ease}
-
 /* carousels */
 .row{display:flex;gap:14px;overflow:auto;scroll-snap-type:x mandatory;padding-bottom:10px}
 .row .p-card{flex:0 0 220px;scroll-snap-align:start;background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden}
@@ -97,7 +103,7 @@ footer .cols{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;padding:2
 footer a{color:#cbd5e1}
 
 /* product modal */
-.product-modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:16px;z-index:100}
+.product-modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:16px;z-index:9999}
 .modal-content{background:#0b111b;border:1px solid rgba(255,255,255,.06);border-radius:16px;max-width:1100px;width:100%;max-height:90vh;overflow:auto;display:grid;grid-template-columns:1.1fr 1fr}
 .close-btn{position:sticky;top:8px;margin:8px;border:0;background:#0f1623;border:1px solid rgba(255,255,255,.08);color:var(--text);width:36px;height:36px;border-radius:10px;cursor:pointer}
 .modal-left{padding:14px;border-right:1px solid rgba(255,255,255,.06)}
@@ -106,7 +112,7 @@ footer a{color:#cbd5e1}
 .related-carousel{margin-top:10px;display:flex;gap:10px;overflow:auto}
 .related-carousel img{width:90px;height:90px;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.08);cursor:pointer}
 .modal-right{padding:14px;display:grid;gap:10px}
-.price{font-size:24px;font-weight:800}
+.price{font-size:14px;font-weight:800}
 .stars{display:flex;gap:2px}
 .qty{display:flex;gap:8px;align-items:center}
 .options{display:flex;flex-wrap:wrap;gap:8px}
@@ -122,22 +128,334 @@ footer a{color:#cbd5e1}
 .modal .box{background:#0b111b;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:18px;max-width:520px;width:100%}
 .field{display:grid;gap:6px;margin:8px 0}
 .field input, .field select, .field textarea{background:#0f1623;color:var(--text);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px}
-.helper{font-size:12px;color:#9aa4b2}
+.helper{font-size:15px;color:#9aa4b2}
 
 /* responsive */
+@media (max-width: 1664px){
+  .grid.mw {
+    grid-template-columns: 1.5fr 1fr 1fr; 
+    grid-auto-rows: 260px;
+  }
+  .modal-content {
+    grid-template-columns: 1fr;
+  }
+  .viewer img {
+    height: 300px;
+  }
+}
 @media (max-width: 1024px){
-  .grid.mw{grid-template-columns:1.5fr 1fr 1fr;grid-auto-rows:260px}
-  .modal-content{grid-template-columns:1fr}
-  .viewer img{height:300px}
+  .grid.mw {
+    grid-template-columns: 1.5fr 1fr 1fr; 
+    grid-auto-rows: 260px;
+  }
+  .modal-content {
+    grid-template-columns: 1fr;
+  }
+  .viewer img {
+    height: 300px;
+  }
 }
+
 @media (max-width: 640px){
-  nav{display:none}
-  .hero-right{grid-template-columns:1fr}
-  .grid.mw{grid-template-columns:1fr 1fr}
-  footer .cols{grid-template-columns:1fr 1fr}
+  
+  footer .cols {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+/* Product price */
+.price {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+/* Card text */
+.p-meta h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.p-meta p {
+  margin: 0;
+}
+
+.btn {
+  font-size: 16px;
+  padding: 6px 19px;
+  border-radius: 8px;
+}
+
+/* Wishlist & cart buttons */
+.btn-outline-secondary {
+  color: #ff6b81;
+  border-color: #ff6b81;
+}
+.btn-outline-secondary:hover {
+  background: #ff6b81;
+  color: #fff;
+}
+/* Product price */
+.price {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+/* Card text */
+.p-meta h5 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.p-meta p {
+  margin: 0;
+}
+
+.btn {
+  font-size: 16px;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+/* Wishlist & cart buttons */
+.btn-outline-secondary {
+  color: #ff6b81;
+  border-color: #ff6b81;
+}
+.btn-outline-secondary:hover {
+  background: #ff6b81;
+  color: #fff;
+}
+/* Blog teasers */
+.grid.blog{grid-template-columns:repeat(3,1fr);gap:16px}
+    
+/* Product title inside modal */
+#mTitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg,#00c6ff,#0072ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Product price */
+#mPrice {
+  font-size: 0.9rem;
+  color: #ffce54;
+  font-weight: 600;
+  margin: 6px 0;
+}
+
+/* Specs list – auto wrap lines */
+#mSpecs li {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Description – readable block */
+#mDescLong {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  margin-top: 12px;
+  white-space: normal;
+  word-break: break-word;
+  text-align: justify;
+}
+/********************
+ * Product modal enhancements
+ ********************/
+#productModal,
+#productModal .modal-content,
+#productModal .modal-right,
+#productModal .panel,
+#productModal .tabs,
+#productModal .reviews {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+/* Prevent page scroll when modal is open */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Modal autofits device screen */
+#productModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Modal content responsive */
+#productModal .modal-content.glassy {
+  max-width: 100%;
+  width: 95%;
+  height: 95%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+/* Center product image properly */
+#productModal .viewer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0;
+}
+#productModal .viewer img {
+  margin-left:800px;
+  max-width: 100%;
+  width:900px;
+  height: 700px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 16px;
+  object-fit: contain;
+}
+
+/* Details start immediately after image */
+#productModal .modal-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 0;
+  text-align: left;
+}
+
+/* Product specs auto-wrap */
+#productModal #mSpecs li {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  margin-bottom: 6px;
+}
+
+/* Responsive grid: 4 per row desktop */
+#similarRow, #recentRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+/* Product cards inside modal */
+#similarRow .p-card,
+#recentRow .p-card {
+  background: #0f1623;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+#similarRow .p-card:hover,
+#recentRow .p-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* Product meta text */
+#similarRow .p-card .p-meta,
+#recentRow .p-card .p-meta {
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 10px;
+  color: #fff;
+}
+/* UNIVERSAL RESET & BASE */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+body {
+  font-family: system-ui, sans-serif;
+  background: #0e0e0e;
+  color: white;
+}
+
+/* CONTAINER FULL WIDTH ON ALL DEVICES */
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 
+/* IMAGE RESPONSIVENESS */
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* GRID & ROW RESPONSIVENESS */
+.grid,
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 6px;
+  width: 100%;
+}
+
+/* SECTION PADDING */
+.section {
+  width: 100%;
+  padding: 2px 0;
+}
+
+/* TOPBAR RESPONSIVENESS */
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 4px;
+}
+
+/* SEARCH BAR FULL WIDTH ON MOBILE */
+.search input {
+  width: 100%;
+  max-width: 400px;
+}
+@media (max-width: 600px) {
+  .search {
+    flex: 1 1 100%;
+    order: 3;
+  }
+}
+
+
+
+/* RESPONSIVE MEDIA QUERIES - 10 BREAKPOINTS */
+@media (max-width: 1400px) { .container { max-width: 1200px; } }
+@media (max-width: 1200px) { .container { max-width: 1000px; } }
+
+
+@media (max-width: 768px)  { .grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } }
+@media (max-width: 600px)  { .topbar { flex-direction: column; } }
+@media (max-width: 480px)  { h1, h2, h3 { font-size: 60%; } }
+@media (max-width: 375px)  { .btn, input { font-size: 0.9rem; } }
+@media (max-width: 320px)  { .container { padding: 0 0.5rem; } }
   </style>
 </head>
 <body>
@@ -147,24 +465,69 @@ footer a{color:#cbd5e1}
         <a class="brand" href="#" aria-label="ShopSphere home">
           <span class="logo" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="logo">
-              <path d="M12 3l8 4v10l-8 4-8-4V7l8-4z" stroke="white" stroke-width="2"/>
-              <circle cx="12" cy="12" r="3" fill="white"/>
+              <path d="M12 3l8 4v10l-8 4-8-4V7l8-4z" stroke="white" stroke-width="2">
+              <circle cx="12" cy="12" r="3" fill="white"></circle>
             </svg>
           </span>
           <span>ShopSphere</span>
         </a>
         <div class="search" role="search">
-          <label class="sr-only" for="searchInput">Search products</label>
-          <input id="searchInput" type="search" placeholder="Search products... (⌘/Ctrl + K)" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls="acList" />
+          <label class="sr-only" for="searchInput"></label>
+          <input id="searchInput" type="search" placeholder="Search products... (Furnitures)" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false" aria-controls="acList">
           <div class="icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="white"/><path d="M20 20l-3.5-3.5" stroke="white"/></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="white"><path d="M20 20l-3.5-3.5" stroke="white"></svg>
           </div>
           <div id="autocomplete" class="autocomplete" role="listbox" aria-label="Search suggestions"></div>
         </div>
         <div class="actions">
-          <button class="icon-btn" id="openWishlist" aria-label="Open wishlist"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7-4.35-7-10a4 4 0 018-1 4 4 0 018 1c0 5.65-7 10-7 10z" stroke="white"/></svg></button>
-          <button class="icon-btn" id="openCart" aria-label="Open cart"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="20" r="1" fill="white"/><circle cx="17" cy="20" r="1" fill="white"/><path d="M3 4h2l2.4 12.5A2 2 0 009.37 18H18a2 2 0 001.96-1.6L22 8H6" stroke="white"/></svg> <span id="cartCount" class="pill" aria-live="polite" aria-label="Items in cart">0</span></button>
-          <button class="icon-btn" id="openAuth" aria-label="Open login/register"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="4" stroke="white"/><path d="M4 21a8 8 0 0116 0" stroke="white"/></svg></button>
+          <button class="icon-btn" id="openWishlist" aria-label="Open wishlist"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7-4.35-7-10a4 4 0 018-1 4 4 0 018 1c0 5.65-7 10-7 10z" stroke="white"></svg></button>
+<!-- 🛒 Cart Button -->
+<button class="icon-btn" id="openCart" aria-label="Open cart" title="View Cart">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="10" cy="20" r="1" fill="white">
+    <circle cx="17" cy="20" r="1" fill="white">
+    <path d="M3 4h2l2.4 12.5A2 2 0 009.37 18H18a2 2 0 001.96-1.6L22 8H6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  </svg>
+  <span id="cartCount" class="pill" aria-live="polite" aria-label="Items in cart">0</span>
+</button><button onclick="logout()">Logout</button>
+<style>
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.icon-btn:hover {
+  transform: scale(1.08);
+}
+
+.pill {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.7em;
+  padding: 2px 6px;
+  line-height: 1;
+  font-weight: bold;
+  min-width: 16px;
+  text-align: center;
+}</style>
+<script>
+openCartBtn.addEventListener('click', () => {
+  productSection.classList.add('hidden');
+  cartPage.classList.remove('hidden');
+  renderCart();
+});</script>
+          <button class="icon-btn" id="openAuth" aria-label="Open login/register"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="4" stroke="white"/><path d="M4 21a8 8 0 0116 0" stroke="white"></svg></button>
         </div>
       </div>
       <nav aria-label="Primary categories">
@@ -182,7 +545,7 @@ footer a{color:#cbd5e1}
     <!-- HERO: big left image (50%), four right cards (2x2) (50%), looping accessible slider -->
     <section class="hero" aria-label="Hero and featured">
       <div class="hero-left" id="heroSlider" aria-roledescription="carousel" aria-label="Promotions" tabindex="0">
-        <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1400&auto=format&fit=crop" alt="Summer collection banner" loading="eager" />
+        <img src="images/download-1.jpg" alt="Summer collection banner" loading="eager">
         <div class="hero-overlay">
           <div>
             <h1 style="margin:0 0 6px">Feel Good. Look Great.</h1>
@@ -196,7 +559,7 @@ footer a{color:#cbd5e1}
       </div>
       <div class="hero-right">
         <article class="mini-card" aria-label="Card 1">
-          <img src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=800&auto=format&fit=crop" alt="Eco tees" loading="lazy" />
+          <img src="images/diningtable.jpg" alt="Eco tees" loading="lazy">
           <div>
             <h3 style="margin:6px 0">Eco Tees</h3>
             <p class="helper">Breathable, organic, everyday staples.</p>
@@ -204,7 +567,7 @@ footer a{color:#cbd5e1}
           <div class="foot"><span class="pill">New</span><button class="btn btn-ghost" data-cat="tees">Explore</button></div>
         </article>
         <article class="mini-card" aria-label="Card 2">
-          <img src="https://images.unsplash.com/photo-1520975922257-8e53a1b5e84b?q=80&w=800&auto=format&fit=crop" alt="City sneakers" loading="lazy" />
+          <img src="images/dc6325d17f827ccfc274b04d65cd0421.jpg" alt="City sneakers" loading="lazy">
           <div>
             <h3 style="margin:6px 0">City Sneakers</h3>
             <p class="helper">Comfort meets performance.</p>
@@ -212,7 +575,7 @@ footer a{color:#cbd5e1}
           <div class="foot"><span class="pill" style="background:var(--accent);color:#1f1300">Deal</span><button class="btn btn-ghost" data-cat="sneakers">Shop</button></div>
         </article>
         <article class="mini-card" aria-label="Card 3">
-          <img src="https://images.unsplash.com/photo-1542326237-94b1c5a538d9?q=80&w=800&auto=format&fit=crop" alt="Athleisure sets" loading="lazy" />
+          <img src="images/65761237_MzAwLTQwMC02NTVlNDMxMmMzLTE-338355277.jpg" alt="Athleisure sets" loading="lazy">
           <div>
             <h3 style="margin:6px 0">Athleisure Sets</h3>
             <p class="helper">Mix, match, move.</p>
@@ -220,7 +583,7 @@ footer a{color:#cbd5e1}
           <div class="foot"><span class="pill" style="background:#60a5fa;color:#001229">Popular</span><button class="btn btn-ghost" data-cat="athleisure">Browse</button></div>
         </article>
         <article class="mini-card" aria-label="Card 4">
-          <img src="https://images.unsplash.com/photo-1503342217505-b0a15cf70489?q=80&w=800&auto=format&fit=crop" alt="Accessories" loading="lazy" />
+          <img src="images/5ec68ce7dfef3e715640a318_cover-1230416600.jpg" alt="Accessories" loading="lazy">
           <div>
             <h3 style="margin:6px 0">Accessories</h3>
             <p class="helper">Finish the look.</p>
@@ -228,13 +591,62 @@ footer a{color:#cbd5e1}
           <div class="foot"><span class="pill" style="background:#f472b6;color:#240013">Hot</span><button class="btn btn-ghost" data-cat="accessories">See More</button></div>
         </article>
       </div>
-    </section><!-- MEN / WOMEN: one big + four small, then another set below -->
+    </section><!-- MEN FEATURED -->
 <section class="section" aria-labelledby="menHeading">
   <h2 id="menHeading">Men • Featured</h2>
-  <div class="grid mw" id="menGrid" aria-label="Men grid with one big and four small cards">
-    <!-- populated via JS -->
+  <div class="grid mw" id="menGrid" aria-label="Men product grid">
+    
+    <!-- Product Card -->
+    <div class="product-card">
+      <img src="images/kitchen.jpg" alt="Classic White Shirt" class="product-img">
+      <div class="product-info">
+        <h3 class="product-title">Classic White Shirt</h3>
+        <p class="product-price">$45.00</p>
+        <div class="product-rating" aria-label="4 out of 5 stars">
+          ★★★★☆
+        </div>
+        <div class="product-actions">
+          <button class="btn add-cart" onclick="addToCart('Classic White Shirt')">Add to Cart</button>
+          <button class="btn wishlist" onclick="addToWishlist('Classic White Shirt')">♡</button>
+          <button class="btn quickview" onclick="quickView('Classic White Shirt')">👁 Quick View</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <img src="images/sofa1.jpg" alt="Leather Sneakers" class="product-img">
+      <div class="product-info">
+        <h3 class="product-title">Leather Sneakers</h3>
+        <p class="product-price">$89.99</p>
+        <div class="product-rating">★★★★★</div>
+        <div class="product-actions">
+          <button class="btn add-cart" onclick="addToCart('Leather Sneakers')">Add to Cart</button>
+          <button class="btn wishlist" onclick="addToWishlist('Leather Sneakers')">♡</button>
+          <button class="btn quickview" onclick="quickView('Leather Sneakers')">👁 Quick View</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add more product cards dynamically via JS if needed -->
   </div>
 </section>
+<!-- JS -->
+<script>
+  function addToCart(product) {
+    alert(product + " added to cart!");
+    // integrate with cart system
+  }
+
+  function addToWishlist(product) {
+    alert(product + " added to wishlist!");
+    // integrate with wishlist system
+  }
+
+  function quickView(product) {
+    alert("Quick view of " + product);
+    // open product modal
+  }
+</script>
 
 <section class="section" aria-labelledby="womenHeading">
   <h2 id="womenHeading">Women • Featured</h2>
@@ -242,7 +654,6 @@ footer a{color:#cbd5e1}
     <!-- populated via JS -->
   </div>
 </section>
-
 <!-- Dynamic sections: New Arrivals, Best Sellers, Special Offers, Most Liked -->
 <section class="section" aria-label="Dynamic product rows">
   <div style="display:grid;gap:8px">
@@ -276,20 +687,346 @@ footer a{color:#cbd5e1}
     </div>
     <div id="rowLiked" class="row" aria-label="Most Liked carousel"></div>
   </div>
-</section>
-<div style="display:grid;gap:8px;margin-top:18px">
+</section><!-- ============================
+  EXTRA PRODUCT SECTIONS
+============================= -->
+
+<section class="section" aria-label="Kitchen Section">
   <div style="display:flex;align-items:center;justify-content:space-between">
-    <h2>Store Products</h2>
+    <h2>Kitchen Essentials</h2>
     <div class="carousel-ctl">
-      <button class="btn btn-ghost" data-scroll="prev" data-target="#productGrid">◀</button>
-      <button class="btn btn-ghost" data-scroll="next" data-target="#productGrid">▶</button>
+      <button class="btn btn-ghost" data-scroll="prev" data-target="#rowKitchen">◀</button>
+      <button class="btn btn-ghost" data-scroll="next" data-target="#rowKitchen">▶</button>
     </div>
   </div>
-  <div id="productGrid" class="row" aria-label="Product carousel"></div>
-</div>
+  <div id="rowKitchen" class="row" aria-label="Kitchen carousel"></div>
+</section>
 
-<script src="product.js"></script>
-<script src="indexproductmodal3.js"></script>
+<section class="section" aria-label="Home Section">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <h2>Home Essentials</h2>
+    <div class="carousel-ctl">
+      <button class="btn btn-ghost" data-scroll="prev" data-target="#rowHome">◀</button>
+      <button class="btn btn-ghost" data-scroll="next" data-target="#rowHome">▶</button>
+    </div>
+  </div>
+  <div id="rowHome" class="row" aria-label="Home carousel"></div>
+</section>
+
+<section class="section" aria-label="Office Section">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <h2>Office</h2>
+    <div class="carousel-ctl">
+      <button class="btn btn-ghost" data-scroll="prev" data-target="#rowOffice">◀</button>
+      <button class="btn btn-ghost" data-scroll="next" data-target="#rowOffice">▶</button>
+    </div>
+  </div>
+  <div id="rowOffice" class="row" aria-label="Office carousel"></div>
+</section>
+
+<section class="section" aria-label="Sports Section">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <h2>Sports & Fitness</h2>
+    <div class="carousel-ctl">
+      <button class="btn btn-ghost" data-scroll="prev" data-target="#rowSports">◀</button>
+      <button class="btn btn-ghost" data-scroll="next" data-target="#rowSports">▶</button>
+    </div>
+  </div>
+  <div id="rowSports" class="row" aria-label="Sports carousel"></div>
+</section>
+
+<section class="section" aria-label="Electronics Section">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <h2>Electronics</h2>
+    <div class="carousel-ctl">
+      <button class="btn btn-ghost" data-scroll="prev" data-target="#rowElectronics">◀</button>
+      <button class="btn btn-ghost" data-scroll="next" data-target="#rowElectronics">▶</button>
+    </div>
+  </div>
+  <div id="rowElectronics" class="row" aria-label="Electronics carousel"></div>
+</section>
+
+<style>
+  :root {
+  --radius: 12px;
+  --radius-lg: 18px;
+  --brand: #22c55e;
+  --accent: #facc15;
+  --text: #f3f4f6;
+}
+
+/* ---------- HERO CONTAINER ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  padding: 20px 0;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ---------- HERO LEFT (Main Slider) ---------- */
+.hero-left {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  height: clamp(220px, 35vw, 480px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-left:hover {
+  transform: scale(1.01);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+.hero-left img.slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.hero-left img.slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* ---------- SLIDER OVERLAY ---------- */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .0), rgba(0, 0, 0, .6));
+  display: flex;
+  align-items: flex-end;
+  padding: 22px;
+  color: white;
+}
+
+.hero-overlay h1 {
+  font-size: clamp(1.4rem, 3vw, 2.4rem);
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+
+.hero-overlay .helper {
+  opacity: 0.85;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.btn {
+  width: 180px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 0;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand), #16a34a);
+  color: #04120b;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.15);
+  color: var(--text);
+}
+
+/* ---------- HERO RIGHT (Mini Cards Grid) ---------- */
+.hero-right {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  width: 100%;
+}
+
+.mini-card {
+  background: #0f1623;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mini-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.3);
+}
+
+.mini-card img {
+  border-radius: 12px;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+}
+
+.mini-card .foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pill {
+  background: rgba(255,255,255,0.15);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+/* ---------- RESPONSIVE LAYOUTS ---------- */
+
+/* ✅ Medium Devices (1200px and below) */
+@media (max-width: 1200px) {
+  .hero-right {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .mini-card {
+    padding: 12px;
+  }
+
+  .hero-left {
+    height: clamp(200px, 40vw, 420px);
+  }
+}
+
+/* ✅ Tablets (992px and below) */
+@media (max-width: 992px) {
+  .hero-right {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hero {
+    gap: 14px;
+  }
+
+  .mini-card img {
+    aspect-ratio: 1.1/1;
+  }
+}
+
+/* ✅ Mobile Large (768px and below) */
+@media (max-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-left {
+    height: clamp(180px, 50vw, 360px);
+  }
+
+  .hero-right {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .btn {
+    width: 100%;
+    font-size: 14px;
+    padding: 9px 12px;
+  }
+
+  .hero-ctas {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ✅ Small Phones (600px and below — includes Infinix i40) */
+@media (max-width: 600px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .hero-left {
+    height: clamp(160px, 55vw, 300px);
+  }
+
+  .hero-right {
+    grid-template-columns: repeat(5, minmax(60px, 1fr));
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .hero-right::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mini-card {
+    min-width: 120px;
+    scroll-snap-align: start;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .mini-card img {
+    aspect-ratio: 1/1;
+  }
+
+  .hero-left, .mini-card {
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeSlideUp 0.6s ease forwards;
+  }
+
+  .mini-card:nth-child(2) { animation-delay: 0.1s; }
+  .mini-card:nth-child(3) { animation-delay: 0.2s; }
+  .mini-card:nth-child(4) { animation-delay: 0.3s; }
+
+  @keyframes fadeSlideUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ✅ Ultra Small Devices (480px and below) */
+@media (max-width: 480px) {
+  .hero-left {
+    height: 220px;
+  }
+
+  .mini-card {
+    min-width: 100px;
+  }
+
+  .hero-overlay h1 {
+    font-size: 1.2rem;
+  }
+}
+
+/* ---------- HERO SLIDER ANIMATION ---------- */
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; }
+}
+</style>
 <!-- Promos / Testimonials / Blog teasers -->
 <section class="section" aria-label="Promos, testimonials, blog">
   <div class="grid" style="grid-template-columns:2fr 1fr 1fr;gap:16px">
@@ -297,8 +1034,8 @@ footer a{color:#cbd5e1}
       <h3>Subscriber Perks</h3>
       <p class="helper">Join the list for early access drops and members-only deals.</p>
       <form id="newsletterForm" aria-label="Newsletter signup">
-        <div class="field"><label for="newsEmail">Email</label><input id="newsEmail" type="email" placeholder="you@domain.com" required aria-required="true" aria-label="Email address"/></div>
-        <div class="field"><label><input type="checkbox" required aria-required="true"/> I agree to receive emails.</label></div>
+        <div class="field"><label for="newsEmail">Email</label><input id="newsEmail" type="email" placeholder="you@domain.com" required aria-required="true" aria-label="Email address"></div>
+        <div class="field"><label><input type="checkbox" required aria-required="true"> I agree to receive emails.</label></div>
         <button class="btn btn-primary" type="submit">Sign Up</button>
       </form>
       <div class="trust" style="margin-top:14px" aria-label="Trust badges">
@@ -306,9 +1043,9 @@ footer a{color:#cbd5e1}
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l7 4v5a7 7 0 11-14 0V7l7-4z" stroke="white"/></svg>
           <span>Secure Checkout</span>
         </div>
-        <div class="badge" title="Free returns"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12a9 9 0 1115.9 6.1" stroke="white"/><path d="M3 12h6M3 12l2-2M3 12l2 2" stroke="white"/></svg><span>Free Returns</span></div>
-        <div class="badge" title="24/7 support"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="white"/><path d="M8 12h8M12 8v8" stroke="white"/></svg><span>24/7 Support</span></div>
-        <div class="badge" title="Privacy first"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l7 4v5c0 5-4.03 9-9 9S1 16 1 11V6l11-4z" stroke="white"/></svg><span>Privacy First</span></div>
+        <div class="badge" title="Free returns"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12a9 9 0 1115.9 6.1" stroke="white"><path d="M3 12h6M3 12l2-2M3 12l2 2" stroke="white"></svg><span>Free Returns</span></div>
+        <div class="badge" title="24/7 support"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="white"><path d="M8 12h8M12 8v8" stroke="white"></svg><span>24/7 Support</span></div>
+        <div class="badge" title="Privacy first"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l7 4v5c0 5-4.03 9-9 9S1 16 1 11V6l11-4z" stroke="white"></svg><span>Privacy First</span></div>
       </div>
       <div class="helper" style="margin-top:8px">We respect accessibility: ARIA labels, semantic HTML, and keyboard support are built-in.</div>
     </div>
@@ -347,7 +1084,7 @@ footer a{color:#cbd5e1}
     <div class="modal-content">
       <button class="close-btn" id="modalClose" aria-label="Close product dialog">&times;</button>
       <div class="modal-left" id="modalLeft">
-        <div class="viewer" id="viewer"><img src="" alt="Product image" id="viewerImg" /></div>
+        <div class="viewer" id="viewer"><img src="" alt="Product image" id="viewerImg"></div>
         <div class="related-carousel" id="relatedCarousel" aria-label="Related products thumbnails"><!-- related items --></div>
       </div>
       <div class="modal-right" id="modalRight">
@@ -356,7 +1093,7 @@ footer a{color:#cbd5e1}
         <div class="price" id="mPrice">$0.00</div>
         <div class="helper" id="mSku">SKU: —</div>
         <div class="options" id="mVariants" aria-label="Variants"></div>
-        <div class="qty"><label for="mQty">Qty</label><input id="mQty" type="number" min="1" value="1" style="width:72px" /></div>
+        <div class="qty"><label for="mQty">Qty</label><input id="mQty" type="number" min="1" value="1" style="width:72px"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
           <button class="btn btn-primary" id="mAddCart">Add to Cart</button>
           <button class="btn btn-ghost" id="mBuyNow">Buy Now</button>
@@ -407,197 +1144,583 @@ footer a{color:#cbd5e1}
   </div> 
  
 
+<!-- ✅ CART SLIDE-IN PAGE -->
+<section id="cart-page" class="cart-slide hidden" aria-label="Shopping Cart">
+  <div class="cart-wrapper">
+    <header class="cart-header">
+      <h2>Shopping Cart</h2>
+      <button id="close-cart" class="btn-ghost" aria-label="Close cart">✕</button>
+    </header>
 
-  <!-- CART / WISHLIST / AUTH / HELP / RETURNS / TRACKING MODALS --> <!-- CART MODAL -->
-<div class="modal" id="cartModal" role="dialog" aria-label="Shopping Cart" aria-modal="true">
-  <div class="box cart-container">
-    
-    <!-- ================= HEADER ================= -->
-    <div class="cart-header flex justify-between items-center">
-      <h3>Your Cart</h3>
-      <button class="btn btn-ghost" id="closeCartBtn" aria-label="Close Cart">&times;</button>
-    </div>
-    
-    <!-- ================= CART ITEMS ================= -->
-    <div id="cartItems" class="cart-items panel">
-      <!-- Each cart item -->
-      <div class="cart-item" data-id="">
-        <img src="" alt="Product Image" class="cart-item-img" />
-        <div class="item-info">
-          <h5 class="cart-item-title">Product Title</h5>
-          <p class="cart-item-description">Product description goes here...</p>
-          <p class="cart-item-specs">Specs: Size, Color, Material...</p>
-          <div class="cart-item-rating">⭐⭐⭐⭐☆ (45 reviews)</div>
-          <div class="cart-item-price-details">
-            <span class="unit-price">$0.00</span>
-            <input type="number" min="1" value="1" class="cart-item-qty" aria-label="Quantity Selector" />
-            <span class="item-total-price">$0.00</span>
-          </div>
-          <div class="cart-item-actions">
-            <button class="btn btn-ghost remove-item-btn">Remove</button>
-            <button class="btn btn-secondary customize-item-btn">Customize</button>
-          </div>
-          <textarea class="cart-item-note" placeholder="Add a note (e.g., gift message)"></textarea>
+    <div class="cart-content">
+      <!-- CART TABLE -->
+      <div class="cart-table">
+        <div class="cart-table-head">
+          <span>Product</span>
+          <span>Unit Price</span>
+          <span>Quantity</span>
+          <span>Subtotal</span>
+        </div>
+        <div id="cart-list" class="cart-items"></div>
+        <div id="cart-empty" class="cart-empty">Your cart is empty.</div>
+      </div>
+
+      <!-- CART SUMMARY -->
+      <div class="cart-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-line"><span>Subtotal:</span><span id="subtotal-amount">$0.00</span></div>
+        <div class="summary-line"><span>Shipping:</span><span id="shipping-amount">$0.00</span></div>
+        <div class="summary-line"><span>Tax:</span><span id="tax-amount">$0.00</span></div>
+        <div class="summary-line"><span>Discount:</span><span id="discount-amount">$0.00</span></div>
+        <hr>
+        <div class="summary-total"><strong>Total:</strong><strong id="total-amount">$0.00</strong></div>
+
+        <div class="cart-actions">
+          <input type="text" id="promo-input" placeholder="Promo code">
+          <button id="apply-promo" class="btn">Apply</button>
+        </div>
+
+        <div class="cart-address">
+          <h4>Delivery Address</h4>
+          <select id="address-select"></select>
+          <button id="add-address-btn" class="btn-ghost">+ Add Address</button>
+        </div>
+
+        <div class="cart-checkout">
+          <h4>Payment Method</h4>
+          <select id="payment-select">
+            <option value="stripe">💳 Stripe</option>
+            <option value="mpesa">📱 M-Pesa</option>
+            <option value="airtel">📞 Airtel Money</option>
+          </select>
+          <button id="checkout-button" class="btn primary">Proceed to Checkout</button>
         </div>
       </div>
     </div>
 
-    <!-- Empty Cart Message -->
-    <div id="emptyCartMessage" class="empty-cart-message hidden">
-      <p>Your cart is currently empty.</p>
-    </div>
+    <!-- RECOMMENDATIONS -->
+    <section class="recommend-section">
+      <h3>You Might Also Like</h3>
+      <div id="recommend-row" class="recommend-row"></div>
+    </section>
 
-    <!-- ================= PROMO CODES & DISCOUNTS ================= -->
-    <div class="promo-code">
-      <input type="text" id="promoCode" placeholder="Enter Promo Code" />
-      <button class="btn btn-secondary" id="applyPromoBtn">Apply</button>
-      <p id="promoMessage"></p>
-    </div>
-
-    <!-- ================= GIFT OPTIONS ================= -->
-    <div class="gift-options">
-      <label><input type="checkbox" id="giftWrap"> Add Gift Wrapping (+$5)</label>
-      <textarea id="giftMessage" placeholder="Add a personal message"></textarea>
-      <label><input type="checkbox" id="giftCard"> Redeem Gift Card</label>
-      <label><input type="checkbox" id="rewardPoints"> Redeem Reward Points</label>
-    </div>
-
-    <!-- ================= CART SUMMARY ================= -->
-    <div class="cart-summary">
-      <div class="summary-item"><span>Items:</span><span id="cartItemCount">0</span></div>
-      <div class="summary-item"><span>Subtotal:</span><span id="subtotal">$0.00</span></div>
-      <div class="summary-item"><span>Discount:</span><span id="discount">$0.00</span></div>
-      <div class="summary-item"><span>Tax:</span><span id="tax">$0.00</span></div>
-      <div class="summary-item"><span>Shipping:</span><span id="shipping">$0.00</span></div>
-      <div class="summary-item"><span>Estimated Delivery:</span><span id="deliveryEstimate">--</span></div>
-      <div class="summary-item total"><span>Total:</span><span id="total">$0.00</span></div>
-    </div>
-
-    <!-- ================= ACTIONS ================= -->
-    <div class="cart-actions">
-      <button class="btn btn-primary" id="checkoutBtn">Checkout</button>
-      <button class="btn btn-ghost" id="updateCartBtn">Update Cart</button>
-    </div>
-
-    <!-- ================= PRODUCT SUGGESTIONS ================= -->
-    <div class="cart-recommendations">
-      <h4>Recommended Products</h4>
-      <div id="recommendedProducts" class="row"></div>
-    </div>
-
-    <div class="cart-suggestions">
-      <h4>You Might Also Like</h4>
-      <div id="suggestedProducts" class="row"></div>
-    </div>
-
-    <!-- ================= BUNDLES, UPSELLS & CROSS-SELLS ================= -->
-    <div class="cart-bundles">
-      <h4>Bundles & Packages</h4>
-      <div id="bundleProducts"></div>
-    </div>
-
-    <div class="cart-upsells">
-      <h4>Upgrade Your Cart</h4>
-      <div id="upsellProducts"></div>
-    </div>
-
-    <div class="cart-cross-sells">
-      <h4>Frequently Bought Together</h4>
-      <div id="crossSellProducts"></div>
-    </div>
-
-    <!-- ================= WISHLIST & COMPARE ================= -->
-    <div class="wishlist-compare">
-      <button class="btn btn-secondary" id="wishlistBtn">Save to Wishlist</button>
-      <button class="btn btn-secondary" id="compareBtn">Compare Products</button>
-    </div>
-
-    <!-- ================= REVIEWS & SPECIFICATIONS ================= -->
-    <div class="product-reviews">
-      <h4>Product Reviews</h4>
-      <div id="reviews"></div>
-    </div>
-
-    <div class="product-specs">
-      <h4>Specifications</h4>
-      <div id="specifications"></div>
-    </div>
-
-    <!-- ================= MEDIA (IMAGES, VIDEOS, 360 VIEW) ================= -->
-    <div class="product-media">
-      <h4>Product Gallery</h4>
-      <div id="imageGallery"></div>
-      <div id="productVideo"></div>
-      <div id="product360"></div>
-    </div>
-
-    <!-- ================= SECURITY & TRUST ================= -->
-    <div class="cart-security">
-      <h4>Secure Checkout</h4>
-      <div class="trust-badges">
-        <img src="ssl-badge.png" alt="SSL Secured" />
-        <img src="trust-badge.png" alt="Trusted Checkout" />
-      </div>
-      <p>Your data is encrypted and protected.</p>
-    </div>
-
-    <!-- ================= CHECKOUT OPTIONS ================= -->
-    <div class="checkout-options">
-      <h4>Payment Options</h4>
-      <div id="paymentMethods">
-        <label><input type="radio" name="payment" value="card"> Credit/Debit Card</label>
-        <label><input type="radio" name="payment" value="paypal"> PayPal</label>
-        <label><input type="radio" name="payment" value="stripe"> Stripe</label>
-      </div>
-      <h4>Shipping Options</h4>
-      <div id="shippingMethods">
-        <label><input type="radio" name="shipping" value="standard"> Standard</label>
-        <label><input type="radio" name="shipping" value="express"> Express</label>
-      </div>
-    </div>
-
-    <!-- ================= ORDER CONFIRMATION & TRACKING ================= -->
-    <div class="order-tracking hidden" id="orderTracking">
-      <h4>Order Summary</h4>
-      <p id="orderSummary"></p>
-      <p id="paymentConfirmation"></p>
-      <p id="shippingInfo"></p>
-      <div id="trackingInfo"></div>
-      <button class="btn btn-ghost" id="printOrderBtn">Print Order</button>
-    </div>
-
-    <!-- ================= POLICIES, SUPPORT & FEEDBACK ================= -->
-    <div class="cart-policies">
-      <h4>Policies</h4>
-      <p id="returnPolicy">30-day return policy</p>
-      <p id="refundPolicy">Refund within 7 business days</p>
-      <p id="exchangePolicy">Easy exchanges available</p>
-    </div>
-
-    <div class="customer-support">
-      <h4>Need Help?</h4>
-      <p>Contact us: <a href="mailto:support@example.com">support@example.com</a></p>
-      <p>FAQs | Live Chat | Call Center</p>
-    </div>
-
-    <div class="customer-feedback">
-      <h4>Feedback</h4>
-      <form id="feedbackForm">
-        <textarea placeholder="Share your experience..."></textarea>
-        <button class="btn btn-secondary" type="submit">Submit</button>
-      </form>
-    </div>
-
+    <!-- CUSTOMER REVIEWS -->
+    <section class="review-section">
+      <h3>What Our Customers Say</h3>
+      <div id="review-list" class="review-list"></div>
+    </section>
   </div>
+</section>
+<style>
+.hidden { display: none !important; }
 
-  <!-- ================= OVERLAY ================= -->
-  <div class="modal-overlay" id="cartOverlay"></div>
-</div>  <div class="modal" id="wishlistModal" role="dialog" aria-label="Wishlist" aria-modal="true">
+/* --- CART SLIDE-IN --- */
+.cart-slide {
+  position: fixed;
+  top: 70px; /* keep navbar visible */
+  right: 0;
+  width: 100%;
+  height: calc(100vh - 70px);
+  background: var(--bg, #fff);
+  color: var(--text, #111);
+  overflow-y: auto;
+  z-index: 999;
+  transform: translateX(100%);
+  transition: transform 0.5s ease-in-out, opacity 0.4s;
+  opacity: 0;
+}
+.cart-slide.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+.fade-out {
+  opacity: 0.2;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.cart-wrapper {
+  max-width: 1000px;
+  margin: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.cart-table {
+  flex: 2;
+  min-width: 60%;
+}
+
+.cart-summary {
+  flex: 1;
+  min-width: 300px;
+  background: #fafafa;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.cart-table-head, .cart-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+.cart-table-head {
+  font-weight: bold;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #eee;
+}
+
+.cart-items { display: grid; gap: 12px; }
+.cart-item {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+.cart-item img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.cart-item-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cart-empty {
+  text-align: center;
+  color: #777;
+  padding: 1.5rem 0;
+}
+
+.summary-line, .summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 0;
+}
+.summary-total {
+  font-size: 1.1em;
+}
+
+.cart-actions, .cart-address, .cart-checkout {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn, .btn-ghost {
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 8px 12px;
+  border: none;
+  font-weight: 600;
+}
+.btn { background: #007bff; color: #fff; }
+.btn:hover { background: #0056b3; }
+.btn-ghost { background: transparent; border: 1px solid #ccc; color: #333; }
+.primary { background: #28a745; }
+
+.recommend-section, .review-section {
+  margin-top: 2rem;
+}
+.recommend-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+.recommend-item {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.recommend-item img {
+  width: 100%;
+  border-radius: 10px;
+  height: 120px;
+  object-fit: cover;
+}
+.review-list {
+  display: grid;
+  gap: 10px;
+}
+.review-card {
+  background: #f1f1f1;
+  padding: 12px;
+  border-radius: 8px;
+}
+.review-card strong { display: block; margin-bottom: 4px; }
+</style>
+<script>
+  const openCartBtn = document.getElementById('openCart');
+  const cartPage = document.getElementById('cart-page');
+  const productSection = document.getElementById('product-section');
+  const closeCartBtn = document.getElementById('close-cart');
+  const cartList = document.getElementById('cart-list');
+  const cartEmpty = document.getElementById('cart-empty');
+  const subtotalEl = document.getElementById('subtotal-amount');
+  const shippingEl = document.getElementById('shipping-amount');
+  const taxEl = document.getElementById('tax-amount');
+  const discountEl = document.getElementById('discount-amount');
+  const totalEl = document.getElementById('total-amount');
+  const promoInput = document.getElementById('promo-input');
+  const applyPromoBtn = document.getElementById('apply-promo');
+  const addressSelect = document.getElementById('address-select');
+  const addAddressBtn = document.getElementById('add-address-btn');
+  const paymentSelect = document.getElementById('payment-select');
+  const checkoutBtn = document.getElementById('checkout-button');
+  const cartCount = document.getElementById('cartCount');
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let addresses = JSON.parse(localStorage.getItem('addresses')) || [];
+  let appliedPromo = null;
+
+  // --- OPEN & CLOSE CART ---
+  openCartBtn.addEventListener('click', () => {
+    cartPage.classList.add('active');
+    productSection.classList.add('fade-out');
+    renderCart();
+    renderRecommendations();
+    renderReviews();
+  });
+  closeCartBtn.addEventListener('click', () => {
+    cartPage.classList.remove('active');
+    productSection.classList.remove('fade-out');
+  });
+
+  // --- SAVE CART ---
+  function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateBadge();
+  }
+
+  function updateBadge() {
+    const count = cart.reduce((a, b) => a + b.qty, 0);
+    cartCount.textContent = count;
+  }
+
+  // --- RENDER CART ITEMS ---
+  function renderCart() {
+    cartList.innerHTML = '';
+    if (cart.length === 0) {
+      cartEmpty.style.display = 'block';
+      return;
+    }
+    cartEmpty.style.display = 'none';
+    cart.forEach((item, i) => {
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <div class="cart-item-name">
+          <img src="${item.image}" alt="${item.name}">
+          <span>${item.name}</span>
+        </div>
+        <span>$${item.price.toFixed(2)}</span>
+        <div>
+          <button class="btn-ghost" onclick="changeQty(${i}, -1)">−</button>
+          <span>${item.qty}</span>
+          <button class="btn-ghost" onclick="changeQty(${i}, 1)">+</button>
+        </div>
+        <span>$${(item.price * item.qty).toFixed(2)}</span>
+      `;
+      cartList.appendChild(div);
+    });
+    calculateTotals();
+  }
+
+  function changeQty(i, delta) {
+    cart[i].qty += delta;
+    if (cart[i].qty <= 0) cart.splice(i, 1);
+    saveCart();
+    renderCart();
+  }
+
+  // --- TOTAL CALCULATION ---
+  function calculateTotals() {
+    let subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    let shipping = subtotal > 50 ? 0 : 5;
+    let tax = subtotal * 0.05;
+    let discount = appliedPromo ? appliedPromo.amount || 0 : 0;
+    let total = subtotal + shipping + tax - discount;
+
+    subtotalEl.textContent = '$' + subtotal.toFixed(2);
+    shippingEl.textContent = '$' + shipping.toFixed(2);
+    taxEl.textContent = '$' + tax.toFixed(2);
+    discountEl.textContent = '-$' + discount.toFixed(2);
+    totalEl.textContent = '$' + total.toFixed(2);
+  }
+
+  // --- PROMO CODES ---
+  const promoCodes = { SAVE10: { type: 'percent', value: 10 }, FREESHIP: { type: 'flat', value: 5 } };
+  applyPromoBtn.addEventListener('click', () => {
+    const code = promoInput.value.trim().toUpperCase();
+    if (promoCodes[code]) {
+      const promo = promoCodes[code];
+      appliedPromo = {
+        code,
+        amount: promo.type === 'percent'
+          ? (cart.reduce((s, i) => s + i.price * i.qty, 0) * promo.value) / 100
+          : promo.value
+      };
+      alert(`Promo ${code} applied!`);
+    } else {
+      appliedPromo = null;
+      alert('Invalid promo code');
+    }
+    calculateTotals();
+  });
+
+  // --- ADDRESS ---
+  function renderAddresses() {
+    addressSelect.innerHTML = '';
+    if (addresses.length === 0) {
+      const opt = document.createElement('option');
+      opt.text = 'No addresses added';
+      addressSelect.add(opt);
+      return;
+    }
+    addresses.forEach((a, i) => {
+      const opt = document.createElement('option');
+      opt.text = `${a.name} - ${a.location}`;
+      opt.value = i;
+      addressSelect.add(opt);
+    });
+  }
+
+  addAddressBtn.addEventListener('click', () => {
+    const name = prompt('Recipient name:');
+    const location = prompt('Delivery location:');
+    if (!name || !location) return;
+    addresses.push({ name, location });
+    localStorage.setItem('addresses', JSON.stringify(addresses));
+    renderAddresses();
+  });
+
+  // --- CHECKOUT ---
+  checkoutBtn.addEventListener('click', () => {
+    const payment = paymentSelect.value;
+    if (cart.length === 0) return alert('Cart is empty.');
+    alert(`Checkout via ${payment.toUpperCase()} in progress...`);
+    localStorage.removeItem('cart');
+    cart = [];
+    saveCart();
+    renderCart();
+  });
+
+  // --- RECOMMENDATIONS ---
+  const recommendRow = document.getElementById('recommend-row');
+  function renderRecommendations() {
+    const demoProducts = [
+      { name: 'Sneakers X1', price: 49.99, image: 'https://via.placeholder.com/150' },
+      { name: 'Wireless Earbuds', price: 29.99, image: 'https://via.placeholder.com/150' },
+      { name: 'Smartwatch Pro', price: 89.99, image: 'https://via.placeholder.com/150' },
+    ];
+    recommendRow.innerHTML = '';
+    demoProducts.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'recommend-item';
+      div.innerHTML = `
+        <img src="${p.image}" alt="${p.name}">
+        <h4>${p.name}</h4>
+        <p>$${p.price}</p>
+        <button class="btn" onclick="addToCart('${p.name}', ${p.price}, '${p.image}')">Add to Cart</button>
+      `;
+      recommendRow.appendChild(div);
+    });
+  }
+
+  function addToCart(name, price, image) {
+    const existing = cart.find(i => i.name === name);
+    if (existing) existing.qty++;
+    else cart.push({ name, price, qty: 1, image });
+    saveCart();
+    renderCart();
+  }
+
+  // --- REVIEWS ---
+  const reviewList = document.getElementById('review-list');
+  function renderReviews() {
+    const demoReviews = [
+      { user: 'Jane D.', text: 'Great products and fast delivery!' },
+      { user: 'Mark T.', text: 'Excellent customer service and packaging.' },
+      { user: 'Sophia L.', text: 'Loved the recommendations, very accurate!' },
+    ];
+    reviewList.innerHTML = '';
+    demoReviews.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'review-card';
+      div.innerHTML = `<strong>${r.user}</strong><p>${r.text}</p>`;
+      reviewList.appendChild(div);
+    });
+  }
+
+  renderAddresses();
+  renderCart();
+  updateBadge();
+  window.changeQty = changeQty;
+  window.addToCart = addToCart;
+</script><style>
+.section .row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px;
+}
+.p-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  padding: 10px;
+  text-align: center;
+}
+.p-card img {
+  width: 100%;
+  height: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.p-meta h3 {
+  font-size: 0.9rem;
+  margin: 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.price {
+  font-weight: bold;
+  margin: 4px 0;
+}
+.btn {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-primary {
+  background: #007bff;
+  color: #fff;
+}
+.btn-ghost {
+  background: #f1f1f1;
+}
+/* Mobile view: show 2 products per row */
+@media (max-width: 600px) {
+  .section .row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .p-card img {
+    height: 100px; /* Slightly smaller for better fit */
+  }
+
+  .p-meta h3 {
+    font-size: 0.8rem;
+  }
+}
+/* Mobile fix: show 2 products per row (2×2 visible grid) */
+@media (max-width: 600px) {
+  .section .row {
+    grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+    gap: 1px;
+    width:100%;
+    
+  }
+
+.p-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  padding: 4px;
+  text-align: center;
+}
+.p-card img {
+  width: 100%;
+  height: 135px;
+  height: 135px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.p-meta h3 {
+  font-size: 0.4rem;
+  margin: 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.price {
+  font-weight: bold;
+  margin: 2px 0;
+}
+.btn {
+  border: none;
+  padding: 2px 2px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.btn-primary {
+  background: #007bff;
+  color: #fff;
+}
+.btn-ghost {
+  background: #f1f1f1;
+}
+</style>
+  <div class="modal" id="wishlistModal" role="dialog" aria-label="Wishlist" aria-modal="true">
     <div class="box">
       <div style="display:flex;justify-content:space-between;align-items:center"><h3>Your Wishlist</h3><button class="btn btn-ghost" data-close="#wishlistModal">Close</button></div>
       <div id="wishlistItems" class="panel"></div>
     </div>
-  </div>  <div class="modal" id="authModal" role="dialog" aria-label="Account" aria-modal="true">
+  </div> <script>
+  function logCustomerActivity(name, email, activity) {
+    const all = JSON.parse(localStorage.getItem("customerActivities") || "[]");
+
+    all.push({
+      name,
+      email,
+      activity,
+      date: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("customerActivities", JSON.stringify(all));
+  }
+
+  // Example usage whenever a customer performs an action
+  // logCustomerActivity("John Doe", "john@gmail.com", "Added item to cart");
+</script><!-- FULL UPDATED HTML + CSS + JS WITH RESPONSIVE TOP + BOTTOM NAVIGATION, CHAT MODAL, LOCATION BUTTON, DARK MODE --><!-- BOTTOM NAVIGATION BAR FOR MOBILE --><div class="bottom-nav">
+<a href="#" class="bn-item"><i class="ri-home-4-fill"></i><span>Home</span></a>
+<a href="#" class="bn-item"><i class="ri-layout-grid-fill"></i><span>Categories</span></a>
+<a href="cart.html" class="bn-item"><i class="ri-shopping-cart-2-fill"></i><span>Cart</span></a>
+<a href="wishlist.html" class="bn-item"><i class="ri-heart-3-fill"></i><span>Wishlist</span></a>
+<a href="account.html" id="openAccount" class="bn-item"><i class="ri-user-3-fill"></i><span>Account</span></a>
+
+</div><style>
+:root { --brand:#00d38b; --brand-2:#0affc7; --text:#fff; }
+body { margin:0; font-family:system-ui; background:#0f1623; color:white; }
+.bottom-nav { position:fixed; bottom:0; left:0; right:0; height:64px; background:rgba(10,14,22,.9); backdrop-filter:blur(10px); border-top:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-around; align-items:center; z-index:9999; }
+.bn-item { display:flex; flex-direction:column; align-items:center; font-size:11px; color:white; text-decoration:none; }
+.bn-item i { font-size:22px; margin-bottom:2px; }
+.icon-home::before{content:"";} .icon-grid::before{content:"🔳";} .icon-cart::before{content:"🛒";} .icon-heart::before{content:"❤️";} .icon-user::before{content:"👤";}
+
+/* MOBILE ONLY */
+@media(min-width:768px){ .bottom-nav{ display:none; }}
+</style> <div class="modal" id="authModal" role="dialog" aria-label="Account" aria-modal="true">
     <div class="box">
       <div style="display:flex;gap:10px">
         <button class="btn btn-ghost" data-auth-tab="login">Login</button>
@@ -606,22 +1729,22 @@ footer a{color:#cbd5e1}
       </div>
       <div id="authPanels">
         <form id="loginForm" aria-label="Login" class="panel" style="margin-top:10px">
-          <div class="field"><label for="lEmail">Email</label><input id="lEmail" type="email" required /></div>
-          <div class="field"><label for="lPass">Password</label><input id="lPass" type="password" required /></div>
-          <div class="field"><label for="l2fa">2FA Code (optional)</label><input id="l2fa" inputmode="numeric" pattern="[0-9]*" placeholder="123456" /></div>
-          <div class="field"><label for="lCaptcha">Captcha: <span id="lCaptchaQ"></span></label><input id="lCaptcha" required aria-describedby="lHelp" /><div id="lHelp" class="helper">Prove you’re human</div></div>
+          <div class="field"><label for="lEmail">Email</label><input id="lEmail" type="email" required ></div>
+          <div class="field"><label for="lPass">Password</label><input id="lPass" type="password" required ></div>
+          <div class="field"><label for="l2fa">2FA Code (optional)</label><input id="l2fa" inputmode="numeric" pattern="[0-9]*" placeholder="123456" ></div>
+          <div class="field"><label for="lCaptcha">Captcha: <span id="lCaptchaQ"></span></label><input id="lCaptcha" required aria-describedby="lHelp"><div id="lHelp" class="helper">Prove you’re human</div></div>
           <button class="btn btn-primary" type="submit">Login</button>
         </form><form id="regForm" aria-label="Register" class="panel" hidden>
-      <div class="field"><label for="rName">Name</label><input id="rName" required /></div>
-      <div class="field"><label for="rEmail">Email</label><input id="rEmail" type="email" required /></div>
-      <div class="field"><label for="rPass">Password</label><input id="rPass" type="password" required /></div>
-      <div class="field"><label for="rCaptcha">Captcha: <span id="rCaptchaQ"></span></label><input id="rCaptcha" required /></div>
+      <div class="field"><label for="rName">Name</label><input id="rName" required></div>
+      <div class="field"><label for="rEmail">Email</label><input id="rEmail" type="email" required></div>
+      <div class="field"><label for="rPass">Password</label><input id="rPass" type="password" required></div>
+      <div class="field"><label for="rCaptcha">Captcha: <span id="rCaptchaQ"></span></label><input id="rCaptcha" required></div>
       <button class="btn btn-primary" type="submit">Create account</button>
     </form>
 
     <form id="resetForm" aria-label="Reset password" class="panel" hidden>
-      <div class="field"><label for="xEmail">Email</label><input id="xEmail" type="email" required /></div>
-      <div class="field"><label for="xCaptcha">Captcha: <span id="xCaptchaQ"></span></label><input id="xCaptcha" required /></div>
+      <div class="field"><label for="xEmail">Email</label><input id="xEmail" type="email" required></div>
+      <div class="field"><label for="xCaptcha">Captcha: <span id="xCaptchaQ"></span></label><input id="xCaptcha" required></div>
       <button class="btn btn-primary" type="submit">Send reset link</button>
     </form>
   </div>
@@ -636,18 +1759,18 @@ footer a{color:#cbd5e1}
       </div>
       <div id="helpPanels" style="margin-top:10px">
         <form id="contactForm" class="panel" aria-label="Contact us">
-          <div class="field"><label for="cName">Name</label><input id="cName" required /></div>
-          <div class="field"><label for="cEmail">Email</label><input id="cEmail" type="email" required /></div>
+          <div class="field"><label for="cName">Name</label><input id="cName" required></div>
+          <div class="field"><label for="cEmail">Email</label><input id="cEmail" type="email" required></div>
           <div class="field"><label for="cMsg">Message</label><textarea id="cMsg" rows="4" required></textarea></div>
           <button class="btn btn-primary" type="submit">Send</button>
         </form>
         <form id="returnsForm" class="panel" hidden aria-label="Returns">
-          <div class="field"><label for="rOrder">Order #</label><input id="rOrder" required /></div>
+          <div class="field"><label for="rOrder">Order #</label><input id="rOrder" required></div>
           <div class="field"><label for="rReason">Reason</label><select id="rReason"><option>Too large</option><option>Too small</option><option>Damaged</option><option>Changed mind</option></select></div>
           <button class="btn btn-primary" type="submit">Start Return</button>
         </form>
         <form id="trackForm" class="panel" hidden aria-label="Order tracking">
-          <div class="field"><label for="tOrder">Order #</label><input id="tOrder" required /></div>
+          <div class="field"><label for="tOrder">Order #</label><input id="tOrder" required></div>
           <button class="btn btn-primary" type="submit">Track</button>
           <div id="trackResult" class="helper" style="margin-top:8px"></div>
         </form>
@@ -700,7 +1823,7 @@ footer a{color:#cbd5e1}
     // Mock "DB" with products (id, gender, category, likes, sales, addedAt, discount, rating)
     const products = (() => {
       const now = Date.now();
-      const data = [
+        const data = [
         {id:'p1', title:'Eco Tee', price:24.00, gender:'men', category:'tees', likes:180, sales:520, addedAt: now-3*86400000, discount:0.10, rating:4.6, images:['https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=900&auto=format&fit=crop'], variants:{size:['S','M','L','XL'], color:['Black','Olive','White']}, sku:'TEE-ECO-001', specs:['100% organic cotton','Pre‑shrunk','Fair trade'], tags:['new','organic','eco']},
         {id:'p2', title:'City Sneakers', price:89.00, gender:'men', category:'sneakers', likes:320, sales:980, addedAt: now-12*86400000, discount:0.20, rating:4.8, images:['https://images.unsplash.com/photo-1528702748617-0316a9e42c1e?q=80&w=900&auto=format&fit=crop'], variants:{size:['7','8','9','10','11'], color:['White','Gray']}, sku:'SNK-CITY-002', specs:['Cushioned midsole','Breathable mesh','Durarubber outsole'], tags:['deal','best']},
         {id:'p3', title:'Athleisure Set', price:64.00, gender:'women', category:'athleisure', likes:210, sales:610, addedAt: now-1*86400000, discount:0.0, rating:4.5, images:['https://images.unsplash.com/photo-1542326237-94b1c5a538d9?q=80&w=900&auto=format&fit=crop'], variants:{size:['XS','S','M','L'], color:['Charcoal','Sage']}, sku:'SET-ATH-003', specs:['4‑way stretch','Moisture wicking','Flatlock seams'], tags:['new']},
@@ -713,7 +1836,214 @@ footer a{color:#cbd5e1}
       ];
       return data;
     })();
+/* ============================
+   EXTRA PRODUCTS p10 - p40
+============================ */
 
+const now = Date.now();
+
+products.push(
+  // ------------------ KITCHEN (p10–p15)
+  {id:'p10', title:'Stainless Steel Knife Set', price:35.00, gender:'unisex', category:'kitchen',
+    likes:120, sales:300, addedAt: now-3*86400000, discount:0.10, rating:4.5,
+    images:['https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Standard'], color:['Silver']},
+    sku:'KIT-KNIFE-010', specs:['6-piece set','Ergonomic handle'], tags:['kitchen','deal']},
+
+  {id:'p11', title:'Electric Blender Pro', price:58.00, gender:'unisex', category:'kitchen',
+    likes:200, sales:520, addedAt: now-7*86400000, discount:0.15, rating:4.7,
+    images:['https://images.unsplash.com/photo-1586201375754-8362c61abf7d?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['1.5L'], color:['Black','White']},
+    sku:'KIT-BLEND-011', specs:['600W','Ice crush mode'], tags:['kitchen']},
+
+  {id:'p12', title:'Non-Stick Frying Pan', price:24.00, gender:'unisex', category:'kitchen',
+    likes:90, sales:210, addedAt: now-10*86400000, discount:0.12, rating:4.3,
+    images:['https://images.unsplash.com/photo-1604908812651-3f5ce242a3cf?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['24cm','28cm'], color:['Black']},
+    sku:'KIT-PAN-012', specs:['Scratch-resistant'], tags:['kitchen']},
+
+  {id:'p13', title:'Glass Food Storage Set', price:32.00, gender:'unisex', category:'kitchen',
+    likes:150, sales:340, addedAt: now-5*86400000, discount:0.08, rating:4.6,
+    images:['https://images.unsplash.com/photo-1586201375843-7a4762a6f9b8?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['500ml','1L'], color:['Clear']},
+    sku:'KIT-STORE-013', specs:['Leak-proof lids'], tags:['kitchen']},
+
+  {id:'p14', title:'Multi Grill Sandwich Maker', price:49.00, gender:'unisex', category:'kitchen',
+    likes:180, sales:290, addedAt: now-9*86400000, discount:0.20, rating:4.5,
+    images:['https://images.unsplash.com/photo-1601314167099-2321f875f0df?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Standard'], color:['Black']},
+    sku:'KIT-GRILL-014', specs:['Non-stick plates'], tags:['deal','kitchen']},
+
+  {id:'p15', title:'Premium Wooden Cutting Board', price:19.00, gender:'unisex', category:'kitchen',
+    likes:110, sales:260, addedAt: now-6*86400000, discount:0.05, rating:4.4,
+    images:['https://images.unsplash.com/photo-1591209627715-3d6941be0f66?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Medium','Large'], color:['Brown']},
+    sku:'KIT-BOARD-015', specs:['Natural bamboo'], tags:['kitchen']},
+
+  // ------------------ HOME (p16–p21)
+  {id:'p16', title:'Luxury Throw Blanket', price:28.00, gender:'unisex', category:'home',
+    likes:90, sales:180, addedAt: now-4*86400000, discount:0.10, rating:4.5,
+    images:['https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['150×200cm'], color:['Grey','Cream']},
+    sku:'HOME-BLANKET-016', specs:['Ultra soft'], tags:['home']},
+
+  {id:'p17', title:'Decorative Wall Mirror', price:45.00, gender:'unisex', category:'home',
+    likes:130, sales:230, addedAt: now-11*86400000, discount:0.18, rating:4.6,
+    images:['https://images.unsplash.com/photo-1567016554429-449b6a99f91f?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Round','Square'], color:['Gold']},
+    sku:'HOME-MIRROR-017', specs:['Steel frame'], tags:['home','deal']},
+
+  {id:'p18', title:'LED Bedroom Lamp', price:34.00, gender:'unisex', category:'home',
+    likes:160, sales:300, addedAt: now-8*86400000, discount:0.12, rating:4.8,
+    images:['https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Standard'], color:['White','Black']},
+    sku:'HOME-LAMP-018', specs:['Warm light'], tags:['home']},
+
+  {id:'p19', title:'Cotton Bedsheet Set', price:42.00, gender:'unisex', category:'home',
+    likes:100, sales:250, addedAt: now-7*86400000, discount:0.10, rating:4.4,
+    images:['https://images.unsplash.com/photo-1600486913747-55e5470d6c7a?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Queen','King'], color:['Blue','White']},
+    sku:'HOME-BEDSHEET-019', specs:['100% cotton'], tags:['home']},
+
+  {id:'p20', title:'Indoor Plant Pot Set', price:20.00, gender:'unisex', category:'home',
+    likes:170, sales:320, addedAt: now-13*86400000, discount:0.16, rating:4.7,
+    images:['https://images.unsplash.com/photo-1593697821336-c84a0d6d2f83?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Small','Medium'], color:['White']},
+    sku:'HOME-POT-020', specs:['Ceramic'], tags:['home']},
+
+  {id:'p21', title:'Portable Air Humidifier', price:33.00, gender:'unisex', category:'home',
+    likes:140, sales:260, addedAt: now-9*86400000, discount:0.10, rating:4.6,
+    images:['https://images.unsplash.com/photo-1582719478185-daaa1f578f50?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['300ml'], color:['White']},
+    sku:'HOME-HUMID-021', specs:['Silent mode'], tags:['home']},
+
+  // ------------------ OFFICE (p22–p27)
+  {id:'p22', title:'Ergonomic Office Chair', price:95.00, gender:'unisex', category:'office',
+    likes:220, sales:410, addedAt: now-5*86400000, discount:0.20, rating:4.7,
+    images:['https://images.unsplash.com/photo-1505820013142-f86a3439c5f3?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Standard'], color:['Black','Grey']},
+    sku:'OFF-CHAIR-022', specs:['Lumbar support'], tags:['office','deal']},
+
+  {id:'p23', title:'Adjustable Laptop Stand', price:27.00, gender:'unisex', category:'office',
+    likes:130, sales:350, addedAt: now-12*86400000, discount:0.12, rating:4.5,
+    images:['https://images.unsplash.com/photo-1587613754545-2dfd2d595b77?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Universal'], color:['Silver']},
+    sku:'OFF-STAND-023', specs:['Aluminium'], tags:['office']},
+
+  {id:'p24', title:'Wireless Keyboard', price:30.00, gender:'unisex', category:'office',
+    likes:180, sales:290, addedAt: now-6*86400000, discount:0.10, rating:4.4,
+    images:['https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Standard'], color:['White','Black']},
+    sku:'OFF-KEY-024', specs:['Rechargeable'], tags:['office']},
+
+  {id:'p25', title:'Desk Organizer Set', price:22.00, gender:'unisex', category:'office',
+    likes:140, sales:210, addedAt: now-4*86400000, discount:0.08, rating:4.3,
+    images:['https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Small','Medium'], color:['Black']},
+    sku:'OFF-ORG-025', specs:['Metal mesh'], tags:['office']},
+
+  {id:'p26', title:'LED Desk Lamp', price:38.00, gender:'unisex', category:'office',
+    likes:160, sales:330, addedAt: now-9*86400000, discount:0.15, rating:4.6,
+    images:['https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Standard'], color:['Black']},
+    sku:'OFF-LAMP-026', specs:['Touch control'], tags:['office']},
+
+  {id:'p27', title:'Noise Canceling Headset', price:55.00, gender:'unisex', category:'office',
+    likes:210, sales:370, addedAt: now-14*86400000, discount:0.22, rating:4.8,
+    images:['https://images.unsplash.com/photo-1519677100203-a0e668c92439?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Standard'], color:['Black']},
+    sku:'OFF-HEAD-027', specs:['Wireless BT 5.0'], tags:['office','deal']},
+
+  // ------------------ SPORTS (p28–p33)
+  {id:'p28', title:'Yoga Mat Premium', price:25.00, gender:'unisex', category:'sports',
+    likes:150, sales:260, addedAt: now-3*86400000, discount:0.12, rating:4.7,
+    images:['https://images.unsplash.com/photo-1599058918043-9403f1bff73b?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['6mm'], color:['Purple','Blue']},
+    sku:'SPRT-MAT-028', specs:['Non-slip'], tags:['sports']},
+
+  {id:'p29', title:'Dumbbell Set 10kg', price:40.00, gender:'unisex', category:'sports',
+    likes:190, sales:340, addedAt: now-10*86400000, discount:0.18, rating:4.6,
+    images:['https://images.unsplash.com/photo-1571019613846-1a8f1cbd345c?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['10kg'], color:['Black']},
+    sku:'SPRT-DB-029', specs:['Rubber coated'], tags:['sports']},
+
+  {id:'p30', title:'Running Shorts', price:18.00, gender:'unisex', category:'sports',
+    likes:100, sales:200, addedAt: now-11*86400000, discount:0.10, rating:4.4,
+    images:['https://images.unsplash.com/photo-1533560777802-6b8da08a523e?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['S','M','L'], color:['Black','Navy']},
+    sku:'SPRT-SHORT-030', specs:['Breathable'], tags:['sports']},
+
+  {id:'p31', title:'Football Boots', price:62.00, gender:'unisex', category:'sports',
+    likes:220, sales:420, addedAt: now-12*86400000, discount:0.20, rating:4.8,
+    images:['https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['40','41','42','43'], color:['Red','Black']},
+    sku:'SPRT-FB-031', specs:['Firm ground'], tags:['sports','deal']},
+
+  {id:'p32', title:'Jump Rope Adjustable', price:12.00, gender:'unisex', category:'sports',
+    likes:80, sales:150, addedAt: now-5*86400000, discount:0.05, rating:4.2,
+    images:['https://images.unsplash.com/photo-1579758629938-03607ccdbaba?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Adjustable'], color:['Black']},
+    sku:'SPRT-ROPE-032', specs:['Steel wire'], tags:['sports']},
+
+  {id:'p33', title:'Sports Water Bottle', price:14.00, gender:'unisex', category:'sports',
+    likes:130, sales:260, addedAt: now-8*86400000, discount:0.10, rating:4.3,
+    images:['https://images.unsplash.com/photo-1585238341983-57c31f182a3f?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['750ml'], color:['Blue','Black']},
+    sku:'SPRT-WATER-033', specs:['BPA-free'], tags:['sports']},
+
+  // ------------------ ELECTRONICS (p34–p40)
+  {id:'p34', title:'Wireless Earbuds Pro', price:59.00, gender:'unisex', category:'electronics',
+    likes:250, sales:480, addedAt: now-9*86400000, discount:0.22, rating:4.8,
+    images:['https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Standard'], color:['Black','White']},
+    sku:'ELEC-BUD-034', specs:['Noise canceling'], tags:['electronics','deal']},
+
+  {id:'p35', title:'Smartwatch X2', price:75.00, gender:'unisex', category:'electronics',
+    likes:290, sales:520, addedAt: now-10*86400000, discount:0.15, rating:4.7,
+    images:['https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['42mm'], color:['Black','Silver']},
+    sku:'ELEC-WATCH-035', specs:['Heart-rate monitor'], tags:['electronics']},
+
+  {id:'p36', title:'Bluetooth Speaker Mini', price:22.00, gender:'unisex', category:'electronics',
+    likes:160, sales:310, addedAt: now-6*86400000, discount:0.10, rating:4.5,
+    images:['https://images.unsplash.com/photo-1512427691650-1f6a75d1d9cf?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Mini'], color:['Blue','Black']},
+    sku:'ELEC-SPK-036', specs:['Deep bass'], tags:['electronics']},
+
+  {id:'p37', title:'4K Action Camera', price:99.00, gender:'unisex', category:'electronics',
+    likes:240, sales:420, addedAt: now-14*86400000, discount:0.20, rating:4.6,
+    images:['https://images.unsplash.com/photo-1519183071298-a2962be90b8e?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Standard'], color:['Black']},
+    sku:'ELEC-CAM-037', specs:['Waterproof'], tags:['electronics','deal']},
+
+  {id:'p38', title:'Gaming Mouse RGB', price:29.00, gender:'unisex', category:'electronics',
+    likes:180, sales:310, addedAt: now-11*86400000, discount:0.12, rating:4.6,
+    images:['https://images.unsplash.com/photo-1593642532458-8ce7c8b15305?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['Standard'], color:['Black','RGB']},
+    sku:'ELEC-MOUSE-038', specs:['Programmable buttons'], tags:['electronics']},
+
+  {id:'p39', title:'Portable Powerbank 20k', price:34.00, gender:'unisex', category:'electronics',
+    likes:190, sales:350, addedAt: now-5*86400000, discount:0.10, rating:4.5,
+    images:['https://images.unsplash.com/photo-1585829365092-3e7f1f1f65ae?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['20000mAh'], color:['Black']},
+    sku:'ELEC-PWR-039', specs:['Fast charging'], tags:['electronics']},
+
+  {id:'p40', title:'USB-C Fast Charger', price:16.00, gender:'unisex', category:'electronics',
+    likes:110, sales:240, addedAt: now-7*86400000, discount:0.05, rating:4.2,
+    images:['https://images.unsplash.com/photo-1580983561371-7b5d6d4d7d05?q=80&w=900&auto=format&fit=crop'],
+    variants:{size:['25W'], color:['White']},
+    sku:'ELEC-CHG-040', specs:['Quick charge'], tags:['electronics']}
+);
+
+/* ============================
+   RENDER EXTRA ROWS
+============================ */
+
+rowFill('#rowKitchen', products.filter(p=>p.category==='kitchen'));
+rowFill('#rowHome', products.filter(p=>p.category==='home'));
+rowFill('#rowOffice', products.filter(p=>p.category==='office'));
+rowFill('#rowSports', products.filter(p=>p.category==='sports'));
+rowFill('#rowElectronics', products.filter(p=>p.category==='electronics'));
     // LocalStorage namespaces
     const LS = {
       cart: 'ss_cart',
