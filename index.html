@@ -422,25 +422,222 @@ img {
   padding: 2px 0;
 }
 
-/* TOPBAR RESPONSIVENESS */
-.topbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  gap: 4px;
+/* ======================================================
+   HEADER BASE IMPROVEMENTS — CLEAN, MODERN, PREMIUM
+====================================================== */
+header {
+  background: linear-gradient(90deg, #1a1a1a, #232323);
+  padding: 8px 0;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  backdrop-filter: blur(8px);
 }
 
-/* SEARCH BAR FULL WIDTH ON MOBILE */
+/* ===========================
+   TOPBAR BASE
+=========================== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  gap: 8px;
+  position: relative;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: opacity .2s ease;
+}
+
+.brand:hover {
+  opacity: 0.85;
+}
+
+.brand svg {
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.35));
+}
+
+
+/* ===========================
+   SEARCH BAR
+=========================== */
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 420px;
+}
+
 .search input {
   width: 100%;
-  max-width: 400px;
+  padding: 8px 36px 8px 12px;
+  border: none;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(6px);
+  color: white;
+  font-size: 0.95rem;
+  transition: background .25s ease, transform .2s ease;
 }
+
+.search input::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+.search input:focus {
+  outline: none;
+  background: rgba(255,255,255,0.28);
+  transform: scale(1.01);
+}
+
+.search .icon {
+  position: absolute;
+  right: 12px;
+  pointer-events: none;
+}
+
+.search .icon svg {
+  opacity: 0.85;
+}
+
+
+/* ===========================
+   ACTION BUTTONS
+=========================== */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .25s ease, transform .25s ease;
+  border: none;
+}
+
+.icon-btn svg {
+  transition: transform .25s ease;
+}
+
+.icon-btn:hover {
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.1);
+}
+
+.icon-btn:hover svg {
+  transform: scale(1.15);
+}
+
+
+/* ===========================
+   CART BADGE (PILL)
+=========================== */
+.pill {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff0033;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.7em;
+  padding: 2px 6px;
+  font-weight: 600;
+  box-shadow: 0 0 6px rgba(255,0,0,0.5);
+}
+
+
+/* ===========================
+   CATEGORY NAV BAR
+=========================== */
+header nav {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-top: 6px;
+}
+
+header nav::-webkit-scrollbar {
+  display: none;
+}
+
+header nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: background .25s ease, color .25s ease;
+}
+
+header nav a:hover {
+  background: rgba(255,255,255,0.22);
+  color: white;
+}
+
+
+/* ===========================
+   MOBILE TOPBAR IMPROVEMENTS
+=========================== */
 @media (max-width: 600px) {
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 4px 0;
+  }
+
+  /* Search full width */
   .search {
-    flex: 1 1 100%;
     order: 3;
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  /* Icons grouped compact */
+  .actions {
+    gap: 6px;
+  }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* Brand slightly smaller */
+  .brand {
+    font-size: 0.95rem;
+  }
+
+  /* Categories scroll neatly */
+  header nav {
+    margin-top: 8px;
+    gap: 10px;
+  }
+
+  header nav a {
+    font-size: 0.85rem;
+    padding: 6px 10px;
   }
 }
 
@@ -456,6 +653,142 @@ img {
 @media (max-width: 480px)  { h1, h2, h3 { font-size: 60%; } }
 @media (max-width: 375px)  { .btn, input { font-size: 0.9rem; } }
 @media (max-width: 320px)  { .container { padding: 0 0.5rem; } }
+/********************************************
+ * THEME TOGGLE — LIGHT & DARK MODE SUPPORT
+ ********************************************/
+
+/* Smooth global transitions */
+body, header, .card, .p-card, .mini-card, .modal-content {
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+/* === LIGHT THEME VARIABLES === */
+:root.light {
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --muted: #4b5563;
+
+  /* Vibrant headings */
+  --heading-1: #0d6efd;
+  --heading-2: #14b8a6;
+  --heading-3: #e11d48;
+
+  /* Buttons */
+  --brand: #0d6efd;
+  --brand-2: #22d3ee;
+  --accent: #f59e0b;
+
+  /* Light shadows */
+  --shadow: 0 12px 32px rgba(0,0,0,0.08);
+}
+
+/* Light theme background fixes */
+:root.light body {
+  background: linear-gradient(180deg, #ffffff, #f1f5f9);
+}
+
+/* Light cards */
+:root.light .card,
+:root.light .p-card,
+:root.light .mini-card,
+:root.light .modal-content {
+  background: #ffffff;
+  border-color: rgba(0,0,0,0.08);
+}
+
+/* Text */
+:root.light p,
+:root.light span,
+:root.light label,
+:root.light .p-meta {
+  color: #1a1a1a;
+}
+
+/* Headings pop with color */
+:root.light h1 { color: var(--heading-1); }
+:root.light h2 { color: var(--heading-2); }
+:root.light h3 { color: var(--heading-3); }
+
+/* Search bar */
+:root.light .search input {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: #111;
+}
+
+/* Navigation background */
+:root.light header {
+  background: rgba(255,255,255,0.85);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  backdrop-filter: blur(10px);
+}
+
+/* Buttons */
+:root.light .btn-primary {
+  background: linear-gradient(135deg, var(--brand), var(--heading-1));
+  color: #fff;
+}
+
+:root.light .btn-ghost {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.15);
+  color: #111;
+}
+
+/* Icons */
+:root.light svg {
+  stroke: #222 !important;
+}
+
+/* Pills */
+:root.light .pill {
+  background: var(--heading-1);
+  color: #fff;
+}
+
+/* Light theme hover animations */
+:root.light .card:hover,
+:root.light .p-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+
+/***********************
+ * THEME TOGGLE SWITCH
+ ***********************/
+.theme-toggle {
+  width: 52px;
+  height: 26px;
+  background: #0f1623;
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.35s ease;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.theme-toggle .ball {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.35s ease;
+}
+
+/* Light mode toggle animation */
+:root.light .theme-toggle {
+  background: #d1d5db;
+  border-color: rgba(0,0,0,0.2);
+}
+
+:root.light .theme-toggle .ball {
+  transform: translateX(26px);
+}
   </style>
 </head>
 <body>
@@ -489,7 +822,30 @@ img {
     <path d="M3 4h2l2.4 12.5A2 2 0 009.37 18H18a2 2 0 001.96-1.6L22 8H6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   </svg>
   <span id="cartCount" class="pill" aria-live="polite" aria-label="Items in cart">0</span>
-</button><button onclick="logout()">Logout</button>
+</button><button onclick="logout()">Logout</button><!-- Theme Toggle -->
+<div class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+  <div class="ball"></div>
+</div>
+<script>
+  const toggle = document.getElementById("themeToggle");
+  const root = document.documentElement;
+
+  // Load saved preference
+  if (localStorage.getItem("theme") === "light") {
+    root.classList.add("light");
+  }
+
+  toggle.addEventListener("click", () => {
+    root.classList.toggle("light");
+
+    // Save preference
+    if (root.classList.contains("light")) {
+      localStorage.setItem("theme", "light");
+    } else {
+      localStorage.removeItem("theme");
+    }
+  });
+</script>
 <style>
 .icon-btn {
   background: transparent;
@@ -520,14 +876,15 @@ img {
   font-weight: bold;
   min-width: 16px;
   text-align: center;
-}</style>
+}
+</style>
 <script>
 openCartBtn.addEventListener('click', () => {
   productSection.classList.add('hidden');
   cartPage.classList.remove('hidden');
   renderCart();
 });</script>
-          <button class="icon-btn" id="openAuth" aria-label="Open login/register"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="4" stroke="white"/><path d="M4 21a8 8 0 0116 0" stroke="white"></svg></button>
+          <button class="icon-btn" id="openAuth" aria-label="Open login/register"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="4" stroke="white"><path d="M4 21a8 8 0 0116 0" stroke="white"></svg></button>
         </div>
       </div>
       <nav aria-label="Primary categories">
@@ -1040,7 +1397,7 @@ openCartBtn.addEventListener('click', () => {
       </form>
       <div class="trust" style="margin-top:14px" aria-label="Trust badges">
         <div class="badge" title="Secure checkout">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l7 4v5a7 7 0 11-14 0V7l7-4z" stroke="white"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3l7 4v5a7 7 0 11-14 0V7l7-4z" stroke="white"></svg>
           <span>Secure Checkout</span>
         </div>
         <div class="badge" title="Free returns"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12a9 9 0 1115.9 6.1" stroke="white"><path d="M3 12h6M3 12l2-2M3 12l2 2" stroke="white"></svg><span>Free Returns</span></div>
@@ -1577,109 +1934,158 @@ openCartBtn.addEventListener('click', () => {
   window.changeQty = changeQty;
   window.addToCart = addToCart;
 </script><style>
-.section .row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 6px;
-}
-.p-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+/* ===== BASE PRODUCT GRID ===== */
+.section .row {      
+  display: grid;      
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));      
+  gap: 12px;      
   padding: 10px;
-  text-align: center;
-}
-.p-card img {
-  width: 100%;
-  height: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-.p-meta h3 {
-  font-size: 0.9rem;
-  margin: 6px 0;
-  white-space: nowrap;
+}      
+
+/* ===== CARD ===== */
+.p-card {      
+  background: #fff;      
+  border-radius: 14px;      
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);      
   overflow: hidden;
-  text-overflow: ellipsis;
-}
-.price {
-  font-weight: bold;
-  margin: 4px 0;
-}
-.btn {
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.btn-primary {
-  background: #007bff;
-  color: #fff;
-}
-.btn-ghost {
-  background: #f1f1f1;
-}
-/* Mobile view: show 2 products per row */
-@media (max-width: 600px) {
-  .section .row {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  transition: transform .25s ease, box-shadow .25s ease;
+  display: flex;
+  flex-direction: column;
+}      
 
-  .p-card img {
-    height: 100px; /* Slightly smaller for better fit */
-  }
+/* Hover animation */
+.p-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+}
 
-  .p-meta h3 {
-    font-size: 0.8rem;
-  }
-}
-/* Mobile fix: show 2 products per row (2×2 visible grid) */
-@media (max-width: 600px) {
-  .section .row {
-    grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
-    gap: 1px;
-    width:100%;
-    
-  }
+/* ===== PRODUCT IMAGE (2/3 of card) ===== */
+.p-card img {      
+  width: 100%;      
+  height: 66%;      
+  object-fit: cover;      
+  border-radius: 0;      
+  transition: transform .35s ease;
+}      
 
-.p-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.1);
-  padding: 4px;
-  text-align: center;
+/* Image zoom effect */
+.p-card:hover img {
+  transform: scale(1.05);
 }
-.p-card img {
-  width: 100%;
-  height: 135px;
-  height: 135px;
-  object-fit: cover;
-  border-radius: 4px;
+
+/* ===== PRODUCT CONTENT (1/3 of card) ===== */
+.p-meta {
+  padding: 10px;
+  text-align: left;
 }
-.p-meta h3 {
-  font-size: 0.4rem;
-  margin: 2px 0;
+
+/* Product title */
+.p-meta h3 {      
+  font-size: 1rem;      
+  margin: 6px 0;      
+  font-weight: 600;
+  color: #222;
+  overflow: hidden;      
+  text-overflow: ellipsis;      
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
-.price {
-  font-weight: bold;
-  margin: 2px 0;
+
+/* Price */
+.price {      
+  font-weight: 700;      
+  margin: 4px 0;      
+  font-size: 1rem;
+  color: #e60023;
 }
-.btn {
-  border: none;
-  padding: 2px 2px;
-  border-radius: 2px;
+
+/* Rating Stars */
+.rating {
+  font-size: 0.45rem;
+  color: #ffb400;
+  margin-bottom: 6px;
+}
+
+/* ===== BUTTONS ===== */
+.btn {      
+  padding: 6px 12px;      
+  border-radius: 8px;      
   cursor: pointer;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background .25s ease, transform .25s ease;
+  width: 48%;
+}      
+
+.btn-primary {      
+  background: #007bff;      
+  color: #fff;      
+}      
+
+.btn-primary:hover {
+  background: #005ad1;
+  transform: scale(1.04);
 }
-.btn-primary {
-  background: #007bff;
-  color: #fff;
-}
-.btn-ghost {
+
+.btn-ghost {      
   background: #f1f1f1;
+  color: #333;
+}      
+
+.btn-ghost:hover {
+  background: #e0e0e0;
+  transform: scale(1.04);
+}
+
+/* Button container */
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+
+/* ========================================================= */
+/* ====================== MOBILE VIEW ====================== */
+/* ========================================================= */
+
+@media (max-width: 600px) {
+
+  .section .row {      
+    grid-template-columns: repeat(2, 1fr);    
+    gap: 8px;
+  }  
+
+  .p-card {
+    border-radius: 10px;
+  }
+
+  .p-card img {    
+    height: 62%;
+  }  
+
+  .p-meta {
+    padding: 6px;
+  }
+
+  .p-meta h3 {    
+    font-size: 0.75rem;    
+    height: 28px;
+  }  
+
+  .price {  
+    font-size: 0.85rem;  
+  }  
+
+  .rating {  
+    font-size: 0.5rem;  
+  }  
+
+  .btn {  
+    padding: 4px;  
+    font-size: 0.7rem;  
+    border-radius: 6px;
+  }
 }
 </style>
   <div class="modal" id="wishlistModal" role="dialog" aria-label="Wishlist" aria-modal="true">
@@ -1824,15 +2230,15 @@ body { margin:0; font-family:system-ui; background:#0f1623; color:white; }
     const products = (() => {
       const now = Date.now();
         const data = [
-        {id:'p1', title:'Eco Tee', price:24.00, gender:'men', category:'tees', likes:180, sales:520, addedAt: now-3*86400000, discount:0.10, rating:4.6, images:['https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=900&auto=format&fit=crop'], variants:{size:['S','M','L','XL'], color:['Black','Olive','White']}, sku:'TEE-ECO-001', specs:['100% organic cotton','Pre‑shrunk','Fair trade'], tags:['new','organic','eco']},
-        {id:'p2', title:'City Sneakers', price:89.00, gender:'men', category:'sneakers', likes:320, sales:980, addedAt: now-12*86400000, discount:0.20, rating:4.8, images:['https://images.unsplash.com/photo-1528702748617-0316a9e42c1e?q=80&w=900&auto=format&fit=crop'], variants:{size:['7','8','9','10','11'], color:['White','Gray']}, sku:'SNK-CITY-002', specs:['Cushioned midsole','Breathable mesh','Durarubber outsole'], tags:['deal','best']},
-        {id:'p3', title:'Athleisure Set', price:64.00, gender:'women', category:'athleisure', likes:210, sales:610, addedAt: now-1*86400000, discount:0.0, rating:4.5, images:['https://images.unsplash.com/photo-1542326237-94b1c5a538d9?q=80&w=900&auto=format&fit=crop'], variants:{size:['XS','S','M','L'], color:['Charcoal','Sage']}, sku:'SET-ATH-003', specs:['4‑way stretch','Moisture wicking','Flatlock seams'], tags:['new']},
-        {id:'p4', title:'Minimal Backpack', price:72.00, gender:'unisex', category:'accessories', likes:155, sales:410, addedAt: now-20*86400000, discount:0.15, rating:4.3, images:['https://images.unsplash.com/photo-1503342217505-b0a15cf70489?q=80&w=900&auto=format&fit=crop'], variants:{size:['One'], color:['Black','Sand']}, sku:'BAG-MIN-004', specs:['Water‑resistant','Laptop sleeve','Recycled nylon'], tags:['popular']},
-        {id:'p5', title:'Cozy Hoodie', price:58.00, gender:'women', category:'hoodies', likes:400, sales:1200, addedAt: now-30*86400000, discount:0.25, rating:4.9, images:['https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=900&auto=format&fit=crop'], variants:{size:['S','M','L'], color:['Oat','Black']}, sku:'HDY-COZY-005', specs:['Brushed fleece','Kangaroo pocket','Raglan sleeves'], tags:['best','liked']},
-        {id:'p6', title:'Ribbed Tank', price:19.00, gender:'women', category:'tops', likes:130, sales:210, addedAt: now-6*86400000, discount:0, rating:4.2, images:['https://images.unsplash.com/photo-1520975922257-8e53a1b5e84b?q=80&w=900&auto=format&fit=crop'], variants:{size:['XS','S','M','L'], color:['White','Black']}, sku:'TNK-RIB-006', specs:['Breathable','Body‑skimming fit','Soft rib'], tags:['new']},
-        {id:'p7', title:'Performance Joggers', price:54.00, gender:'men', category:'pants', likes:95, sales:300, addedAt: now-10*86400000, discount:0.05, rating:4.1, images:['https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=900&auto=format&fit=crop'], variants:{size:['S','M','L','XL'], color:['Navy','Coal']}, sku:'JOG-PERF-007', specs:['Secure pockets','Tapered fit','Quick dry'], tags:['offer']},
-        {id:'p8', title:'Cashmere Beanie', price:36.00, gender:'unisex', category:'accessories', likes:220, sales:160, addedAt: now-2*86400000, discount:0, rating:4.7, images:['https://images.unsplash.com/photo-1520975935791-50f2492a67f0?q=80&w=900&auto=format&fit=crop'], variants:{size:['One'], color:['Gray','Brown']}, sku:'BN-CASH-008', specs:['Grade‑A cashmere','Double knit','Ultra soft'], tags:['liked','new']},
-        {id:'p9', title:'Trail Runners', price:92.00, gender:'women', category:'sneakers', likes:180, sales:500, addedAt: now-14*86400000, discount:0.18, rating:4.4, images:['https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=900&auto=format&fit=crop'], variants:{size:['6','7','8','9'], color:['Teal','Black']}, sku:'RUN-TRL-009', specs:['Aggressive lugs','Rock plate','Reflective'], tags:['deal']}
+        {id:'p1', title:'Eco Tee', price:24.00, gender:'men', category:'tees', likes:180, sales:520, addedAt: now-3*86400000, discount:0.10, rating:4.6, images:['images/chair.jpg'], variants:{size:['S','M','L','XL'], color:['Black','Olive','White']}, sku:'TEE-ECO-001', specs:['100% organic cotton','Pre‑shrunk','Fair trade'], tags:['new','organic','eco']},
+        {id:'p2', title:'City Sneakers', price:89.00, gender:'men', category:'sneakers', likes:320, sales:980, addedAt: now-12*86400000, discount:0.20, rating:4.8, images:['images/chairmufasa.jpg'], variants:{size:['7','8','9','10','11'], color:['White','Gray']}, sku:'SNK-CITY-002', specs:['Cushioned midsole','Breathable mesh','Durarubber outsole'], tags:['deal','best']},
+        {id:'p3', title:'Athleisure Set', price:64.00, gender:'women', category:'athleisure', likes:210, sales:610, addedAt: now-1*86400000, discount:0.0, rating:4.5, images:['images/chairs.jpg'], variants:{size:['XS','S','M','L'], color:['Charcoal','Sage']}, sku:'SET-ATH-003', specs:['4‑way stretch','Moisture wicking','Flatlock seams'], tags:['new']},
+        {id:'p4', title:'Minimal Backpack', price:72.00, gender:'unisex', category:'accessories', likes:155, sales:410, addedAt: now-20*86400000, discount:0.15, rating:4.3, images:['images/chairs1.jpg'], variants:{size:['One'], color:['Black','Sand']}, sku:'BAG-MIN-004', specs:['Water‑resistant','Laptop sleeve','Recycled nylon'], tags:['popular']},
+        {id:'p5', title:'Cozy Hoodie', price:58.00, gender:'women', category:'hoodies', likes:400, sales:1200, addedAt: now-30*86400000, discount:0.25, rating:4.9, images:['images/desk.jpg'], variants:{size:['S','M','L'], color:['Oat','Black']}, sku:'HDY-COZY-005', specs:['Brushed fleece','Kangaroo pocket','Raglan sleeves'], tags:['best','liked']},
+        {id:'p6', title:'Ribbed Tank', price:19.00, gender:'women', category:'tops', likes:130, sales:210, addedAt: now-6*86400000, discount:0, rating:4.2, images:['images/dining-table.jpg'], variants:{size:['XS','S','M','L'], color:['White','Black']}, sku:'TNK-RIB-006', specs:['Breathable','Body‑skimming fit','Soft rib'], tags:['new']},
+        {id:'p7', title:'Performance Joggers', price:54.00, gender:'men', category:'pants', likes:95, sales:300, addedAt: now-10*86400000, discount:0.05, rating:4.1, images:['images/dining.jpg'], variants:{size:['S','M','L','XL'], color:['Navy','Coal']}, sku:'JOG-PERF-007', specs:['Secure pockets','Tapered fit','Quick dry'], tags:['offer']},
+        {id:'p8', title:'Cashmere Beanie', price:36.00, gender:'unisex', category:'accessories', likes:220, sales:160, addedAt: now-2*86400000, discount:0, rating:4.7, images:['images/diningtable.jpg'], variants:{size:['One'], color:['Gray','Brown']}, sku:'BN-CASH-008', specs:['Grade‑A cashmere','Double knit','Ultra soft'], tags:['liked','new']},
+        {id:'p9', title:'Trail Runners', price:92.00, gender:'women', category:'sneakers', likes:180, sales:500, addedAt: now-14*86400000, discount:0.18, rating:4.4, images:['diningtable1.jpg'], variants:{size:['6','7','8','9'], color:['Teal','Black']}, sku:'RUN-TRL-009', specs:['Aggressive lugs','Rock plate','Reflective'], tags:['deal']}
       ];
       return data;
     })();
@@ -2068,12 +2474,12 @@ rowFill('#rowElectronics', products.filter(p=>p.category==='electronics'));
       for(let i=0;i<5;i++){
         if(i<full) s+= '★'; else if(i===full && half) s+='☆'; else s+='✩';
       }
-      return `<span aria-hidden="true">${s}</span> <span class="sr-only">${r.toFixed(1)} out of 5</span>`
+      return `<span aria-hidden="true">${s}</span> <span class="sr-only">${r.toFixed(1)} / 5</span>`
     }
 
     function productCard(p){
       return `<article class="p-card" data-id="${p.id}">
-        <img src="${p.images[0]}" alt="${p.title}" loading="lazy" />
+        <img src="${p.images[0]}" alt="${p.title}" loading="lazy" >
         <div class="p-meta">
           <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
             <h4 style="margin:0;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${p.title}">${p.title}</h4>
@@ -2103,8 +2509,8 @@ rowFill('#rowElectronics', products.filter(p=>p.category==='electronics'));
       grid.style.gridAutoRows = '220px';
       grid.innerHTML = '';
       const big = items[0];
-      grid.insertAdjacentHTML('beforeend', `<a class="big" href="#" data-id="${big.id}" aria-label="View ${big.title}"><img src="${big.images[0]}" alt="${big.title}" loading="lazy" /><div class="meta">${big.title} — ${fmt(big.price)}</div></a>`);
-      items.slice(1,5).forEach(p => grid.insertAdjacentHTML('beforeend', `<a class="card" href="#" data-id="${p.id}" aria-label="View ${p.title}"><img src="${p.images[0]}" alt="${p.title}" loading="lazy" /><div class="meta">${p.title} — ${fmt(p.price)}</div></a>`));
+      grid.insertAdjacentHTML('beforeend', `<a class="big" href="#" data-id="${big.id}" aria-label="View ${big.title}"><img src="${big.images[0]}" alt="${big.title}" loading="lazy"><div class="meta">${big.title} — ${fmt(big.price)}</div></a>`);
+      items.slice(1,5).forEach(p => grid.insertAdjacentHTML('beforeend', `<a class="card" href="#" data-id="${p.id}" aria-label="View ${p.title}"><img src="${p.images[0]}" alt="${p.title}" loading="lazy"><div class="meta">${p.title} — ${fmt(p.price)}</div></a>`));
     }
 
     /************************************
@@ -2186,7 +2592,7 @@ rowFill('#rowElectronics', products.filter(p=>p.category==='electronics'));
       if(!c.length){ box.innerHTML = '<p class="helper">Your cart is empty.</p>'; return; }
       const total = c.reduce((n,i)=>n + i.price*i.qty, 0);
       box.innerHTML = c.map(i=>`<div style="display:flex;gap:10px;align-items:center;margin:6px 0">
-        <img src="${i.img}" alt="${i.title}" width="64" height="64" style="border-radius:10px;object-fit:cover"/>
+        <img src="${i.img}" alt="${i.title}" width="64" height="64" style="border-radius:10px;object-fit:cover">
         <div style="flex:1">
           <div>${i.title}</div>
           <div class="helper">${fmt(i.price)} × ${i.qty}</div>
@@ -2205,7 +2611,7 @@ rowFill('#rowElectronics', products.filter(p=>p.category==='electronics'));
     function renderWishlist(){
       const w = getWishlist();
       $('#wishlistItems').innerHTML = w.length? w.map(i=>`<div style="display:flex;gap:10px;align-items:center;margin:6px 0">
-        <img src="${i.img}" alt="${i.title}" width="64" height="64" style="border-radius:10px;object-fit:cover"/>
+        <img src="${i.img}" alt="${i.title}" width="64" height="64" style="border-radius:10px;object-fit:cover">
         <div style="flex:1">
           <div>${i.title}</div>
           <div class="helper">${fmt(i.price)}</div>
@@ -2251,8 +2657,8 @@ rowFill('#rowElectronics', products.filter(p=>p.category==='electronics'));
       // related (same category) + similar (same tags/category)
       const related = products.filter(x=>x.category===p.category && x.id!==p.id).slice(0,8);
       const similar = products.filter(x=> x.id!==p.id && (x.category===p.category || x.tags.some(t=>p.tags.includes(t)))).slice(0,12);
-      $('#relatedCarousel').innerHTML = related.map(r=>`<img src="${r.images[0]}" alt="${r.title}" data-id="${r.id}"/>`).join('');
-      $('#recentRow').innerHTML = store.get(LS.views, []).map(id=> products.find(pp=>pp.id===id)).filter(Boolean).map(rv=>`<div class="p-card" style="flex:0 0 150px"><img src="${rv.images[0]}" alt="${rv.title}" width="150" height="150"/><div class="p-meta"><div style="font-size:13px">${rv.title}</div><div>${fmt(rv.price)}</div></div></div>`).join('');
+      $('#relatedCarousel').innerHTML = related.map(r=>`<img src="${r.images[0]}" alt="${r.title}" data-id="${r.id}">`).join('');
+      $('#recentRow').innerHTML = store.get(LS.views, []).map(id=> products.find(pp=>pp.id===id)).filter(Boolean).map(rv=>`<div class="p-card" style="flex:0 0 150px"><img src="${rv.images[0]}" alt="${rv.title}" width="150" height="150"><div class="p-meta"><div style="font-size:13px">${rv.title}</div><div>${fmt(rv.price)}</div></div></div>`).join('');
       $('#similarRow').innerHTML = similar.map(s=> productCard(s)).join('');
 
       // reviews
