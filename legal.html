@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sorix — Legal & Copyright</title>
+
+  <!-- Unified CSS: your provided rules (kept) + modern UI variables + animations -->
+  <style>
+    :root{
+      --bg:#0f1623;
+      --panel:#0b1220;
+      --muted:#e5e7eb;
+      --accent:#16a34a;
+      --brand:#10b981;
+      --card:#0f1623;
+      --glass: rgba(255,255,255,0.04);
+      --radius:14px;
+      --radius-lg:18px;
+      --text:#e5e7eb;
+      --max-width:1100px;
+      --glass-strong: rgba(255,255,255,0.06);
+    }
+
+    /* ---------- USER-PROVIDED CSS (merged & cleaned) ---------- */
+    /* HERO */
+    .hero{display:grid;grid-template-columns:1fr;gap:16px;padding:18px 0}
+    .hero-left{position:relative;border-radius:var(--radius-lg);overflow:hidden}
+    .hero-left img{aspect-ratio:16/9;object-fit:cover}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.0),rgba(0,0,0,.55));display:flex;align-items:flex-end;padding:18px}
+    .hero-ctas{display:flex;gap:10px;margin-top:8px}
+    .btn{padding:10px 14px;border-radius:12px;border:0;cursor:pointer;font-weight:700}
+    .btn-primary{background:linear-gradient(135deg,var(--brand),#16a34a);color:#04120b}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--text)}
+    .hero-right{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .mini-card{background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:14px;display:grid;grid-template-rows:auto 1fr auto;gap:10px}
+    .mini-card img{border-radius:12px;aspect-ratio:4/3;object-fit:cover}
+    .mini-card .foot{display:flex;align-items:center;justify-content:space-between}
+    /* Men/Women sections */
+    .section{margin:24px 0}
+    .section h2{margin:0 0 12px}
+    .grid{display:grid;gap:16px}
+    .grid.mw{grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+    gap: 1px;
+    width:100%;}
+    .grid .big{grid-row:span 2;background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);overflow:hidden;position:relative}
+    .grid .big img{height:100%;width:100%;object-fit:cover}
+    .grid .card{background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);overflow:hidden;position:relative}
+    .grid .card img{aspect-ratio:1/1;object-fit:cover}
+    .card .meta{position:absolute;inset:auto 8px 8px 8px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);padding:8px;border-radius:10px;font-size:14px}
+    .card:hover,.big:hover{transform:translateY(-2px);transition:transform .2s ease}
+    /* carousels */
+    .row{display:flex;gap:14px;overflow:auto;scroll-snap-type:x mandatory;padding-bottom:10px}
+    .row .p-card{flex:0 0 220px;scroll-snap-align:start;background:#0f1623;border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden}
+    .row .p-card img{aspect-ratio:4/3;object-fit:cover}
+    .row .p-card .p-meta{padding:10px}
+    .carousel-ctl{display:flex;gap:10px}
+    /* badges & trust */
+    .trust{display:flex;flex-wrap:wrap;gap:10px}
+    .trust .badge{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:#0f1623;border:1px solid rgba(255,255,255,.06)}
+    /* PRODUCT GRID */
+    .section .row {display: grid;grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));gap: 10px;padding: 8px;}
+    .p-card {background: #fff;border-radius: 14px;box-shadow: 0 3px 12px rgba(0,0,0,0.15);overflow: hidden;transition: transform .25s ease, box-shadow .25s ease;display: flex;flex-direction: column;height: 100%;}
+    .p-card:hover {transform: translateY(-4px);box-shadow: 0 6px 20px rgba(0,0,0,0.20);}
+    .p-card img {width: 100%;height: 66%;object-fit: cover;border-radius: 0;transition: transform .3s ease;}
+    .p-card:hover img {transform: scale(1.05);}
+    .p-meta {padding: 10px;text-align: left;height: 34%;display: flex;flex-direction: column;justify-content: space-between;}
+    .p-meta h3 {font-size: 1rem;margin: 4px 0 6px 0;font-weight: 600;color: #222;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+    .price {font-weight: bold;margin: 4px 0;font-size: 1rem;color: #e60023;}
+    .rating {font-size: 0.85rem;color: #ffb400;margin-top: 2px;}
+    .btn {padding: 6px 12px;border-radius: 8px;cursor: pointer;font-size: 0.85rem;border: none;font-weight: 600;width: 48%;transition: background .25s ease, transform .25s ease;}
+    .btn-primary {background: #007bff;color: #fff;}
+    .btn-primary:hover {background: #005ad1;transform: scale(1.05);}
+    .btn-ghost {background: #f1f1f1;color: #333;}
+    .btn-ghost:hover {background: #e2e2e2;transform: scale(1.05);}
+    .btn-group {display: flex;justify-content: space-between;margin-top: 8px;}
+    @media (max-width: 600px) {.section .row {grid-template-columns: repeat(2, 1fr);gap: 4px;} .p-card {padding: 0;border-radius: 10px;box-shadow: 0 2px 8px rgba(0,0,0,0.12);} .p-card img {height: 62%;border-radius: 0;} .p-meta {padding: 6px;height: 38%;} .p-meta h3 {font-size: 0.75rem;height: auto;} .price {font-size: 0.85rem;margin: 2px 0;} .rating {font-size: 0.55rem;} .btn {padding: 4px;font-size: 0.7rem;border-radius: 6px;}}
+
+    /* ---------- Modern Legal Page Styles & layout ---------- */
+    html,body{height:100%}
+    body {
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#08101a 0%, #0f1623 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      gap:20px;
+    }
+
+    .page {
+      width:100%;
+      max-width:var(--max-width);
+      margin:0 auto;
+    }
+
+    header.site-header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:18px;
+    }
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .logo {
+      width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#0ea5a3);display:flex;align-items:center;justify-content:center;font-weight:800;color:#04201b;
+      box-shadow: 0 6px 20px rgba(8,16,24,0.4);
+    }
+    .brand h1{font-size:18px;margin:0}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    /* top nav (legal menu) */
+    nav.legal-menu {
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    nav.legal-menu a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:10px;
+      font-weight:600;
+      transition:all .18s ease;
+      background:transparent;
+      border:1px solid transparent;
+    }
+    nav.legal-menu a.active,
+    nav.legal-menu a:hover{
+      color:#04120b;
+      background:linear-gradient(135deg,var(--brand),#16a34a);
+      box-shadow: 0 6px 18px rgba(2,6,8,0.35);
+      transform:translateY(-2px);
+    }
+
+    .hero-strip {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .meta-card {
+      background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);
+      border-radius:12px;
+      padding:12px 14px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      border:1px solid var(--glass-strong);
+      box-shadow: 0 6px 26px rgba(2,6,8,0.35);
+    }
+    .meta-card small{color:var(--muted)}
+    .meta-actions{display:flex;gap:8px}
+
+    main.content {display:grid;grid-template-columns: 320px 1fr; gap:20px;align-items:start}
+
+    /* Left nav panel */
+    .left-panel {
+      position:sticky;top:28px;
+      background:var(--panel);
+      padding:16px;border-radius:12px;border:1px solid var(--glass-strong);
+      min-height:240px;
+    }
+    .left-panel h3{margin:0 0 10px 0;font-size:14px}
+    .left-panel a{display:block;color:var(--muted);text-decoration:none;padding:8px;border-radius:8px;margin-bottom:6px}
+    .left-panel a:hover{background:rgba(255,255,255,0.02);color:var(--text)}
+
+    /* Right: content panels */
+    .panel {
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius:12px;
+      padding:20px;
+      border:1px solid var(--glass-strong);
+      box-shadow: 0 6px 26px rgba(2,6,8,0.35);
+      margin-bottom:16px;
+      transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+
+    .panel h2{margin-top:0}
+    .muted{color:var(--muted)}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* little utilities */
+    .controls{display:flex;gap:8px;align-items:center}
+    .chip{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);font-weight:700}
+
+    .contact {
+      display:flex;align-items:center;gap:12px;
+    }
+    .contact button {padding:8px 12px;border-radius:10px;border:0;cursor:pointer}
+    .copy-btn {background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px;border-radius:8px;color:var(--muted)}
+    .copy-btn:hover{transform:translateY(-2px)}
+
+    /* Responsive */
+    @media (max-width:980px){
+      main.content{grid-template-columns:1fr; padding-bottom:60px}
+      .left-panel{position:relative;top:0}
+      nav.legal-menu{overflow:auto}
+    }
+
+    /* subtle animation for panels */
+    .panel[data-visible="false"]{opacity:0;transform:translateY(6px);pointer-events:none}
+    .panel[data-visible="true"]{opacity:1;transform:translateY(0)}
+
+    /* small print */
+    .legal-small{font-size:13px;color:var(--muted);margin-top:8px}
+    a.inline-link{color:#93c5fd}
+    .form-row {display:grid;grid-template-columns:1fr 140px;gap:10px;margin-top:10px}
+    input[type="text"],input[type="email"],textarea{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)}
+    textarea{min-height:110px;resize:vertical}
+    .btn-cta {background:linear-gradient(90deg,var(--brand),#16a34a);color:#04120b;border-radius:12px;padding:10px 14px;border:0;font-weight:800;cursor:pointer}
+    .actions-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  </style>
+</head>
+<body>
+  <div class="page" role="main">
+    <header class="site-header">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div>
+          <h1>Sorix</h1>
+          <p>Trusted e-commerce</p>
+        </div>
+      </div>
+
+      <nav class="legal-menu" aria-label="Legal pages">
+        <a href="#copyright" data-target="copyright" class="active">Copyright</a>
+        <a href="#terms" data-target="terms">Terms</a>
+        <a href="#privacy" data-target="privacy">Privacy</a>
+        <a href="#refund" data-target="refund">Returns</a>
+        <a href="#shipping" data-target="shipping">Shipping</a>
+        <a href="#disclaimer" data-target="disclaimer">Disclaimer</a>
+        <a href="#ip" data-target="ip">IP Rights</a>
+        <a href="#dmca" data-target="dmca">DMCA</a>
+      </nav>
+    </header>
+
+    <section class="hero-strip">
+      <div class="meta-card">
+        <div>
+          <small class="small">Legal & Copyright — Sorix</small>
+          <div class="chip">© 2025 Sorix</div>
+        </div>
+        <div class="meta-actions">
+          <div class="contact">
+            <div class="small">Contact:</div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="copy-btn" id="copyEmail" title="Copy email">sorix@gmail.com</button>
+              <button class="btn-cta" id="openDMCA">Submit DMCA</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="content">
+      <!-- left nav panel -->
+      <aside class="left-panel" aria-label="Legal menu">
+        <h3>Legal pages</h3>
+        <a href="#copyright" data-target="copyright">Copyright Notice</a>
+        <a href="#terms" data-target="terms">Terms & Conditions</a>
+        <a href="#privacy" data-target="privacy">Privacy Policy</a>
+        <a href="#refund" data-target="refund">Return & Refund</a>
+        <a href="#shipping" data-target="shipping">Shipping Policy</a>
+        <a href="#disclaimer" data-target="disclaimer">Disclaimer</a>
+        <a href="#ip" data-target="ip">Intellectual Property</a>
+        <a href="#dmca" data-target="dmca">DMCA Takedown</a>
+        <div style="height:8px"></div>
+        <div class="small muted">Quick actions</div>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn-primary" id="printLegal">Print</button>
+          <button class="btn-ghost" id="downloadTxt">Download .txt</button>
+        </div>
+      </aside>
+
+      <!-- content area -->
+      <section aria-live="polite">
+        <!-- Copyright -->
+        <article id="copyright" class="panel" data-visible="true">
+          <h2>Copyright Notice</h2>
+          <p class="muted"><strong>© 2025 Sorix. All Rights Reserved.</strong></p>
+          <p>Unauthorized use, reproduction, or distribution of any content on this website is strictly prohibited.</p>
+          <p class="legal-small">Contact: <a class="inline-link" href="mailto:sorix@gmail.com">sorix@gmail.com</a></p>
+        </article>
+
+        <!-- Terms -->
+        <article id="terms" class="panel" data-visible="false">
+          <h2>Terms &amp; Conditions (E-commerce)</h2>
+          <p><strong>Last Updated:</strong> 2025</p>
+
+          <h3>1. Introduction</h3>
+          <p>Welcome to Sorix. By accessing or using our website, you agree to comply with these Terms and Conditions. Please read carefully before shopping with us.</p>
+
+          <h3>2. Definitions</h3>
+          <p><strong>“Company”, “we”, “us”, “our”</strong> refers to Sorix. <strong>“Customer”, “you”, “your”</strong> refers to any person using the website or making a purchase.</p>
+
+          <h3>3. Use of Website</h3>
+          <p>You agree not to misuse this website, engage in fraudulent activities, or violate any applicable laws.</p>
+
+          <h3>4. Intellectual Property Rights</h3>
+          <p>All content on this website — text, images, product descriptions, logos, graphics, and code — is the exclusive property of Sorix and is protected under Kenyan and international copyright laws. You may not copy, reproduce, modify, upload, or distribute any content without written permission.</p>
+
+          <h3>5. Product Information</h3>
+          <p>We strive to display accurate product details. Slight variations in color or size may occur due to screen differences and manufacturing tolerances.</p>
+
+          <h3>6. Pricing &amp; Payments</h3>
+          <p>All prices are listed in Kenyan Shillings (KES). We accept multiple secure payment options including mobile money, cards, and online gateways.</p>
+
+          <h3>7. Order Acceptance</h3>
+          <p>Orders are confirmed after payment and verification. Sorix may refuse or cancel an order if fraud is suspected.</p>
+
+          <h3>8. Shipping &amp; Delivery</h3>
+          <p>Delivery times may vary. See our Shipping Policy for details.</p>
+
+          <h3>9. Returns &amp; Refunds</h3>
+          <p>Customers may make return requests under our Return & Refund Policy.</p>
+
+          <h3>10. Privacy</h3>
+          <p>Your personal information will be handled under our Privacy Policy and the Kenya Data Protection Act.</p>
+
+          <h3>11. Limitation of Liability</h3>
+          <p>Sorix is not responsible for damages from misuse of products or third-party courier delays.</p>
+
+          <h3>12. Changes to Terms</h3>
+          <p>We reserve the right to update these Terms at any time. Material changes will be notified on this page.</p>
+        </article>
+
+        <!-- Privacy -->
+        <article id="privacy" class="panel" data-visible="false">
+          <h2>Privacy Policy (Kenya Data Protection Act + GDPR Ready)</h2>
+          <p><strong>Last Updated:</strong> 2025</p>
+
+          <h3>1. Introduction</h3>
+          <p>Your privacy is important. This Privacy Policy explains how Sorix collects, uses, and protects your information.</p>
+
+          <h3>2. Information We Collect</h3>
+          <ul>
+            <li>Name</li>
+            <li>Phone number</li>
+            <li>Email address</li>
+            <li>Shipping address</li>
+            <li>Payment details (processed securely, not stored)</li>
+            <li>Browsing data (cookies)</li>
+          </ul>
+
+          <h3>3. How We Use Your Information</h3>
+          <ul>
+            <li>Process orders</li>
+            <li>Improve customer service</li>
+            <li>Personalize your shopping experience</li>
+            <li>Send updates or promotional messages (optional)</li>
+          </ul>
+
+          <h3>4. Legal Basis for Processing</h3>
+          <p>We process data on the basis of: Consent, Contract performance, Legal compliance (Kenya Data Protection Act 2019).</p>
+
+          <h3>5. Data Protection</h3>
+          <p>We implement encryption, secure servers, and restricted access to protect personal data.</p>
+
+          <h3>6. Sharing Your Information</h3>
+          <p>We may share data only with payment processors, delivery companies, and partners assisting with operations. We never sell customer data.</p>
+
+          <h3>7. Cookies</h3>
+          <p>Cookies are used to improve experience. You can disable cookies via your browser, though some features may be affected.</p>
+
+          <h3>8. Your Rights</h3>
+          <p>Under the Kenya Data Protection Act you have the right to:</p>
+          <ul>
+            <li>Access your data</li>
+            <li>Request corrections</li>
+            <li>Request deletion</li>
+            <li>Withdraw consent</li>
+            <li>File a complaint with the ODPC</li>
+          </ul>
+
+          <h3>9. Contact</h3>
+          <p>For privacy requests email: <a class="inline-link" href="mailto:sorix@gmail.com">sorix@gmail.com</a></p>
+        </article>
+
+        <!-- Return & Refund -->
+        <article id="refund" class="panel" data-visible="false">
+          <h2>Return &amp; Refund Policy</h2>
+
+          <h3>1. Returns</h3>
+          <p>Returns accepted within <strong>7 days</strong> of receiving your order, provided items are unused and in original packaging.</p>
+
+          <h3>2. Non-Returnable Items</h3>
+          <p>Underwear, beauty products, customised items, and clearance items are non-returnable.</p>
+
+          <h3>3. Refunds</h3>
+          <p>Refunds processed within <strong>3–7 business days</strong> after product inspection. Refunds are issued via the original payment method.</p>
+
+          <h3>4. Exchanges</h3>
+          <p>If an item is wrong or defective, we will replace it at no extra cost.</p>
+
+          <h3>5. Return Shipping</h3>
+          <p>Customer pays return shipping unless the item is defective or the return was caused by Sorix.</p>
+        </article>
+
+        <!-- Shipping -->
+        <article id="shipping" class="panel" data-visible="false">
+          <h2>Shipping Policy</h2>
+
+          <h3>1. Delivery Coverage</h3>
+          <p>We deliver across Kenya through trusted couriers and pickup stations.</p>
+
+          <h3>2. Delivery Time</h3>
+          <p>Standard delivery times: <strong>1–3 days</strong> depending on location.</p>
+
+          <h3>3. Shipping Fees</h3>
+          <p>Fees vary by location and are displayed during checkout.</p>
+
+          <h3>4. Tracking</h3>
+          <p>Customers receive a tracking number or confirmation message after dispatch.</p>
+
+          <h3>5. Delays</h3>
+          <p>Sorix is not responsible for delays caused by weather, courier issues, or force majeure.</p>
+        </article>
+
+        <!-- Disclaimer -->
+        <article id="disclaimer" class="panel" data-visible="false">
+          <h2>Disclaimer</h2>
+          <p>The information on this website is provided for general purposes only. Sorix makes no warranties about accuracy, availability, or reliability. Product use is the customer's responsibility.</p>
+        </article>
+
+        <!-- IP Rights -->
+        <article id="ip" class="panel" data-visible="false">
+          <h2>Intellectual Property Rights</h2>
+          <p>All content on this website — images, product descriptions, text, videos, UI design, code files, graphics, and branding — is the property of Sorix and is protected under Kenya's Copyright Act (2001) and international treaties.</p>
+          <p>No content may be copied, distributed, downloaded, or reproduced without written permission from Sorix. Violators may face legal action.</p>
+          <p class="legal-small">For permission requests, contact: <a class="inline-link" href="mailto:sorix@gmail.com">sorix@gmail.com</a></p>
+        </article>
+
+        <!-- DMCA -->
+        <article id="dmca" class="panel" data-visible="false">
+          <h2>DMCA / Takedown Requests</h2>
+          <p>This website is protected by Sorix. If you believe any content on this site infringes your copyright, please submit a written notice using the form below or email <a class="inline-link" href="mailto:sorix@gmail.com">sorix@gmail.com</a>.</p>
+
+          <form id="dmcaForm" class="panel-form" onsubmit="return false;">
+            <label class="small">Your Full Name (or Agent)</label>
+            <input type="text" id="dmca_name" required placeholder="Full name or authorised agent">
+            <label class="small">Your Email</label>
+            <input type="email" id="dmca_email" required placeholder="you@example.com">
+            <label class="small">Work That You Claim Is Infringed (URL or description)</label>
+            <textarea id="dmca_work" required placeholder="Provide URLs or detailed description"></textarea>
+
+            <div class="form-row">
+              <input type="text" id="dmca_extra" placeholder="Additional info (optional)">
+              <button class="btn-cta" id="submitDMCA">Submit Request</button>
+            </div>
+
+            <div id="dmcaMessage" class="small muted" style="margin-top:10px"></div>
+          </form>
+        </article>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- JS: smooth nav, copy email, DMCA form, print/download -->
+  <script>
+    (function(){
+      // helpers
+      const qs = s => document.querySelector(s);
+      const qsa = s => Array.from(document.querySelectorAll(s));
+
+      // nav links (top + left)
+      const navLinks = qsa('a[data-target]');
+      function activate(target){
+        navLinks.forEach(a=>{
+          if(a.dataset.target === target) a.classList.add('active');
+          else a.classList.remove('active');
+        });
+        // toggle panels visibility
+        const panels = qsa('.panel');
+        panels.forEach(p=>{
+          p.dataset.visible = (p.id === target) ? 'true' : 'false';
+        });
+      }
+
+      navLinks.forEach(a=>{
+        a.addEventListener('click', e=>{
+          e.preventDefault();
+          const t = a.dataset.target;
+          const el = document.getElementById(t);
+          if(el){
+            el.scrollIntoView({behavior:'smooth', block:'start'});
+            activate(t);
+            history.replaceState(null,'', '#'+t);
+          }
+        });
+      });
+
+      // read initial hash
+      const initial = location.hash ? location.hash.replace('#','') : 'copyright';
+      if(document.getElementById(initial)) activate(initial);
+
+      // copy email
+      const copyBtn = qs('#copyEmail');
+      copyBtn && copyBtn.addEventListener('click', async ()=>{
+        const email = 'sorix@gmail.com';
+        try {
+          await navigator.clipboard.writeText(email);
+          copyBtn.textContent = 'Copied!';
+          setTimeout(()=> copyBtn.textContent = email, 2000);
+        } catch(e){
+          // fallback
+          const tmp = document.createElement('textarea');
+          tmp.value = email; document.body.appendChild(tmp); tmp.select();
+          document.execCommand('copy'); tmp.remove();
+          copyBtn.textContent = 'Copied!';
+          setTimeout(()=> copyBtn.textContent = email, 2000);
+        }
+      });
+
+      // open DMCA
+      qs('#openDMCA') && qs('#openDMCA').addEventListener('click', ()=>{
+        const el = qs('#dmca');
+        if(el){ el.scrollIntoView({behavior:'smooth'}); activate('dmca'); }
+      });
+
+      // DMCA form handler (client-side only; implement server-side endpoint later)
+      const dmcaForm = qs('#dmcaForm');
+      const dmcaMessage = qs('#dmcaMessage');
+      qs('#submitDMCA').addEventListener('click', ()=>{
+        const name = qs('#dmca_name').value.trim();
+        const email = qs('#dmca_email').value.trim();
+        const work = qs('#dmca_work').value.trim();
+        if(!name || !email || !work){ dmcaMessage.textContent = 'Please complete all required fields.'; dmcaMessage.style.color='tomato'; return; }
+        // simulate submission
+        dmcaMessage.style.color = 'var(--muted)';
+        dmcaMessage.textContent = 'Thank you. Your takedown request has been received. We will respond to ' + email + ' within 5 business days.';
+        // clear form lightly
+        // In production: POST to server endpoint or send email to sorix@gmail.com
+      });
+
+      // print
+      qs('#printLegal').addEventListener('click', ()=> window.print());
+
+      // download txt
+      qs('#downloadTxt').addEventListener('click', ()=>{
+        // gather text from panels
+        const panels = qsa('.panel');
+        let content = 'Sorix — Legal & Copyright\\n\\n';
+        panels.forEach(p=>{
+          const title = p.querySelector('h2') ? p.querySelector('h2').innerText : '';
+          const txt = p.innerText.replace(/\\n\\s+/g,'\\n').trim();
+          content += '---\\n' + title + '\\n\\n' + txt + '\\n\\n';
+        });
+        const blob = new Blob([content], {type:'text/plain;charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'sorix-legal.txt';
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      // keyboard accessibility: navigate with left/right arrows between sections
+      let visibleIndex = Array.from(qsa('.panel')).findIndex(p=>p.dataset.visible==='true');
+      window.addEventListener('keydown', (e)=>{
+        if(e.key === 'ArrowRight' || e.key === 'ArrowLeft'){
+          const panels = qsa('.panel');
+          if(e.key === 'ArrowRight') visibleIndex = Math.min( panels.length -1, visibleIndex +1);
+          else visibleIndex = Math.max(0, visibleIndex -1);
+          const id = panels[visibleIndex].id;
+          activate(id);
+          document.getElementById(id).scrollIntoView({behavior:'smooth'});
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
