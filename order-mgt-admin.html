@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Management - Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<style>
+  :root{ --max-w:1100px; --accent:#2563eb; --muted:#6b7280 }
+  body{font-family:Inter, system-ui, Arial; margin:0; padding:20px; background:#f7f7fb; color:#111}
+  .wrap{max-width:var(--max-w); margin:18px auto; background:white; border-radius:12px; box-shadow:0 6px 22px rgba(12,13,18,0.06); padding:20px}
+  h1{margin:0 0 12px}
+  .grid{display:grid; grid-template-columns: 1fr 380px; gap:18px}
+  .card{padding:14px; border-radius:10px; background:#fff; border:1px solid #efefef}
+  .items{max-height:520px; overflow:auto}
+  .item{display:flex; gap:12px; align-items:center; padding:10px 0; border-bottom:1px dashed #eee}
+  .item img{width:72px; height:72px; object-fit:cover; border-radius:8px}
+  .item .meta{flex:1}
+  .muted{color:var(--muted); font-size:13px}
+  .small{font-size:13px}
+  .total-row{display:flex; justify-content:space-between; padding:10px 0}
+  .btn{display:inline-block; padding:10px 14px; border-radius:8px; cursor:pointer; border:0}
+  .btn-primary{background:var(--accent); color:white}
+  .btn-ghost{background:transparent; border:1px solid #ddd}
+  label{display:block; font-weight:600; margin:6px 0 6px}
+  input, select, textarea{width:100%; padding:8px 10px; border-radius:8px; border:1px solid #ddd}
+  .row{display:flex; gap:12px}
+  .row .col{flex:1}
+  .notice{background:#fffbeb; border-left:4px solid #f59e0b; padding:8px 12px; border-radius:6px; margin-bottom:10px}
+  .summary{position:sticky; top:18px}
+  .trust{display:flex; gap:8px; align-items:center}
+  .small-badge{font-size:12px; padding:6px 8px; border-radius:6px; background:#f1f5f9}
+  @media(max-width:980px){ .grid{grid-template-columns: 1fr; } .summary{position:relative} }
+</style>
+<body>
+<div class="wrap">
+  <h1>Order Management</h1>
+  <p class="muted">
+    Manage customer orders from placement to delivery.
+  </p>
+
+  <div class="grid">
+    <!-- MAIN -->
+    <div>
+      <div id="ordersContainer"></div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="summary">
+      <div class="card">
+        <h3>Admin Dashboard</h3>
+
+        <div class="total-row">
+          <div class="muted">Total Orders</div>
+          <div id="totalOrders">0</div>
+        </div>
+        <div class="total-row">
+          <div class="muted">On Delivery</div>
+          <div id="onDelivery">0</div>
+        </div>
+        <div class="total-row">
+          <div class="muted">Delivered</div>
+          <div id="delivered">0</div>
+        </div>
+        <div class="total-row">
+          <div class="muted">Cancelled</div>
+          <div id="cancelled">0</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h4>Admin Notes</h4>
+        <p class="muted small">
+          • Assign drivers<br />
+          • Schedule delivery<br />
+          • Update order status<br />
+          • Collect payment on delivery
+        </p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+(function(){
+  const ordersKey = 'ss_orders';
+  let orders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+  const container = document.getElementById('ordersContainer');
+
+  function fmt(n){ return '$' + Number(n||0).toFixed(2); }
+
+  function save(){
+    localStorage.setItem(ordersKey, JSON.stringify(orders));
+    render();
+  }
+
+  function renderStats(){
+    document.getElementById('totalOrders').textContent = orders.length;
+    document.getElementById('onDelivery').textContent =
+      orders.filter(o=>o.status==='On Delivery').length;
+    document.getElementById('delivered').textContent =
+      orders.filter(o=>o.status==='Delivered').length;
+    document.getElementById('cancelled').textContent =
+      orders.filter(o=>o.status==='Cancelled').length;
+  }
+
+  function render(){
+    if(!orders.length){
+      container.innerHTML = `
+        <div class="card">
+          <p class="muted">No orders available.</p>
+        </div>`;
+      renderStats();
+      return;
+    }
+
+    container.innerHTML = orders
+      .slice()
+      .reverse()
+      .map((o, idx)=>`
+        <div class="card" style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between">
+            <div>
+              <strong>${o.id}</strong>
+              <div class="muted small">${new Date(o.createdAt).toLocaleString()}</div>
+            </div>
+            <select data-status="${idx}">
+              ${['Placed','On Delivery','Delivered','Cancelled']
+                .map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}
+            </select>
+          </div>
+
+          <hr />
+
+          <strong>Customer</strong>
+          <div class="muted small">
+            ${o.customer.name}<br />
+            ${o.customer.phone}<br />
+            ${o.customer.address}, ${o.customer.city}
+          </div>
+
+          <hr />
+
+          ${o.items.map(i=>`
+            <div style="display:flex;justify-content:space-between">
+              <div>${i.title} × ${i.qty}</div>
+              <div>${fmt(i.total)}</div>
+            </div>
+          `).join('')}
+
+          <hr />
+
+          <div class="total-row">
+            <div>Total</div>
+            <strong>${fmt(o.total)}</strong>
+          </div>
+
+          <div class="muted small" style="margin-top:8px">
+            <strong>Payment:</strong> ${o.paymentMethod}<br />
+            <strong>Shipping:</strong> ${o.shippingMethod}
+          </div>
+
+          <hr />
+
+          <label class="small">Assign Driver</label>
+          <input placeholder="Driver name" value="${o.driver||''}" data-driver="${idx}" />
+
+          <label class="small">Delivery Date</label>
+          <input type="date" value="${o.deliveryDate||''}" data-date="${idx}" />
+
+        </div>
+      `).join('');
+
+    // status change
+    container.querySelectorAll('[data-status]').forEach(sel=>{
+      sel.addEventListener('change',()=>{
+        orders[sel.dataset.status].status = sel.value;
+        save();
+      });
+    });
+
+    // driver assignment
+    container.querySelectorAll('[data-driver]').forEach(inp=>{
+      inp.addEventListener('change',()=>{
+        orders[inp.dataset.driver].driver = inp.value;
+        save();
+      });
+    });
+
+    // delivery date
+    container.querySelectorAll('[data-date]').forEach(inp=>{
+      inp.addEventListener('change',()=>{
+        orders[inp.dataset.date].deliveryDate = inp.value;
+        save();
+      });
+    });
+
+    renderStats();
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>
