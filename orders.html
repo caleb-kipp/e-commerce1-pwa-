@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Orders</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<style>
+  :root{ --max-w:1100px; --accent:#2563eb; --muted:#6b7280 }
+  body{font-family:Inter, system-ui, Arial; margin:0; padding:20px; background:#f7f7fb; color:#111}
+  .wrap{max-width:var(--max-w); margin:18px auto; background:white; border-radius:12px; box-shadow:0 6px 22px rgba(12,13,18,0.06); padding:20px}
+  h1{margin:0 0 12px}
+  .grid{display:grid; grid-template-columns: 1fr 380px; gap:18px}
+  .card{padding:14px; border-radius:10px; background:#fff; border:1px solid #efefef}
+  .items{max-height:520px; overflow:auto}
+  .item{display:flex; gap:12px; align-items:center; padding:10px 0; border-bottom:1px dashed #eee}
+  .item img{width:72px; height:72px; object-fit:cover; border-radius:8px}
+  .item .meta{flex:1}
+  .muted{color:var(--muted); font-size:13px}
+  .small{font-size:13px}
+  .total-row{display:flex; justify-content:space-between; padding:10px 0}
+  .btn{display:inline-block; padding:10px 14px; border-radius:8px; cursor:pointer; border:0}
+  .btn-primary{background:var(--accent); color:white}
+  .btn-ghost{background:transparent; border:1px solid #ddd}
+  label{display:block; font-weight:600; margin:6px 0 6px}
+  input, select, textarea{width:100%; padding:8px 10px; border-radius:8px; border:1px solid #ddd}
+  .row{display:flex; gap:12px}
+  .row .col{flex:1}
+  .notice{background:#fffbeb; border-left:4px solid #f59e0b; padding:8px 12px; border-radius:6px; margin-bottom:10px}
+  .summary{position:sticky; top:18px}
+  .trust{display:flex; gap:8px; align-items:center}
+  .small-badge{font-size:12px; padding:6px 8px; border-radius:6px; background:#f1f5f9}
+  @media(max-width:980px){ .grid{grid-template-columns: 1fr; } .summary{position:relative} }
+</style>
+<body>
+<div class="wrap">
+  <h1>My Orders</h1>
+  <p class="muted">
+    View your order history and delivery status.
+    Payment is made on delivery.
+  </p>
+
+  <div class="grid">
+    <div>
+      <div id="ordersContainer"></div>
+
+      <div class="card" style="margin-top:12px">
+        <button id="backToShop" class="btn btn-ghost">Back to Shop</button>
+      </div>
+    </div>
+
+    <aside class="summary">
+      <div class="card">
+        <h3>Order Info</h3>
+        <p class="muted small">
+          Orders are processed by our team and delivered to your address.
+          You will pay the delivery agent upon arrival.
+        </p>
+
+        <div class="trust" style="margin-top:10px">
+          <div class="small-badge">Cash on Delivery</div>
+          <div class="small-badge">Order Tracking</div>
+          <div class="small-badge">Secure Records</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h4>Need help?</h4>
+        <p class="muted small">
+          Contact support@example.com or call +1 555 123 456
+        </p>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+(function(){
+  const ordersKey = 'ss_orders';
+  const orders = JSON.parse(localStorage.getItem(ordersKey) || '[]');
+  const container = document.getElementById('ordersContainer');
+
+  function fmt(n){ return '$' + Number(n||0).toFixed(2); }
+
+  if(!orders.length){
+    container.innerHTML = `
+      <div class="card">
+        <p class="muted">You have not placed any orders yet.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = orders
+    .slice()
+    .reverse()
+    .map(order => `
+      <div class="card" style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <strong>Order ${order.id}</strong>
+            <div class="muted small">
+              ${new Date(order.createdAt).toLocaleString()}
+            </div>
+          </div>
+          <div>
+            <span class="small-badge">${order.status}</span>
+          </div>
+        </div>
+
+        <hr />
+
+        ${order.items.map(i => `
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+            <div>${i.title} × ${i.qty}</div>
+            <div>${fmt(i.total)}</div>
+          </div>
+        `).join('')}
+
+        <hr />
+
+        <div class="total-row">
+          <div class="muted">Subtotal</div>
+          <div>${fmt(order.subtotal)}</div>
+        </div>
+
+        <div class="total-row">
+          <div class="muted">Shipping</div>
+          <div>${fmt(order.shipping)}</div>
+        </div>
+
+        <div class="total-row">
+          <div class="muted">Tax</div>
+          <div>${fmt(order.tax)}</div>
+        </div>
+
+        <div class="total-row">
+          <strong>Total</strong>
+          <strong>${fmt(order.total)}</strong>
+        </div>
+
+        <div style="margin-top:8px" class="muted small">
+          <strong>Payment:</strong> ${order.paymentMethod}<br />
+          <strong>Delivery Method:</strong> ${order.shippingMethod}
+        </div>
+      </div>
+    `).join('');
+
+  document.getElementById('backToShop')
+    .addEventListener('click', ()=> location.href='index.html');
+})();
+</script>
+
+</body>
+  </html>
