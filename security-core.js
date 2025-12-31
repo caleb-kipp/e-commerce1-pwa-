@@ -1,131 +1,53 @@
 /* =====================================================
-   SECURE CORE – GLOBAL APP SECURITY LAYER
-   Author: Production Security Layer
+   SECURE CORE – MOBILE OPTIMIZED SECURITY LAYER
 ===================================================== */
 
 "use strict";
 
 /* ===============================
-   BASIC APP LOCK
+   SINGLE LOAD LOCK (SAFE)
 ================================ */
-(function () {
-  if (window.__SECURE_APP_LOADED__) {
-    throw new Error("Unauthorized reload detected");
-  }
-  window.__SECURE_APP_LOADED__ = true;
-})();
+if (window.__SECURE_APP_LOADED__) {
+  throw new Error("App already initialized");
+}
+window.__SECURE_APP_LOADED__ = true;
 
 /* ===============================
-   ORIGIN & HTTPS ENFORCEMENT
+   HTTPS & ORIGIN (LIGHTWEIGHT)
 ================================ */
 (function enforceOrigin() {
-  const allowedOrigins = [
-    "https://yourdomain.com",
-    "capacitor://localhost",
-    "ionic://localhost"
-  ];
+  const allowed = ["yourdomain.com", "localhost"];
 
-  if (
-    location.protocol !== "https:" &&
-    !location.hostname.includes("localhost")
-  ) {
+  if (!location.hostname.includes("localhost") && location.protocol !== "https:") {
     location.replace("https://" + location.host + location.pathname);
   }
 
-  if (
-    !allowedOrigins.some(origin =>
-      location.href.startsWith(origin)
-    )
-  ) {
+  if (!allowed.some(o => location.hostname.includes(o))) {
     document.documentElement.innerHTML = "";
-    throw new Error("Blocked unauthorized origin");
+    throw new Error("Unauthorized origin");
   }
 })();
 
 /* ===============================
-   ANTI DEVTOOLS / DEBUGGING
-================================ */
-(function antiDebug() {
-  setInterval(() => {
-    const start = performance.now();
-    debugger;
-    if (performance.now() - start > 100) {
-      location.reload();
-    }
-  }, 1000);
-
-  document.addEventListener("contextmenu", e => e.preventDefault());
-  document.addEventListener("keydown", e => {
-    if (
-      e.key === "F12" ||
-      (e.ctrlKey && e.shiftKey && ["I", "C", "J"].includes(e.key)) ||
-      (e.ctrlKey && e.key === "U")
-    ) {
-      e.preventDefault();
-      location.reload();
-    }
-  });
-})();
-
-/* ===============================
-   CONSOLE HIJACK
-================================ */
-(function blockConsole() {
-  const noop = () => {};
-  ["log", "warn", "error", "info", "table"].forEach(fn => {
-    console[fn] = noop;
-  });
-})();
-
-/* ===============================
-   SCRIPT INJECTION DETECTION
-================================ */
-(function detectInjection() {
-  const allowedScripts = [...document.scripts].map(s => s.src);
-
-  const observer = new MutationObserver(mutations => {
-    mutations.forEach(m => {
-      m.addedNodes.forEach(node => {
-        if (
-          node.tagName === "SCRIPT" &&
-          !allowedScripts.includes(node.src)
-        ) {
-          location.reload();
-        }
-      });
-    });
-  });
-
-  observer.observe(document.documentElement, {
-    childList: true,
-    subtree: true
-  });
-})();
-
-/* ===============================
-   SECURE STORAGE (ENCRYPTION)
+   SECURE STORAGE (PER USER)
 ================================ */
 const SecureStore = (() => {
-  const secret = "x9A#K@!secureKey";
+  const secret = "secure-mobile-key";
 
-  function encrypt(data) {
-    return btoa(
+  const crypt = (str) =>
+    btoa(
       encodeURIComponent(
-        data
-          .split("")
-          .map((c, i) =>
-            String.fromCharCode(
-              c.charCodeAt(0) ^ secret.charCodeAt(i % secret.length)
-            )
+        [...str].map((c, i) =>
+          String.fromCharCode(
+            c.charCodeAt(0) ^ secret.charCodeAt(i % secret.length)
           )
-          .join("")
+        ).join("")
       )
     );
-  }
 
-  function decrypt(data) {
-    return decodeURIComponent(
-      atob(data)
+  const decrypt = (str) =>
+    decodeURIComponent(
+      atob(str)
         .split("")
         .map((c, i) =>
           String.fromCharCode(
@@ -134,20 +56,19 @@ const SecureStore = (() => {
         )
         .join("")
     );
-  }
 
   return {
     set(key, value) {
-      localStorage.setItem(key, encrypt(JSON.stringify(value)));
+      localStorage.setItem(key, crypt(JSON.stringify(value)));
     },
     get(key) {
-      const val = localStorage.getItem(key);
-      return val ? JSON.parse(decrypt(val)) : null;
+      const v = localStorage.getItem(key);
+      return v ? JSON.parse(decrypt(v)) : null;
     },
     remove(key) {
       localStorage.removeItem(key);
     },
-    clearAll() {
+    wipeAll() {
       localStorage.clear();
       sessionStorage.clear();
     }
@@ -155,34 +76,70 @@ const SecureStore = (() => {
 })();
 
 /* ===============================
-   AUTH SESSION PROTECTION
+   AUTH & USER ISOLATION
 ================================ */
 const AuthGuard = (() => {
-  const SESSION_KEY = "SECURE_ACTIVE_USER";
+  const SESSION = "ACTIVE_USER";
+  let lastUser = sessionStorage.getItem(SESSION);
+
+  function isolateUser(email) {
+    if (lastUser && lastUser !== email) {
+      // Different user detected → wipe old data
+      SecureStore.remove("user_" + lastUser);
+    }
+    lastUser = email;
+  }
 
   return {
     login(email) {
-      sessionStorage.setItem(SESSION_KEY, email);
+      isolateUser(email);
+      sessionStorage.setItem(SESSION, email);
+
+      const data = SecureStore.get("user_" + email) || {
+        email,
+        cart: [],
+        wishlist: [],
+        orders: [],
+        profile: {}
+      };
+
+      SecureStore.set("user_" + email, data);
     },
+
     logout() {
-      SecureStore.clearAll();
-      location.replace("index.html");
+      const user = sessionStorage.getItem(SESSION);
+      if (user) SecureStore.remove("user_" + user);
+      SecureStore.wipeAll();
+      location.replace("authentication.html");
     },
+
     isLoggedIn() {
-      return !!sessionStorage.getItem(SESSION_KEY);
+      return !!sessionStorage.getItem(SESSION);
     },
-    user() {
-      return sessionStorage.getItem(SESSION_KEY);
+
+    currentUser() {
+      return sessionStorage.getItem(SESSION);
+    },
+
+    getUserData() {
+      const u = this.currentUser();
+      return u ? SecureStore.get("user_" + u) : null;
+    },
+
+    saveUserData(data) {
+      const u = this.currentUser();
+      if (u) SecureStore.set("user_" + u, data);
     }
   };
 })();
 
 /* ===============================
-   PAGE ACCESS CONTROL
+   PAGE ACCESS CONTROL (FAST)
 ================================ */
 (function protectPages() {
   const protectedPages = [
     "cart.html",
+    "wishlist.html",
     "checkout.html",
     "orders.html",
     "account.html"
@@ -197,28 +154,57 @@ const AuthGuard = (() => {
 })();
 
 /* ===============================
-   BOT / AUTOMATION DETECTION
+   DATA AUTO-CLEAR IF NOT LOGGED IN
 ================================ */
-(function botDetection() {
-  if (
-    navigator.webdriver ||
-    /HeadlessChrome/.test(navigator.userAgent)
-  ) {
-    document.documentElement.innerHTML = "";
-    throw new Error("Bot blocked");
+if (!AuthGuard.isLoggedIn()) {
+  SecureStore.wipeAll();
+}
+
+/* ===============================
+   SAFE NAVIGATION HELPERS
+================================ */
+function goToCart() {
+  AuthGuard.isLoggedIn()
+    ? location.href = "cart.html"
+    : location.href = "authentication.html";
+}
+
+function goToWishlist() {
+  AuthGuard.isLoggedIn()
+    ? location.href = "wishlist.html"
+    : location.href = "authentication.html";
+}
+
+function goToAccount() {
+  AuthGuard.isLoggedIn()
+    ? location.href = "account.html"
+    : location.href = "authentication.html";
+}
+
+/* ===============================
+   LOGIN REDIRECT RESTORE
+================================ */
+(function restoreAfterLogin() {
+  if (!AuthGuard.isLoggedIn()) return;
+
+  const redirect = sessionStorage.getItem("redirectAfterLogin");
+  if (redirect) {
+    sessionStorage.removeItem("redirectAfterLogin");
+    location.replace(redirect);
   }
 })();
 
 /* ===============================
-   IFRAME / EMBED BLOCK
+   LIGHT ANTI-BOT (MOBILE SAFE)
 ================================ */
-(function blockEmbedding() {
-  if (window.top !== window.self) {
-    window.top.location = window.self.location;
-  }
-})();
+if (navigator.webdriver) {
+  document.documentElement.innerHTML = "";
+  throw new Error("Automation blocked");
+}
 
 /* ===============================
-   GLOBAL EXPORT (READ-ONLY)
+   IFRAME PROTECTION
 ================================ */
-Object.freeze(window);
+if (window.top !== window.self) {
+  window.top.location = window.self.location;
+}
