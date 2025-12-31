@@ -436,6 +436,199 @@ document.getElementById("registerForm")?.addEventListener("submit", function (e)
 
   if (!name || !email || !password) {
     alert("All fields are required");
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authentication | Sliding Panels</title>
+     <script src="auth.js"></script>
+<script src="secure-core.js"></script>
+  <script src="protect.js"></script>
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4f46e5,#0ea5e9)}
+    .auth-container{width:1000px;max-width:95%;height:550px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.25);position:relative}
+    .slides{display:flex;width:300%;height:100%;transition:transform .7s ease-in-out}
+    .panel{width:100%;display:flex}
+    .welcome{width:50%;padding:60px 50px;background:linear-gradient(135deg,#6366f1,#0ea5e9);color:#fff;display:flex;flex-direction:column;justify-content:center;gap:20px}
+    .welcome h1{font-size:38px}
+    .welcome p{font-size:16px;line-height:1.6}
+    .welcome button{margin-top:20px;padding:14px 28px;border:none;border-radius:30px;background:#fff;color:#1e3a8a;font-weight:600;cursor:pointer;width:max-content}
+    .form-section{width:50%;padding:60px 50px;display:flex;flex-direction:column;justify-content:center}
+    .form-section h2{font-size:30px;color:#1e293b}
+    .form-section p{color:#64748b;margin:10px 0 25px}
+    form{display:flex;flex-direction:column;gap:15px}
+    input{padding:14px 18px;border-radius:10px;border:1px solid #cbd5e1;font-size:15px;outline:none}
+    .form-btn{margin-top:10px;padding:14px;border:none;border-radius:30px;background:#4f46e5;color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+    .links{margin-top:15px}
+    .links a{color:#4f46e5;cursor:pointer;text-decoration:none;font-size:14px}
+    .dashboard{display:none;padding:40px}
+    .dashboard h2{margin-bottom:15px}
+    .dashboard section{margin-bottom:20px}
+    .logout{background:#ef4444;color:#fff;border:none;padding:12px 20px;border-radius:20px;cursor:pointer}
+    .show-login{transform:translateX(0)}
+    .show-register{transform:translateX(-33.333%)}
+    .show-forgot{transform:translateX(-66.666%)}
+@media(max-width:768px){
+  .panel{flex-direction:column}
+  .welcome,.form-section{width:100%;
+    height:auto;
+    min-height:10vh;
+    border-radius:16px}
+  .welcome{text-align:center;align-items:center}
+   .welcome,
+  .form-section{
+    width:100%;
+    padding:40px 30px;
+  }
+
+  .welcome h1{
+    font-size:28px;
+  }
+
+  .welcome p{
+    font-size:14px;
+  }
+
+  .form-section h2{
+    font-size:24px;
+  }
+
+  .form-section p{
+    font-size:14px;
+  }
+
+  input{
+    padding:12px 16px;
+    font-size:14px;
+  }
+
+  .form-btn{
+    padding:12px;
+    font-size:15px;
+  }
+
+  .welcome button{
+    padding:12px 24px;
+    font-size:14px;
+  }
+
+  .links a{
+    font-size:13px;
+  }
+}
+  </style>
+</head>
+<body>
+<div class="auth-container" id="authContainer">      
+  <div class="slides show-login" id="slides"><!-- LOGIN PANEL -->      
+<div class="panel">      
+  <div class="welcome">      
+    <h1>Welcome Back!</h1>      
+    <p>Login to access your dashboard, manage your account, and continue shopping.</p>      
+    <button onclick="showRegister()">New Member? Register</button>      
+  </div>      
+  <div class="form-section">      
+    <h2>Login</h2>      
+    <form id="loginForm">      
+      <input type="email" id="loginEmail" placeholder="Email address" required>      
+      <input type="password" id="loginPassword" placeholder="Password" required>      
+      <button class="form-btn">Login</button>      
+    </form>      
+    <div class="links"><a onclick="showForgot()">Forgot Password?</a></div>      
+  </div>      
+</div>      <!-- REGISTER PANEL -->      <div class="panel">      
+  <div class="welcome">      
+    <h1>Hello, Friend!</h1>      
+    <p>Create an account to manage orders, checkout faster, and save payments.</p>      
+    <button onclick="showLogin()">Already Have Account?</button>      
+  </div>      
+  <div class="form-section">      
+    <h2>Register</h2>      
+    <form id="registerForm">      
+      <input type="text" id="regName" placeholder="Full Name" required>      
+      <input type="email" id="regEmail" placeholder="Email address" required>      
+      <input type="password" id="regPassword" placeholder="Password" required>      
+      <button class="form-btn">Create Account</button>      
+    </form>      
+  </div>      
+</div>      <!-- FORGOT PASSWORD PANEL -->      <div class="panel">      
+  <div class="welcome">      
+    <h1>Reset Password</h1>      
+    <p>We will send you reset instructions.</p>      
+    <button onclick="showLogin()">Back to Login</button>      
+  </div>      
+  <div class="form-section">      
+    <h2>Forgot Password</h2>      
+    <form id="forgotForm">      
+      <input type="email" id="forgotEmail" placeholder="Registered Email" required>      
+      <button class="form-btn">Send Reset Link</button>      
+    </form>      
+  </div>      
+</div>        </div>  <!-- USER DASHBOARD -->  <div class="dashboard" id="dashboard">      
+    <h2>My Account</h2>      
+    <section><strong>Order History</strong><p>No orders yet</p></section>      
+    <section><strong>Payment Methods</strong><p>No saved payment methods</p></section>      
+    <section><strong>Account Details</strong><p id="userEmail"></p></section>      
+    <button class="logout" onclick="logout()">Logout</button>      
+  </div>      
+</div> </div>     
+<script>
+/* =========================
+   GLOBAL AUTH STATE
+========================= */
+
+const AUTH_KEY = "activeUser";
+
+/* =========================
+   HELPER FUNCTIONS
+========================= */
+
+function isLoggedIn() {
+  return sessionStorage.getItem(AUTH_KEY) !== null;
+}
+
+function getActiveUser() {
+  return sessionStorage.getItem(AUTH_KEY);
+}
+
+function requireAuth() {
+  if (!isLoggedIn()) {
+    sessionStorage.setItem("redirectAfterLogin", window.location.pathname);
+    window.location.href = "authentication.html";
+  }
+}
+
+/* =========================
+   AUTH UI SWITCHING
+========================= */
+
+function showRegister() {
+  document.getElementById("slides").className = "slides show-register";
+}
+
+function showLogin() {
+  document.getElementById("slides").className = "slides show-login";
+}
+
+function showForgot() {
+  document.getElementById("slides").className = "slides show-forgot";
+}
+
+/* =========================
+   REGISTRATION
+========================= */
+
+document.getElementById("registerForm")?.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const name = document.getElementById("regName").value.trim();
+  const email = document.getElementById("regEmail").value.trim();
+  const password = document.getElementById("regPassword").value.trim();
+
+  if (!name || !email || !password) {
+    alert("All fields are required");
     return;
   }
 
@@ -563,3 +756,79 @@ function goToAccount() {
 </html>
 
 
+    return;
+  }
+
+  if (localStorage.getItem("user_" + email)) {
+    alert("Account already exists");
+    return;
+  }
+
+  localStorage.setItem(
+    "user_" + email,
+    JSON.stringify({
+      name,
+      email,
+      password,
+      orders: [],
+      cart: [],
+      wishlist: [],
+      payments: [],
+      addressBook: []
+    })
+  );
+
+  alert("Account created successfully. Please login.");
+  showLogin();
+});
+
+/* =========================
+   LOGIN
+========================= */
+
+document.getElementById("loginForm")?.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  const userData = JSON.parse(localStorage.getItem("user_" + email));
+
+  if (!userData || userData.password !== password) {
+    alert("Invalid login credentials");
+    return;
+  }
+
+  sessionStorage.setItem(AUTH_KEY, email);
+
+  const redirect = sessionStorage.getItem("redirectAfterLogin");
+  sessionStorage.removeItem("redirectAfterLogin");
+
+  window.location.href = redirect || "account.html";
+});
+
+/* =========================
+   LOGOUT (PRIVACY SAFE)
+========================= */
+
+function logout() {
+  if (getActiveUser()) {
+    sessionStorage.clear(); // clears auth + redirect history
+  }
+
+  window.location.href = "authentication.html";
+}
+
+/* =========================
+   ACCOUNT PAGE RENDER
+========================= */
+
+if (window.location.pathname.includes("account.html")) {
+  requireAuth();
+
+  const email = getActiveUser();
+  const userData = JSON.parse(localStorage.getItem("user_" + email));
+
+  if (userData) {
+    document.getElementById("userEmail").textContent = userData.email;
+  }
