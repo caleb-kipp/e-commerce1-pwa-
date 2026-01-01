@@ -2240,7 +2240,13 @@ body { margin:0; font-family:system-ui; background:#0f1623; color:white; }
       </div>
       <div class="helper" style="padding:0 0 16px">© <span id="year"></span> ShopSphere</div>
     </div>
-  </footer>   <script>
+  </footer>  <script>const firebaseConfig = {
+  apiKey: "AIzaSyCglKXoDTnD7X0iRM-wskCUnxyFXJCIyCM",
+  authDomain: "my-ecommerce-auth-2b86d.firebaseapp.com",
+  projectId: "my-ecommerce-auth-2b86d",
+  appId: "1:747882612530:web:940467d8823cd576cab92b"
+};</script>
+ <script>
     /************************************
      * Demo Data + Utilities (mock backend)
      ************************************/
@@ -2809,5 +2815,6 @@ rowFill('#rowElectronics', products.filter(p=>p.category==='electronics'));
     window.addEventListener('hashchange', ()=>{
       if(location.hash==='#cart') openModal('#cartModal', renderCart);
     });
-  </script></body>
+  </script>
+        </body>
 </html>
