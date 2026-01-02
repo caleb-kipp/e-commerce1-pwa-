@@ -625,6 +625,184 @@ function login() {
   localStorage.setItem('user_' + user, JSON.stringify(userData));
 
   sessionStorage.setItem('activeUser', user);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Authentication</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail,
+      GoogleAuthProvider,
+      signInWithPopup,
+      onAuthStateChanged,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    // 🔐 FIREBASE CONFIG (PUBLIC – SAFE)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCglKXoDTnD7X0iRM-wskCUnxyFXJCIyCM",
+      authDomain: "my-ecommerce-auth-2b86d.firebaseapp.com",
+      projectId: "my-ecommerce-auth-2b86d",
+      appId: "1:747882612530:web:940467d8823cd576cab92b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    /* =======================
+       AUTH STATE GUARD
+    ======================== */
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User logged in → redirect to app
+        window.location.href = "/index.html";
+      }
+    });
+
+    /* =======================
+       LOGIN
+    ======================== */
+    window.login = async function () {
+      const email = document.getElementById("loginUser").value;
+      const password = document.getElementById("loginPass").value;
+      const remember = document.getElementById("rememberMe").checked;
+      const msg = document.getElementById("loginMsg");
+
+      try {
+        await setPersistence(
+          auth,
+          remember ? browserLocalPersistence : browserSessionPersistence
+        );
+
+        await signInWithEmailAndPassword(auth, email, password);
+        msg.textContent = "Login successful";
+      } catch (err) {
+        msg.textContent = err.message;
+      }
+    };
+
+    /* =======================
+       REGISTER
+    ======================== */
+    window.register = async function () {
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPass").value;
+      const msg = document.getElementById("regMsg");
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        msg.textContent = "Account created successfully";
+      } catch (err) {
+        msg.textContent = err.message;
+      }
+    };
+
+    /* =======================
+       GOOGLE LOGIN
+    ======================== */
+    document.addEventListener("click", async (e) => {
+      if (e.target.dataset.provider === "google") {
+        try {
+          await signInWithPopup(auth, googleProvider);
+        } catch (err) {
+          alert(err.message);
+        }
+      }
+    });
+
+    /* =======================
+       FORGOT PASSWORD
+    ======================== */
+    window.forgotPassword = async function () {
+      const email = document.getElementById("forgotUser").value;
+      const msg = document.getElementById("forgotMsg");
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        msg.textContent = "Password reset email sent";
+      } catch (err) {
+        msg.textContent = err.message;
+      }
+    };
+
+    /* =======================
+       UI HELPERS
+    ======================== */
+    window.showForm = function (id) {
+      document.querySelectorAll(".auth-container").forEach(el => {
+        el.classList.add("hidden");
+      });
+      document.getElementById(id).classList.remove("hidden");
+    };
+
+    window.togglePass = function (id, el) {
+      const input = document.getElementById(id);
+      input.type = input.type === "password" ? "text" : "password";
+      el.textContent = input.type === "password" ? "👁️" : "🙈";
+    };
+  </script>
+
+  <style>
+    body { font-family: Arial, sans-serif; background:#111; color:#fff; }
+    .auth-container { max-width:400px; margin:60px auto; padding:20px; background:#1e1e1e; border-radius:10px; }
+    .hidden { display:none; }
+    input, button { width:100%; padding:10px; margin:8px 0; }
+    button { background:#4caf50; border:none; color:#fff; cursor:pointer; }
+    .toggle { color:#4caf50; cursor:pointer; margin-top:10px; }
+  </style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="auth-container" id="loginForm">
+  <h1>Login</h1>
+  <input id="loginUser" placeholder="Email" />
+  <input id="loginPass" type="password" placeholder="Password" />
+  <label><input type="checkbox" id="rememberMe"> Remember Me</label>
+  <button onclick="login()">Sign In</button>
+
+  <div class="social-login">
+    <button data-provider="google">Login with Google</button>
+  </div>
+
+  <div class="toggle" onclick="showForm('registerForm')">Create account</div>
+  <div class="toggle" onclick="showForm('forgotForm')">Forgot password?</div>
+  <div id="loginMsg"></div>
+</div>
+
+<!-- REGISTER -->
+<div class="auth-container hidden" id="registerForm">
+  <h1>Register</h1>
+  <input id="regEmail" placeholder="Email" />
+  <input id="regPass" type="password" placeholder="Password" />
+  <button onclick="register()">Sign Up</button>
+  <div class="toggle" onclick="showForm('loginForm')">Back to login</div>
+  <div id="regMsg"></div>
+</div>
+
+<!-- FORGOT -->
+<div class="auth-container hidden" id="forgotForm">
+  <h1>Reset Password</h1>
+  <input id="forgotUser" placeholder="Email" />
+  <button onclick="forgotPassword()">Send Reset Email</button>
+  <div class="toggle" onclick="showForm('loginForm')">Back</div>
+  <div id="forgotMsg"></div>
+</div>
+
+</body>
+</html>
   sessionStorage.setItem('lastActivity', Date.now());
 
   if (remember) localStorage.setItem('rememberUser', user);
@@ -663,31 +841,7 @@ function resetPassword() {
   const pin = resetPin.value.trim();
   const newPass = newPass.value.trim();
   const msg = resetMsg;
-  const savedPin = localStorage.getItem('reset_' + user);
-
-  if (pin === savedPin && newPass) {
-    let data = JSON.parse(localStorage.getItem('user_' + user));
-    data.password = newPass;
-    localStorage.setItem('user_' + user, JSON.stringify(data));
-    localStorage.removeItem('reset_' + user);
-    msg.innerHTML = '<p class="success">Password reset successful</p>';
-    setTimeout(() => showForm('loginForm'), 1500);
-  } else {
-    msg.innerHTML = '<p class="error">Invalid PIN</p>';
-  }
-}
-
-/* =====================================================
-   SESSION TIMEOUT
-===================================================== */
-setInterval(() => {
-  const last = sessionStorage.getItem('lastActivity');
-  if (last && Date.now() - last > SESSION_TIMEOUT) {
-    logout();
-  }
-}, 60000);
-
-document.addEventListener('mousemove', () => sessionStorage.setItem('lastActivity', Date.now()));
+ve', () => sessionStorage.setItem('lastActivity', Date.now()));
 
 /* =====================================================
    LOGOUT
