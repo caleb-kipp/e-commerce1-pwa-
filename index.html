@@ -900,6 +900,65 @@ openCartBtn.addEventListener('click', () => {
   cartPage.classList.remove('hidden');
   renderCart();
 });</script>
+      
+<script>setTimeout(() => signOut(auth), 15 * 60 * 1000);</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  const firebaseConfig = {
+        apiKey: "AIzaSyCglKXoDTnD7X0iRM-wskCUnxyFXJCIyCM",
+    authDomain: "my-ecommerce-auth-2b86d.firebaseapp.com",
+    projectId: "my-ecommerce-auth-2b86d",
+    appId: "1:747882612530:web:940467d8823cd576cab92b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  // 🔄 Auth State Listener
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // ✅ Logged in → show logout
+      logoutBtn.classList.remove("hidden");
+    } else {
+      // ❌ Logged out → hide logout & redirect
+      logoutBtn.classList.add("hidden");
+      window.location.replace("authentication.html");
+    }
+  });
+
+  // 🚪 Logout Click
+  logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+  });
+</script>
+<style>
+.hidden {
+  display: none !important;
+}
+
+.logout-btn {
+  background: #e53935;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+</style>
+  <!-- Logout button (hidden by default) -->
+  <button id="logoutBtn" class="logout-btn hidden">
+    Logout
+  </button>
+    </nav>
           <button class="icon-btn" id="openAuth" aria-label="Open login/register"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="7" r="4" stroke="white"><path d="M4 21a8 8 0 0116 0" stroke="white"></svg></button>
         </div>
       </div>
