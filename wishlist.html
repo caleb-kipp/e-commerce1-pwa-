@@ -7,9 +7,7 @@
 <script src="auth.js"></script>
 <script src="protect.js"></script>
 <script src="secure-core.js"></script>
-  <script>
-  protectPage(); // Prevent unauthorized access
-</script>
+  
 <style>
 :root {
   --accent: #2563eb;
@@ -281,6 +279,25 @@ $('#goToCart').addEventListener('click', () => {
 // Initialize
 renderWishlist();
 </script>
+ <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyCglKXoDTnD7X0iRM-wskCUnxyFXJCIyCM",
+    authDomain: "my-ecommerce-auth-2b86d.firebaseapp.com",
+    projectId: "my-ecommerce-auth-2b86d",
+    appId: "1:747882612530:web:940467d8823cd576cab92b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "/authentication.html";
+    }
+  });
+</script>
 </body>
   </html>
