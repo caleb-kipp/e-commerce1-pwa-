@@ -37,11 +37,10 @@
        AUTH STATE GUARD
     ======================== */
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User logged in → redirect to app
-        window.location.href = "index.html";
-      }
-    });
+  if (user) {
+    window.location.replace("index.html");
+  }
+});
 
     /* =======================
        LOGIN
