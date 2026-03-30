@@ -1512,77 +1512,101 @@ x-init="
     </div>
   </div>
 
-  <script id="app-script">
-    // Placeholder for API integration
-    const apiEndpoints = {
-      userProfile: '/api/user/profile',
-      orders: '/api/orders',
-      addresses: '/api/addresses',
-      paymentMethods: '/api/payment-methods',
-      wallet: '/api/wallet',
-      giftCards: '/api/gift-cards',
-      invoices: '/api/invoices',
-      supportTickets: '/api/support/tickets',
-      returns: '/api/returns',
-      reviews: '/api/reviews',
-      wishlist: '/api/wishlist',
-      recommendations: '/api/recommendations',
-      notifications: '/api/notifications',
-      loyaltyProgram: '/api/loyalty',
-      coupons: '/api/coupons',
-      subscriptions: '/api/subscriptions',
-      referrals: '/api/referrals',
-      accountSettings: '/api/account/settings'
-    };
-    
-    // Prototype message function
-    function showProtoMessage() {
-      Swal.fire({
-        title: 'Prototype Message',
-        text: 'This is a prototype. Continue building to see the full version with API integration.',
-        icon: 'info',
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#3b82f6'
-      });
+<script id="app-script">
+// ✅ ADD THIS (your Vercel deployed backend URL)
+const API_BASE_URL = "https://vercel.com/calebs-projects-8e1e6887/e-commerce1-pwa";
+
+// Placeholder for API integration
+const apiEndpoints = {
+userProfile: `${API_BASE_URL}/api/user/profile`,
+orders: `${API_BASE_URL}/api/orders`,
+addresses: `${API_BASE_URL}/api/addresses`,
+paymentMethods: `${API_BASE_URL}/api/payment-methods`,
+wallet: `${API_BASE_URL}/api/wallet`,
+giftCards: `${API_BASE_URL}/api/gift-cards`,
+invoices: `${API_BASE_URL}/api/invoices`,
+supportTickets: `${API_BASE_URL}/api/support/tickets`,
+returns: `${API_BASE_URL}/api/returns`,
+reviews: `${API_BASE_URL}/api/reviews`,
+wishlist: `${API_BASE_URL}/api/wishlist`,
+recommendations: `${API_BASE_URL}/api/recommendations`,
+notifications: `${API_BASE_URL}/api/notifications`,
+loyaltyProgram: `${API_BASE_URL}/api/loyalty`,
+coupons: `${API_BASE_URL}/api/coupons`,
+subscriptions: `${API_BASE_URL}/api/subscriptions`,
+referrals: `${API_BASE_URL}/api/referrals`,
+accountSettings: `${API_BASE_URL}/api/account/settings`
+};
+
+// ✅ ADD THIS (real API handler)
+async function apiRequest(url) {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error("API not ready");
     }
-    
-    // Add event listeners to buttons that would typically make API calls
-    document.addEventListener('DOMContentLoaded', function() {
-      const actionButtons = document.querySelectorAll('a[href="javascript:void(0)"]');
-      actionButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-          // Prevent default only if it's a link
-          if (e.currentTarget.tagName === 'A') {
-            e.preventDefault();
-          }
-          
-          // Show prototype message
-          showProtoMessage();
-        });
-      });
-    });
-    
-    // Helper functions for when APIs are implemented
-    function fetchUserProfile() {
-      // To be implemented
-      return {
-        name: 'John Doe',
-        email: 'john.doe@example.com',
-        memberSince: 'January 2023',
-        avatar: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
-      };
-    }
-    
-    function fetchOrders() {
-      // To be implemented
-      return [
-        { id: '12345', date: '2023-01-15', status: 'Delivered', total: '$120.50' },
-        { id: '12346', date: '2023-02-20', status: 'Processing', total: '$75.25' },
-        { id: '12347', date: '2023-03-05', status: 'Shipped', total: '$210.00' }
-      ];
-    }
-    
-    // More helper functions as needed...
-  </script>
+
+    return await response.json();
+
+  } catch (error) {
+    console.warn("Using prototype fallback:", error);
+    showProtoMessage(); // 👈 still show prototype message
+    return null;
+  }
+}
+
+// Prototype message function  
+function showProtoMessage() {  
+  Swal.fire({  
+    title: 'Prototype Message',  
+    text: 'This is a prototype. Continue building to see the full version with API integration.',  
+    icon: 'info',  
+    confirmButtonText: 'OK',  
+    confirmButtonColor: '#3b82f6'  
+  });  
+}  
+  
+// Add event listeners to buttons that would typically make API calls  
+document.addEventListener('DOMContentLoaded', function() {  
+  const actionButtons = document.querySelectorAll('a[href="javascript:void(0)"]');  
+  actionButtons.forEach(button => {  
+    button.addEventListener('click', function(e) {  
+      if (e.currentTarget.tagName === 'A') {  
+        e.preventDefault();  
+      }  
+
+      // 👇 ALWAYS show prototype message (as you requested)
+      showProtoMessage();  
+    });  
+  });  
+});  
+  
+// Helper functions for when APIs are implemented  
+async function fetchUserProfile() {  
+  const data = await apiRequest(apiEndpoints.userProfile);
+
+  // fallback if API not ready  
+  return data || {  
+    name: 'John Doe',  
+    email: 'john.doe@example.com',  
+    memberSince: 'January 2023',  
+    avatar: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'  
+  };  
+}  
+  
+async function fetchOrders() {  
+  const data = await apiRequest(apiEndpoints.orders);
+
+  return data || [  
+    { id: '12345', date: '2023-01-15', status: 'Delivered', total: '$120.50' },  
+    { id: '12346', date: '2023-02-20', status: 'Processing', total: '$75.25' },  
+    { id: '12347', date: '2023-03-05', status: 'Shipped', total: '$210.00' }  
+  ];  
+}  
+  
+// More helper functions as needed...
+</script>
+
 </body>
 </html>
