@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Commerce Account Dashboard</title>
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Alpine.js for simple interactions -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Animate.css for animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <!-- SweetAlert2 for beautiful alerts -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <style id="app-style">
+    :root {
+      --primary-color: #3b82f6;
+      --secondary-color: #6366f1;
+      --accent-color: #ec4899;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --light-bg: #f9fafb;
+      --dark-bg: #1f2937;
+      --text-dark: #1f2937;
+      --text-light: #f9fafb;
+      --border-color: #e5e7eb;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    body.light-mode {
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+    }
+    
+    body.dark-mode {
+      background-color: var(--dark-bg);
+      color: var(--text-light);
+    }
+    
+    .dashboard-container {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    
+    .header-container {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(10px);
+    }
+    
+    .dashboard-card {
+      height: 100%;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      overflow: hidden;
+    }
+    
+    .dashboard-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .card-header {
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .card-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+    
+    .card-content.expanded {
+      max-height: 1000px;
+    }
+    
+    .rotate-icon {
+      transition: transform 0.3s ease;
+    }
+    
+    .rotate-icon.rotate {
+      transform: rotate(90deg);
+    }
+    
+    .profile-dropdown {
+      position: absolute;
+      top: 70px;
+      right: 20px;
+      min-width: 250px;
+      transform: translateY(-20px);
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .profile-dropdown.show {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .avatar-container {
+      min-width: 100px;
+      min-height: 100px;
+    }
+    
+    .avatar-image {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+    }
+    
+    /* Responsive Grid System */
+    .grid-container {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+    
+    @media (min-width: 1200px) {
+      .grid-container {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    @media (min-width: 900px) and (max-width: 1199px) {
+      .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (min-width: 600px) and (max-width: 899px) {
+      .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 599px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .header-right {
+        justify-content: flex-end;
+      }
+      
+      .avatar-container {
+        margin-left: auto;
+      }
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.3s ease-in-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    /* Badge Styles */
+    .badge {
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .badge-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .badge-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    
+    .badge-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+    
+    .badge-warning {
+      background-color: var(--warning-color);
+      color: white;
+    }
+    
+    .badge-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    /* Button Effects */
+    .btn-effect {
+      position: relative;
+      overflow: hidden;
+      transform: translate3d(0, 0, 0);
+    }
+    
+    .btn-effect:after {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+      background-repeat: no-repeat;
+      background-position: 50%;
+      transform: scale(10, 10);
+      opacity: 0;
+      transition: transform .5s, opacity 1s;
+    }
+    
+    .btn-effect:active:after {
+      transform: scale(0, 0);
+      opacity: .3;
+      transition: 0s;
+    }
+    
+    /* Toggle Switch */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .toggle-slider {
+      background-color: var(--primary-color);
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+    
+    /* Progress Bar */
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background-color: var(--border-color);
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: var(--primary-color);
+      transition: width 0.5s ease;
+    }
+    
+    /* Tooltip */
+    .tooltip {
+      position: relative;
+    }
+    
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    .tooltip-text {
+      visibility: hidden;
+      width: 120px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #333 transparent transparent transparent;
+    }
+  </style>
+</head>
+<body class="light-mode" x-data="{ 
+  showProfileDropdown: false, 
+  darkMode: localStorage.getItem('darkMode') === 'true',
+  expandedCards: JSON.parse(localStorage.getItem('expandedCards') || '{}')
+}" 
+x-init="
+  $watch('darkMode', val => {
+    localStorage.setItem('darkMode', val);
+    document.body.classList.toggle('dark-mode', val);
+    document.body.classList.toggle('light-mode', !val);
+  });
+  
+  $watch('expandedCards', val => {
+    localStorage.setItem('expandedCards', JSON.stringify(val));
+  }, { deep: true });
+  
+  if (darkMode) {
+    document.body.classList.add('dark-mode');
+    document.body.classList.remove('light-mode');
+  }
+">
+
+  <div class="dashboard-container">
+    <!-- Header -->
+    <header class="header-container bg-white dark:bg-gray-800 shadow-md mb-6 py-4">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <img class="h-10 w-auto" src="https://cdn.pixabay.com/photo/2017/01/31/23/42/animal-2028258_960_720.png" alt="Company Logo">
+            </div>
+            <div class="hidden md:block ml-6">
+              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">My Account Dashboard</h1>
+            </div>
+          </div>
+          
+          <div class="flex items-center space-x-4">
+            <button class="btn-effect px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+              <i class="fas fa-sign-in-alt mr-2"></i>
+              <span class="hidden sm:inline">Login</span>
+            </button>
+            
+            <button @click="darkMode = !darkMode" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" title="Toggle Dark Mode">
+              <i class="fas" :class="darkMode ? 'fa-sun text-yellow-400' : 'fa-moon text-gray-700 dark:text-gray-300'"></i>
+            </button>
+            
+            <div class="relative" @click.away="showProfileDropdown = false">
+              <div class="avatar-container flex items-center cursor-pointer" @click="showProfileDropdown = !showProfileDropdown">
+                <img class="avatar-image rounded-full border-2 border-blue-500" src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png" alt="User Avatar">
+                <i class="fas fa-chevron-down ml-2 text-gray-600 dark:text-gray-300" :class="{'transform rotate-180': showProfileDropdown}"></i>
+              </div>
+              
+              <div class="profile-dropdown bg-white dark:bg-gray-800 rounded-md shadow-lg border dark:border-gray-700 z-50" :class="{'show': showProfileDropdown}">
+                <div class="p-4 border-b dark:border-gray-700">
+                  <div class="font-semibold text-lg text-gray-900 dark:text-white">John Doe</div>
+                  <div class="text-gray-600 dark:text-gray-300 text-sm">john.doe@example.com</div>
+                  <div class="text-gray-500 dark:text-gray-400 text-xs mt-1">Member since Jan 2023</div>
+                </div>
+                <div class="p-2">
+                  <a href="javascript:void(0)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
+                    <i class="fas fa-user mr-2 text-blue-600 dark:text-blue-400"></i> View Profile
+                  </a>
+                  <a href="javascript:void(0)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
+                    <i class="fas fa-cog mr-2 text-gray-600 dark:text-gray-400"></i> Settings
+                  </a>
+                  <a href="javascript:void(0)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
+                    <i class="fas fa-question-circle mr-2 text-green-600 dark:text-green-400"></i> Help Center
+                  </a>
+                  <div class="border-t dark:border-gray-700 my-1"></div>
+                  <a href="javascript:void(0)" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors text-red-600 dark:text-red-400">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pb-16">
+      <!-- Welcome Banner -->
+      <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl shadow-lg p-6 mb-8 relative overflow-hidden">
+        <div class="absolute right-0 top-0 transform translate-x-8 -translate-y-8">
+          <div class="text-white/10 text-[200px]">
+            <i class="fas fa-user-circle"></i>
+          </div>
+        </div>
+        <div class="relative z-10">
+          <h2 class="text-3xl font-bold mb-2">Welcome back, John!</h2>
+          <p class="text-blue-100 mb-4">Manage your account, track orders, and customize your shopping experience.</p>
+          <div class="flex flex-wrap gap-3">
+            <a href="javascript:void(0)" class="bg-white text-blue-600 px-4 py-2 rounded-md font-medium hover:bg-blue-50 transition-colors">
+              <i class="fas fa-shopping-bag mr-2"></i> Continue Shopping
+            </a>
+            <a href="javascript:void(0)" class="bg-blue-700 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-800 transition-colors">
+              <i class="fas fa-box mr-2"></i> Track Latest Order
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 1 -->
+      <div class="grid-container mb-8">
+        <!-- Account Information -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['account'] = !expandedCards['account']">
+            <div class="flex items-center">
+              <i class="fas fa-user-circle text-2xl text-blue-600 dark:text-blue-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Account</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['account']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['account']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Profile</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Upload Profile Picture</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Edit Personal Information</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Communication Preferences</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login & Security -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['security'] = !expandedCards['security']">
+            <div class="flex items-center">
+              <i class="fas fa-shield-alt text-2xl text-green-600 dark:text-green-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Login & Security</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['security']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['security']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Change Password</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Two-Factor Authentication</span>
+                    <div class="flex items-center">
+                      <span class="badge badge-success mr-2">Enabled</span>
+                      <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Login Activity</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Connected Devices</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['orders'] = !expandedCards['orders']">
+            <div class="flex items-center">
+              <i class="fas fa-box text-2xl text-purple-600 dark:text-purple-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Orders</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['orders']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['orders']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Order History</span>
+                    <div class="flex items-center">
+                      <span class="text-sm text-blue-600 dark:text-blue-400 mr-2">12 orders</span>
+                      <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Track Orders</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Cancel / Return Items</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Recurring Orders</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Addresses -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['addresses'] = !expandedCards['addresses']">
+            <div class="flex items-center">
+              <i class="fas fa-map-marker-alt text-2xl text-red-600 dark:text-red-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Addresses</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['addresses']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['addresses']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Add New Address</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Edit Shipping & Billing Addresses</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Set Default Address</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Address Book</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="grid-container mb-8">
+        <!-- Payment Methods -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['payment'] = !expandedCards['payment']">
+            <div class="flex items-center">
+              <i class="fas fa-credit-card text-2xl text-indigo-600 dark:text-indigo-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Payment Methods</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['payment']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['payment']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Saved Cards</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Add New Card</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Remove Cards</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Integrate Wallets (Stripe, PayPal)</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wallet / Store Credit -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['wallet'] = !expandedCards['wallet']">
+            <div class="flex items-center">
+              <i class="fas fa-wallet text-2xl text-yellow-600 dark:text-yellow-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">💰 Wallet / Store Credit</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['wallet']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['wallet']}">
+            <div class="p-6">
+              <div class="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4 mb-4">
+                <div class="text-sm text-blue-800 dark:text-blue-200">Available Balance</div>
+                <div class="text-2xl font-bold text-blue-900 dark:text-blue-100">$124.50</div>
+              </div>
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Available Balance</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Cashback / Refunds</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Transaction History</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gift Cards -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['giftcards'] = !expandedCards['giftcards']">
+            <div class="flex items-center">
+              <i class="fas fa-gift text-2xl text-pink-600 dark:text-pink-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🎁 Gift Cards</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['giftcards']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['giftcards']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Redeem Codes</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Check Balance</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Purchase Gift Cards</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Gift Card History</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Billing & Invoices -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['billing'] = !expandedCards['billing']">
+            <div class="flex items-center">
+              <i class="fas fa-file-invoice-dollar text-2xl text-green-600 dark:text-green-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🧾 Billing & Invoices</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['billing']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['billing']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Download Invoices</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">VAT / Tax Information</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Billing History</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Manage Billing Information</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="grid-container mb-8">
+        <!-- Customer Support -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['support'] = !expandedCards['support']">
+            <div class="flex items-center">
+              <i class="fas fa-headset text-2xl text-blue-600 dark:text-blue-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">📞 Customer Support</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['support']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['support']}">
+            <div class="p-6">
+              <div class="bg-green-50 dark:bg-green-900/30 rounded-lg p-4 mb-4 flex items-center">
+                <div class="h-3 w-3 bg-green-500 rounded-full animate-pulse mr-2"></div>
+                <div class="text-green-800 dark:text-green-200">Support agents are online now</div>
+              </div>
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Contact Support</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Live Chat</span>
+                    <div class="flex items-center">
+                      <span class="badge badge-success mr-2">Online</span>
+                      <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Ticket System</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">FAQs</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Returns & Refunds -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['returns'] = !expandedCards['returns']">
+            <div class="flex items-center">
+              <i class="fas fa-exchange-alt text-2xl text-orange-600 dark:text-orange-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🔄 Returns & Refunds</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['returns']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['returns']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Request Returns</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Refund Status Tracking</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Return Policy</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Return History</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reviews & Ratings -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['reviews'] = !expandedCards['reviews']">
+            <div class="flex items-center">
+              <i class="fas fa-star text-2xl text-yellow-500 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">⭐ Reviews & Ratings</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['reviews']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['reviews']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Products Reviewed</span>
+                    <div class="flex items-center">
+                      <span class="text-sm text-blue-600 dark:text-blue-400 mr-2">8 reviews</span>
+                      <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Write/Edit Reviews</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Review Guidelines</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Helpful Contributions</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wishlist / Favorites -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['wishlist'] = !expandedCards['wishlist']">
+            <div class="flex items-center">
+              <i class="fas fa-heart text-2xl text-red-600 dark:text-red-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">❤️ Wishlist / Favorites</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['wishlist']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['wishlist']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Saved Items</span>
+                    <div class="flex items-center">
+                      <span class="text-sm text-blue-600 dark:text-blue-400 mr-2">5 items</span>
+                      <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Move to Cart</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Create Wishlists</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Share Wishlist</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="grid-container mb-8">
+        <!-- Recommendations -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['recommendations'] = !expandedCards['recommendations']">
+            <div class="flex items-center">
+              <i class="fas fa-bullseye text-2xl text-purple-600 dark:text-purple-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🎯 Recommendations</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['recommendations']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['recommendations']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Personalized Products</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Recently Viewed</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Based on Your Purchases</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Popular in Your Area</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['notifications'] = !expandedCards['notifications']">
+            <div class="flex items-center">
+              <i class="fas fa-bell text-2xl text-orange-600 dark:text-orange-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🔔 Notifications</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['notifications']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['notifications']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Email/SMS Preferences</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Order Updates</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Promotional Emails</span>
+                    <div class="flex items-center">
+                      <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Notification History</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loyalty Program / Rewards -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['loyalty'] = !expandedCards['loyalty']">
+            <div class="flex items-center">
+              <i class="fas fa-trophy text-2xl text-amber-600 dark:text-amber-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🏆 Loyalty Program / Rewards</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['loyalty']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['loyalty']}">
+            <div class="p-6">
+              <div class="bg-gradient-to-r from-amber-500 to-amber-700 text-white p-4 rounded-lg mb-4">
+                <div class="text-sm">Current Tier: Gold</div>
+                <div class="flex items-center mb-2">
+                  <i class="fas fa-medal mr-2"></i>
+                  <div class="font-bold">1,250 points</div>
+                </div>
+                <div class="text-xs">750 points until Platinum tier</div>
+                <div class="progress-bar mt-2">
+                  <div class="progress-fill" style="width: 62%"></div>
+                </div>
+              </div>
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Points Earned</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Redeem Rewards</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Program Benefits</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coupons & Promotions -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['coupons'] = !expandedCards['coupons']">
+            <div class="flex items-center">
+              <i class="fas fa-ticket-alt text-2xl text-indigo-600 dark:text-indigo-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🎟 Coupons & Promotions</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['coupons']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['coupons']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Available Coupons</span>
+                    <div class="flex items-center">
+                      <span class="text-sm text-blue-600 dark:text-blue-400 mr-2">3 active</span>
+                      <i class="fas fa-chevron-right text-gray-400"></i>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Apply Discounts</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Coupon History</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Promotion Calendar</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 5 -->
+      <div class="grid-container mb-8">
+        <!-- Subscriptions -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['subscriptions'] = !expandedCards['subscriptions']">
+            <div class="flex items-center">
+              <i class="fas fa-sync-alt text-2xl text-blue-600 dark:text-blue-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">📦 Subscriptions</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['subscriptions']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['subscriptions']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Manage Recurring Orders</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Pause/Cancel Subscriptions</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Change Delivery Schedule</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Subscription History</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Referral Program -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['referral'] = !expandedCards['referral']">
+            <div class="flex items-center">
+              <i class="fas fa-user-friends text-2xl text-green-600 dark:text-green-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">👥 Referral Program</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['referral']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['referral']}">
+            <div class="p-6">
+              <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg mb-4">
+                <div class="text-center mb-2">
+                  <div class="text-green-700 dark:text-green-300 font-semibold">Your Referral Code</div>
+                  <div class="text-xl font-mono bg-white dark:bg-gray-800 border border-green-200 dark:border-green-800 rounded px-3 py-1 inline-block">JOHN25</div>
+                </div>
+                <div class="text-center">
+                  <button class="text-xs text-green-700 dark:text-green-300 hover:underline">
+                    <i class="fas fa-copy mr-1"></i> Copy to clipboard
+                  </button>
+                </div>
+              </div>
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Share Referral Link</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Track Earnings</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Redeem Referral Rewards</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Language & Currency -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['language'] = !expandedCards['language']">
+            <div class="flex items-center">
+              <i class="fas fa-globe text-2xl text-blue-600 dark:text-blue-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">🌍 Language & Currency</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['language']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['language']}">
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label for="language" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Language</label>
+                  <select id="language" class="w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ja">日本語</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Currency</label>
+                  <select id="currency" class="w-full border border-gray-300 dark:border-gray-600 rounded-md py-2 px-3 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    <option value="usd">USD ($)</option>
+                    <option value="eur">EUR (€)</option>
+                    <option value="gbp">GBP (£)</option>
+                    <option value="jpy">JPY (¥)</option>
+                    <option value="cad">CAD ($)</option>
+                  </select>
+                </div>
+              </div>
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Region & Time Zone</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Date & Number Format</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Settings -->
+        <div class="dashboard-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
+          <div class="card-header px-6 py-4 bg-gray-50 dark:bg-gray-700 flex justify-between items-center" 
+               @click="expandedCards['settings'] = !expandedCards['settings']">
+            <div class="flex items-center">
+              <i class="fas fa-cog text-2xl text-gray-600 dark:text-gray-400 mr-3"></i>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">⚙️ Account Settings</h3>
+            </div>
+            <i class="fas fa-chevron-right rotate-icon text-gray-500 dark:text-gray-400" 
+               :class="{'rotate': expandedCards['settings']}"></i>
+          </div>
+          <div class="card-content" :class="{'expanded': expandedCards['settings']}">
+            <div class="p-6">
+              <ul class="space-y-3">
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Privacy Settings</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Data Export (GDPR Compliance)</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    <span class="text-gray-700 dark:text-gray-300">Linked Accounts</span>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" class="flex justify-between items-center p-3 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg transition-colors">
+                    <span>Delete Account</span>
+                    <i class="fas fa-exclamation-triangle"></i>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-800 mt-8 py-6 border-t border-gray-200 dark:border-gray-700">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Need Help?</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <i class="fas fa-headset mr-2"></i> Contact Support
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <i class="fas fa-question-circle mr-2"></i> FAQs
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <i class="fas fa-shipping-fast mr-2"></i> Shipping Information
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <i class="fas fa-exchange-alt mr-2"></i> Returns Policy
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Links</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <i class="fas fa-shopping-bag mr-2"></i> Continue Shopping
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <i class="fas fa-box mr-2"></i> Track Order
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <i class="fas fa-heart mr-2"></i> Wishlist
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  <i class="fas fa-user mr-2"></i> My Account
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Connect With Us</h4>
+            <div class="flex space-x-4 mb-4">
+              <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                <i class="fab fa-facebook-f text-xl"></i>
+              </a>
+              <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                <i class="fab fa-twitter text-xl"></i>
+              </a>
+              <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors">
+                <i class="fab fa-instagram text-xl"></i>
+              </a>
+              <a href="javascript:void(0)" class="text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">
+                <i class="fab fa-youtube text-xl"></i>
+              </a>
+            </div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              © 2025 YourStore. All rights reserved.
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Quick Actions Floating Bar -->
+  <div class="fixed bottom-0 inset-x-0 bg-white dark:bg-gray-800 shadow-lg border-t border-gray-200 dark:border-gray-700 py-2 px-4 z-30">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-4">
+          <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors tooltip">
+            <i class="fas fa-home text-gray-600 dark:text-gray-300"></i>
+            <span class="tooltip-text">Home</span>
+          </button>
+          <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors tooltip">
+            <i class="fas fa-search text-gray-600 dark:text-gray-300"></i>
+            <span class="tooltip-text">Search</span>
+          </button>
+          <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors tooltip">
+            <i class="fas fa-shopping-cart text-gray-600 dark:text-gray-300"></i>
+            <span class="tooltip-text">Cart</span>
+          </button>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors tooltip">
+            <i class="fas fa-heart text-gray-600 dark:text-gray-300"></i>
+            <span class="tooltip-text">Wishlist</span>
+          </button>
+          <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors tooltip">
+            <i class="fas fa-bell text-gray-600 dark:text-gray-300"></i>
+            <span class="tooltip-text">Notifications</span>
+          </button>
+          <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors tooltip">
+            <i class="fas fa-question-circle text-gray-600 dark:text-gray-300"></i>
+            <span class="tooltip-text">Help</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script id="app-script">
+    // Placeholder for API integration
+    const apiEndpoints = {
+      userProfile: '/api/user/profile',
+      orders: '/api/orders',
+      addresses: '/api/addresses',
+      paymentMethods: '/api/payment-methods',
+      wallet: '/api/wallet',
+      giftCards: '/api/gift-cards',
+      invoices: '/api/invoices',
+      supportTickets: '/api/support/tickets',
+      returns: '/api/returns',
+      reviews: '/api/reviews',
+      wishlist: '/api/wishlist',
+      recommendations: '/api/recommendations',
+      notifications: '/api/notifications',
+      loyaltyProgram: '/api/loyalty',
+      coupons: '/api/coupons',
+      subscriptions: '/api/subscriptions',
+      referrals: '/api/referrals',
+      accountSettings: '/api/account/settings'
+    };
+    
+    // Prototype message function
+    function showProtoMessage() {
+      Swal.fire({
+        title: 'Prototype Message',
+        text: 'This is a prototype. Continue building to see the full version with API integration.',
+        icon: 'info',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3b82f6'
+      });
+    }
+    
+    // Add event listeners to buttons that would typically make API calls
+    document.addEventListener('DOMContentLoaded', function() {
+      const actionButtons = document.querySelectorAll('a[href="javascript:void(0)"]');
+      actionButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          // Prevent default only if it's a link
+          if (e.currentTarget.tagName === 'A') {
+            e.preventDefault();
+          }
+          
+          // Show prototype message
+          showProtoMessage();
+        });
+      });
+    });
+    
+    // Helper functions for when APIs are implemented
+    function fetchUserProfile() {
+      // To be implemented
+      return {
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+        memberSince: 'January 2023',
+        avatar: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+      };
+    }
+    
+    function fetchOrders() {
+      // To be implemented
+      return [
+        { id: '12345', date: '2023-01-15', status: 'Delivered', total: '$120.50' },
+        { id: '12346', date: '2023-02-20', status: 'Processing', total: '$75.25' },
+        { id: '12347', date: '2023-03-05', status: 'Shipped', total: '$210.00' }
+      ];
+    }
+    
+    // More helper functions as needed...
+  </script>
+</body>
+</html>
