@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Account | ShopEase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style id="app-style">
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+    }
+    
+    .header-shadow {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .tab-active {
+      color: #4f46e5;
+      border-bottom: 2px solid #4f46e5;
+    }
+    
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-weight: 500;
+    }
+    
+    .badge-green {
+      background-color: #d1fae5;
+      color: #047857;
+    }
+    
+    .badge-yellow {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    
+    .badge-blue {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .badge-red {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background-color: #4f46e5;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #4338ca;
+    }
+    
+    .btn-secondary {
+      background-color: #e5e7eb;
+      color: #4b5563;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #d1d5db;
+    }
+    
+    .btn-danger {
+      background-color: #ef4444;
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #dc2626;
+    }
+    
+    .btn-outline {
+      border: 1px solid #d1d5db;
+      background-color: transparent;
+    }
+    
+    .btn-outline:hover {
+      background-color: #f3f4f6;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background-color: #e5e7eb;
+      overflow: hidden;
+    }
+    
+    .progress-value {
+      height: 100%;
+      background-color: #4f46e5;
+      border-radius: 4px;
+    }
+    
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: .5;
+      }
+    }
+    
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .modal.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-content {
+      background-color: white;
+      border-radius: 0.5rem;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+    
+    .modal.show .modal-content {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="bg-white header-shadow sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="javascript:void(0)" class="text-2xl font-bold text-indigo-600">
+        ShopEase
+      </a>
+      
+      <div class="flex items-center space-x-6">
+        <a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900">
+          <i class="fas fa-heart"></i>
+        </a>
+        <a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900">
+          <i class="fas fa-shopping-cart"></i>
+        </a>
+        <a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900">
+          <div class="relative" id="account-icon">
+            <i class="fas fa-user-circle text-xl"></i>
+          </div>
+        </a>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8">
+    <div id="signin-container" class="hidden">
+      <div class="max-w-md mx-auto bg-white rounded-lg p-8 shadow-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">Sign In</h1>
+        <form id="login-form">
+          <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+          </div>
+          <div class="mb-6">
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input type="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+          </div>
+          <button type="submit" class="w-full btn btn-primary">Sign In</button>
+        </form>
+        <div class="mt-4 text-center">
+          <a href="javascript:void(0)" class="text-sm text-indigo-600 hover:text-indigo-800">Forgot password?</a>
+        </div>
+        <div class="mt-6 text-center">
+          <p class="text-sm text-gray-600">Don't have an account? <a href="javascript:void(0)" class="text-indigo-600 hover:text-indigo-800">Sign up</a></p>
+        </div>
+      </div>
+    </div>
+    
+    <div id="account-container" class="hidden">
+      <!-- Profile Section -->
+      <div class="bg-white rounded-lg p-6 shadow-sm mb-8">
+        <div class="flex flex-col md:flex-row items-center md:items-start">
+          <div class="flex-shrink-0 mb-4 md:mb-0 md:mr-6">
+            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Profile" class="rounded-full w-24 h-24 object-cover border-2 border-gray-200">
+          </div>
+          <div class="flex-grow text-center md:text-left">
+            <h1 class="text-2xl font-bold" id="user-name">John Doe</h1>
+            <p class="text-gray-600" id="user-email">john.doe@example.com</p>
+            <div class="mt-3">
+              <button id="edit-profile-btn" class="btn btn-outline">
+                <i class="fas fa-pencil-alt mr-2"></i> Edit Profile
+              </button>
+            </div>
+          </div>
+          <div class="hidden md:block ml-auto">
+            <button id="sign-out-btn" class="btn btn-outline text-red-600 border-red-200 hover:bg-red-50">
+              <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Account Sections -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+          <!-- Address Book Section -->
+          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-xl font-semibold">Address Book</h2>
+              <button id="add-address-btn" class="btn btn-outline">
+                <i class="fas fa-plus mr-2"></i> Add Address
+              </button>
+            </div>
+            
+            <div class="space-y-4" id="addresses-container">
+              <!-- Address card 1 -->
+              <div class="border rounded-lg p-4">
+                <div class="flex justify-between mb-2">
+                  <span class="font-medium">Home</span>
+                  <span class="badge badge-blue">Default</span>
+                </div>
+                <p class="text-gray-700">John Doe</p>
+                <p class="text-gray-700">123 Main Street</p>
+                <p class="text-gray-700">Apt 4B</p>
+                <p class="text-gray-700">New York, NY 10001</p>
+                <p class="text-gray-700">United States</p>
+                <p class="text-gray-700">(123) 456-7890</p>
+                <div class="mt-4 flex space-x-2">
+                  <button class="btn btn-secondary btn-sm">
+                    <i class="fas fa-pencil-alt mr-1"></i> Edit
+                  </button>
+                  <button class="btn btn-outline btn-sm text-red-600">
+                    <i class="fas fa-trash-alt mr-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Address card 2 -->
+              <div class="border rounded-lg p-4">
+                <div class="flex justify-between mb-2">
+                  <span class="font-medium">Work</span>
+                </div>
+                <p class="text-gray-700">John Doe</p>
+                <p class="text-gray-700">456 Office Plaza</p>
+                <p class="text-gray-700">Suite 200</p>
+                <p class="text-gray-700">New York, NY 10022</p>
+                <p class="text-gray-700">United States</p>
+                <p class="text-gray-700">(123) 456-7890</p>
+                <div class="mt-4 flex space-x-2">
+                  <button class="btn btn-secondary btn-sm">
+                    <i class="fas fa-pencil-alt mr-1"></i> Edit
+                  </button>
+                  <button class="btn btn-outline btn-sm text-red-600">
+                    <i class="fas fa-trash-alt mr-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Order Management Section -->
+          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Order Management</h2>
+            
+            <!-- Tabs -->
+            <div class="border-b mb-6">
+              <div class="flex">
+                <button class="px-4 py-2 font-medium tab-active" id="order-history-tab">Order History</button>
+                <button class="px-4 py-2 font-medium text-gray-500" id="current-orders-tab">Current Orders</button>
+              </div>
+            </div>
+            
+            <!-- Order History Tab Content -->
+            <div id="order-history-content">
+              <div class="space-y-4">
+                <!-- Order 1 -->
+                <div class="border rounded-lg p-4">
+                  <div class="flex flex-col md:flex-row justify-between mb-4">
+                    <div>
+                      <p class="font-medium">Order #12345</p>
+                      <p class="text-sm text-gray-600">August 15, 2023</p>
+                    </div>
+                    <div class="mt-2 md:mt-0">
+                      <span class="badge badge-green">Delivered</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between mb-4">
+                    <p class="text-gray-700">3 Items</p>
+                    <p class="font-medium">$124.99</p>
+                  </div>
+                  <button class="btn btn-outline w-full md:w-auto">
+                    <i class="fas fa-redo-alt mr-2"></i> Reorder
+                  </button>
+                </div>
+                
+                <!-- Order 2 -->
+                <div class="border rounded-lg p-4">
+                  <div class="flex flex-col md:flex-row justify-between mb-4">
+                    <div>
+                      <p class="font-medium">Order #12289</p>
+                      <p class="text-sm text-gray-600">July 28, 2023</p>
+                    </div>
+                    <div class="mt-2 md:mt-0">
+                      <span class="badge badge-green">Delivered</span>
+                    </div>
+                  </div>
+                  <div class="flex justify-between mb-4">
+                    <p class="text-gray-700">1 Item</p>
+                    <p class="font-medium">$49.99</p>
+                  </div>
+                  <button class="btn btn-outline w-full md:w-auto">
+                    <i class="fas fa-redo-alt mr-2"></i> Reorder
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Pagination -->
+              <div class="flex justify-center mt-6">
+                <nav class="flex items-center space-x-2">
+                  <a href="javascript:void(0)" class="px-3 py-1 rounded border text-gray-600 hover:bg-gray-100">&laquo;</a>
+                  <a href="javascript:void(0)" class="px-3 py-1 rounded border bg-indigo-600 text-white">1</a>
+                  <a href="javascript:void(0)" class="px-3 py-1 rounded border text-gray-600 hover:bg-gray-100">2</a>
+                  <a href="javascript:void(0)" class="px-3 py-1 rounded border text-gray-600 hover:bg-gray-100">3</a>
+                  <a href="javascript:void(0)" class="px-3 py-1 rounded border text-gray-600 hover:bg-gray-100">&raquo;</a>
+                </nav>
+              </div>
+            </div>
+            
+            <!-- Current Orders Tab Content -->
+            <div id="current-orders-content" class="hidden">
+              <div class="space-y-6">
+                <!-- Current Order 1 -->
+                <div class="border rounded-lg p-4">
+                  <div class="flex flex-col md:flex-row justify-between mb-4">
+                    <div>
+                      <p class="font-medium">Order #12390</p>
+                      <p class="text-sm text-gray-600">September 1, 2023</p>
+                    </div>
+                    <div class="mt-2 md:mt-0">
+                      <span class="badge badge-yellow">In Transit</span>
+                    </div>
+                  </div>
+                  <div class="mb-4">
+                    <p class="text-sm text-gray-700 mb-1">Estimated delivery: Sept 5, 2023</p>
+                    <p class="text-sm text-gray-700 mb-1">Carrier: FedEx</p>
+                    <p class="text-sm text-gray-700 mb-3">Tracking: FX123456789US</p>
+                    <div class="progress-bar">
+                      <div class="progress-value" style="width: 75%"></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-between mb-4">
+                    <p class="text-gray-700">2 Items</p>
+                    <p class="font-medium">$87.50</p>
+                  </div>
+                  <button class="btn btn-outline w-full md:w-auto">
+                    <i class="fas fa-truck mr-2"></i> Track Package
+                  </button>
+                </div>
+                
+                <!-- Current Order 2 -->
+                <div class="border rounded-lg p-4">
+                  <div class="flex flex-col md:flex-row justify-between mb-4">
+                    <div>
+                      <p class="font-medium">Order #12375</p>
+                      <p class="text-sm text-gray-600">August 29, 2023</p>
+                    </div>
+                    <div class="mt-2 md:mt-0">
+                      <span class="badge badge-blue">Processing</span>
+                    </div>
+                  </div>
+                  <div class="mb-4">
+                    <p class="text-sm text-gray-700 mb-1">Estimated delivery: Sept 8, 2023</p>
+                    <div class="progress-bar">
+                      <div class="progress-value" style="width: 25%"></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-between mb-4">
+                    <p class="text-gray-700">4 Items</p>
+                    <p class="font-medium">$199.95</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Payment Information Section -->
+          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-xl font-semibold">Payment Information</h2>
+              <button id="add-payment-btn" class="btn btn-outline">
+                <i class="fas fa-plus mr-2"></i> Add Payment Method
+              </button>
+            </div>
+            
+            <div class="space-y-4" id="payment-methods-container">
+              <!-- Payment Method 1 -->
+              <div class="border rounded-lg p-4">
+                <div class="flex justify-between mb-2">
+                  <div class="flex items-center">
+                    <i class="fab fa-cc-visa text-blue-800 text-2xl mr-2"></i>
+                    <span class="font-medium">Visa ending in 4242</span>
+                  </div>
+                  <span class="badge badge-blue">Default</span>
+                </div>
+                <p class="text-gray-700 mb-2">Expires: 09/2025</p>
+                <div class="flex space-x-2">
+                  <button class="btn btn-secondary btn-sm">
+                    <i class="fas fa-pencil-alt mr-1"></i> Edit
+                  </button>
+                  <button class="btn btn-outline btn-sm text-red-600">
+                    <i class="fas fa-trash-alt mr-1"></i> Remove
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Payment Method 2 -->
+              <div class="border rounded-lg p-4">
+                <div class="flex justify-between mb-2">
+                  <div class="flex items-center">
+                    <i class="fab fa-cc-mastercard text-red-600 text-2xl mr-2"></i>
+                    <span class="font-medium">Mastercard ending in 5678</span>
+                  </div>
+                </div>
+                <p class="text-gray-700 mb-2">Expires: 12/2026</p>
+                <div class="flex space-x-2">
+                  <button class="btn btn-secondary btn-sm">
+                    <i class="fas fa-pencil-alt mr-1"></i> Edit
+                  </button>
+                  <button class="btn btn-outline btn-sm text-red-600">
+                    <i class="fas fa-trash-alt mr-1"></i> Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        
+        <div class="lg:col-span-1">
+          <!-- Wishlist Section -->
+          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Wishlist & Favorites</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+              <!-- Wishlist Item 1 -->
+              <div class="border rounded-lg p-3">
+                <div class="flex">
+                  <img src="https://cdn.pixabay.com/photo/2017/03/29/04/47/high-heels-2184095_1280.jpg" alt="Product" class="w-20 h-20 object-cover rounded">
+                  <div class="ml-3 flex-grow">
+                    <p class="font-medium">Women's Leather Shoes</p>
+                    <p class="text-indigo-600 font-medium mt-1">$89.99</p>
+                    <div class="flex space-x-2 mt-2">
+                      <button class="btn btn-primary btn-sm text-xs">
+                        <i class="fas fa-shopping-cart mr-1"></i> Add to Cart
+                      </button>
+                      <button class="btn btn-outline btn-sm text-xs text-red-600">
+                        <i class="fas fa-trash-alt mr-1"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Wishlist Item 2 -->
+              <div class="border rounded-lg p-3">
+                <div class="flex">
+                  <img src="https://cdn.pixabay.com/photo/2016/11/19/18/06/feet-1840619_1280.jpg" alt="Product" class="w-20 h-20 object-cover rounded">
+                  <div class="ml-3 flex-grow">
+                    <p class="font-medium">Men's Casual Sneakers</p>
+                    <p class="text-indigo-600 font-medium mt-1">$64.99</p>
+                    <div class="flex space-x-2 mt-2">
+                      <button class="btn btn-primary btn-sm text-xs">
+                        <i class="fas fa-shopping-cart mr-1"></i> Add to Cart
+                      </button>
+                      <button class="btn btn-outline btn-sm text-xs text-red-600">
+                        <i class="fas fa-trash-alt mr-1"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Wishlist Item 3 -->
+              <div class="border rounded-lg p-3">
+                <div class="flex">
+                  <img src="https://cdn.pixabay.com/photo/2016/06/03/17/35/shoes-1433925_1280.jpg" alt="Product" class="w-20 h-20 object-cover rounded">
+                  <div class="ml-3 flex-grow">
+                    <p class="font-medium">Running Shoes</p>
+                    <p class="text-indigo-600 font-medium mt-1">$129.99</p>
+                    <div class="flex space-x-2 mt-2">
+                      <button class="btn btn-primary btn-sm text-xs">
+                        <i class="fas fa-shopping-cart mr-1"></i> Add to Cart
+                      </button>
+                      <button class="btn btn-outline btn-sm text-xs text-red-600">
+                        <i class="fas fa-trash-alt mr-1"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="text-center mt-4">
+              <a href="javascript:void(0)" class="text-indigo-600 font-medium hover:text-indigo-800">View all items</a>
+            </div>
+          </section>
+          
+          <!-- Security Section -->
+          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Security</h2>
+            
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="font-medium">Two-Factor Authentication</p>
+                  <p class="text-sm text-gray-600">Add an extra layer of security</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" value="" class="sr-only peer">
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+              
+              <div>
+                <p class="font-medium mb-2">Login History</p>
+                <div class="border rounded overflow-hidden">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date/Time</th>
+                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      <tr>
+                        <td class="px-4 py-3 text-sm text-gray-900">September 2, 2023<br>10:15 AM</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">New York, US</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-3 text-sm text-gray-900">August 30, 2023<br>2:45 PM</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">New York, US</td>
+                      </tr>
+                      <tr>
+                        <td class="px-4 py-3 text-sm text-gray-900">August 25, 2023<br>9:30 AM</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">New York, US</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Preferences Section -->
+          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Preferences</h2>
+            
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <div>
+                  <p class="font-medium">Newsletter Subscription</p>
+                  <p class="text-sm text-gray-600">Receive updates on new products and offers</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked class="sr-only peer">
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </div>
+              
+              <div>
+                <p class="font-medium mb-2">Notification Settings</p>
+                <div class="space-y-2">
+                  <div class="flex items-center">
+                    <input id="order-updates" name="notification-type" type="checkbox" checked class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                    <label for="order-updates" class="ml-2 block text-sm text-gray-700">Order Updates</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="promotions" name="notification-type" type="checkbox" checked class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                    <label for="promotions" class="ml-2 block text-sm text-gray-700">Promotions and Discounts</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="recommendations" name="notification-type" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                    <label for="recommendations" class="ml-2 block text-sm text-gray-700">Product Recommendations</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+          <!-- Support & Help Section -->
+          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Support & Help</h2>
+            
+            <div class="border-b pb-4 mb-4">
+              <div class="bg-gray-50 p-4 rounded-lg mb-3 text-center">
+                <i class="fas fa-comments text-3xl text-indigo-500 mb-2"></i>
+                <p class="font-medium">Live Chat Support</p>
+                <button class="btn btn-primary mt-2 w-full">Start Chat</button>
+              </div>
+            </div>
+            
+            <div class="space-y-3">
+              <p class="font-medium">Quick Links</p>
+              <a href="javascript:void(0)" class="flex items-center text-indigo-600 hover:text-indigo-800">
+                <i class="fas fa-question-circle mr-2"></i> Frequently Asked Questions
+              </a>
+              <a href="javascript:void(0)" class="flex items-center text-indigo-600 hover:text-indigo-800">
+                <i class="fas fa-exchange-alt mr-2"></i> Return Policy
+              </a>
+              <a href="javascript:void(0)" class="flex items-center text-indigo-600 hover:text-indigo-800">
+                <i class="fas fa-truck mr-2"></i> Shipping Information
+              </a>
+              <a href="javascript:void(0)" class="flex items-center text-indigo-600 hover:text-indigo-800">
+                <i class="fas fa-file-alt mr-2"></i> Terms of Service
+              </a>
+            </div>
+          </section>
+          
+          <!-- Loyalty Program Section -->
+          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Loyalty Program</h2>
+            
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-4 text-white mb-4">
+              <div class="flex justify-between items-center mb-3">
+                <p class="font-medium text-lg">Silver Member</p>
+                <i class="fas fa-medal text-xl"></i>
+              </div>
+              <p class="text-sm mb-3">Current points balance</p>
+              <p class="text-3xl font-bold">750</p>
+              <div class="mt-3">
+                <p class="text-sm mb-1">250 points until Gold level</p>
+                <div class="progress-bar bg-white/30">
+                  <div class="progress-value bg-white" style="width: 75%"></div>
+                </div>
+              </div>
+            </div>
+            
+            <button class="btn btn-outline w-full">
+              <i class="fas fa-gift mr-2"></i> View Rewards
+            </button>
+          </section>
+          
+          <!-- Account Management Section -->
+          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 class="text-xl font-semibold text-red-600 mb-4">Account Management</h2>
+            <button id="deactivate-account-btn" class="btn btn-outline border-red-300 text-red-600 hover:bg-red-50 w-full mb-3">
+              <i class="fas fa-user-slash mr-2"></i> Deactivate Account
+            </button>
+            <button id="mobile-sign-out-btn" class="lg:hidden btn btn-outline text-red-600 border-red-300 hover:bg-red-50 w-full">
+              <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
+            </button>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-8">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-lg font-semibold mb-4">ShopEase</h3>
+          <p class="text-gray-400">Your one-stop shop for all your needs. Quality products, competitive prices, and exceptional customer service.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Home</a></li>
+            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Shop</a></li>
+            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">About Us</a></li>
+            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Customer Service</h3>
+          <ul class="space-y-2">
+            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">FAQs</a></li>
+            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
+            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Returns & Exchanges</a></li>
+            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Track Order</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+          <div class="flex space-x-4 mb-4">
+            <a href="javascript:void(0)" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-facebook-square"></i></a>
+            <a href="javascript:void(0)" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-twitter-square"></i></a>
+            <a href="javascript:void(0)" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-instagram"></i></a>
+            <a href="javascript:void(0)" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-pinterest-square"></i></a>
+          </div>
+          <p class="text-gray-400">Sign up for our newsletter</p>
+          <div class="mt-2 flex">
+            <input type="email" placeholder="Your email" class="px-3 py-2 bg-gray-700 text-white rounded-l focus:outline-none">
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-r">Subscribe</button>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+        <p>&copy; 2023 ShopEase. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Modals -->
+  <!-- Edit Profile Modal -->
+  <div id="edit-profile-modal" class="modal">
+    <div class="modal-content p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">Edit Profile</h2>
+        <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="edit-profile-modal">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <form id="edit-profile-form">
+        <div class="mb-4 text-center">
+          <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Profile" class="rounded-full w-24 h-24 object-cover border-2 border-gray-200 mx-auto mb-2">
+          <button type="button" class="text-indigo-600 text-sm">Change Profile Picture</button>
+        </div>
+        <div class="mb-4">
+          <label for="edit-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+          <input type="text" id="edit-name" value="John Doe" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="mb-4">
+          <label for="edit-email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <input type="email" id="edit-email" value="john.doe@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="mb-4">
+          <label for="edit-phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+          <input type="tel" id="edit-phone" value="(123) 456-7890" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <h3 class="font-medium text-lg mt-6 mb-3">Change Password</h3>
+        <div class="mb-4">
+          <label for="current-password" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+          <input type="password" id="current-password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="mb-4">
+          <label for="new-password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+          <input type="password" id="new-password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="mb-6">
+          <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+          <input type="password" id="confirm-password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" class="btn btn-secondary close-modal" data-modal="edit-profile-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Add Address Modal -->
+  <div id="add-address-modal" class="modal">
+    <div class="modal-content p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">Add New Address</h2>
+        <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-address-modal">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <form id="add-address-form">
+        <div class="mb-4">
+          <label for="address-name" class="block text-sm font-medium text-gray-700 mb-1">Address Name</label>
+          <input type="text" id="address-name" placeholder="Home, Work, etc." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="mb-4">
+          <label for="full-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+          <input type="text" id="full-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="mb-4">
+          <label for="street-address" class="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
+          <input type="text" id="street-address" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2">
+          <input type="text" id="street-address-2" placeholder="Apt, Suite, Unit, etc. (Optional)" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+            <input type="text" id="city" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State/Province</label>
+            <input type="text" id="state" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label for="zip" class="block text-sm font-medium text-gray-700 mb-1">Zip/Postal Code</label>
+            <input type="text" id="zip" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+          <select id="country" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="US">United States</option>
+            <option value="CA">Canada</option>
+            <option value="UK">United Kingdom</option>
+            <option value="AU">Australia</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+          <input type="tel" id="phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="mb-6 flex items-center">
+          <input id="default-address" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+          <label for="default-address" class="ml-2 block text-sm text-gray-700">Make this my default address</label>
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" class="btn btn-secondary close-modal" data-modal="add-address-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Address</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Add Payment Modal -->
+  <div id="add-payment-modal" class="modal">
+    <div class="modal-content p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">Add Payment Method</h2>
+        <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-payment-modal">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <form id="add-payment-form">
+        <div class="mb-4">
+          <label for="card-name" class="block text-sm font-medium text-gray-700 mb-1">Name on Card</label>
+          <input type="text" id="card-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div class="mb-4">
+          <label for="card-number" class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
+          <div class="relative">
+            <input type="text" id="card-number" placeholder="XXXX XXXX XXXX XXXX" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10">
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+              <i class="fas fa-credit-card text-gray-400"></i>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div>
+            <label for="expiry" class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
+            <input type="text" id="expiry" placeholder="MM/YY" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+          <div>
+            <label for="cvv" class="block text-sm font-medium text-gray-700 mb-1">CVV</label>
+            <input type="text" id="cvv" placeholder="XXX" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          </div>
+        </div>
+        <div class="mb-6 flex items-center">
+          <input id="default-payment" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+          <label for="default-payment" class="ml-2 block text-sm text-gray-700">Make this my default payment method</label>
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" class="btn btn-secondary close-modal" data-modal="add-payment-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Payment Method</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Deactivate Account Modal -->
+  <div id="deactivate-account-modal" class="modal">
+    <div class="modal-content p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold text-red-600">Deactivate Account</h2>
+        <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="deactivate-account-modal">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      <div class="mb-6">
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <i class="fas fa-exclamation-triangle text-red-600"></i>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm text-red-600">
+                Warning: This action cannot be undone. All your data will be permanently deleted.
+              </p>
+            </div>
+          </div>
+        </div>
+        <p class="text-gray-700 mb-4">
+          We're sorry to see you go. Before you deactivate your account, please let us know the reason for leaving:
+        </p>
+        <div class="space-y-2 mb-4">
+          <div class="flex items-center">
+            <input id="reason-1" name="deactivation-reason" type="radio" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+            <label for="reason-1" class="ml-2 block text-sm text-gray-700">I found a better service</label>
+          </div>
+          <div class="flex items-center">
+            <input id="reason-2" name="deactivation-reason" type="radio" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+            <label for="reason-2" class="ml-2 block text-sm text-gray-700">I'm not satisfied with the service</label>
+          </div>
+          <div class="flex items-center">
+            <input id="reason-3" name="deactivation-reason" type="radio" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+            <label for="reason-3" class="ml-2 block text-sm text-gray-700">I'm not using my account anymore</label>
+          </div>
+          <div class="flex items-center">
+            <input id="reason-4" name="deactivation-reason" type="radio" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+            <label for="reason-4" class="ml-2 block text-sm text-gray-700">Other reason</label>
+          </div>
+        </div>
+        <textarea placeholder="Additional comments (optional)" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4" rows="3"></textarea>
+        <div class="flex items-center mb-6">
+          <input id="confirm-deactivate" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+          <label for="confirm-deactivate" class="ml-2 block text-sm text-gray-700">I understand that deactivating my account will permanently delete all my data</label>
+        </div>
+      </div>
+      <div class="flex justify-end space-x-2">
+        <button type="button" class="btn btn-secondary close-modal" data-modal="deactivate-account-modal">Cancel</button>
+        <button type="button" class="btn btn-danger" disabled id="confirm-deactivate-btn">Deactivate Account</button>
+      </div>
+    </div>
+  </div>
+  
+  <script id="app-script">
+    // Global variables
+    let isAuthenticated = false;
+    
+    // DOM Ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check auth status
+      checkAuthStatus();
+      
+      // Set up event listeners
+      setupEventListeners();
+      
+      // Set up tab navigation
+      setupTabs();
+    });
+    
+    // Check if user is authenticated
+    function checkAuthStatus() {
+      // For this prototype, we'll simulate authentication using localStorage
+      const authStatus = localStorage.getItem('isAuthenticated');
+      
+      if (authStatus === 'true') {
+        isAuthenticated = true;
+        showAccountPage();
+      } else {
+        isAuthenticated = false;
+        showSignInPage();
+      }
+    }
+    
+    // Show the sign-in page
+    function showSignInPage() {
+      document.getElementById('signin-container').classList.remove('hidden');
+      document.getElementById('account-container').classList.add('hidden');
+    }
+    
+    // Show the account page
+    function showAccountPage() {
+      document.getElementById('signin-container').classList.add('hidden');
+      document.getElementById('account-container').classList.remove('hidden');
+    }
+    
+    // Set up all event listeners
+    function setupEventListeners() {
+      // Account icon click
+      document.getElementById('account-icon').addEventListener('click', function() {
+        if (isAuthenticated) {
+          showAccountPage();
+        } else {
+          showSignInPage();
+        }
+      });
+      
+      // Login form submit
+      document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        simulateLogin();
+      });
+      
+      // Sign out buttons
+      document.getElementById('sign-out-btn').addEventListener('click', handleSignOut);
+      document.getElementById('mobile-sign-out-btn').addEventListener('click', handleSignOut);
+      
+      // Tab navigation
+      document.getElementById('order-history-tab').addEventListener('click', function() {
+        switchTab('order-history');
+      });
+      document.getElementById('current-orders-tab').addEventListener('click', function() {
+        switchTab('current-orders');
+      });
+      
+      // Modal triggers
+      document.getElementById('edit-profile-btn').addEventListener('click', function() {
+        openModal('edit-profile-modal');
+      });
+      
+      document.getElementById('add-address-btn').addEventListener('click', function() {
+        openModal('add-address-modal');
+      });
+      
+      document.getElementById('add-payment-btn').addEventListener('click', function() {
+        openModal('add-payment-modal');
+      });
+      
+      document.getElementById('deactivate-account-btn').addEventListener('click', function() {
+        openModal('deactivate-account-modal');
+      });
+      
+      // Close modal buttons
+      const closeButtons = document.querySelectorAll('.close-modal');
+      closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const modalId = this.getAttribute('data-modal');
+          closeModal(modalId);
+        });
+      });
+      
+      // Handle deactivate account checkbox
+      document.getElementById('confirm-deactivate').addEventListener('change', function() {
+        document.getElementById('confirm-deactivate-btn').disabled = !this.checked;
+      });
+      
+      // Form submissions
+      document.getElementById('edit-profile-form').addEventListener('submit', handleFormSubmit);
+      document.getElementById('add-address-form').addEventListener('submit', handleFormSubmit);
+      document.getElementById('add-payment-form').addEventListener('submit', handleFormSubmit);
+    }
+    
+    // Simulate login
+    function simulateLogin() {
+      // For prototype, we just set localStorage and update UI
+      localStorage.setItem('isAuthenticated', 'true');
+      isAuthenticated = true;
+      showAccountPage();
+    }
+    
+    // Handle sign out
+    function handleSignOut() {
+      localStorage.removeItem('isAuthenticated');
+      isAuthenticated = false;
+      showSignInPage();
+    }
+    
+    // Setup tab navigation
+    function setupTabs() {
+      // Default to showing order history
+      document.getElementById('order-history-tab').classList.add('tab-active');
+      document.getElementById('current-orders-tab').classList.remove('tab-active');
+      document.getElementById('order-history-content').classList.remove('hidden');
+      document.getElementById('current-orders-content').classList.add('hidden');
+    }
+    
+    // Switch between tabs
+    function switchTab(tabName) {
+      if (tabName === 'order-history') {
+        document.getElementById('order-history-tab').classList.add('tab-active');
+        document.getElementById('current-orders-tab').classList.remove('tab-active');
+        document.getElementById('order-history-content').classList.remove('hidden');
+        document.getElementById('current-orders-content').classList.add('hidden');
+      } else {
+        document.getElementById('order-history-tab').classList.remove('tab-active');
+        document.getElementById('current-orders-tab').classList.add('tab-active');
+        document.getElementById('order-history-content').classList.add('hidden');
+        document.getElementById('current-orders-content').classList.remove('hidden');
+      }
+      
+      // Store preference in localStorage
+      localStorage.setItem('activeTab', tabName);
+    }
+    
+    // Open a modal
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.add('show');
+    }
+    
+    // Close a modal
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.remove('show');
+    }
+    
+    // Handle form submissions
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      
+      // In a real app, this would send data to server
+      // For prototype, just close the modal
+      const form = e.target;
+      const parentModal = form.closest('.modal');
+      
+      if (parentModal) {
+        const modalId = parentModal.id;
+        closeModal(modalId);
+      }
+    }
+  </script>
+</body>
+</html>
