@@ -205,7 +205,24 @@
   
 <div id="toast" class="toast" role="status" aria-live="polite"></div>  
   
-  </main>  <footer>Caleb's Store — demo cart. This page uses localStorage for demo purposes. Links: <a href="index.html">Home</a> • <a href="checkout.html">Checkout</a></footer>    
+  </main><!-- FULL UPDATED HTML + CSS + JS WITH RESPONSIVE TOP + BOTTOM NAVIGATION, CHAT MODAL, LOCATION BUTTON, DARK MODE --><!-- BOTTOM NAVIGATION BAR FOR MOBILE --><div class="bottom-nav">
+<a href="#" class="bn-item"><i class="ri-home-4-fill"></i><span>Home</span></a>
+<a href="#" class="bn-item"><i class="ri-layout-grid-fill"></i><span>Categories</span></a>
+<a href="cart.html" class="bn-item"><i class="ri-shopping-cart-2-fill"></i><span>Cart</span></a>
+<a href="wishlist.html" class="bn-item"><i class="ri-heart-3-fill"></i><span>Wishlist</span></a>
+<a href="account.html" id="openAccount" class="bn-item"><i class="ri-user-3-fill"></i><span>Account</span></a>
+
+</div><style>
+:root { --brand:#00d38b; --brand-2:#0affc7; --text:#fff; }
+body { margin:0; font-family:system-ui; background:#0f1623; color:white; }
+.bottom-nav { position:fixed; bottom:0; left:0; right:0; height:64px; background:rgba(10,14,22,.9); backdrop-filter:blur(10px); border-top:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-around; align-items:center; z-index:9999; }
+.bn-item { display:flex; flex-direction:column; align-items:center; font-size:11px; color:white; text-decoration:none; }
+.bn-item i { font-size:22px; margin-bottom:2px; }
+.icon-home::before{content:"";} .icon-grid::before{content:"🔳";} .icon-cart::before{content:"🛒";} .icon-heart::before{content:"❤️";} .icon-user::before{content:"👤";}
+
+/* MOBILE ONLY */
+@media(min-width:768px){ .bottom-nav{ display:none; }}
+</style>  <footer>Caleb's Store — demo cart. This page uses localStorage for demo purposes. Links: <a href="index.html">Home</a> • <a href="checkout.html">Checkout</a></footer>    
 </body>  
 <script>
 /* =========================================================
