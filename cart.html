@@ -1,0 +1,954 @@
+<!doctype html>  
+  
+<html lang="en">  
+<head>  
+  <meta charset="utf-8">  
+  <meta name="viewport" content="width=device-width,initial-scale=1">  
+  <title>Cart — Caleb's Store (Mega Cart)</title>  
+  <meta name="description" content="Advanced cart demo for Caleb's Store — promo codes, gift wrap, shipping, addresses, recommendations, AR placeholder, and accessible UI.">  
+  <script src="auth.js"></script>  
+<script src="protect.js"></script>  
+<script src="secure-core.js"></script>  
+    
+  <style>  
+    :root{--bg:#f7f9fc;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4;--danger:#ef4444;--shadow:0 6px 18px rgba(15,23,42,0.08)}  
+    *{box-sizing:border-box}  
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:var(--bg);color:#0f172a;line-height:1.4}  
+    header{background:linear-gradient(90deg,#ffffffcc, #f1f5f9cc);backdrop-filter:blur(4px);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}  
+    .brand{font-weight:800;letter-spacing:0.2px}  
+    nav a{margin-left:12px;text-decoration:none;color:inherit;padding:8px;border-radius:10px}  
+    nav a.active{background:rgba(14,165,164,0.12)}  
+    .container{max-width:1180px;margin:22px auto;padding:0 18px}  
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}  
+    .card{background:var(--card);padding:16px;border-radius:14px;box-shadow:var(--shadow)}  
+    h2,h3,h4{margin:0 0 8px}  
+    .muted{color:var(--muted)}  
+    .small{font-size:13px}  
+    .cart-list{display:flex;flex-direction:column;gap:12px}  
+    .cart-item{display:flex;gap:12px;align-items:center}  
+    .cart-item img{width:84px;height:84px;object-fit:cover;border-radius:8px}  
+    .cart-item .meta{flex:1}  
+    .controls{display:flex;gap:8px;align-items:center}  
+    .qty{display:inline-flex;align-items:center;border-radius:8px;overflow:hidden;border:1px solid #e6e9ef}  
+    .qty button{border:0;background:none;padding:8px 10px;cursor:pointer}  
+    .btn{background:var(--accent);color:white;border:0;padding:10px 14px;border-radius:10px;cursor:pointer}  
+    .btn-ghost{background:transparent;border:1px solid #e6e9ef;padding:8px 12px;border-radius:10px;cursor:pointer}  
+    .btn[disabled]{opacity:0.6;cursor:not-allowed}  
+    .summary-row{display:flex;justify-content:space-between;padding:6px 0}  
+    .divider{height:1px;background:#f1f5f9;margin:12px 0}  
+    .recommendations{display:flex;gap:8px;flex-wrap:wrap}  
+    .rec-card{width:120px;padding:8px;border-radius:8px;border:1px solid #eef2f7;text-align:center}  
+    .address-list{display:flex;flex-direction:column;gap:8px}  
+    .address{border:1px dashed #e6e9ef;padding:8px;border-radius:8px}  
+    .lightbox{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center}  
+    .lightbox img{max-width:90%;max-height:80%;border-radius:8px}  
+    .toast{position:fixed;right:20px;bottom:20px;background:#0f172a;color:white;padding:10px 14px;border-radius:10px;box-shadow:var(--shadow);display:none}  
+    footer{max-width:1180px;margin:18px auto;padding:12px;text-align:center;color:var(--muted)}  
+    /* small animations */  
+    .fade-in{animation:fadeIn .36s ease both}  
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}  
+    @media(max-width:920px){.grid{grid-template-columns:1fr}.card{padding:12px}}  
+  </style>  
+</head>  
+<body>  
+  <header>  
+    <div style="display:flex;align-items:center;gap:12px">  
+      <div class="brand">Caleb's Store</div>  
+      <nav aria-label="Main navigation">  
+        <a href="index.html">Home</a>  
+        <a href="cart.html" class="active">Cart</a>  
+        <a href="checkout.html">Checkout</a>  
+        <a href="orders.html">Orders</a>  
+      </nav>  
+    </div>  
+    <div aria-hidden="true">Cart demo — Mega Cart</div>  
+  </header>  <main class="container">  
+    <div class="grid" role="region" aria-label="Cart area">  
+      <!-- Left: Cart Items -->  
+      <section>  
+        <div class="card" aria-labelledby="items-heading">  
+          <h2 id="items-heading">Items in your cart <span id="cart-count-badge" class="muted" style="font-weight:600;margin-left:8px"></span></h2><div id="cart-empty" class="muted" style="display:none;padding:16px">Your cart is empty. <a href="index.html">Continue shopping</a></div>  
+  
+      <div id="cart-list" class="cart-list" aria-live="polite"></div>  
+  
+      <div class="divider" role="separator" aria-hidden="true"></div>  
+  
+      <!-- Promo / Gift / Notes -->  
+      <div style="display:flex;gap:12px;flex-wrap:wrap">  
+        <div style="flex:1;min-width:220px">  
+          <label for="promo-code" class="small">Promo / Coupon</label>  
+          <div class="promo" style="display:flex;gap:8px;margin-top:6px">  
+            <input type="text" id="promo-code" placeholder="Enter promo code" aria-label="Promo code" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6e9ef">  
+            <button class="btn" id="apply-promo">Apply</button>  
+          </div>  
+          <div id="promo-feedback" class="small muted" style="margin-top:6px"></div>  
+        </div>  
+  
+        <div style="min-width:200px">  
+          <label class="small">Gift wrapping</label>  
+          <div class="controls-row" style="margin-top:6px">  
+            <label><input type="checkbox" id="gift-wrap"> Add gift wrapping ($5.00)</label>  
+          </div>  
+        </div>  
+  
+        <div style="flex-basis:100%;">  
+          <label class="small" for="order-notes">Order / item notes (optional)</label>  
+          <textarea id="order-notes" rows="2" placeholder="Add any notes for the seller (e.g., color/size reminders)" aria-label="Order notes" style="width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ef"></textarea>  
+        </div>  
+      </div>  
+    </div>  
+  
+    <div style="height:14px"></div>  
+  
+    <!-- Recommendations / Cross-sells -->  
+    <div class="card" aria-labelledby="recommendations-heading">  
+      <h2 id="recommendations-heading">You May Also Like</h2>  
+      <p class="small muted">Products recommended based on what's in your cart.</p>  
+      <div id="recommendations" class="recommendations" aria-live="polite"></div>  
+    </div>  
+  
+    <div style="height:14px"></div>  
+  
+    <!-- Reviews & AR placeholder -->  
+    <div class="card" aria-labelledby="extras-heading">  
+      <h2 id="extras-heading">Product Extras</h2>  
+      <div style="display:flex;gap:12px;flex-wrap:wrap">  
+        <div style="flex:1;min-width:220px">  
+          <h4>Customer reviews (demo)</h4>  
+          <div id="reviews-area" class="reviews" aria-live="polite"></div>  
+        </div>  
+        <div style="width:220px">  
+          <h4>AR / 360 placeholder</h4>  
+          <div class="small muted">Integrate <code>&lt;model-viewer&gt;</code> or WebXR for AR experiences. (Demo placeholder)</div>  
+          <div style="margin-top:8px"><button class="btn" onclick="showToast('AR viewer placeholder')">Open AR (demo)</button></div>  
+        </div>  
+      </div>  
+    </div>  
+  </section>  
+  
+  <!-- Right: Summary & Checkout -->  
+  <aside>  
+    <div class="card" aria-labelledby="summary-heading">  
+      <h2 id="summary-heading">Order Summary</h2>  
+  
+      <div class="summary-row"><div>Items subtotal</div><div id="subtotal-amount">$0.00</div></div>  
+  
+      <div style="margin-top:6px">  
+        <label for="shipping-method" class="small">Shipping method</label>  
+        <select id="shipping-method" aria-label="Shipping method" style="width:100%;margin-top:6px;padding:8px;border-radius:8px;border:1px solid #e6e9ef">  
+          <option value="5" selected>Standard — $5.00</option>  
+          <option value="15">Express — $15.00</option>  
+          <option value="0">Pickup — $0.00</option>  
+        </select>  
+      </div>  
+  
+      <div style="margin-top:6px">  
+        <label for="tax-rate" class="small">Tax rate</label>  
+        <select id="tax-rate" aria-label="Tax rate" style="width:100%;margin-top:6px;padding:8px;border-radius:8px;border:1px solid #e6e9ef">  
+          <option value="0">0%</option>  
+          <option value="0.05" selected>5%</option>  
+          <option value="0.12">12%</option>  
+        </select>  
+      </div>  
+  
+      <div class="summary-row"><div>Shipping</div><div id="shipping-amount">$0.00</div></div>  
+      <div class="summary-row"><div>Tax</div><div id="tax-amount">$0.00</div></div>  
+      <div class="summary-row"><div>Discount</div><div id="discount-amount">-$0.00</div></div>  
+  
+      <div class="divider"></div>  
+  
+      <div class="summary-row" style="font-size:18px;font-weight:700"><div>Total</div><div id="total-amount">$0.00</div></div>  
+  
+      <div style="margin-top:12px">  
+        <label class="small">Delivery address</label>  
+        <div id="address-book" class="address-list"></div>  
+        <div style="display:flex;gap:8px;margin-top:8px">  
+          <button class="btn" id="add-address-btn">Add Address</button>  
+          <button class="btn-ghost" id="edit-address-btn">Edit Selected</button>  
+        </div>  
+      </div>  
+  
+      <div style="margin-top:12px">  
+        <label class="small">Payment (placeholder)</label>  
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">  
+          <button class="pay-method btn-ghost" data-id="mpesa" onclick="selectPayMethod(this)">Mpesa</button>  
+          <button class="pay-method btn-ghost" data-id="airtel" onclick="selectPayMethod(this)">Airtel Money</button>  
+          <button class="pay-method btn-ghost" data-id="card" onclick="selectPayMethod(this)">Card</button>  
+        </div>  
+        <div class="small muted" style="margin-top:8px">Real payment happens on the checkout page using secure gateway integration.</div>  
+      </div>  
+  
+      <div style="margin-top:12px;display:flex;gap:8px">  
+        <button class="btn" id="checkout-button">Proceed to Checkout</button>  
+        <button class="btn-ghost" id="save-wish-btn">Save Cart to Wishlist</button>  
+      </div>  
+  
+      <div style="margin-top:10px;font-size:13px;color:var(--muted)">  
+        <div>Secure checkout — in production, initiate payments server-side (Mpesa/Airtel/Stripe).</div>  
+      </div>  
+    </div>  
+  
+    <div style="height:14px"></div>  
+  
+    <!-- Bundles & upsells -->  
+    <div class="card" aria-labelledby="upsell-heading">  
+      <h3 id="upsell-heading">Offers & Bundles</h3>  
+      <div id="bundles" style="display:flex;flex-direction:column;gap:10px;margin-top:8px"></div>  
+    </div>  
+  </aside>  
+</div>  
+  
+<!-- Lightbox for image zoom -->  
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" onclick="closeLightbox(event)">  
+  <img id="lightbox-img" src="" alt="Zoomed image">  
+</div>  
+  
+<div id="toast" class="toast" role="status" aria-live="polite"></div>  
+  
+  </main>  <footer>Caleb's Store — demo cart. This page uses localStorage for demo purposes. Links: <a href="index.html">Home</a> • <a href="checkout.html">Checkout</a></footer>    
+</body>  
+<script>
+/* =========================================================
+   CALEB'S STORE — CART.HTML ULTRA MEGA CONTROLLER
+   FULL E-COMMERCE CART ENGINE
+   FIXES:
+   ✔ Product images render
+   ✔ Product prices render
+   ✔ Selected quantity renders
+   ✔ Unit total = price × qty
+   ✔ Cart subtotal
+   ✔ Shipping
+   ✔ Tax
+   ✔ Gift wrap
+   ✔ Promo discounts
+   ✔ Recommended products
+   ✔ Recently viewed products
+   ✔ Related products
+   ✔ Customer reviews per cart item
+   ✔ Checkout integration
+   ✔ Address system
+   ✔ Wishlist
+   ✔ sessionStorage + localStorage sync
+========================================================= */
+
+(function(){
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const fmt = n => '$' + Number(n || 0).toFixed(2);
+
+function escapeHtml(str){
+  return ('' + str).replace(/[&<>"']/g, c => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+}
+
+function showToast(message){
+  const toast = $('#toast');
+  if(!toast) return;
+
+  toast.textContent = message;
+  toast.style.display = 'block';
+
+  setTimeout(()=>{
+    toast.style.display = 'none';
+  },2500);
+}
+
+/* =========================================================
+   STORAGE
+========================================================= */
+let cart = [];
+let allProducts = [];
+let selectedAddress = null;
+let selectedPayment = null;
+let appliedCoupon = null;
+
+/* Load all products from index if available */
+try{
+  allProducts = JSON.parse(localStorage.getItem('all_products') || '[]');
+}catch(e){
+  allProducts = [];
+}
+
+/* Load cart */
+try{
+  cart = JSON.parse(localStorage.getItem('ss_cart') || '[]');
+}catch(e){
+  cart = [];
+}
+
+if(!cart.length){
+  try{
+    cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  }catch(e){
+    cart = [];
+  }
+}
+
+/* =========================================================
+   PROMO SYSTEM
+========================================================= */
+const promoCodes = {
+  SAVE10: 0.10,
+  SAVE20: 0.20,
+  FREESHIP: 'FREESHIP'
+};
+
+/* =========================================================
+   NORMALIZE PRODUCT
+========================================================= */
+function normalizeProduct(product){
+  return {
+    id: product.id || Date.now(),
+    title: product.title || product.name || "Unnamed Product",
+    description: product.description || product.desc || "",
+    image:
+      product.image ||
+      (product.images && product.images[0]) ||
+      "https://via.placeholder.com/150",
+    images: product.images || [product.image || "https://via.placeholder.com/150"],
+    price: Number(product.price || 0),
+    quantity: Number(product.quantity || 1),
+    category: product.category || "general",
+    rating: product.rating || 4.0,
+    likes: product.likes || 0,
+    sales: product.sales || 0,
+    reviews: product.reviews || [],
+    tags: product.tags || []
+  };
+}
+
+/* =========================================================
+   SAVE CART
+========================================================= */
+function saveCart(){
+  localStorage.setItem('ss_cart', JSON.stringify(cart));
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+/* =========================================================
+   ADD TO CART
+========================================================= */
+window.addToCart = function(product){
+
+  const item = normalizeProduct(product);
+
+  const existing = cart.find(p => p.id === item.id);
+
+  if(existing){
+    existing.quantity += item.quantity || 1;
+  }else{
+    cart.push(item);
+  }
+
+  /* Save recently viewed */
+  let viewed = [];
+  try{
+    viewed = JSON.parse(localStorage.getItem('recently_viewed') || '[]');
+  }catch(e){
+    viewed = [];
+  }
+
+  viewed = viewed.filter(v => v.id !== item.id);
+  viewed.unshift(item);
+  viewed = viewed.slice(0,12);
+
+  localStorage.setItem('recently_viewed', JSON.stringify(viewed));
+
+  saveCart();
+  updateAll();
+
+  showToast(item.title + ' added to cart');
+};
+
+/* =========================================================
+   REMOVE ITEM
+========================================================= */
+function removeItem(index){
+  cart.splice(index,1);
+  updateAll();
+}
+
+/* =========================================================
+   UPDATE QUANTITY
+========================================================= */
+function updateQty(index, qty){
+  cart[index].quantity = Math.max(1, parseInt(qty) || 1);
+  updateAll();
+}
+
+/* =========================================================
+   SUBTOTAL
+========================================================= */
+function subtotal(){
+  return cart.reduce((sum,item)=>{
+    return sum + (Number(item.price) * Number(item.quantity));
+  },0);
+}
+
+/* =========================================================
+   SHIPPING
+========================================================= */
+function shippingCost(){
+  if(!cart.length) return 0;
+
+  const shippingMethod = $('#shipping-method')
+    ? Number($('#shipping-method').value)
+    : 5;
+
+  return shippingMethod;
+}
+
+/* =========================================================
+   TAX
+========================================================= */
+function taxAmount(sub){
+  const rate = $('#tax-rate')
+    ? Number($('#tax-rate').value)
+    : 0.05;
+
+  return sub * rate;
+}
+
+/* =========================================================
+   GIFT WRAP
+========================================================= */
+function giftWrapAmount(){
+  return ($('#gift-wrap') && $('#gift-wrap').checked)
+    ? 5
+    : 0;
+}
+
+/* =========================================================
+   CART ITEM REVIEWS
+========================================================= */
+function getReviewsForProduct(product){
+
+  if(product.reviews && product.reviews.length){
+    return product.reviews;
+  }
+
+  return [
+    `★★★★★ Great ${product.title}!`,
+    `★★★★☆ Good value for money.`,
+    `★★★★★ Highly recommended by customers.`
+  ];
+}
+
+/* =========================================================
+   RENDER CART ITEMS
+========================================================= */
+function renderItems(){
+
+  const container = $('#cart-list');
+  const empty = $('#cart-empty');
+  const badge = $('#cart-count-badge');
+
+  if(!container) return;
+
+  if(!cart.length){
+    container.innerHTML = '';
+    if(empty) empty.style.display = 'block';
+    if(badge) badge.textContent = '(0)';
+    return;
+  }
+
+  if(empty) empty.style.display = 'none';
+  if(badge) badge.textContent = '(' + cart.length + ')';
+
+  container.innerHTML = cart.map((item,index)=>{
+
+    const lineTotal = item.price * item.quantity;
+
+    const reviewsHTML = getReviewsForProduct(item)
+      .slice(0,2)
+      .map(r=>`<div class="small muted">${escapeHtml(r)}</div>`)
+      .join('');
+
+    return `
+      <div class="cart-item fade-in" data-index="${index}">
+        
+        <img src="${escapeHtml(item.image)}"
+             alt="${escapeHtml(item.title)}"
+             onclick="openLightbox('${escapeHtml(item.image)}')">
+
+        <div class="meta">
+          <h4>${escapeHtml(item.title)}</h4>
+
+          <div class="small muted">
+            ${escapeHtml(item.description)}
+          </div>
+
+          <div style="margin-top:6px;font-weight:700">
+            Unit Price: ${fmt(item.price)}
+          </div>
+
+          <div class="small">
+            Rating: ⭐ ${item.rating}
+          </div>
+
+          <div class="controls" style="margin-top:10px;">
+            <div class="qty">
+              <button data-minus="${index}">−</button>
+              <span style="padding:0 12px">${item.quantity}</span>
+              <button data-plus="${index}">+</button>
+            </div>
+
+            <button class="btn-ghost" data-remove="${index}">
+              Remove
+            </button>
+          </div>
+
+          <div style="margin-top:8px;font-weight:700">
+            Total: ${fmt(lineTotal)}
+          </div>
+
+          <div style="margin-top:8px;">
+            ${reviewsHTML}
+          </div>
+        </div>
+
+      </div>
+    `;
+  }).join('');
+
+  /* Minus buttons */
+  $$('[data-minus]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const i = +btn.getAttribute('data-minus');
+
+      if(cart[i].quantity > 1){
+        cart[i].quantity--;
+      }else{
+        removeItem(i);
+        return;
+      }
+
+      updateAll();
+    });
+  });
+
+  /* Plus buttons */
+  $$('[data-plus]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const i = +btn.getAttribute('data-plus');
+      cart[i].quantity++;
+      updateAll();
+    });
+  });
+
+  /* Remove */
+  $$('[data-remove]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      removeItem(+btn.getAttribute('data-remove'));
+    });
+  });
+}
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+function updateSummary(){
+
+  const sub = subtotal();
+  let ship = shippingCost();
+  let discount = 0;
+
+  if(appliedCoupon && typeof appliedCoupon === 'number'){
+    discount = sub * appliedCoupon;
+  }
+
+  if(appliedCoupon === 'FREESHIP'){
+    ship = 0;
+  }
+
+  const gift = giftWrapAmount();
+  const taxable = Math.max(0, sub - discount) + gift;
+  const tax = taxAmount(taxable);
+  const total = taxable + ship + tax;
+
+  if($('#subtotal-amount')){
+    $('#subtotal-amount').textContent = fmt(sub + gift);
+  }
+
+  if($('#shipping-amount')){
+    $('#shipping-amount').textContent = fmt(ship);
+  }
+
+  if($('#tax-amount')){
+    $('#tax-amount').textContent = fmt(tax);
+  }
+
+  if($('#discount-amount')){
+    $('#discount-amount').textContent = '-' + fmt(discount);
+  }
+
+  if($('#total-amount')){
+    $('#total-amount').textContent = fmt(total);
+  }
+}
+
+/* =========================================================
+   UPDATE ALL
+========================================================= */
+function updateAll(){
+  saveCart();
+  renderItems();
+  renderRecommendations();
+  renderRecentlyViewed();
+  renderReviewsSection();
+  updateSummary();
+}
+
+/* =========================================================
+   PROMO
+========================================================= */
+if($('#apply-promo')){
+  $('#apply-promo').addEventListener('click',()=>{
+
+    const code = ($('#promo-code').value || '').trim().toUpperCase();
+
+    if(!code){
+      $('#promo-feedback').textContent = 'Enter promo code';
+      return;
+    }
+
+    if(promoCodes[code] === undefined){
+      $('#promo-feedback').textContent = 'Invalid promo code';
+      appliedCoupon = null;
+    }else{
+      appliedCoupon = promoCodes[code];
+      $('#promo-feedback').textContent = 'Applied ' + code;
+      showToast('Promo applied');
+    }
+
+    updateSummary();
+  });
+}
+
+/* =========================================================
+   SHIPPING/TAX/GIFT
+========================================================= */
+['shipping-method','tax-rate','gift-wrap'].forEach(id=>{
+  const el = $('#' + id);
+  if(el){
+    el.addEventListener('change', updateSummary);
+  }
+});
+
+/* =========================================================
+   RECOMMENDED PRODUCTS
+========================================================= */
+function getRecommendedProducts(){
+
+  if(!cart.length){
+    return allProducts.slice(0,6);
+  }
+
+  const categories = [...new Set(cart.map(i=>i.category))];
+
+  let recommended = allProducts.filter(p =>
+    categories.includes(p.category) &&
+    !cart.some(c => c.id === p.id)
+  );
+
+  recommended.sort((a,b)=>
+    (b.sales + b.likes) - (a.sales + a.likes)
+  );
+
+  return recommended.slice(0,8);
+}
+
+function renderRecommendations(){
+
+  const container = $('#recommendations');
+  if(!container) return;
+
+  const products = getRecommendedProducts();
+
+  container.innerHTML = products.map(product=>{
+
+    const p = normalizeProduct(product);
+
+    return `
+      <div class="rec-card">
+        <img src="${escapeHtml(p.image)}"
+             alt="${escapeHtml(p.title)}"
+             style="width:100%;height:80px;object-fit:cover;border-radius:8px">
+
+        <div class="small" style="margin-top:6px;">
+          <strong>${escapeHtml(p.title)}</strong>
+        </div>
+
+        <div class="small muted">
+          ${fmt(p.price)}
+        </div>
+
+        <button class="btn-ghost"
+                style="margin-top:8px"
+                data-rec="${p.id}">
+          Add
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  $$('[data-rec]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const id = btn.getAttribute('data-rec');
+      const product = products.find(p => p.id == id);
+
+      if(product){
+        addToCart(product);
+      }
+    });
+  });
+}
+
+/* =========================================================
+   RECENTLY VIEWED
+========================================================= */
+function renderRecentlyViewed(){
+
+  const container = $('#bundles');
+  if(!container) return;
+
+  let viewed = [];
+
+  try{
+    viewed = JSON.parse(localStorage.getItem('recently_viewed') || '[]');
+  }catch(e){
+    viewed = [];
+  }
+
+  viewed = viewed.filter(v =>
+    !cart.some(c => c.id === v.id)
+  ).slice(0,4);
+
+  container.innerHTML = viewed.map(item=>`
+    <div class="address">
+      <img src="${escapeHtml(item.image)}"
+           alt="${escapeHtml(item.title)}"
+           style="width:100%;height:70px;object-fit:cover;border-radius:8px">
+
+      <div style="margin-top:6px;">
+        <strong>${escapeHtml(item.title)}</strong>
+      </div>
+
+      <div class="small muted">
+        ${fmt(item.price)}
+      </div>
+
+      <button class="btn-ghost"
+              style="margin-top:8px"
+              onclick='addToCart(${JSON.stringify(item)})'>
+        Add Again
+      </button>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   REVIEWS SECTION
+========================================================= */
+function renderReviewsSection(){
+
+  const container = $('#reviews-area');
+  if(!container) return;
+
+  let reviewsHTML = '';
+
+  cart.forEach(item=>{
+
+    const reviews = getReviewsForProduct(item);
+
+    reviewsHTML += `
+      <div style="margin-bottom:12px;">
+        <strong>${escapeHtml(item.title)}</strong>
+        ${reviews.map(r=>`
+          <div class="small muted">
+            ${escapeHtml(r)}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  });
+
+  container.innerHTML = reviewsHTML || `
+    <div class="small muted">
+      No reviews yet.
+    </div>
+  `;
+}
+
+/* =========================================================
+   ADDRESS BOOK
+========================================================= */
+let addresses = [];
+
+try{
+  addresses = JSON.parse(localStorage.getItem('addresses') || '[]');
+}catch(e){
+  addresses = [];
+}
+
+function renderAddresses(){
+
+  const container = $('#address-book');
+  if(!container) return;
+
+  container.innerHTML = '';
+
+  addresses.forEach((addr,index)=>{
+
+    const div = document.createElement('div');
+    div.className = 'address';
+
+    div.innerHTML = `
+      <label>
+        <input type="radio"
+               name="selected-address"
+               data-address="${index}">
+        ${escapeHtml(addr.name)}<br>
+        ${escapeHtml(addr.street)}, ${escapeHtml(addr.city)}
+      </label>
+    `;
+
+    container.appendChild(div);
+  });
+
+  $$('[data-address]').forEach(r=>{
+    r.addEventListener('change',()=>{
+      selectedAddress = +r.getAttribute('data-address');
+    });
+  });
+}
+
+if($('#add-address-btn')){
+  $('#add-address-btn').addEventListener('click',()=>{
+
+    const name = prompt('Full Name:');
+    const phone = prompt('Phone Number:');
+    const street = prompt('Street Address:');
+    const city = prompt('City:');
+    const country = prompt('Country:');
+
+    if(!name || !street) return;
+
+    addresses.push({
+      name,
+      phone,
+      street,
+      city,
+      country
+    });
+
+    localStorage.setItem('addresses', JSON.stringify(addresses));
+
+    renderAddresses();
+
+    showToast('Address added');
+  });
+}
+
+/* =========================================================
+   PAYMENT
+========================================================= */
+window.selectPayMethod = function(button){
+
+  $$('.pay-method').forEach(btn=>{
+    btn.classList.remove('btn');
+    btn.classList.add('btn-ghost');
+  });
+
+  button.classList.remove('btn-ghost');
+  button.classList.add('btn');
+
+  selectedPayment = button.dataset.id;
+};
+
+/* =========================================================
+   CHECKOUT
+========================================================= */
+if($('#checkout-button')){
+  $('#checkout-button').addEventListener('click',()=>{
+
+    if(!cart.length){
+      alert('Cart is empty');
+      return;
+    }
+
+    if(selectedAddress === null){
+      alert('Please select address');
+      return;
+    }
+
+    if(!selectedPayment){
+      alert('Please select payment method');
+      return;
+    }
+
+    sessionStorage.setItem(
+      'checkoutCart',
+      JSON.stringify(cart)
+    );
+
+    localStorage.setItem(
+      'ss_user',
+      JSON.stringify(addresses[selectedAddress])
+    );
+
+    window.location.href = 'checkout.html';
+  });
+}
+
+/* =========================================================
+   WISHLIST
+========================================================= */
+if($('#save-wish-btn')){
+  $('#save-wish-btn').addEventListener('click',()=>{
+    localStorage.setItem('wishlist', JSON.stringify(cart));
+    showToast('Cart saved to wishlist');
+  });
+}
+
+/* =========================================================
+   LIGHTBOX
+========================================================= */
+window.openLightbox = function(src){
+
+  if($('#lightbox') && $('#lightbox-img')){
+    $('#lightbox-img').src = src;
+    $('#lightbox').style.display = 'flex';
+  }
+};
+
+window.closeLightbox = function(e){
+  if(e.target.id === 'lightbox' || e.target.id === 'lightbox-img'){
+    $('#lightbox').style.display = 'none';
+  }
+};
+
+/* =========================================================
+   INIT
+========================================================= */
+document.addEventListener('DOMContentLoaded',()=>{
+  renderItems();
+  renderAddresses();
+  renderRecommendations();
+  renderRecentlyViewed();
+  renderReviewsSection();
+  updateSummary();
+});
+
+})();
+</script>
+</html>
