@@ -207,296 +207,333 @@
   
   </main>  <footer>Caleb's Store — demo cart. This page uses localStorage for demo purposes. Links: <a href="index.html">Home</a> • <a href="checkout.html">Checkout</a></footer>    
 </body>  
-  <script>
+<script>
 /* =========================================================
-   CALEB'S STORE — FIXED MEGA CART JAVASCRIPT
-   FULLY UPDATED:
-   - Compatible with index.html
-   - Compatible with checkout.html
-   - Uses BOTH localStorage + sessionStorage
-   - Correct product property mapping:
-       title/name
-       desc/description
-       image
-       price
-   - Renders cart items properly
-   - Proceed to checkout works
+   CALEB'S STORE — CART.HTML MASTER CONTROLLER
+   FULLY FIXED + CHECKOUT COMPATIBLE
+   STRUCTURE MATCHES checkout.html LOGIC
+   FEATURES:
+   - Reads products from index.html addToCart()
+   - Renders cart correctly
+   - Updates quantity
+   - Removes items
+   - Promo system
+   - Shipping methods
+   - Tax calculations
+   - Gift wrap
+   - Address capture
+   - Payment method selection
+   - Wishlist
+   - Recommendations
+   - Bundles
+   - Reviews
+   - Checkout redirect
+   - Saves to sessionStorage checkoutCart
 ========================================================= */
 
-/* ---------------------------
-   GLOBAL STATE
----------------------------- */
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-let selectedAddress = null;
-let selectedPayment = null;
-let discount = 0;
-let promoApplied = null;
+(function(){
 
-/* ---------------------------
-   PROMO CODES
----------------------------- */
+/* =========================================================
+   UTILITIES
+========================================================= */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+const fmt = n => '$' + Number(n || 0).toFixed(2);
+
+function escapeHtml(str){
+  return ('' + str).replace(/[&<>"']/g, c => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+}
+
+function showToast(message){
+  const toast = $('#toast');
+  if(!toast) return;
+
+  toast.textContent = message;
+  toast.style.display = 'block';
+
+  setTimeout(()=>{
+    toast.style.display = 'none';
+  },2500);
+}
+
+/* =========================================================
+   STORAGE
+========================================================= */
+let cart = [];
+
+try{
+  cart = JSON.parse(localStorage.getItem('ss_cart') || '[]');
+}catch(e){
+  cart = [];
+}
+
+if(!cart.length){
+  try{
+    cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  }catch(e){
+    cart = [];
+  }
+}
+
+/* =========================================================
+   PROMO SYSTEM
+========================================================= */
 const promoCodes = {
-  "SAVE10": 0.10,
-  "SAVE20": 0.20,
-  "FREESHIP": "shipping"
+  SAVE10: 0.10,
+  SAVE20: 0.20,
+  FREESHIP: 'FREESHIP'
 };
 
-/* ---------------------------
-   RECOMMENDATIONS
----------------------------- */
-const recommendedProducts = [
-  {
-    id: 101,
-    title: "Wireless Earbuds",
-    price: 39.99,
-    image: "images/earbuds.jpg",
-    description: "High-quality sound"
-  },
-  {
-    id: 102,
-    title: "Phone Case",
-    price: 19.99,
-    image: "images/case.jpg",
-    description: "Protective premium case"
-  },
-  {
-    id: 103,
-    title: "Smart Watch",
-    price: 89.99,
-    image: "images/watch.jpg",
-    description: "Track fitness & calls"
-  }
-];
-
-/* ---------------------------
-   BUNDLES
----------------------------- */
-const bundleOffers = [
-  { title: "Buy 2 accessories, get 15% off" },
-  { title: "Laptop + Mouse combo save $25" }
-];
-
-/* ---------------------------
-   REVIEWS
----------------------------- */
-const reviews = [
-  "★★★★★ Excellent product quality!",
-  "★★★★☆ Fast shipping and secure packaging.",
-  "★★★★★ Worth every penny."
-];
+let appliedCoupon = null;
 
 /* =========================================================
-   CORE CART FUNCTIONS
+   PRODUCT NORMALIZATION
 ========================================================= */
-
-/* ---------------------------
-   NORMALIZE PRODUCT DATA
----------------------------- */
-function normalizeProduct(product) {
+function normalizeProduct(product){
   return {
     id: product.id || Date.now(),
-    title: product.title || product.name || "Unnamed Product",
-    description: product.description || product.desc || "",
-    price: Number(product.price) || 0,
-    image: product.image || "https://via.placeholder.com/150",
-    quantity: product.quantity || 1
+    title: product.title || product.name || 'Unnamed Product',
+    description: product.description || product.desc || '',
+    image: product.image || 'https://via.placeholder.com/150',
+    price: Number(product.price || 0),
+    quantity: Number(product.quantity || 1),
+    weight: Number(product.weight || 1)
   };
 }
 
-/* ---------------------------
+/* =========================================================
    SAVE CART
----------------------------- */
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  localStorage.setItem("ss_cart", JSON.stringify(cart));
+========================================================= */
+function saveCart(){
+  localStorage.setItem('ss_cart', JSON.stringify(cart));
+  localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-/* ---------------------------
+/* =========================================================
    ADD TO CART
----------------------------- */
-function addToCart(product) {
-  const normalized = normalizeProduct(product);
+========================================================= */
+window.addToCart = function(product){
+  const item = normalizeProduct(product);
 
-  const existing = cart.find(item => item.id === normalized.id);
+  const existing = cart.find(p => p.id === item.id);
 
-  if (existing) {
+  if(existing){
     existing.quantity += 1;
-  } else {
-    cart.push(normalized);
+  }else{
+    cart.push(item);
   }
 
   saveCart();
-  renderCart();
-  showToast(`${normalized.title} added to cart`);
+  renderItems();
+  updateSummary();
+
+  showToast(item.title + ' added to cart');
+};
+
+/* =========================================================
+   REMOVE ITEM
+========================================================= */
+function removeItem(index){
+  cart.splice(index,1);
+  updateAll();
 }
 
-/* ---------------------------
-   REMOVE FROM CART
----------------------------- */
-function removeFromCart(productId) {
-  cart = cart.filter(item => item.id !== productId);
-  saveCart();
-  renderCart();
-  showToast("Item removed");
-}
-
-/* ---------------------------
+/* =========================================================
    UPDATE QUANTITY
----------------------------- */
-function updateQuantity(productId, change) {
-  const item = cart.find(p => p.id === productId);
-
-  if (!item) return;
-
-  item.quantity += change;
-
-  if (item.quantity <= 0) {
-    removeFromCart(productId);
-    return;
-  }
-
-  saveCart();
-  renderCart();
+========================================================= */
+function updateQty(index, qty){
+  cart[index].quantity = Math.max(1, parseInt(qty) || 1);
+  updateAll();
 }
 
 /* =========================================================
-   TOTAL CALCULATIONS
+   SUBTOTAL
 ========================================================= */
-function calculateTotals() {
-  let subtotal = cart.reduce(
-    (sum, item) => sum + (item.price * item.quantity),
-    0
-  );
-
-  const shippingSelect = document.getElementById("shipping-method");
-  const taxSelect = document.getElementById("tax-rate");
-  const giftWrapBox = document.getElementById("gift-wrap");
-
-  const shipping = shippingSelect ? parseFloat(shippingSelect.value) : 0;
-  const taxRate = taxSelect ? parseFloat(taxSelect.value) : 0;
-  const giftWrap = giftWrapBox && giftWrapBox.checked ? 5 : 0;
-
-  let shippingCost = shipping;
-  let discountAmount = 0;
-
-  if (promoApplied === "shipping") {
-    shippingCost = 0;
-  } else if (typeof promoApplied === "number") {
-    discountAmount = subtotal * promoApplied;
-  }
-
-  subtotal += giftWrap;
-
-  const taxableAmount = subtotal - discountAmount;
-  const tax = taxableAmount * taxRate;
-  const total = taxableAmount + shippingCost + tax;
-
-  return {
-    subtotal,
-    shipping: shippingCost,
-    tax,
-    discount: discountAmount,
-    total
-  };
+function subtotal(){
+  return cart.reduce((sum,item)=>{
+    return sum + (Number(item.price) * Number(item.quantity));
+  },0);
 }
 
 /* =========================================================
-   RENDER CART
+   SHIPPING COST
 ========================================================= */
-function renderCart() {
-  const cartList = document.getElementById("cart-list");
-  const emptyMsg = document.getElementById("cart-empty");
-  const badge = document.getElementById("cart-count-badge");
+function shippingCost(){
+  const method = $('#shipping-method') ? $('#shipping-method').value : '5';
 
-  if (!cartList) return;
+  if(!cart.length) return 0;
 
-  cartList.innerHTML = "";
+  if(method == '0') return 0;
+  if(method == '15') return 15;
 
-  if (!cart.length) {
-    if (emptyMsg) emptyMsg.style.display = "block";
-    if (badge) badge.textContent = "(0)";
-    updateSummary();
+  return 5;
+}
+
+/* =========================================================
+   TAX
+========================================================= */
+function taxAmount(sub){
+  const taxRate = $('#tax-rate')
+    ? parseFloat($('#tax-rate').value)
+    : 0.05;
+
+  return sub * taxRate;
+}
+
+/* =========================================================
+   GIFT WRAP
+========================================================= */
+function giftWrapAmount(){
+  return $('#gift-wrap') && $('#gift-wrap').checked ? 5 : 0;
+}
+
+/* =========================================================
+   RENDER CART ITEMS
+========================================================= */
+function renderItems(){
+  const container = $('#cart-list');
+  const empty = $('#cart-empty');
+  const badge = $('#cart-count-badge');
+
+  if(!container) return;
+
+  if(!cart.length){
+    container.innerHTML = '';
+    if(empty) empty.style.display = 'block';
+    if(badge) badge.textContent = '(0)';
     return;
   }
 
-  if (emptyMsg) emptyMsg.style.display = "none";
-  if (badge) badge.textContent = `(${cart.length})`;
+  if(empty) empty.style.display = 'none';
+  if(badge) badge.textContent = '(' + cart.length + ')';
 
-  cart.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "cart-item fade-in";
-
-    div.innerHTML = `
-      <img src="${item.image}" alt="${item.title}" onclick="openLightbox('${item.image}')">
+  container.innerHTML = cart.map((item,index)=>`
+    <div class="cart-item fade-in" data-index="${index}">
       
+      <img src="${escapeHtml(item.image)}"
+           alt="${escapeHtml(item.title)}"
+           onclick="openLightbox('${escapeHtml(item.image)}')">
+
       <div class="meta">
-        <h4>${item.title}</h4>
-        <div class="small muted">${item.description}</div>
-        <div><strong>$${item.price.toFixed(2)}</strong></div>
+        <h4>${escapeHtml(item.title)}</h4>
+        <div class="small muted">${escapeHtml(item.description)}</div>
+        <div style="margin-top:6px;font-weight:600">
+          ${fmt(item.price)}
+        </div>
 
         <div class="controls" style="margin-top:8px;">
           <div class="qty">
-            <button onclick="updateQuantity(${item.id}, -1)">−</button>
-            <span style="padding:0 10px">${item.quantity}</span>
-            <button onclick="updateQuantity(${item.id}, 1)">+</button>
+            <button data-minus="${index}">−</button>
+            <span style="padding:0 12px">${item.quantity}</span>
+            <button data-plus="${index}">+</button>
           </div>
 
-          <button class="btn-ghost" onclick="removeFromCart(${item.id})">
+          <button class="btn-ghost" data-remove="${index}">
             Remove
           </button>
         </div>
       </div>
 
-      <div>
-        <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
+      <div style="font-weight:700">
+        ${fmt(item.price * item.quantity)}
       </div>
-    `;
+    </div>
+  `).join('');
 
-    cartList.appendChild(div);
+  /* Quantity buttons */
+  $$('[data-minus]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const i = +btn.getAttribute('data-minus');
+      if(cart[i].quantity > 1){
+        cart[i].quantity--;
+      }else{
+        removeItem(i);
+        return;
+      }
+      updateAll();
+    });
   });
 
+  $$('[data-plus]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const i = +btn.getAttribute('data-plus');
+      cart[i].quantity++;
+      updateAll();
+    });
+  });
+
+  /* Remove buttons */
+  $$('[data-remove]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      removeItem(+btn.getAttribute('data-remove'));
+    });
+  });
+}
+
+/* =========================================================
+   UPDATE SUMMARY
+========================================================= */
+function updateSummary(){
+  const sub = subtotal();
+  let ship = shippingCost();
+  let discount = 0;
+
+  if(appliedCoupon && typeof appliedCoupon === 'number'){
+    discount = sub * appliedCoupon;
+  }
+
+  if(appliedCoupon === 'FREESHIP'){
+    ship = 0;
+  }
+
+  const gift = giftWrapAmount();
+  const taxable = Math.max(0, sub - discount) + gift;
+  const tax = taxAmount(taxable);
+  const total = taxable + ship + tax;
+
+  if($('#subtotal-amount')) $('#subtotal-amount').textContent = fmt(sub + gift);
+  if($('#shipping-amount')) $('#shipping-amount').textContent = fmt(ship);
+  if($('#tax-amount')) $('#tax-amount').textContent = fmt(tax);
+  if($('#discount-amount')) $('#discount-amount').textContent = '-' + fmt(discount);
+  if($('#total-amount')) $('#total-amount').textContent = fmt(total);
+}
+
+/* =========================================================
+   UPDATE EVERYTHING
+========================================================= */
+function updateAll(){
+  saveCart();
+  renderItems();
   updateSummary();
-  renderRecommendations();
-  renderBundles();
-  renderReviews();
 }
 
 /* =========================================================
-   SUMMARY
+   PROMO BUTTON
 ========================================================= */
-function updateSummary() {
-  const totals = calculateTotals();
+if($('#apply-promo')){
+  $('#apply-promo').addEventListener('click',()=>{
+    const code = ($('#promo-code').value || '').trim().toUpperCase();
+    const feedback = $('#promo-feedback');
 
-  const subtotal = document.getElementById("subtotal-amount");
-  const shipping = document.getElementById("shipping-amount");
-  const tax = document.getElementById("tax-amount");
-  const discount = document.getElementById("discount-amount");
-  const total = document.getElementById("total-amount");
+    if(!code){
+      feedback.textContent = 'Enter promo code';
+      return;
+    }
 
-  if (subtotal) subtotal.textContent = `$${totals.subtotal.toFixed(2)}`;
-  if (shipping) shipping.textContent = `$${totals.shipping.toFixed(2)}`;
-  if (tax) tax.textContent = `$${totals.tax.toFixed(2)}`;
-  if (discount) discount.textContent = `-$${totals.discount.toFixed(2)}`;
-  if (total) total.textContent = `$${totals.total.toFixed(2)}`;
-}
-
-/* =========================================================
-   PROMO
-========================================================= */
-const promoBtn = document.getElementById("apply-promo");
-if (promoBtn) {
-  promoBtn.addEventListener("click", () => {
-    const code = document.getElementById("promo-code").value.trim().toUpperCase();
-    const feedback = document.getElementById("promo-feedback");
-
-    if (promoCodes[code] !== undefined) {
-      promoApplied = promoCodes[code];
-      feedback.textContent = `Promo "${code}" applied successfully`;
-      showToast("Promo applied");
-    } else {
-      promoApplied = null;
-      feedback.textContent = "Invalid promo code";
-      showToast("Invalid promo");
+    if(promoCodes[code] === undefined){
+      feedback.textContent = 'Invalid promo code';
+      appliedCoupon = null;
+    }else{
+      appliedCoupon = promoCodes[code];
+      feedback.textContent = 'Applied ' + code;
+      showToast('Promo applied');
     }
 
     updateSummary();
@@ -504,262 +541,255 @@ if (promoBtn) {
 }
 
 /* =========================================================
-   SHIPPING/TAX/GIFT
+   SHIPPING / TAX / GIFT EVENTS
 ========================================================= */
-["shipping-method", "tax-rate", "gift-wrap"].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener("change", updateSummary);
+['shipping-method','tax-rate','gift-wrap'].forEach(id=>{
+  const el = $('#' + id);
+  if(el){
+    el.addEventListener('change', updateSummary);
+  }
 });
 
 /* =========================================================
-   ADDRESS MANAGEMENT
+   ADDRESS BOOK
 ========================================================= */
-let addresses = JSON.parse(localStorage.getItem("addresses")) || [];
+let addresses = [];
 
-function renderAddresses() {
-  const addressBook = document.getElementById("address-book");
-  if (!addressBook) return;
+try{
+  addresses = JSON.parse(localStorage.getItem('addresses') || '[]');
+}catch(e){
+  addresses = [];
+}
 
-  addressBook.innerHTML = "";
+let selectedAddress = null;
 
-  addresses.forEach((address, index) => {
-    const div = document.createElement("div");
-    div.className = "address";
+function renderAddresses(){
+  const container = $('#address-book');
+  if(!container) return;
+
+  container.innerHTML = '';
+
+  addresses.forEach((addr,index)=>{
+    const div = document.createElement('div');
+    div.className = 'address';
 
     div.innerHTML = `
       <label>
-        <input type="radio" name="selected-address"
-          ${selectedAddress === index ? "checked" : ""}
-          onchange="selectAddress(${index})">
-        ${address.name}, ${address.phone}<br>
-        ${address.street}, ${address.city}, ${address.country}
+        <input type="radio"
+               name="selected-address"
+               ${selectedAddress === index ? 'checked' : ''}
+               data-address="${index}">
+        ${escapeHtml(addr.name)} (${escapeHtml(addr.phone)})<br>
+        ${escapeHtml(addr.street)}, ${escapeHtml(addr.city)}, ${escapeHtml(addr.country)}
       </label>
     `;
 
-    addressBook.appendChild(div);
+    container.appendChild(div);
+  });
+
+  $$('[data-address]').forEach(r=>{
+    r.addEventListener('change',()=>{
+      selectedAddress = +r.getAttribute('data-address');
+    });
   });
 }
 
-function selectAddress(index) {
-  selectedAddress = index;
-}
+if($('#add-address-btn')){
+  $('#add-address-btn').addEventListener('click',()=>{
+    const name = prompt('Full Name:');
+    const phone = prompt('Phone Number:');
+    const street = prompt('Street Address:');
+    const city = prompt('City:');
+    const country = prompt('Country:');
 
-const addAddressBtn = document.getElementById("add-address-btn");
-if (addAddressBtn) {
-  addAddressBtn.addEventListener("click", () => {
-    const name = prompt("Full Name:");
-    const phone = prompt("Phone Number:");
-    const street = prompt("Street Address:");
-    const city = prompt("City:");
-    const country = prompt("Country:");
+    if(!name || !street) return;
 
-    if (name && phone && street && city && country) {
-      addresses.push({ name, phone, street, city, country });
-      localStorage.setItem("addresses", JSON.stringify(addresses));
-      renderAddresses();
-      showToast("Address added");
-    }
+    addresses.push({
+      name,
+      phone,
+      street,
+      city,
+      country
+    });
+
+    localStorage.setItem('addresses', JSON.stringify(addresses));
+
+    renderAddresses();
+
+    showToast('Address added');
   });
 }
 
 /* =========================================================
-   PAYMENT
+   PAYMENT METHODS
 ========================================================= */
-function selectPayMethod(button) {
-  document.querySelectorAll(".pay-method").forEach(btn => {
-    btn.classList.remove("btn");
-    btn.classList.add("btn-ghost");
+let selectedPayment = null;
+
+window.selectPayMethod = function(button){
+  $$('.pay-method').forEach(btn=>{
+    btn.classList.remove('btn');
+    btn.classList.add('btn-ghost');
   });
 
-  button.classList.remove("btn-ghost");
-  button.classList.add("btn");
+  button.classList.remove('btn-ghost');
+  button.classList.add('btn');
 
   selectedPayment = button.dataset.id;
-}
+};
 
 /* =========================================================
    CHECKOUT
 ========================================================= */
-const checkoutBtn = document.getElementById("checkout-button");
+if($('#checkout-button')){
+  $('#checkout-button').addEventListener('click',()=>{
 
-if (checkoutBtn) {
-  checkoutBtn.addEventListener("click", () => {
-    if (!cart.length) {
-      showToast("Cart is empty");
+    if(!cart.length){
+      alert('Cart is empty');
       return;
     }
 
-    if (selectedAddress === null) {
-      showToast("Please add/select address");
+    if(selectedAddress === null){
+      alert('Please add/select address');
       return;
     }
 
-    if (!selectedPayment) {
-      showToast("Please select payment method");
+    if(!selectedPayment){
+      alert('Please select payment method');
       return;
     }
 
-    const order = {
-      cart,
-      address: addresses[selectedAddress],
-      payment: selectedPayment,
-      notes: document.getElementById("order-notes")?.value || "",
-      totals: calculateTotals()
-    };
+    /* Save for checkout page */
+    sessionStorage.setItem('checkoutCart', JSON.stringify(cart));
 
-    /* CRITICAL FIX */
-    sessionStorage.setItem("checkoutCart", JSON.stringify(cart));
-    localStorage.setItem("pendingOrder", JSON.stringify(order));
+    /* Save user details */
+    localStorage.setItem('ss_user', JSON.stringify(addresses[selectedAddress]));
 
-    window.location.href = "checkout.html";
+    /* Save pending order */
+    localStorage.setItem('pendingOrder', JSON.stringify({
+      items: cart,
+      customer: addresses[selectedAddress],
+      paymentMethod: selectedPayment,
+      notes: $('#order-notes') ? $('#order-notes').value : ''
+    }));
+
+    window.location.href = 'checkout.html';
   });
 }
 
 /* =========================================================
    WISHLIST
 ========================================================= */
-const wishBtn = document.getElementById("save-wish-btn");
-
-if (wishBtn) {
-  wishBtn.addEventListener("click", () => {
-    localStorage.setItem("wishlist", JSON.stringify(cart));
-    showToast("Cart saved to wishlist");
+if($('#save-wish-btn')){
+  $('#save-wish-btn').addEventListener('click',()=>{
+    localStorage.setItem('wishlist', JSON.stringify(cart));
+    showToast('Cart saved to wishlist');
   });
 }
 
 /* =========================================================
    RECOMMENDATIONS
 ========================================================= */
-function renderRecommendations() {
-  const container = document.getElementById("recommendations");
-  if (!container) return;
+const recommendations = [
+  {id:101,title:'Wireless Earbuds',price:39.99,image:'images/earbuds.jpg',description:'Premium sound'},
+  {id:102,title:'Phone Case',price:19.99,image:'images/case.jpg',description:'Protective case'},
+  {id:103,title:'Smart Watch',price:89.99,image:'images/watch.jpg',description:'Smart wearable'}
+];
 
-  container.innerHTML = "";
+function renderRecommendations(){
+  const container = $('#recommendations');
+  if(!container) return;
 
-  recommendedProducts.forEach(product => {
-    const div = document.createElement("div");
-    div.className = "rec-card";
-
-    div.innerHTML = `
-      <img src="${product.image}" alt="${product.title}"
-        style="width:100%;height:70px;object-fit:cover;border-radius:6px">
-      <div class="small"><strong>${product.title}</strong></div>
-      <div class="small">$${product.price.toFixed(2)}</div>
-      <button class="btn-ghost" style="margin-top:6px">
+  container.innerHTML = recommendations.map(p=>`
+    <div class="rec-card">
+      <img src="${p.image}" alt="${escapeHtml(p.title)}"
+           style="width:100%;height:70px;object-fit:cover;border-radius:6px">
+      <div class="small"><strong>${escapeHtml(p.title)}</strong></div>
+      <div class="small">${fmt(p.price)}</div>
+      <button class="btn-ghost" data-rec="${p.id}">
         Add
       </button>
-    `;
+    </div>
+  `).join('');
 
-    div.querySelector("button").addEventListener("click", () => {
-      addToCart(product);
+  $$('[data-rec]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const p = recommendations.find(x=>x.id == btn.getAttribute('data-rec'));
+      if(p) addToCart(p);
     });
-
-    container.appendChild(div);
   });
 }
 
 /* =========================================================
    BUNDLES
 ========================================================= */
-function renderBundles() {
-  const container = document.getElementById("bundles");
-  if (!container) return;
+function renderBundles(){
+  const container = $('#bundles');
+  if(!container) return;
 
-  container.innerHTML = "";
+  const bundles = [
+    'Buy 2 accessories, get 15% off',
+    'Laptop + Mouse combo save $25'
+  ];
 
-  bundleOffers.forEach(bundle => {
-    const div = document.createElement("div");
-    div.className = "address";
-
-    div.innerHTML = `
-      <div>${bundle.title}</div>
-      <button class="btn-ghost" style="margin-top:6px">
+  container.innerHTML = bundles.map(bundle=>`
+    <div class="address">
+      <div>${bundle}</div>
+      <button class="btn-ghost" onclick="showToast('Bundle applied')">
         Apply Offer
       </button>
-    `;
-
-    div.querySelector("button").addEventListener("click", () => {
-      showToast("Bundle applied");
-    });
-
-    container.appendChild(div);
-  });
+    </div>
+  `).join('');
 }
 
 /* =========================================================
    REVIEWS
 ========================================================= */
-function renderReviews() {
-  const area = document.getElementById("reviews-area");
-  if (!area) return;
+function renderReviews(){
+  const container = $('#reviews-area');
+  if(!container) return;
 
-  area.innerHTML = "";
+  const reviews = [
+    '★★★★★ Excellent quality!',
+    '★★★★☆ Fast delivery.',
+    '★★★★★ Highly recommended.'
+  ];
 
-  reviews.forEach(review => {
-    const p = document.createElement("p");
-    p.className = "small";
-    p.textContent = review;
-    area.appendChild(p);
-  });
+  container.innerHTML = reviews.map(r=>`
+    <p class="small">${r}</p>
+  `).join('');
 }
 
 /* =========================================================
    LIGHTBOX
 ========================================================= */
-function openLightbox(src) {
-  const lightbox = document.getElementById("lightbox");
-  const img = document.getElementById("lightbox-img");
+window.openLightbox = function(src){
+  const lightbox = $('#lightbox');
+  const img = $('#lightbox-img');
 
-  if (lightbox && img) {
+  if(lightbox && img){
     img.src = src;
-    lightbox.style.display = "flex";
+    lightbox.style.display = 'flex';
   }
-}
+};
 
-function closeLightbox(event) {
-  if (
-    event.target.id === "lightbox" ||
-    event.target.id === "lightbox-img"
-  ) {
-    document.getElementById("lightbox").style.display = "none";
+window.closeLightbox = function(e){
+  if(e.target.id === 'lightbox' || e.target.id === 'lightbox-img'){
+    $('#lightbox').style.display = 'none';
   }
-}
+};
 
 /* =========================================================
-   TOAST
+   INITIALIZATION
 ========================================================= */
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  if (!toast) return;
-
-  toast.textContent = message;
-  toast.style.display = "block";
-
-  setTimeout(() => {
-    toast.style.display = "none";
-  }, 2500);
-}
-
-/* =========================================================
-   INIT
-========================================================= */
-window.addEventListener("DOMContentLoaded", () => {
-  renderCart();
+document.addEventListener('DOMContentLoaded',()=>{
+  renderItems();
   renderAddresses();
+  renderRecommendations();
+  renderBundles();
+  renderReviews();
+  updateSummary();
 });
 
-/* =========================================================
-   PRODUCT PAGE BUTTON USAGE:
-   
-   <button class="btn btn-ghost" onclick='addToCart({
-      id: 1,
-      title: "Wireless Headphones",
-      price: 79.99,
-      description: "Premium sound quality",
-      image: "images/headphones.jpg"
-   })'>
-      Add to Cart
-   </button>
-========================================================= */
+})();
 </script>
 </html>
