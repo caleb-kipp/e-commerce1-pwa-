@@ -207,27 +207,20 @@
   
   </main>  <footer>Caleb's Store — demo cart. This page uses localStorage for demo purposes. Links: <a href="index.html">Home</a> • <a href="checkout.html">Checkout</a></footer>    
 </body>  
-  <script>
+  <<script>
 /* =========================================================
-   CALEB'S STORE — MEGA CART FUNCTIONAL JAVASCRIPT
-   Retains existing HTML + CSS structure
-   Adds:
-   - addToCart(product)
-   - cart rendering
-   - quantity controls
-   - remove items
-   - promo codes
-   - shipping + tax calculations
-   - gift wrap
-   - address management
-   - payment method selection
-   - checkout
-   - wishlist save
-   - recommendations
-   - bundles
-   - reviews
-   - image zoom
-   - localStorage persistence
+   CALEB'S STORE — FIXED MEGA CART JAVASCRIPT
+   FULLY UPDATED:
+   - Compatible with index.html
+   - Compatible with checkout.html
+   - Uses BOTH localStorage + sessionStorage
+   - Correct product property mapping:
+       title/name
+       desc/description
+       image
+       price
+   - Renders cart items properly
+   - Proceed to checkout works
 ========================================================= */
 
 /* ---------------------------
@@ -239,73 +232,75 @@ let selectedPayment = null;
 let discount = 0;
 let promoApplied = null;
 
-/* Demo promo codes */
+/* ---------------------------
+   PROMO CODES
+---------------------------- */
 const promoCodes = {
   "SAVE10": 0.10,
   "SAVE20": 0.20,
   "FREESHIP": "shipping"
 };
 
-/* Demo recommendations */
+/* ---------------------------
+   RECOMMENDATIONS
+---------------------------- */
 const recommendedProducts = [
   {
     id: 101,
-    name: "Wireless Earbuds",
+    title: "Wireless Earbuds",
     price: 39.99,
     image: "images/earbuds.jpg",
     description: "High-quality sound"
   },
   {
     id: 102,
-    name: "Phone Case",
+    title: "Phone Case",
     price: 19.99,
     image: "images/case.jpg",
     description: "Protective premium case"
   },
   {
     id: 103,
-    name: "Smart Watch",
+    title: "Smart Watch",
     price: 89.99,
     image: "images/watch.jpg",
     description: "Track fitness & calls"
   }
 ];
 
-/* Demo bundles */
+/* ---------------------------
+   BUNDLES
+---------------------------- */
 const bundleOffers = [
-  {
-    title: "Buy 2 accessories, get 15% off"
-  },
-  {
-    title: "Laptop + Mouse combo save $25"
-  }
-];
-
-/* Demo reviews */
-const reviews = [
-  "★★★★★ Excellent product quality!",
-  "★★★★☆ Fast shipping and good packaging.",
-  "★★★★★ Worth every penny."
+  { title: "Buy 2 accessories, get 15% off" },
+  { title: "Laptop + Mouse combo save $25" }
 ];
 
 /* ---------------------------
-   ADD TO CART FUNCTION
+   REVIEWS
 ---------------------------- */
-function addToCart(product) {
-  const existing = cart.find(item => item.id === product.id);
+const reviews = [
+  "★★★★★ Excellent product quality!",
+  "★★★★☆ Fast shipping and secure packaging.",
+  "★★★★★ Worth every penny."
+];
 
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    cart.push({
-      ...product,
-      quantity: 1
-    });
-  }
+/* =========================================================
+   CORE CART FUNCTIONS
+========================================================= */
 
-  saveCart();
-  renderCart();
-  showToast(`${product.name} added to cart`);
+/* ---------------------------
+   NORMALIZE PRODUCT DATA
+---------------------------- */
+function normalizeProduct(product) {
+  return {
+    id: product.id || Date.now(),
+    title: product.title || product.name || "Unnamed Product",
+    description: product.description || product.desc || "",
+    price: Number(product.price) || 0,
+    image: product.image || "https://via.placeholder.com/150",
+    quantity: product.quantity || 1
+  };
 }
 
 /* ---------------------------
@@ -313,6 +308,26 @@ function addToCart(product) {
 ---------------------------- */
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("ss_cart", JSON.stringify(cart));
+}
+
+/* ---------------------------
+   ADD TO CART
+---------------------------- */
+function addToCart(product) {
+  const normalized = normalizeProduct(product);
+
+  const existing = cart.find(item => item.id === normalized.id);
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push(normalized);
+  }
+
+  saveCart();
+  renderCart();
+  showToast(`${normalized.title} added to cart`);
 }
 
 /* ---------------------------
@@ -344,17 +359,22 @@ function updateQuantity(productId, change) {
   renderCart();
 }
 
-/* ---------------------------
-   CALCULATE TOTALS
----------------------------- */
+/* =========================================================
+   TOTAL CALCULATIONS
+========================================================= */
 function calculateTotals() {
-  let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  let subtotal = cart.reduce(
+    (sum, item) => sum + (item.price * item.quantity),
+    0
+  );
 
-  const shipping = parseFloat(document.getElementById("shipping-method").value || 0);
+  const shippingSelect = document.getElementById("shipping-method");
+  const taxSelect = document.getElementById("tax-rate");
+  const giftWrapBox = document.getElementById("gift-wrap");
 
-  const taxRate = parseFloat(document.getElementById("tax-rate").value || 0);
-
-  const giftWrap = document.getElementById("gift-wrap").checked ? 5 : 0;
+  const shipping = shippingSelect ? parseFloat(shippingSelect.value) : 0;
+  const taxRate = taxSelect ? parseFloat(taxSelect.value) : 0;
+  const giftWrap = giftWrapBox && giftWrapBox.checked ? 5 : 0;
 
   let shippingCost = shipping;
   let discountAmount = 0;
@@ -368,9 +388,7 @@ function calculateTotals() {
   subtotal += giftWrap;
 
   const taxableAmount = subtotal - discountAmount;
-
   const tax = taxableAmount * taxRate;
-
   const total = taxableAmount + shippingCost + tax;
 
   return {
@@ -382,47 +400,59 @@ function calculateTotals() {
   };
 }
 
-/* ---------------------------
+/* =========================================================
    RENDER CART
----------------------------- */
+========================================================= */
 function renderCart() {
   const cartList = document.getElementById("cart-list");
   const emptyMsg = document.getElementById("cart-empty");
   const badge = document.getElementById("cart-count-badge");
 
+  if (!cartList) return;
+
   cartList.innerHTML = "";
 
-  if (cart.length === 0) {
-    emptyMsg.style.display = "block";
-    badge.textContent = "(0)";
-  } else {
-    emptyMsg.style.display = "none";
-    badge.textContent = `(${cart.length})`;
+  if (!cart.length) {
+    if (emptyMsg) emptyMsg.style.display = "block";
+    if (badge) badge.textContent = "(0)";
+    updateSummary();
+    return;
   }
 
-  cart.forEach(item => {
-    const cartItem = document.createElement("div");
-    cartItem.className = "cart-item fade-in";
+  if (emptyMsg) emptyMsg.style.display = "none";
+  if (badge) badge.textContent = `(${cart.length})`;
 
-    cartItem.innerHTML = `
-      <img src="${item.image}" alt="${item.name}" onclick="openLightbox('${item.image}')">
+  cart.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "cart-item fade-in";
+
+    div.innerHTML = `
+      <img src="${item.image}" alt="${item.title}" onclick="openLightbox('${item.image}')">
+      
       <div class="meta">
-        <h4>${item.name}</h4>
+        <h4>${item.title}</h4>
         <div class="small muted">${item.description}</div>
         <div><strong>$${item.price.toFixed(2)}</strong></div>
-        <div class="controls">
+
+        <div class="controls" style="margin-top:8px;">
           <div class="qty">
             <button onclick="updateQuantity(${item.id}, -1)">−</button>
             <span style="padding:0 10px">${item.quantity}</span>
             <button onclick="updateQuantity(${item.id}, 1)">+</button>
           </div>
-          <button class="btn-ghost" onclick="removeFromCart(${item.id})">Remove</button>
+
+          <button class="btn-ghost" onclick="removeFromCart(${item.id})">
+            Remove
+          </button>
         </div>
       </div>
-      <div><strong>$${(item.price * item.quantity).toFixed(2)}</strong></div>
+
+      <div>
+        <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
+      </div>
     `;
 
-    cartList.appendChild(cartItem);
+    cartList.appendChild(div);
   });
 
   updateSummary();
@@ -431,65 +461,81 @@ function renderCart() {
   renderReviews();
 }
 
-/* ---------------------------
-   UPDATE SUMMARY
----------------------------- */
+/* =========================================================
+   SUMMARY
+========================================================= */
 function updateSummary() {
   const totals = calculateTotals();
 
-  document.getElementById("subtotal-amount").textContent = `$${totals.subtotal.toFixed(2)}`;
-  document.getElementById("shipping-amount").textContent = `$${totals.shipping.toFixed(2)}`;
-  document.getElementById("tax-amount").textContent = `$${totals.tax.toFixed(2)}`;
-  document.getElementById("discount-amount").textContent = `-$${totals.discount.toFixed(2)}`;
-  document.getElementById("total-amount").textContent = `$${totals.total.toFixed(2)}`;
+  const subtotal = document.getElementById("subtotal-amount");
+  const shipping = document.getElementById("shipping-amount");
+  const tax = document.getElementById("tax-amount");
+  const discount = document.getElementById("discount-amount");
+  const total = document.getElementById("total-amount");
+
+  if (subtotal) subtotal.textContent = `$${totals.subtotal.toFixed(2)}`;
+  if (shipping) shipping.textContent = `$${totals.shipping.toFixed(2)}`;
+  if (tax) tax.textContent = `$${totals.tax.toFixed(2)}`;
+  if (discount) discount.textContent = `-$${totals.discount.toFixed(2)}`;
+  if (total) total.textContent = `$${totals.total.toFixed(2)}`;
 }
 
-/* ---------------------------
-   APPLY PROMO
----------------------------- */
-document.getElementById("apply-promo").addEventListener("click", () => {
-  const code = document.getElementById("promo-code").value.trim().toUpperCase();
-  const feedback = document.getElementById("promo-feedback");
+/* =========================================================
+   PROMO
+========================================================= */
+const promoBtn = document.getElementById("apply-promo");
+if (promoBtn) {
+  promoBtn.addEventListener("click", () => {
+    const code = document.getElementById("promo-code").value.trim().toUpperCase();
+    const feedback = document.getElementById("promo-feedback");
 
-  if (promoCodes[code] !== undefined) {
-    promoApplied = promoCodes[code];
-    feedback.textContent = `Promo code "${code}" applied successfully!`;
-    showToast("Promo applied");
-  } else {
-    promoApplied = null;
-    feedback.textContent = "Invalid promo code";
-    showToast("Invalid promo");
-  }
+    if (promoCodes[code] !== undefined) {
+      promoApplied = promoCodes[code];
+      feedback.textContent = `Promo "${code}" applied successfully`;
+      showToast("Promo applied");
+    } else {
+      promoApplied = null;
+      feedback.textContent = "Invalid promo code";
+      showToast("Invalid promo");
+    }
 
-  updateSummary();
+    updateSummary();
+  });
+}
+
+/* =========================================================
+   SHIPPING/TAX/GIFT
+========================================================= */
+["shipping-method", "tax-rate", "gift-wrap"].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener("change", updateSummary);
 });
 
-/* ---------------------------
-   SHIPPING / TAX / GIFT EVENTS
----------------------------- */
-document.getElementById("shipping-method").addEventListener("change", updateSummary);
-document.getElementById("tax-rate").addEventListener("change", updateSummary);
-document.getElementById("gift-wrap").addEventListener("change", updateSummary);
-
-/* ---------------------------
+/* =========================================================
    ADDRESS MANAGEMENT
----------------------------- */
+========================================================= */
 let addresses = JSON.parse(localStorage.getItem("addresses")) || [];
 
 function renderAddresses() {
   const addressBook = document.getElementById("address-book");
+  if (!addressBook) return;
+
   addressBook.innerHTML = "";
 
   addresses.forEach((address, index) => {
     const div = document.createElement("div");
     div.className = "address";
+
     div.innerHTML = `
       <label>
-        <input type="radio" name="selected-address" ${selectedAddress === index ? "checked" : ""} onchange="selectAddress(${index})">
+        <input type="radio" name="selected-address"
+          ${selectedAddress === index ? "checked" : ""}
+          onchange="selectAddress(${index})">
         ${address.name}, ${address.phone}<br>
         ${address.street}, ${address.city}, ${address.country}
       </label>
     `;
+
     addressBook.appendChild(div);
   });
 }
@@ -498,27 +544,32 @@ function selectAddress(index) {
   selectedAddress = index;
 }
 
-document.getElementById("add-address-btn").addEventListener("click", () => {
-  const name = prompt("Full Name:");
-  const phone = prompt("Phone Number:");
-  const street = prompt("Street Address:");
-  const city = prompt("City:");
-  const country = prompt("Country:");
+const addAddressBtn = document.getElementById("add-address-btn");
+if (addAddressBtn) {
+  addAddressBtn.addEventListener("click", () => {
+    const name = prompt("Full Name:");
+    const phone = prompt("Phone Number:");
+    const street = prompt("Street Address:");
+    const city = prompt("City:");
+    const country = prompt("Country:");
 
-  if (name && phone && street && city && country) {
-    addresses.push({ name, phone, street, city, country });
-    localStorage.setItem("addresses", JSON.stringify(addresses));
-    renderAddresses();
-    showToast("Address added");
-  }
-});
+    if (name && phone && street && city && country) {
+      addresses.push({ name, phone, street, city, country });
+      localStorage.setItem("addresses", JSON.stringify(addresses));
+      renderAddresses();
+      showToast("Address added");
+    }
+  });
+}
 
-/* ---------------------------
-   PAYMENT METHOD
----------------------------- */
+/* =========================================================
+   PAYMENT
+========================================================= */
 function selectPayMethod(button) {
-  document.querySelectorAll(".pay-method").forEach(btn => btn.classList.remove("btn"));
-  document.querySelectorAll(".pay-method").forEach(btn => btn.classList.add("btn-ghost"));
+  document.querySelectorAll(".pay-method").forEach(btn => {
+    btn.classList.remove("btn");
+    btn.classList.add("btn-ghost");
+  });
 
   button.classList.remove("btn-ghost");
   button.classList.add("btn");
@@ -526,51 +577,63 @@ function selectPayMethod(button) {
   selectedPayment = button.dataset.id;
 }
 
-/* ---------------------------
+/* =========================================================
    CHECKOUT
----------------------------- */
-document.getElementById("checkout-button").addEventListener("click", () => {
-  if (cart.length === 0) {
-    showToast("Cart is empty");
-    return;
-  }
+========================================================= */
+const checkoutBtn = document.getElementById("checkout-button");
 
-  if (selectedAddress === null) {
-    showToast("Please add/select address");
-    return;
-  }
+if (checkoutBtn) {
+  checkoutBtn.addEventListener("click", () => {
+    if (!cart.length) {
+      showToast("Cart is empty");
+      return;
+    }
 
-  if (!selectedPayment) {
-    showToast("Please select payment method");
-    return;
-  }
+    if (selectedAddress === null) {
+      showToast("Please add/select address");
+      return;
+    }
 
-  const order = {
-    cart,
-    address: addresses[selectedAddress],
-    payment: selectedPayment,
-    notes: document.getElementById("order-notes").value,
-    totals: calculateTotals()
-  };
+    if (!selectedPayment) {
+      showToast("Please select payment method");
+      return;
+    }
 
-  localStorage.setItem("pendingOrder", JSON.stringify(order));
+    const order = {
+      cart,
+      address: addresses[selectedAddress],
+      payment: selectedPayment,
+      notes: document.getElementById("order-notes")?.value || "",
+      totals: calculateTotals()
+    };
 
-  window.location.href = "checkout.html";
-});
+    /* CRITICAL FIX */
+    sessionStorage.setItem("checkoutCart", JSON.stringify(cart));
+    localStorage.setItem("pendingOrder", JSON.stringify(order));
 
-/* ---------------------------
+    window.location.href = "checkout.html";
+  });
+}
+
+/* =========================================================
    WISHLIST
----------------------------- */
-document.getElementById("save-wish-btn").addEventListener("click", () => {
-  localStorage.setItem("wishlist", JSON.stringify(cart));
-  showToast("Cart saved to wishlist");
-});
+========================================================= */
+const wishBtn = document.getElementById("save-wish-btn");
 
-/* ---------------------------
+if (wishBtn) {
+  wishBtn.addEventListener("click", () => {
+    localStorage.setItem("wishlist", JSON.stringify(cart));
+    showToast("Cart saved to wishlist");
+  });
+}
+
+/* =========================================================
    RECOMMENDATIONS
----------------------------- */
+========================================================= */
 function renderRecommendations() {
   const container = document.getElementById("recommendations");
+  if (!container) return;
+
   container.innerHTML = "";
 
   recommendedProducts.forEach(product => {
@@ -578,41 +641,58 @@ function renderRecommendations() {
     div.className = "rec-card";
 
     div.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" style="width:100%;height:70px;object-fit:cover;border-radius:6px">
-      <div class="small"><strong>${product.name}</strong></div>
+      <img src="${product.image}" alt="${product.title}"
+        style="width:100%;height:70px;object-fit:cover;border-radius:6px">
+      <div class="small"><strong>${product.title}</strong></div>
       <div class="small">$${product.price.toFixed(2)}</div>
-      <button class="btn-ghost" style="margin-top:6px" onclick='addToCart(${JSON.stringify(product)})'>
+      <button class="btn-ghost" style="margin-top:6px">
         Add
       </button>
     `;
+
+    div.querySelector("button").addEventListener("click", () => {
+      addToCart(product);
+    });
 
     container.appendChild(div);
   });
 }
 
-/* ---------------------------
+/* =========================================================
    BUNDLES
----------------------------- */
+========================================================= */
 function renderBundles() {
   const container = document.getElementById("bundles");
+  if (!container) return;
+
   container.innerHTML = "";
 
   bundleOffers.forEach(bundle => {
     const div = document.createElement("div");
     div.className = "address";
+
     div.innerHTML = `
       <div>${bundle.title}</div>
-      <button class="btn-ghost" style="margin-top:6px" onclick="showToast('Bundle applied')">Apply Offer</button>
+      <button class="btn-ghost" style="margin-top:6px">
+        Apply Offer
+      </button>
     `;
+
+    div.querySelector("button").addEventListener("click", () => {
+      showToast("Bundle applied");
+    });
+
     container.appendChild(div);
   });
 }
 
-/* ---------------------------
+/* =========================================================
    REVIEWS
----------------------------- */
+========================================================= */
 function renderReviews() {
   const area = document.getElementById("reviews-area");
+  if (!area) return;
+
   area.innerHTML = "";
 
   reviews.forEach(review => {
@@ -623,25 +703,35 @@ function renderReviews() {
   });
 }
 
-/* ---------------------------
+/* =========================================================
    LIGHTBOX
----------------------------- */
+========================================================= */
 function openLightbox(src) {
-  document.getElementById("lightbox-img").src = src;
-  document.getElementById("lightbox").style.display = "flex";
+  const lightbox = document.getElementById("lightbox");
+  const img = document.getElementById("lightbox-img");
+
+  if (lightbox && img) {
+    img.src = src;
+    lightbox.style.display = "flex";
+  }
 }
 
 function closeLightbox(event) {
-  if (event.target.id === "lightbox" || event.target.id === "lightbox-img") {
+  if (
+    event.target.id === "lightbox" ||
+    event.target.id === "lightbox-img"
+  ) {
     document.getElementById("lightbox").style.display = "none";
   }
 }
 
-/* ---------------------------
+/* =========================================================
    TOAST
----------------------------- */
+========================================================= */
 function showToast(message) {
   const toast = document.getElementById("toast");
+  if (!toast) return;
+
   toast.textContent = message;
   toast.style.display = "block";
 
@@ -650,22 +740,22 @@ function showToast(message) {
   }, 2500);
 }
 
-/* ---------------------------
-   INITIALIZE PAGE
----------------------------- */
+/* =========================================================
+   INIT
+========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
   renderCart();
   renderAddresses();
 });
 
 /* =========================================================
-   SAMPLE PRODUCT PAGE BUTTON:
+   PRODUCT PAGE BUTTON USAGE:
    
    <button class="btn btn-ghost" onclick='addToCart({
       id: 1,
-      name: "Wireless Headphones",
+      title: "Wireless Headphones",
       price: 79.99,
-      description: "Premium sound quality headphones",
+      description: "Premium sound quality",
       image: "images/headphones.jpg"
    })'>
       Add to Cart
