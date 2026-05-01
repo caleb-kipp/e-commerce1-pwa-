@@ -1,0 +1,675 @@
+<!doctype html>  
+  
+<html lang="en">  
+<head>  
+  <meta charset="utf-8">  
+  <meta name="viewport" content="width=device-width,initial-scale=1">  
+  <title>Cart — Caleb's Store (Mega Cart)</title>  
+  <meta name="description" content="Advanced cart demo for Caleb's Store — promo codes, gift wrap, shipping, addresses, recommendations, AR placeholder, and accessible UI.">  
+  <script src="auth.js"></script>  
+<script src="protect.js"></script>  
+<script src="secure-core.js"></script>  
+    
+  <style>  
+    :root{--bg:#f7f9fc;--card:#ffffff;--muted:#6b7280;--accent:#0ea5a4;--danger:#ef4444;--shadow:0 6px 18px rgba(15,23,42,0.08)}  
+    *{box-sizing:border-box}  
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:var(--bg);color:#0f172a;line-height:1.4}  
+    header{background:linear-gradient(90deg,#ffffffcc, #f1f5f9cc);backdrop-filter:blur(4px);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}  
+    .brand{font-weight:800;letter-spacing:0.2px}  
+    nav a{margin-left:12px;text-decoration:none;color:inherit;padding:8px;border-radius:10px}  
+    nav a.active{background:rgba(14,165,164,0.12)}  
+    .container{max-width:1180px;margin:22px auto;padding:0 18px}  
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}  
+    .card{background:var(--card);padding:16px;border-radius:14px;box-shadow:var(--shadow)}  
+    h2,h3,h4{margin:0 0 8px}  
+    .muted{color:var(--muted)}  
+    .small{font-size:13px}  
+    .cart-list{display:flex;flex-direction:column;gap:12px}  
+    .cart-item{display:flex;gap:12px;align-items:center}  
+    .cart-item img{width:84px;height:84px;object-fit:cover;border-radius:8px}  
+    .cart-item .meta{flex:1}  
+    .controls{display:flex;gap:8px;align-items:center}  
+    .qty{display:inline-flex;align-items:center;border-radius:8px;overflow:hidden;border:1px solid #e6e9ef}  
+    .qty button{border:0;background:none;padding:8px 10px;cursor:pointer}  
+    .btn{background:var(--accent);color:white;border:0;padding:10px 14px;border-radius:10px;cursor:pointer}  
+    .btn-ghost{background:transparent;border:1px solid #e6e9ef;padding:8px 12px;border-radius:10px;cursor:pointer}  
+    .btn[disabled]{opacity:0.6;cursor:not-allowed}  
+    .summary-row{display:flex;justify-content:space-between;padding:6px 0}  
+    .divider{height:1px;background:#f1f5f9;margin:12px 0}  
+    .recommendations{display:flex;gap:8px;flex-wrap:wrap}  
+    .rec-card{width:120px;padding:8px;border-radius:8px;border:1px solid #eef2f7;text-align:center}  
+    .address-list{display:flex;flex-direction:column;gap:8px}  
+    .address{border:1px dashed #e6e9ef;padding:8px;border-radius:8px}  
+    .lightbox{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center}  
+    .lightbox img{max-width:90%;max-height:80%;border-radius:8px}  
+    .toast{position:fixed;right:20px;bottom:20px;background:#0f172a;color:white;padding:10px 14px;border-radius:10px;box-shadow:var(--shadow);display:none}  
+    footer{max-width:1180px;margin:18px auto;padding:12px;text-align:center;color:var(--muted)}  
+    /* small animations */  
+    .fade-in{animation:fadeIn .36s ease both}  
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}  
+    @media(max-width:920px){.grid{grid-template-columns:1fr}.card{padding:12px}}  
+  </style>  
+</head>  
+<body>  
+  <header>  
+    <div style="display:flex;align-items:center;gap:12px">  
+      <div class="brand">Caleb's Store</div>  
+      <nav aria-label="Main navigation">  
+        <a href="index.html">Home</a>  
+        <a href="cart.html" class="active">Cart</a>  
+        <a href="checkout.html">Checkout</a>  
+        <a href="orders.html">Orders</a>  
+      </nav>  
+    </div>  
+    <div aria-hidden="true">Cart demo — Mega Cart</div>  
+  </header>  <main class="container">  
+    <div class="grid" role="region" aria-label="Cart area">  
+      <!-- Left: Cart Items -->  
+      <section>  
+        <div class="card" aria-labelledby="items-heading">  
+          <h2 id="items-heading">Items in your cart <span id="cart-count-badge" class="muted" style="font-weight:600;margin-left:8px"></span></h2><div id="cart-empty" class="muted" style="display:none;padding:16px">Your cart is empty. <a href="index.html">Continue shopping</a></div>  
+  
+      <div id="cart-list" class="cart-list" aria-live="polite"></div>  
+  
+      <div class="divider" role="separator" aria-hidden="true"></div>  
+  
+      <!-- Promo / Gift / Notes -->  
+      <div style="display:flex;gap:12px;flex-wrap:wrap">  
+        <div style="flex:1;min-width:220px">  
+          <label for="promo-code" class="small">Promo / Coupon</label>  
+          <div class="promo" style="display:flex;gap:8px;margin-top:6px">  
+            <input type="text" id="promo-code" placeholder="Enter promo code" aria-label="Promo code" style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6e9ef">  
+            <button class="btn" id="apply-promo">Apply</button>  
+          </div>  
+          <div id="promo-feedback" class="small muted" style="margin-top:6px"></div>  
+        </div>  
+  
+        <div style="min-width:200px">  
+          <label class="small">Gift wrapping</label>  
+          <div class="controls-row" style="margin-top:6px">  
+            <label><input type="checkbox" id="gift-wrap"> Add gift wrapping ($5.00)</label>  
+          </div>  
+        </div>  
+  
+        <div style="flex-basis:100%;">  
+          <label class="small" for="order-notes">Order / item notes (optional)</label>  
+          <textarea id="order-notes" rows="2" placeholder="Add any notes for the seller (e.g., color/size reminders)" aria-label="Order notes" style="width:100%;padding:8px;border-radius:8px;border:1px solid #e6e9ef"></textarea>  
+        </div>  
+      </div>  
+    </div>  
+  
+    <div style="height:14px"></div>  
+  
+    <!-- Recommendations / Cross-sells -->  
+    <div class="card" aria-labelledby="recommendations-heading">  
+      <h2 id="recommendations-heading">You May Also Like</h2>  
+      <p class="small muted">Products recommended based on what's in your cart.</p>  
+      <div id="recommendations" class="recommendations" aria-live="polite"></div>  
+    </div>  
+  
+    <div style="height:14px"></div>  
+  
+    <!-- Reviews & AR placeholder -->  
+    <div class="card" aria-labelledby="extras-heading">  
+      <h2 id="extras-heading">Product Extras</h2>  
+      <div style="display:flex;gap:12px;flex-wrap:wrap">  
+        <div style="flex:1;min-width:220px">  
+          <h4>Customer reviews (demo)</h4>  
+          <div id="reviews-area" class="reviews" aria-live="polite"></div>  
+        </div>  
+        <div style="width:220px">  
+          <h4>AR / 360 placeholder</h4>  
+          <div class="small muted">Integrate <code>&lt;model-viewer&gt;</code> or WebXR for AR experiences. (Demo placeholder)</div>  
+          <div style="margin-top:8px"><button class="btn" onclick="showToast('AR viewer placeholder')">Open AR (demo)</button></div>  
+        </div>  
+      </div>  
+    </div>  
+  </section>  
+  
+  <!-- Right: Summary & Checkout -->  
+  <aside>  
+    <div class="card" aria-labelledby="summary-heading">  
+      <h2 id="summary-heading">Order Summary</h2>  
+  
+      <div class="summary-row"><div>Items subtotal</div><div id="subtotal-amount">$0.00</div></div>  
+  
+      <div style="margin-top:6px">  
+        <label for="shipping-method" class="small">Shipping method</label>  
+        <select id="shipping-method" aria-label="Shipping method" style="width:100%;margin-top:6px;padding:8px;border-radius:8px;border:1px solid #e6e9ef">  
+          <option value="5" selected>Standard — $5.00</option>  
+          <option value="15">Express — $15.00</option>  
+          <option value="0">Pickup — $0.00</option>  
+        </select>  
+      </div>  
+  
+      <div style="margin-top:6px">  
+        <label for="tax-rate" class="small">Tax rate</label>  
+        <select id="tax-rate" aria-label="Tax rate" style="width:100%;margin-top:6px;padding:8px;border-radius:8px;border:1px solid #e6e9ef">  
+          <option value="0">0%</option>  
+          <option value="0.05" selected>5%</option>  
+          <option value="0.12">12%</option>  
+        </select>  
+      </div>  
+  
+      <div class="summary-row"><div>Shipping</div><div id="shipping-amount">$0.00</div></div>  
+      <div class="summary-row"><div>Tax</div><div id="tax-amount">$0.00</div></div>  
+      <div class="summary-row"><div>Discount</div><div id="discount-amount">-$0.00</div></div>  
+  
+      <div class="divider"></div>  
+  
+      <div class="summary-row" style="font-size:18px;font-weight:700"><div>Total</div><div id="total-amount">$0.00</div></div>  
+  
+      <div style="margin-top:12px">  
+        <label class="small">Delivery address</label>  
+        <div id="address-book" class="address-list"></div>  
+        <div style="display:flex;gap:8px;margin-top:8px">  
+          <button class="btn" id="add-address-btn">Add Address</button>  
+          <button class="btn-ghost" id="edit-address-btn">Edit Selected</button>  
+        </div>  
+      </div>  
+  
+      <div style="margin-top:12px">  
+        <label class="small">Payment (placeholder)</label>  
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">  
+          <button class="pay-method btn-ghost" data-id="mpesa" onclick="selectPayMethod(this)">Mpesa</button>  
+          <button class="pay-method btn-ghost" data-id="airtel" onclick="selectPayMethod(this)">Airtel Money</button>  
+          <button class="pay-method btn-ghost" data-id="card" onclick="selectPayMethod(this)">Card</button>  
+        </div>  
+        <div class="small muted" style="margin-top:8px">Real payment happens on the checkout page using secure gateway integration.</div>  
+      </div>  
+  
+      <div style="margin-top:12px;display:flex;gap:8px">  
+        <button class="btn" id="checkout-button">Proceed to Checkout</button>  
+        <button class="btn-ghost" id="save-wish-btn">Save Cart to Wishlist</button>  
+      </div>  
+  
+      <div style="margin-top:10px;font-size:13px;color:var(--muted)">  
+        <div>Secure checkout — in production, initiate payments server-side (Mpesa/Airtel/Stripe).</div>  
+      </div>  
+    </div>  
+  
+    <div style="height:14px"></div>  
+  
+    <!-- Bundles & upsells -->  
+    <div class="card" aria-labelledby="upsell-heading">  
+      <h3 id="upsell-heading">Offers & Bundles</h3>  
+      <div id="bundles" style="display:flex;flex-direction:column;gap:10px;margin-top:8px"></div>  
+    </div>  
+  </aside>  
+</div>  
+  
+<!-- Lightbox for image zoom -->  
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" onclick="closeLightbox(event)">  
+  <img id="lightbox-img" src="" alt="Zoomed image">  
+</div>  
+  
+<div id="toast" class="toast" role="status" aria-live="polite"></div>  
+  
+  </main>  <footer>Caleb's Store — demo cart. This page uses localStorage for demo purposes. Links: <a href="index.html">Home</a> • <a href="checkout.html">Checkout</a></footer>    
+</body>  
+  <script>
+/* =========================================================
+   CALEB'S STORE — MEGA CART FUNCTIONAL JAVASCRIPT
+   Retains existing HTML + CSS structure
+   Adds:
+   - addToCart(product)
+   - cart rendering
+   - quantity controls
+   - remove items
+   - promo codes
+   - shipping + tax calculations
+   - gift wrap
+   - address management
+   - payment method selection
+   - checkout
+   - wishlist save
+   - recommendations
+   - bundles
+   - reviews
+   - image zoom
+   - localStorage persistence
+========================================================= */
+
+/* ---------------------------
+   GLOBAL STATE
+---------------------------- */
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let selectedAddress = null;
+let selectedPayment = null;
+let discount = 0;
+let promoApplied = null;
+
+/* Demo promo codes */
+const promoCodes = {
+  "SAVE10": 0.10,
+  "SAVE20": 0.20,
+  "FREESHIP": "shipping"
+};
+
+/* Demo recommendations */
+const recommendedProducts = [
+  {
+    id: 101,
+    name: "Wireless Earbuds",
+    price: 39.99,
+    image: "images/earbuds.jpg",
+    description: "High-quality sound"
+  },
+  {
+    id: 102,
+    name: "Phone Case",
+    price: 19.99,
+    image: "images/case.jpg",
+    description: "Protective premium case"
+  },
+  {
+    id: 103,
+    name: "Smart Watch",
+    price: 89.99,
+    image: "images/watch.jpg",
+    description: "Track fitness & calls"
+  }
+];
+
+/* Demo bundles */
+const bundleOffers = [
+  {
+    title: "Buy 2 accessories, get 15% off"
+  },
+  {
+    title: "Laptop + Mouse combo save $25"
+  }
+];
+
+/* Demo reviews */
+const reviews = [
+  "★★★★★ Excellent product quality!",
+  "★★★★☆ Fast shipping and good packaging.",
+  "★★★★★ Worth every penny."
+];
+
+/* ---------------------------
+   ADD TO CART FUNCTION
+---------------------------- */
+function addToCart(product) {
+  const existing = cart.find(item => item.id === product.id);
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({
+      ...product,
+      quantity: 1
+    });
+  }
+
+  saveCart();
+  renderCart();
+  showToast(`${product.name} added to cart`);
+}
+
+/* ---------------------------
+   SAVE CART
+---------------------------- */
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+/* ---------------------------
+   REMOVE FROM CART
+---------------------------- */
+function removeFromCart(productId) {
+  cart = cart.filter(item => item.id !== productId);
+  saveCart();
+  renderCart();
+  showToast("Item removed");
+}
+
+/* ---------------------------
+   UPDATE QUANTITY
+---------------------------- */
+function updateQuantity(productId, change) {
+  const item = cart.find(p => p.id === productId);
+
+  if (!item) return;
+
+  item.quantity += change;
+
+  if (item.quantity <= 0) {
+    removeFromCart(productId);
+    return;
+  }
+
+  saveCart();
+  renderCart();
+}
+
+/* ---------------------------
+   CALCULATE TOTALS
+---------------------------- */
+function calculateTotals() {
+  let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  const shipping = parseFloat(document.getElementById("shipping-method").value || 0);
+
+  const taxRate = parseFloat(document.getElementById("tax-rate").value || 0);
+
+  const giftWrap = document.getElementById("gift-wrap").checked ? 5 : 0;
+
+  let shippingCost = shipping;
+  let discountAmount = 0;
+
+  if (promoApplied === "shipping") {
+    shippingCost = 0;
+  } else if (typeof promoApplied === "number") {
+    discountAmount = subtotal * promoApplied;
+  }
+
+  subtotal += giftWrap;
+
+  const taxableAmount = subtotal - discountAmount;
+
+  const tax = taxableAmount * taxRate;
+
+  const total = taxableAmount + shippingCost + tax;
+
+  return {
+    subtotal,
+    shipping: shippingCost,
+    tax,
+    discount: discountAmount,
+    total
+  };
+}
+
+/* ---------------------------
+   RENDER CART
+---------------------------- */
+function renderCart() {
+  const cartList = document.getElementById("cart-list");
+  const emptyMsg = document.getElementById("cart-empty");
+  const badge = document.getElementById("cart-count-badge");
+
+  cartList.innerHTML = "";
+
+  if (cart.length === 0) {
+    emptyMsg.style.display = "block";
+    badge.textContent = "(0)";
+  } else {
+    emptyMsg.style.display = "none";
+    badge.textContent = `(${cart.length})`;
+  }
+
+  cart.forEach(item => {
+    const cartItem = document.createElement("div");
+    cartItem.className = "cart-item fade-in";
+
+    cartItem.innerHTML = `
+      <img src="${item.image}" alt="${item.name}" onclick="openLightbox('${item.image}')">
+      <div class="meta">
+        <h4>${item.name}</h4>
+        <div class="small muted">${item.description}</div>
+        <div><strong>$${item.price.toFixed(2)}</strong></div>
+        <div class="controls">
+          <div class="qty">
+            <button onclick="updateQuantity(${item.id}, -1)">−</button>
+            <span style="padding:0 10px">${item.quantity}</span>
+            <button onclick="updateQuantity(${item.id}, 1)">+</button>
+          </div>
+          <button class="btn-ghost" onclick="removeFromCart(${item.id})">Remove</button>
+        </div>
+      </div>
+      <div><strong>$${(item.price * item.quantity).toFixed(2)}</strong></div>
+    `;
+
+    cartList.appendChild(cartItem);
+  });
+
+  updateSummary();
+  renderRecommendations();
+  renderBundles();
+  renderReviews();
+}
+
+/* ---------------------------
+   UPDATE SUMMARY
+---------------------------- */
+function updateSummary() {
+  const totals = calculateTotals();
+
+  document.getElementById("subtotal-amount").textContent = `$${totals.subtotal.toFixed(2)}`;
+  document.getElementById("shipping-amount").textContent = `$${totals.shipping.toFixed(2)}`;
+  document.getElementById("tax-amount").textContent = `$${totals.tax.toFixed(2)}`;
+  document.getElementById("discount-amount").textContent = `-$${totals.discount.toFixed(2)}`;
+  document.getElementById("total-amount").textContent = `$${totals.total.toFixed(2)}`;
+}
+
+/* ---------------------------
+   APPLY PROMO
+---------------------------- */
+document.getElementById("apply-promo").addEventListener("click", () => {
+  const code = document.getElementById("promo-code").value.trim().toUpperCase();
+  const feedback = document.getElementById("promo-feedback");
+
+  if (promoCodes[code] !== undefined) {
+    promoApplied = promoCodes[code];
+    feedback.textContent = `Promo code "${code}" applied successfully!`;
+    showToast("Promo applied");
+  } else {
+    promoApplied = null;
+    feedback.textContent = "Invalid promo code";
+    showToast("Invalid promo");
+  }
+
+  updateSummary();
+});
+
+/* ---------------------------
+   SHIPPING / TAX / GIFT EVENTS
+---------------------------- */
+document.getElementById("shipping-method").addEventListener("change", updateSummary);
+document.getElementById("tax-rate").addEventListener("change", updateSummary);
+document.getElementById("gift-wrap").addEventListener("change", updateSummary);
+
+/* ---------------------------
+   ADDRESS MANAGEMENT
+---------------------------- */
+let addresses = JSON.parse(localStorage.getItem("addresses")) || [];
+
+function renderAddresses() {
+  const addressBook = document.getElementById("address-book");
+  addressBook.innerHTML = "";
+
+  addresses.forEach((address, index) => {
+    const div = document.createElement("div");
+    div.className = "address";
+    div.innerHTML = `
+      <label>
+        <input type="radio" name="selected-address" ${selectedAddress === index ? "checked" : ""} onchange="selectAddress(${index})">
+        ${address.name}, ${address.phone}<br>
+        ${address.street}, ${address.city}, ${address.country}
+      </label>
+    `;
+    addressBook.appendChild(div);
+  });
+}
+
+function selectAddress(index) {
+  selectedAddress = index;
+}
+
+document.getElementById("add-address-btn").addEventListener("click", () => {
+  const name = prompt("Full Name:");
+  const phone = prompt("Phone Number:");
+  const street = prompt("Street Address:");
+  const city = prompt("City:");
+  const country = prompt("Country:");
+
+  if (name && phone && street && city && country) {
+    addresses.push({ name, phone, street, city, country });
+    localStorage.setItem("addresses", JSON.stringify(addresses));
+    renderAddresses();
+    showToast("Address added");
+  }
+});
+
+/* ---------------------------
+   PAYMENT METHOD
+---------------------------- */
+function selectPayMethod(button) {
+  document.querySelectorAll(".pay-method").forEach(btn => btn.classList.remove("btn"));
+  document.querySelectorAll(".pay-method").forEach(btn => btn.classList.add("btn-ghost"));
+
+  button.classList.remove("btn-ghost");
+  button.classList.add("btn");
+
+  selectedPayment = button.dataset.id;
+}
+
+/* ---------------------------
+   CHECKOUT
+---------------------------- */
+document.getElementById("checkout-button").addEventListener("click", () => {
+  if (cart.length === 0) {
+    showToast("Cart is empty");
+    return;
+  }
+
+  if (selectedAddress === null) {
+    showToast("Please add/select address");
+    return;
+  }
+
+  if (!selectedPayment) {
+    showToast("Please select payment method");
+    return;
+  }
+
+  const order = {
+    cart,
+    address: addresses[selectedAddress],
+    payment: selectedPayment,
+    notes: document.getElementById("order-notes").value,
+    totals: calculateTotals()
+  };
+
+  localStorage.setItem("pendingOrder", JSON.stringify(order));
+
+  window.location.href = "checkout.html";
+});
+
+/* ---------------------------
+   WISHLIST
+---------------------------- */
+document.getElementById("save-wish-btn").addEventListener("click", () => {
+  localStorage.setItem("wishlist", JSON.stringify(cart));
+  showToast("Cart saved to wishlist");
+});
+
+/* ---------------------------
+   RECOMMENDATIONS
+---------------------------- */
+function renderRecommendations() {
+  const container = document.getElementById("recommendations");
+  container.innerHTML = "";
+
+  recommendedProducts.forEach(product => {
+    const div = document.createElement("div");
+    div.className = "rec-card";
+
+    div.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" style="width:100%;height:70px;object-fit:cover;border-radius:6px">
+      <div class="small"><strong>${product.name}</strong></div>
+      <div class="small">$${product.price.toFixed(2)}</div>
+      <button class="btn-ghost" style="margin-top:6px" onclick='addToCart(${JSON.stringify(product)})'>
+        Add
+      </button>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+/* ---------------------------
+   BUNDLES
+---------------------------- */
+function renderBundles() {
+  const container = document.getElementById("bundles");
+  container.innerHTML = "";
+
+  bundleOffers.forEach(bundle => {
+    const div = document.createElement("div");
+    div.className = "address";
+    div.innerHTML = `
+      <div>${bundle.title}</div>
+      <button class="btn-ghost" style="margin-top:6px" onclick="showToast('Bundle applied')">Apply Offer</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+/* ---------------------------
+   REVIEWS
+---------------------------- */
+function renderReviews() {
+  const area = document.getElementById("reviews-area");
+  area.innerHTML = "";
+
+  reviews.forEach(review => {
+    const p = document.createElement("p");
+    p.className = "small";
+    p.textContent = review;
+    area.appendChild(p);
+  });
+}
+
+/* ---------------------------
+   LIGHTBOX
+---------------------------- */
+function openLightbox(src) {
+  document.getElementById("lightbox-img").src = src;
+  document.getElementById("lightbox").style.display = "flex";
+}
+
+function closeLightbox(event) {
+  if (event.target.id === "lightbox" || event.target.id === "lightbox-img") {
+    document.getElementById("lightbox").style.display = "none";
+  }
+}
+
+/* ---------------------------
+   TOAST
+---------------------------- */
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.style.display = "block";
+
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 2500);
+}
+
+/* ---------------------------
+   INITIALIZE PAGE
+---------------------------- */
+window.addEventListener("DOMContentLoaded", () => {
+  renderCart();
+  renderAddresses();
+});
+
+/* =========================================================
+   SAMPLE PRODUCT PAGE BUTTON:
+   
+   <button class="btn btn-ghost" onclick='addToCart({
+      id: 1,
+      name: "Wireless Headphones",
+      price: 79.99,
+      description: "Premium sound quality headphones",
+      image: "images/headphones.jpg"
+   })'>
+      Add to Cart
+   </button>
+========================================================= */
+</script>
+</html>
