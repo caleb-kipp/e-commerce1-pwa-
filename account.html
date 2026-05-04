@@ -1021,16 +1021,80 @@ function formatDate(dateString){
   return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
 }
 
-function getStorage(key, fallback=[]){
+const STORAGE_CRYPTO = {
+  passphrase: 'ShopEase_Profile_Local_Encryption_v1',
+  salt: 'ShopEase_LocalStorage_Salt_v1',
+  iterations: 100000
+};
+
+function toBase64(bytes){
+  return btoa(String.fromCharCode(...bytes));
+}
+
+function fromBase64(b64){
+  return new Uint8Array(atob(b64).split('').map(c=>c.charCodeAt(0)));
+}
+
+async function deriveStorageKey(){
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(STORAGE_CRYPTO.passphrase),
+    'PBKDF2',
+    false,
+    ['deriveKey']
+  );
+
+  return crypto.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt: enc.encode(STORAGE_CRYPTO.salt),
+      iterations: STORAGE_CRYPTO.iterations,
+      hash: 'SHA-256'
+    },
+    baseKey,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+}
+
+async function getStorage(key, fallback=[]){
   try{
-    return JSON.parse(localStorage.getItem(key)) || fallback;
+    const raw = localStorage.getItem(key);
+    if(!raw) return fallback;
+
+    const payload = JSON.parse(raw);
+    if(!payload || !payload.iv || !payload.data) return fallback;
+
+    const cryptoKey = await deriveStorageKey();
+    const decrypted = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: fromBase64(payload.iv) },
+      cryptoKey,
+      fromBase64(payload.data)
+    );
+
+    return JSON.parse(new TextDecoder().decode(decrypted)) || fallback;
   }catch(e){
     return fallback;
   }
 }
 
-function setStorage(key, value){
-  localStorage.setItem(key, JSON.stringify(value));
+async function setStorage(key, value){
+  const cryptoKey = await deriveStorageKey();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const plaintext = new TextEncoder().encode(JSON.stringify(value));
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    cryptoKey,
+    plaintext
+  );
+
+  localStorage.setItem(key, JSON.stringify({
+    v: 1,
+    iv: toBase64(iv),
+    data: toBase64(new Uint8Array(ciphertext))
+  }));
 }
 
 function showToast(msg){
@@ -1179,9 +1243,9 @@ function renderLoginHistory(){
 /* =========================================================
    PROFILE
 ========================================================= */
-function getProfile(){
+async function getProfile(){
 
-  return getStorage('ss_profile',{
+  return await getStorage('ss_profile',{
     fullName:'',
     email:'',
     phone:'',
@@ -1193,13 +1257,13 @@ function getProfile(){
   });
 }
 
-function saveProfile(profile){
-  setStorage('ss_profile', profile);
+async function saveProfile(profile){
+  await setStorage('ss_profile', profile);
 }
 
-function renderProfile(){
+async function renderProfile(){
 
-  const profile = getProfile();
+  const profile = await getProfile();
 
   const displayMap = {
     'profile-name': profile.fullName,
@@ -1238,7 +1302,7 @@ function renderProfile(){
   });
 }
 
-function saveProfileForm(e){
+async function saveProfileForm(e){
 
   e.preventDefault();
 
@@ -1253,9 +1317,9 @@ function saveProfileForm(e){
     bio: safe('edit-bio')?.value || ''
   };
 
-  saveProfile(profile);
+  await saveProfile(profile);
 
-  renderProfile();
+  await renderProfile();
 
   closeModal('edit-profile-modal');
 
