@@ -958,22 +958,31 @@
   </div>
   
   <script id="app-script">
-    /* =========================================================
-   CALEB'S STORE — ACCOUNT.JS MASTER ENTERPRISE ENGINE
-   FULL REAL DATA VERSION
+/* =========================================================
+   CALEB'S STORE — ACCOUNT.JS MOBILE + WEB FULL REAL DATA ENGINE
+   COMPLETE PRODUCTION VERSION
    FEATURES:
-   ✔ Real profile persistence
-   ✔ Edit profile + save permanently
-   ✔ Shared address book sync with cart.html + checkout.html
-   ✔ Add / edit / delete addresses
-   ✔ Real order management from checkout orders
+   ✔ Real authentication persistence
+   ✔ Full profile CRUD
+   ✔ Shared address book sync across:
+      - account.html
+      - cart.html
+      - checkout.html
+   ✔ Real order history from checkout
    ✔ Real payment history
-   ✔ Real wishlist/favorites from index add-to-wishlist
-   ✔ Real login history
-   ✔ Device + browser detection
-   ✔ Authentication persistence
-   ✔ Modal system retained
-   ✔ Tab navigation retained
+   ✔ Wishlist/favorites from index.html
+   ✔ Login history with:
+      - date
+      - time
+      - browser
+      - device
+      - platform
+   ✔ Mobile compatibility fixes
+   ✔ Full modal compatibility
+   ✔ Sign out whole app
+   ✔ Re-login support
+   ✔ Delete/edit addresses
+   ✔ Persistent storage
 ========================================================= */
 
 (function(){
@@ -984,10 +993,14 @@
 let isAuthenticated = false;
 
 /* =========================================================
-   UTILITIES
+   HELPERS
 ========================================================= */
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
+
+function safe(id){
+  return document.getElementById(id);
+}
 
 function escapeHtml(str){
   return ('' + str).replace(/[&<>"']/g, c => ({
@@ -999,37 +1012,15 @@ function escapeHtml(str){
   }[c]));
 }
 
+function formatCurrency(n){
+  return '$' + Number(n || 0).toFixed(2);
+}
+
 function formatDate(dateString){
   const d = new Date(dateString);
   return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
 }
 
-function getDeviceInfo(){
-  const ua = navigator.userAgent;
-
-  let device = 'Unknown Device';
-
-  if(/mobile/i.test(ua)){
-    device = 'Mobile Device';
-  }else if(/tablet/i.test(ua)){
-    device = 'Tablet';
-  }else{
-    device = 'Desktop';
-  }
-
-  let browser = 'Unknown Browser';
-
-  if(ua.includes('Chrome')) browser = 'Chrome';
-  else if(ua.includes('Firefox')) browser = 'Firefox';
-  else if(ua.includes('Safari')) browser = 'Safari';
-  else if(ua.includes('Edge')) browser = 'Edge';
-
-  return `${device} - ${browser}`;
-}
-
-/* =========================================================
-   STORAGE HELPERS
-========================================================= */
 function getStorage(key, fallback=[]){
   try{
     return JSON.parse(localStorage.getItem(key)) || fallback;
@@ -1042,11 +1033,155 @@ function setStorage(key, value){
   localStorage.setItem(key, JSON.stringify(value));
 }
 
+function showToast(msg){
+  let toast = safe('global-toast');
+
+  if(!toast){
+    toast = document.createElement('div');
+    toast.id = 'global-toast';
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.right = '20px';
+    toast.style.padding = '12px 18px';
+    toast.style.background = '#111';
+    toast.style.color = '#fff';
+    toast.style.borderRadius = '8px';
+    toast.style.zIndex = '9999';
+    toast.style.fontSize = '14px';
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = msg;
+  toast.style.display = 'block';
+
+  setTimeout(()=>{
+    toast.style.display = 'none';
+  },2500);
+}
+
 /* =========================================================
-   PROFILE SYSTEM
+   DEVICE DETECTION
+========================================================= */
+function getDeviceInfo(){
+
+  const ua = navigator.userAgent;
+  let device = 'Desktop';
+  let browser = 'Unknown Browser';
+
+  if(/android/i.test(ua)) device = 'Android';
+  else if(/iPhone|iPad|iPod/i.test(ua)) device = 'iPhone/iPad';
+  else if(/Mobile/i.test(ua)) device = 'Mobile';
+
+  if(ua.includes('Chrome')) browser = 'Chrome';
+  else if(ua.includes('Firefox')) browser = 'Firefox';
+  else if(ua.includes('Safari')) browser = 'Safari';
+  else if(ua.includes('Edge')) browser = 'Edge';
+
+  return {
+    device,
+    browser,
+    platform: navigator.platform || 'Unknown'
+  };
+}
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+function checkAuthStatus(){
+
+  const authStatus = localStorage.getItem('isAuthenticated');
+
+  if(authStatus === 'true'){
+    isAuthenticated = true;
+    showAccountPage();
+  }else{
+    isAuthenticated = false;
+    showSignInPage();
+  }
+}
+
+function simulateLogin(){
+
+  localStorage.setItem('isAuthenticated','true');
+  isAuthenticated = true;
+
+  recordLogin();
+
+  showAccountPage();
+
+  renderAllData();
+}
+
+function handleSignOut(){
+
+  localStorage.removeItem('isAuthenticated');
+
+  isAuthenticated = false;
+
+  showSignInPage();
+
+  showToast('Signed out successfully');
+}
+
+function showSignInPage(){
+
+  safe('signin-container')?.classList.remove('hidden');
+  safe('account-container')?.classList.add('hidden');
+}
+
+function showAccountPage(){
+
+  safe('signin-container')?.classList.add('hidden');
+  safe('account-container')?.classList.remove('hidden');
+}
+
+/* =========================================================
+   LOGIN HISTORY
+========================================================= */
+function recordLogin(){
+
+  const logins = getStorage('login_history', []);
+
+  const info = getDeviceInfo();
+
+  logins.unshift({
+    date: new Date().toISOString(),
+    device: info.device,
+    browser: info.browser,
+    platform: info.platform
+  });
+
+  setStorage('login_history', logins.slice(0,100));
+}
+
+function renderLoginHistory(){
+
+  const container = safe('login-history-container');
+  if(!container) return;
+
+  const history = getStorage('login_history', []);
+
+  if(!history.length){
+    container.innerHTML = '<p>No login history found.</p>';
+    return;
+  }
+
+  container.innerHTML = history.map(item=>`
+    <div class="login-history-card">
+      <div><strong>Date:</strong> ${formatDate(item.date)}</div>
+      <div><strong>Device:</strong> ${escapeHtml(item.device)}</div>
+      <div><strong>Browser:</strong> ${escapeHtml(item.browser)}</div>
+      <div><strong>Platform:</strong> ${escapeHtml(item.platform)}</div>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   PROFILE
 ========================================================= */
 function getProfile(){
-  return getStorage('ss_profile', {
+
+  return getStorage('ss_profile',{
     fullName:'',
     email:'',
     phone:'',
@@ -1054,8 +1189,7 @@ function getProfile(){
     dob:'',
     country:'',
     city:'',
-    bio:'',
-    avatar:''
+    bio:''
   });
 }
 
@@ -1067,7 +1201,7 @@ function renderProfile(){
 
   const profile = getProfile();
 
-  const fields = {
+  const displayMap = {
     'profile-name': profile.fullName,
     'profile-email': profile.email,
     'profile-phone': profile.phone,
@@ -1078,35 +1212,58 @@ function renderProfile(){
     'profile-bio': profile.bio
   };
 
-  Object.keys(fields).forEach(id=>{
-    const el = document.getElementById(id);
+  Object.keys(displayMap).forEach(id=>{
+    const el = safe(id);
     if(el){
-      el.textContent = fields[id] || 'Not provided';
+      el.textContent = displayMap[id] || 'Not provided';
     }
   });
 
-  /* Prefill edit form */
-  const map = {
-    fullName:'edit-fullname',
-    email:'edit-email',
-    phone:'edit-phone',
-    gender:'edit-gender',
-    dob:'edit-dob',
-    country:'edit-country',
-    city:'edit-city',
-    bio:'edit-bio'
+  const formMap = {
+    'edit-fullname': profile.fullName,
+    'edit-email': profile.email,
+    'edit-phone': profile.phone,
+    'edit-gender': profile.gender,
+    'edit-dob': profile.dob,
+    'edit-country': profile.country,
+    'edit-city': profile.city,
+    'edit-bio': profile.bio
   };
 
-  Object.keys(map).forEach(key=>{
-    const input = document.getElementById(map[key]);
-    if(input){
-      input.value = profile[key] || '';
+  Object.keys(formMap).forEach(id=>{
+    const el = safe(id);
+    if(el){
+      el.value = formMap[id] || '';
     }
   });
 }
 
+function saveProfileForm(e){
+
+  e.preventDefault();
+
+  const profile = {
+    fullName: safe('edit-fullname')?.value || '',
+    email: safe('edit-email')?.value || '',
+    phone: safe('edit-phone')?.value || '',
+    gender: safe('edit-gender')?.value || '',
+    dob: safe('edit-dob')?.value || '',
+    country: safe('edit-country')?.value || '',
+    city: safe('edit-city')?.value || '',
+    bio: safe('edit-bio')?.value || ''
+  };
+
+  saveProfile(profile);
+
+  renderProfile();
+
+  closeModal('edit-profile-modal');
+
+  showToast('Profile updated');
+}
+
 /* =========================================================
-   ADDRESS BOOK SYSTEM
+   ADDRESS BOOK
 ========================================================= */
 function getAddresses(){
   return getStorage('addresses', []);
@@ -1121,9 +1278,10 @@ function renderAddresses(){
   const addresses = getAddresses();
 
   const containers = [
-    $('#address-book-list'),
-    $('#saved-addresses'),
-    $('#cart-address-sync')
+    safe('address-book-list'),
+    safe('saved-addresses'),
+    safe('address-book'),
+    safe('cart-address-sync')
   ];
 
   containers.forEach(container=>{
@@ -1142,13 +1300,13 @@ function renderAddresses(){
         <div>${escapeHtml(addr.street)}</div>
         <div>${escapeHtml(addr.city)}, ${escapeHtml(addr.country)}</div>
 
-        <div style="margin-top:10px;">
-          <button class="btn btn-ghost edit-address"
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-ghost edit-address-btn"
                   data-index="${index}">
             Edit
           </button>
 
-          <button class="btn btn-ghost delete-address"
+          <button class="btn btn-ghost delete-address-btn"
                   data-index="${index}">
             Delete
           </button>
@@ -1157,26 +1315,46 @@ function renderAddresses(){
     `).join('');
   });
 
-  /* Edit */
-  $$('.edit-address').forEach(btn=>{
+  $$('.edit-address-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
       editAddress(+btn.dataset.index);
     });
   });
 
-  /* Delete */
-  $$('.delete-address').forEach(btn=>{
+  $$('.delete-address-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
       deleteAddress(+btn.dataset.index);
     });
   });
 }
 
-function addAddress(address){
+function addAddressFromForm(e){
+
+  e.preventDefault();
+
+  const address = {
+    name: safe('address-name')?.value || '',
+    phone: safe('address-phone')?.value || '',
+    street: safe('address-street')?.value || '',
+    city: safe('address-city')?.value || '',
+    country: safe('address-country')?.value || ''
+  };
+
+  if(!address.name || !address.street){
+    showToast('Name and address required');
+    return;
+  }
+
   const addresses = getAddresses();
   addresses.push(address);
+
   saveAddresses(addresses);
+
   renderAddresses();
+
+  closeModal('add-address-modal');
+
+  showToast('Address added');
 }
 
 function editAddress(index){
@@ -1203,7 +1381,10 @@ function editAddress(index){
   };
 
   saveAddresses(addresses);
+
   renderAddresses();
+
+  showToast('Address updated');
 }
 
 function deleteAddress(index){
@@ -1211,39 +1392,43 @@ function deleteAddress(index){
   if(!confirm('Delete this address?')) return;
 
   const addresses = getAddresses();
+
   addresses.splice(index,1);
 
   saveAddresses(addresses);
+
   renderAddresses();
+
+  showToast('Address deleted');
 }
 
 /* =========================================================
-   ORDER MANAGEMENT
+   ORDERS
 ========================================================= */
 function renderOrders(){
 
   const orders = getStorage('ss_orders', []);
 
-  const historyContainer = $('#order-history-content');
-  const currentContainer = $('#current-orders-content');
+  const history = safe('order-history-content');
+  const current = safe('current-orders-content');
 
-  if(historyContainer){
+  if(history){
 
     if(!orders.length){
-      historyContainer.innerHTML = '<p>No previous orders.</p>';
+      history.innerHTML = '<p>No orders yet.</p>';
     }else{
-      historyContainer.innerHTML = orders.map(order=>`
+      history.innerHTML = orders.map(order=>`
         <div class="order-card">
           <div><strong>Order ID:</strong> ${escapeHtml(order.id)}</div>
           <div><strong>Status:</strong> ${escapeHtml(order.status)}</div>
           <div><strong>Date:</strong> ${formatDate(order.createdAt)}</div>
-          <div><strong>Total:</strong> $${order.total.toFixed(2)}</div>
+          <div><strong>Total:</strong> ${formatCurrency(order.total)}</div>
 
           <div style="margin-top:8px;">
             ${order.items.map(item=>`
               <div>
                 ${escapeHtml(item.title)} × ${item.qty}
-                = $${item.total.toFixed(2)}
+                = ${formatCurrency(item.total)}
               </div>
             `).join('')}
           </div>
@@ -1252,20 +1437,21 @@ function renderOrders(){
     }
   }
 
-  if(currentContainer){
+  if(current){
 
-    const activeOrders = orders.filter(
+    const active = orders.filter(
       o => o.status !== 'Delivered'
     );
 
-    if(!activeOrders.length){
-      currentContainer.innerHTML = '<p>No active orders.</p>';
+    if(!active.length){
+      current.innerHTML = '<p>No active orders.</p>';
     }else{
-      currentContainer.innerHTML = activeOrders.map(order=>`
+      current.innerHTML = active.map(order=>`
         <div class="order-card">
           <div><strong>${escapeHtml(order.id)}</strong></div>
           <div>Status: ${escapeHtml(order.status)}</div>
           <div>${formatDate(order.createdAt)}</div>
+          <div>${formatCurrency(order.total)}</div>
         </div>
       `).join('');
     }
@@ -1273,17 +1459,17 @@ function renderOrders(){
 }
 
 /* =========================================================
-   PAYMENT HISTORY
+   PAYMENTS
 ========================================================= */
 function renderPayments(){
 
-  const orders = getStorage('ss_orders', []);
-  const container = $('#payment-history');
-
+  const container = safe('payment-history');
   if(!container) return;
 
+  const orders = getStorage('ss_orders', []);
+
   if(!orders.length){
-    container.innerHTML = '<p>No payment history.</p>';
+    container.innerHTML = '<p>No payments found.</p>';
     return;
   }
 
@@ -1291,21 +1477,21 @@ function renderPayments(){
     <div class="payment-card">
       <div><strong>Order:</strong> ${escapeHtml(order.id)}</div>
       <div><strong>Method:</strong> ${escapeHtml(order.paymentMethod)}</div>
-      <div><strong>Total Paid:</strong> $${order.total.toFixed(2)}</div>
+      <div><strong>Total:</strong> ${formatCurrency(order.total)}</div>
       <div><strong>Date:</strong> ${formatDate(order.createdAt)}</div>
     </div>
   `).join('');
 }
 
 /* =========================================================
-   WISHLIST + FAVORITES
+   WISHLIST / FAVORITES
 ========================================================= */
 function renderWishlist(){
 
-  const wishlist = getStorage('wishlist', []);
-  const container = $('#wishlist-container');
-
+  const container = safe('wishlist-container');
   if(!container) return;
+
+  const wishlist = getStorage('wishlist', []);
 
   if(!wishlist.length){
     container.innerHTML = '<p>No wishlist items.</p>';
@@ -1320,125 +1506,72 @@ function renderWishlist(){
 
       <div>
         <div><strong>${escapeHtml(item.title)}</strong></div>
-        <div>$${Number(item.price).toFixed(2)}</div>
+        <div>${formatCurrency(item.price)}</div>
 
-        <button class="btn btn-ghost add-cart-from-wishlist"
-                data-id="${escapeHtml(item.id)}">
-          Add to Cart
-        </button>
+        <div style="margin-top:8px;display:flex;gap:8px;">
+          <button class="btn btn-ghost wishlist-add-cart"
+                  data-id="${escapeHtml(item.id)}">
+            Add to Cart
+          </button>
+
+          <button class="btn btn-ghost wishlist-remove"
+                  data-id="${escapeHtml(item.id)}">
+            Remove
+          </button>
+        </div>
       </div>
     </div>
   `).join('');
 
-  $$('.add-cart-from-wishlist').forEach(btn=>{
+  $$('.wishlist-add-cart').forEach(btn=>{
     btn.addEventListener('click',()=>{
-      const wishlist = getStorage('wishlist', []);
-      const item = wishlist.find(
-        w => w.id == btn.dataset.id
-      );
+      addWishlistItemToCart(btn.dataset.id);
+    });
+  });
 
-      if(!item) return;
-
-      let cart = getStorage('ss_cart', []);
-
-      const existing = cart.find(c=>c.id===item.id);
-
-      if(existing){
-        existing.quantity += 1;
-      }else{
-        item.quantity = 1;
-        cart.push(item);
-      }
-
-      setStorage('ss_cart', cart);
-      alert('Added to cart');
+  $$('.wishlist-remove').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      removeWishlistItem(btn.dataset.id);
     });
   });
 }
 
-/* =========================================================
-   LOGIN HISTORY
-========================================================= */
-function recordLogin(){
+function addWishlistItemToCart(id){
 
-  const logins = getStorage('login_history', []);
+  const wishlist = getStorage('wishlist', []);
+  const item = wishlist.find(w=>w.id==id);
 
-  logins.unshift({
-    date: new Date().toISOString(),
-    device: getDeviceInfo()
-  });
+  if(!item) return;
 
-  setStorage('login_history', logins.slice(0,50));
-}
+  const cart = getStorage('ss_cart', []);
 
-function renderLoginHistory(){
+  const existing = cart.find(c=>c.id===item.id);
 
-  const history = getStorage('login_history', []);
-  const container = $('#login-history-container');
-
-  if(!container) return;
-
-  if(!history.length){
-    container.innerHTML = '<p>No login history.</p>';
-    return;
-  }
-
-  container.innerHTML = history.map(login=>`
-    <div class="login-history-card">
-      <div><strong>Date:</strong> ${formatDate(login.date)}</div>
-      <div><strong>Device:</strong> ${escapeHtml(login.device)}</div>
-    </div>
-  `).join('');
-}
-
-/* =========================================================
-   AUTH
-========================================================= */
-function checkAuthStatus(){
-
-  const authStatus = localStorage.getItem('isAuthenticated');
-
-  if(authStatus === 'true'){
-    isAuthenticated = true;
-    showAccountPage();
+  if(existing){
+    existing.quantity += 1;
   }else{
-    isAuthenticated = false;
-    showSignInPage();
+    item.quantity = 1;
+    cart.push(item);
   }
+
+  setStorage('ss_cart', cart);
+
+  showToast('Added to cart');
 }
 
-function simulateLogin(){
+function removeWishlistItem(id){
 
-  localStorage.setItem('isAuthenticated','true');
-  isAuthenticated = true;
+  let wishlist = getStorage('wishlist', []);
 
-  recordLogin();
+  wishlist = wishlist.filter(
+    item => item.id != id
+  );
 
-  showAccountPage();
+  setStorage('wishlist', wishlist);
 
-  renderAllAccountData();
-}
+  renderWishlist();
 
-function handleSignOut(){
-
-  localStorage.removeItem('isAuthenticated');
-  isAuthenticated = false;
-
-  showSignInPage();
-}
-
-function showSignInPage(){
-
-  $('#signin-container')?.classList.remove('hidden');
-  $('#account-container')?.classList.add('hidden');
-}
-
-function showAccountPage(){
-
-  $('#signin-container')?.classList.add('hidden');
-  $('#account-container')?.classList.remove('hidden');
-
-  renderAllAccountData();
+  showToast('Removed from wishlist');
 }
 
 /* =========================================================
@@ -1446,28 +1579,28 @@ function showAccountPage(){
 ========================================================= */
 function setupTabs(){
 
-  switchTab(
-    localStorage.getItem('activeTab') || 'order-history'
-  );
+  const activeTab = localStorage.getItem('activeTab') || 'order-history';
+
+  switchTab(activeTab);
 }
 
 function switchTab(tabName){
 
   if(tabName === 'order-history'){
 
-    $('#order-history-tab')?.classList.add('tab-active');
-    $('#current-orders-tab')?.classList.remove('tab-active');
+    safe('order-history-tab')?.classList.add('tab-active');
+    safe('current-orders-tab')?.classList.remove('tab-active');
 
-    $('#order-history-content')?.classList.remove('hidden');
-    $('#current-orders-content')?.classList.add('hidden');
+    safe('order-history-content')?.classList.remove('hidden');
+    safe('current-orders-content')?.classList.add('hidden');
 
   }else{
 
-    $('#order-history-tab')?.classList.remove('tab-active');
-    $('#current-orders-tab')?.classList.add('tab-active');
+    safe('order-history-tab')?.classList.remove('tab-active');
+    safe('current-orders-tab')?.classList.add('tab-active');
 
-    $('#order-history-content')?.classList.add('hidden');
-    $('#current-orders-content')?.classList.remove('hidden');
+    safe('order-history-content')?.classList.add('hidden');
+    safe('current-orders-content')?.classList.remove('hidden');
   }
 
   localStorage.setItem('activeTab', tabName);
@@ -1477,59 +1610,17 @@ function switchTab(tabName){
    MODALS
 ========================================================= */
 function openModal(modalId){
-  $('#' + modalId)?.classList.add('show');
+  safe(modalId)?.classList.add('show');
 }
 
 function closeModal(modalId){
-  $('#' + modalId)?.classList.remove('show');
+  safe(modalId)?.classList.remove('show');
 }
 
 /* =========================================================
-   FORM HANDLERS
+   FULL DATA RENDER
 ========================================================= */
-function handleProfileSave(e){
-
-  e.preventDefault();
-
-  const profile = {
-    fullName: $('#edit-fullname')?.value || '',
-    email: $('#edit-email')?.value || '',
-    phone: $('#edit-phone')?.value || '',
-    gender: $('#edit-gender')?.value || '',
-    dob: $('#edit-dob')?.value || '',
-    country: $('#edit-country')?.value || '',
-    city: $('#edit-city')?.value || '',
-    bio: $('#edit-bio')?.value || ''
-  };
-
-  saveProfile(profile);
-
-  renderProfile();
-
-  closeModal('edit-profile-modal');
-}
-
-function handleAddressSave(e){
-
-  e.preventDefault();
-
-  const address = {
-    name: $('#address-name')?.value || '',
-    phone: $('#address-phone')?.value || '',
-    street: $('#address-street')?.value || '',
-    city: $('#address-city')?.value || '',
-    country: $('#address-country')?.value || ''
-  };
-
-  addAddress(address);
-
-  closeModal('add-address-modal');
-}
-
-/* =========================================================
-   MAIN RENDER
-========================================================= */
-function renderAllAccountData(){
+function renderAllData(){
 
   renderProfile();
   renderAddresses();
@@ -1544,39 +1635,56 @@ function renderAllAccountData(){
 ========================================================= */
 function setupEventListeners(){
 
-  $('#account-icon')?.addEventListener('click',()=>{
+  safe('account-icon')?.addEventListener('click',()=>{
     isAuthenticated
       ? showAccountPage()
       : showSignInPage();
   });
 
-  $('#login-form')?.addEventListener('submit',e=>{
+  safe('login-form')?.addEventListener('submit',e=>{
     e.preventDefault();
     simulateLogin();
   });
 
-  $('#sign-out-btn')?.addEventListener('click',handleSignOut);
-  $('#mobile-sign-out-btn')?.addEventListener('click',handleSignOut);
+  safe('sign-out-btn')?.addEventListener(
+    'click',
+    handleSignOut
+  );
 
-  $('#order-history-tab')?.addEventListener('click',()=>{
-    switchTab('order-history');
-  });
+  safe('mobile-sign-out-btn')?.addEventListener(
+    'click',
+    handleSignOut
+  );
 
-  $('#current-orders-tab')?.addEventListener('click',()=>{
-    switchTab('current-orders');
-  });
+  safe('order-history-tab')?.addEventListener(
+    'click',
+    ()=>switchTab('order-history')
+  );
 
-  $('#edit-profile-btn')?.addEventListener('click',()=>{
-    openModal('edit-profile-modal');
-  });
+  safe('current-orders-tab')?.addEventListener(
+    'click',
+    ()=>switchTab('current-orders')
+  );
 
-  $('#add-address-btn')?.addEventListener('click',()=>{
-    openModal('add-address-modal');
-  });
+  safe('edit-profile-btn')?.addEventListener(
+    'click',
+    ()=>openModal('edit-profile-modal')
+  );
 
-  $('#deactivate-account-btn')?.addEventListener('click',()=>{
-    openModal('deactivate-account-modal');
-  });
+  safe('add-address-btn')?.addEventListener(
+    'click',
+    ()=>openModal('add-address-modal')
+  );
+
+  safe('add-payment-btn')?.addEventListener(
+    'click',
+    ()=>openModal('add-payment-modal')
+  );
+
+  safe('deactivate-account-btn')?.addEventListener(
+    'click',
+    ()=>openModal('deactivate-account-modal')
+  );
 
   $$('.close-modal').forEach(btn=>{
     btn.addEventListener('click',()=>{
@@ -1584,18 +1692,21 @@ function setupEventListeners(){
     });
   });
 
-  $('#confirm-deactivate')?.addEventListener('change',function(){
-    $('#confirm-deactivate-btn').disabled = !this.checked;
-  });
-
-  $('#edit-profile-form')?.addEventListener(
-    'submit',
-    handleProfileSave
+  safe('confirm-deactivate')?.addEventListener(
+    'change',
+    function(){
+      safe('confirm-deactivate-btn').disabled = !this.checked;
+    }
   );
 
-  $('#add-address-form')?.addEventListener(
+  safe('edit-profile-form')?.addEventListener(
     'submit',
-    handleAddressSave
+    saveProfileForm
+  );
+
+  safe('add-address-form')?.addEventListener(
+    'submit',
+    addAddressFromForm
   );
 }
 
@@ -1610,7 +1721,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   setupTabs();
 
-  renderAllAccountData();
+  renderAllData();
 });
 
 })();
