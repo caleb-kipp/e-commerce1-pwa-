@@ -183,7 +183,9 @@
     // status change
     container.querySelectorAll('[data-status]').forEach(sel=>{
       sel.addEventListener('change',()=>{
-        orders[sel.dataset.status].status = sel.value;
+        const allowedStatuses = ['Placed','On Delivery','Delivered','Cancelled'];
+        const nextStatus = allowedStatuses.includes(sel.value) ? sel.value : 'Placed';
+        orders[sel.dataset.status].status = nextStatus;
         save();
       });
     });
@@ -191,7 +193,7 @@
     // driver assignment
     container.querySelectorAll('[data-driver]').forEach(inp=>{
       inp.addEventListener('change',()=>{
-        orders[inp.dataset.driver].driver = inp.value;
+        orders[inp.dataset.driver].driver = String(inp.value || '').trim();
         save();
       });
     });
@@ -199,7 +201,8 @@
     // delivery date
     container.querySelectorAll('[data-date]').forEach(inp=>{
       inp.addEventListener('change',()=>{
-        orders[inp.dataset.date].deliveryDate = inp.value;
+        const v = String(inp.value || '').trim();
+        orders[inp.dataset.date].deliveryDate = /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : '';
         save();
       });
     });

@@ -82,6 +82,14 @@
   const container = document.getElementById('ordersContainer');
 
   function fmt(n){ return '$' + Number(n||0).toFixed(2); }
+  function esc(v){
+    return String(v ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
   if(!orders.length){
     container.innerHTML = `
@@ -99,13 +107,13 @@
       <div class="card" style="margin-bottom:12px">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div>
-            <strong>Order ${order.id}</strong>
+            <strong>Order ${esc(order.id)}</strong>
             <div class="muted small">
-              ${new Date(order.createdAt).toLocaleString()}
+              ${esc(new Date(order.createdAt).toLocaleString())}
             </div>
           </div>
           <div>
-            <span class="small-badge">${order.status}</span>
+            <span class="small-badge">${esc(order.status)}</span>
           </div>
         </div>
 
@@ -113,7 +121,7 @@
 
         ${order.items.map(i => `
           <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-            <div>${i.title} × ${i.qty}</div>
+            <div>${esc(i.title)} × ${esc(i.qty)}</div>
             <div>${fmt(i.total)}</div>
           </div>
         `).join('')}
@@ -141,8 +149,8 @@
         </div>
 
         <div style="margin-top:8px" class="muted small">
-          <strong>Payment:</strong> ${order.paymentMethod}<br />
-          <strong>Delivery Method:</strong> ${order.shippingMethod}
+          <strong>Payment:</strong> ${esc(order.paymentMethod)}<br />
+          <strong>Delivery Method:</strong> ${esc(order.shippingMethod)}
         </div>
       </div>
     `).join('');
