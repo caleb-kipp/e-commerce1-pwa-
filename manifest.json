@@ -1,7 +1,9 @@
 {
+  "id": "/e-commerce1-pwa-/",
   "name": "My PWA App",
   "short_name": "PWAApp",
-  "start_url": "/index.html",
+  "start_url": "/e-commerce1-pwa-/index.html",
+  "scope": "/e-commerce1-pwa-/",
   "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "#000000",
@@ -57,3 +59,4 @@
     }
   ]
 }
+
