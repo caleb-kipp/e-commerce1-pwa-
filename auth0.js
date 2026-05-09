@@ -9,6 +9,26 @@ const AUTH_KEY = "activeUser";
    HELPER FUNCTIONS
 ========================= */
 
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function secureEquals(a, b) {
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) {
+    return false;
+  }
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
+}
+
 function isLoggedIn() {
   return sessionStorage.getItem(AUTH_KEY) !== null;
 }
@@ -44,7 +64,7 @@ function showForgot() {
    REGISTRATION
 ========================= */
 
-document.getElementById("registerForm")?.addEventListener("submit", function (e) {
+document.getElementById("registerForm")?.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const name = document.getElementById("regName").value.trim();
@@ -61,12 +81,14 @@ document.getElementById("registerForm")?.addEventListener("submit", function (e)
     return;
   }
 
+  const passwordHash = await hashPassword(password);
+
   localStorage.setItem(
     "user_" + email,
     JSON.stringify({
       name,
       email,
-      password,
+      passwordHash,
       orders: [],
       cart: [],
       payments: [],
@@ -82,15 +104,16 @@ document.getElementById("registerForm")?.addEventListener("submit", function (e)
    LOGIN
 ========================= */
 
-document.getElementById("loginForm")?.addEventListener("submit", function (e) {
+document.getElementById("loginForm")?.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value.trim();
 
   const userData = JSON.parse(localStorage.getItem("user_" + email));
+  const enteredPasswordHash = await hashPassword(password);
 
-  if (!userData || userData.password !== password) {
+  if (!userData || !secureEquals(userData.passwordHash, enteredPasswordHash)) {
     alert("Invalid login credentials");
     return;
   }
