@@ -823,7 +823,7 @@ footer{
     sessionStorage.removeItem('checkoutCart');
     localStorage.setItem('ss_cart', JSON.stringify([]));
 
-    window.location.href = 'order-success.html?order=' + order.id;
+    window.location.href = 'orders.html?order=' + order.id;
   });
 
   renderItems();
