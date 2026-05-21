@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Categories</title>
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+<style>
+/*********************************
+ RESET
+**********************************/
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,body{
+  width:100%;
+  overflow-x:hidden;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:#0b111b;
+  color:#fff;
+}
+
+/*********************************
+ ROOT VARIABLES
+**********************************/
+:root{
+  --bg:#0b111b;
+  --card:#111827;
+  --card2:#0f172a;
+  --text:#ffffff;
+  --muted:#94a3b8;
+  --brand:#22c55e;
+  --border:rgba(255,255,255,.08);
+  --radius:18px;
+  --shadow:0 10px 25px rgba(0,0,0,.35);
+}
+
+/*********************************
+ PAGE WRAPPER
+**********************************/
+.container{
+  width:100%;
+  max-width:1600px;
+  margin:auto;
+  padding:20px;
+}
+
+/*********************************
+ HEADER
+**********************************/
+.page-header{
+  margin-bottom:30px;
+}
+
+.page-header h1{
+  font-size:clamp(2rem,5vw,3rem);
+  font-weight:800;
+  margin-bottom:10px;
+  background:linear-gradient(135deg,#22c55e,#06b6d4);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.page-header p{
+  color:var(--muted);
+  font-size:1rem;
+  line-height:1.6;
+}
+
+/*********************************
+ SEARCH
+**********************************/
+.search-wrap{
+  margin:25px 0 35px;
+  position:relative;
+}
+
+.search-wrap input{
+  width:100%;
+  height:58px;
+  border:none;
+  outline:none;
+  padding:0 55px 0 18px;
+  border-radius:18px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  color:#fff;
+  font-size:1rem;
+  backdrop-filter:blur(10px);
+}
+
+.search-wrap input::placeholder{
+  color:#94a3b8;
+}
+
+.search-icon{
+  position:absolute;
+  right:18px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#94a3b8;
+  font-size:1rem;
+}
+
+/*********************************
+ CATEGORY GRID
+ MOBILE = 4 PER ROW
+ BIG SCREEN = AUTO FIT MORE
+**********************************/
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+
+/*********************************
+ CATEGORY CARD
+**********************************/
+.category-card{
+  background:linear-gradient(180deg,#111827,#0f172a);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;
+  padding:18px 10px;
+  text-decoration:none;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  transition:.25s ease;
+  position:relative;
+  overflow:hidden;
+  min-height:140px;
+}
+
+.category-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.04),transparent);
+  pointer-events:none;
+}
+
+.category-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(34,197,94,.4);
+  box-shadow:0 12px 30px rgba(0,0,0,.4);
+}
+
+/*********************************
+ CIRCLE ICON
+**********************************/
+.icon-circle{
+  width:74px;
+  height:74px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#22c55e,#06b6d4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.6rem;
+  box-shadow:0 8px 20px rgba(34,197,94,.3);
+  flex-shrink:0;
+}
+
+.category-name{
+  text-align:center;
+  font-size:.95rem;
+  font-weight:600;
+  line-height:1.4;
+  word-break:break-word;
+}
+
+/*********************************
+ BADGE
+**********************************/
+.count{
+  margin-top:4px;
+  font-size:.78rem;
+  color:#94a3b8;
+}
+
+/*********************************
+ RESPONSIVE
+**********************************/
+@media (min-width:640px){
+  .category-grid{
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  }
+}
+
+@media (max-width:480px){
+
+  .container{
+    padding:14px;
+  }
+
+  .category-grid{
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+  }
+
+  .category-card{
+    min-height:115px;
+    padding:14px 6px;
+    border-radius:18px;
+  }
+
+  .icon-circle{
+    width:56px;
+    height:56px;
+    font-size:1.2rem;
+  }
+
+  .category-name{
+    font-size:.76rem;
+  }
+
+  .count{
+    font-size:.68rem;
+  }
+
+  .search-wrap input{
+    height:52px;
+    font-size:.95rem;
+  }
+}
+
+/*********************************
+ TABLET
+**********************************/
+@media (min-width:768px){
+  .category-grid{
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  }
+}
+
+/*********************************
+ DESKTOP
+**********************************/
+@media (min-width:1200px){
+  .category-grid{
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  }
+}
+
+/*********************************
+ HUGE SCREENS
+**********************************/
+@media (min-width:1600px){
+  .category-grid{
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  }
+}
+
+/*********************************
+ EMPTY STATE
+**********************************/
+.empty-state{
+  display:none;
+  text-align:center;
+  padding:60px 20px;
+  color:#94a3b8;
+  font-size:1.1rem;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <h1>Shop Categories</h1>
+    <p>
+      Browse products by category. Categories automatically filter products
+      from your main index.html page.
+    </p>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search categories..."
+    />
+    <div class="search-icon">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+  </div>
+
+  <!-- CATEGORY GRID -->
+  <div class="category-grid" id="categoryGrid"></div>
+
+  <!-- EMPTY -->
+  <div class="empty-state" id="emptyState">
+    No categories found
+  </div>
+
+</div>
+
+<script>
+/***************************************************
+ CATEGORY DATA
+ Up to 50 categories
+****************************************************/
+const categories = [
+
+  {
+    name:"Watches",
+    icon:"fa-clock",
+    slug:"watches",
+    count:124
+  },
+
+  {
+    name:"Smartphones",
+    icon:"fa-mobile-screen",
+    slug:"smartphones",
+    count:88
+  },
+
+  {
+    name:"Laptops",
+    icon:"fa-laptop",
+    slug:"laptops",
+    count:56
+  },
+
+  {
+    name:"Headphones",
+    icon:"fa-headphones",
+    slug:"headphones",
+    count:75
+  },
+
+  {
+    name:"Shoes",
+    icon:"fa-shoe-prints",
+    slug:"shoes",
+    count:203
+  },
+
+  {
+    name:"Fashion",
+    icon:"fa-shirt",
+    slug:"fashion",
+    count:180
+  },
+
+  {
+    name:"Gaming",
+    icon:"fa-gamepad",
+    slug:"gaming",
+    count:60
+  },
+
+  {
+    name:"Cameras",
+    icon:"fa-camera",
+    slug:"cameras",
+    count:40
+  },
+
+  {
+    name:"Beauty",
+    icon:"fa-wand-magic-sparkles",
+    slug:"beauty",
+    count:72
+  },
+
+  {
+    name:"Books",
+    icon:"fa-book",
+    slug:"books",
+    count:140
+  },
+
+  {
+    name:"Fitness",
+    icon:"fa-dumbbell",
+    slug:"fitness",
+    count:45
+  },
+
+  {
+    name:"Furniture",
+    icon:"fa-couch",
+    slug:"furniture",
+    count:52
+  },
+
+  {
+    name:"Jewelry",
+    icon:"fa-gem",
+    slug:"jewelry",
+    count:66
+  },
+
+  {
+    name:"Kids",
+    icon:"fa-baby",
+    slug:"kids",
+    count:91
+  },
+
+  {
+    name:"Music",
+    icon:"fa-music",
+    slug:"music",
+    count:38
+  },
+
+  {
+    name:"Pets",
+    icon:"fa-paw",
+    slug:"pets",
+    count:44
+  },
+
+  {
+    name:"Travel",
+    icon:"fa-plane",
+    slug:"travel",
+    count:29
+  },
+
+  {
+    name:"Bags",
+    icon:"fa-briefcase",
+    slug:"bags",
+    count:77
+  },
+
+  {
+    name:"Food",
+    icon:"fa-burger",
+    slug:"food",
+    count:51
+  },
+
+  {
+    name:"Coffee",
+    icon:"fa-mug-hot",
+    slug:"coffee",
+    count:26
+  },
+
+  {
+    name:"Home Decor",
+    icon:"fa-house",
+    slug:"home-decor",
+    count:80
+  },
+
+  {
+    name:"Lighting",
+    icon:"fa-lightbulb",
+    slug:"lighting",
+    count:33
+  },
+
+  {
+    name:"Garden",
+    icon:"fa-seedling",
+    slug:"garden",
+    count:22
+  },
+
+  {
+    name:"Sports",
+    icon:"fa-football",
+    slug:"sports",
+    count:97
+  },
+
+  {
+    name:"Cycling",
+    icon:"fa-bicycle",
+    slug:"cycling",
+    count:35
+  },
+
+  {
+    name:"Automotive",
+    icon:"fa-car",
+    slug:"automotive",
+    count:42
+  },
+
+  {
+    name:"Motorcycles",
+    icon:"fa-motorcycle",
+    slug:"motorcycles",
+    count:19
+  },
+
+  {
+    name:"Tools",
+    icon:"fa-screwdriver-wrench",
+    slug:"tools",
+    count:58
+  },
+
+  {
+    name:"Office",
+    icon:"fa-building",
+    slug:"office",
+    count:49
+  },
+
+  {
+    name:"Art",
+    icon:"fa-palette",
+    slug:"art",
+    count:31
+  },
+
+  {
+    name:"Streaming",
+    icon:"fa-tv",
+    slug:"streaming",
+    count:18
+  },
+
+  {
+    name:"Smart Home",
+    icon:"fa-house-signal",
+    slug:"smart-home",
+    count:54
+  },
+
+  {
+    name:"Accessories",
+    icon:"fa-glasses",
+    slug:"accessories",
+    count:110
+  },
+
+  {
+    name:"VR & AR",
+    icon:"fa-vr-cardboard",
+    slug:"vr-ar",
+    count:12
+  },
+
+  {
+    name:"Tablets",
+    icon:"fa-tablet-screen-button",
+    slug:"tablets",
+    count:24
+  },
+
+  {
+    name:"Printers",
+    icon:"fa-print",
+    slug:"printers",
+    count:14
+  },
+
+  {
+    name:"Storage",
+    icon:"fa-hard-drive",
+    slug:"storage",
+    count:36
+  },
+
+  {
+    name:"Networking",
+    icon:"fa-wifi",
+    slug:"networking",
+    count:17
+  },
+
+  {
+    name:"Security",
+    icon:"fa-shield-halved",
+    slug:"security",
+    count:27
+  },
+
+  {
+    name:"Kitchen",
+    icon:"fa-kitchen-set",
+    slug:"kitchen",
+    count:68
+  },
+
+  {
+    name:"Refrigerators",
+    icon:"fa-temperature-low",
+    slug:"refrigerators",
+    count:9
+  },
+
+  {
+    name:"Washing",
+    icon:"fa-soap",
+    slug:"washing",
+    count:11
+  },
+
+  {
+    name:"Air Conditioners",
+    icon:"fa-fan",
+    slug:"air-conditioners",
+    count:8
+  },
+
+  {
+    name:"Education",
+    icon:"fa-graduation-cap",
+    slug:"education",
+    count:23
+  },
+
+  {
+    name:"Medical",
+    icon:"fa-briefcase-medical",
+    slug:"medical",
+    count:16
+  },
+
+  {
+    name:"Camping",
+    icon:"fa-campground",
+    slug:"camping",
+    count:25
+  },
+
+  {
+    name:"Fishing",
+    icon:"fa-fish",
+    slug:"fishing",
+    count:13
+  },
+
+  {
+    name:"Luxury",
+    icon:"fa-crown",
+    slug:"luxury",
+    count:7
+  },
+
+  {
+    name:"Gift Cards",
+    icon:"fa-gift",
+    slug:"gift-cards",
+    count:21
+  },
+
+  {
+    name:"Digital",
+    icon:"fa-cloud",
+    slug:"digital",
+    count:43
+  }
+
+];
+
+/***************************************************
+ RENDER CATEGORIES
+****************************************************/
+const categoryGrid = document.getElementById("categoryGrid");
+const emptyState = document.getElementById("emptyState");
+
+function renderCategories(items){
+
+  categoryGrid.innerHTML = "";
+
+  if(items.length === 0){
+    emptyState.style.display = "block";
+    return;
+  }
+
+  emptyState.style.display = "none";
+
+  items.forEach(cat => {
+
+    const card = document.createElement("a");
+
+    /********************************************
+     REDIRECT OPTIONS
+     
+     OPTION 1:
+     index.html?category=watches
+     
+     OPTION 2:
+     Your index page can filter automatically
+    *********************************************/
+    card.href = `index.html?category=${encodeURIComponent(cat.slug)}`;
+
+    card.className = "category-card";
+
+    card.innerHTML = `
+      <div class="icon-circle">
+        <i class="fa-solid ${cat.icon}"></i>
+      </div>
+
+      <div class="category-name">
+        ${cat.name}
+      </div>
+
+      <div class="count">
+        ${cat.count} Products
+      </div>
+    `;
+
+    categoryGrid.appendChild(card);
+
+  });
+
+}
+
+renderCategories(categories);
+
+/***************************************************
+ SEARCH FILTER
+****************************************************/
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("input", function(){
+
+  const value = this.value.toLowerCase().trim();
+
+  const filtered = categories.filter(cat =>
+    cat.name.toLowerCase().includes(value)
+  );
+
+  renderCategories(filtered);
+
+});
+
+/***************************************************
+ OPTIONAL:
+ AUTO FILTER SUPPORT FOR index.html
+----------------------------------------------------
+ Example for your index.html:
+
+ const params = new URLSearchParams(window.location.search);
+ const category = params.get("category");
+
+ if(category){
+    const filteredProducts = products.filter(
+       p => p.category === category
+    );
+
+    renderProducts(filteredProducts);
+ }
+
+****************************************************/
+</script>
+
+</body>
+</html>
