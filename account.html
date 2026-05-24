@@ -31,12 +31,13 @@ body {
 
 body {
 
-  min-width: 320px;
+  min-width: 200px;
 }
 
 .container {
 
   width: 100%;
+  height: 200px;
   max-width: 1600px;
 
   margin-inline: auto;
@@ -115,7 +116,7 @@ body {
 
   width: 100%;
 
-  min-height: auto;
+  min-height: 200px;
 
   padding:
     clamp(20px, 4vw, 38px);
@@ -155,7 +156,7 @@ body {
 .profile-avatar {
 
   width:
-    clamp(75px, 10vw, 110px);
+    clamp(75px, 10vw, 500px);
 
   height:
     clamp(75px, 10vw, 110px);
@@ -1372,373 +1373,490 @@ footer {
    END RESPONSIVE EXTENSIONS
 ========================================================= */
 /* =========================================================
-   MOBILE CONTAINER SIZE CONTROL EXTENSIONS
+   SHOPEASE ACCOUNT.CSS EXTENSION
+   ADVANCED RESPONSIVE MOBILE + DESKTOP ENHANCEMENTS
    ADD BELOW EXISTING account.css
-   PURPOSE:
-   ✔ Prevent giant full-screen containers
-   ✔ Standardize text sizes
-   ✔ Smaller hero area
-   ✔ Smaller wishlist/favorite cards
-   ✔ Better mobile scaling
+   DOES NOT REMOVE OR CHANGE EXISTING CSS
 ========================================================= */
 
 /* =========================================================
-   HERO CONTAINER HEIGHT CONTROL
+   GLOBAL RESPONSIVE SCALING
 ========================================================= */
 
-.account-hero {
+html {
+  font-size: clamp(14px, 1vw, 16px);
+}
 
-  min-height: 400px !important;
-  height: auto !important;
-
-  padding: 24px !important;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 /* =========================================================
-   HERO CONTENT SPACING
+   CONTAINER IMPROVEMENTS
 ========================================================= */
 
-.hero-top {
-  gap: 18px !important;
+.container,
+.account-container {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: clamp(14px, 2vw, 28px);
 }
 
-.hero-divider {
-  margin: 22px 0 !important;
+/* Prevent giant stretched layouts */
+.account-page,
+.account-wrapper {
+  width: 100%;
+  overflow: hidden;
 }
 
 /* =========================================================
-   PROFILE AREA SMALLER
+   HERO SECTION RESPONSIVE
 ========================================================= */
 
-.profile-avatar {
-
-  width: 72px !important;
-  height: 72px !important;
+.account-hero,
+.hero,
+.hero-container {
+  width: 100%;
+  min-height: 400px;
+  height: auto;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
 }
 
-.profile-content h2 {
+/* Hero content spacing */
+.hero-overlay,
+.hero-content {
+  padding: clamp(18px, 3vw, 42px);
+}
 
-  font-size: 22px !important;
+/* Hero images fit perfectly */
+.hero img,
+.account-hero img,
+.hero-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =========================================================
+   PRODUCT / FAVORITES / WISHLIST BOXES
+========================================================= */
+
+.wishlist-item,
+.favorite-item,
+.favorites-item,
+.saved-item,
+.product-mini-card,
+.quick-product-card,
+.recent-product,
+.p-card {
+  width: 100%;
+  min-width: 150px;
+  max-width: 100%;
+  min-height: 150px;
+  border-radius: 22px;
+  overflow: hidden;
+  transition: all .3s ease;
+}
+
+/* Product image sizing */
+.wishlist-item img,
+.favorite-item img,
+.saved-item img,
+.p-card img,
+.product-mini-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+/* Hover effects */
+.wishlist-item:hover,
+.favorite-item:hover,
+.saved-item:hover,
+.p-card:hover,
+.product-mini-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
+}
+
+/* =========================================================
+   RESPONSIVE PRODUCT GRIDS
+========================================================= */
+
+.products-grid,
+.product-grid,
+.wishlist-grid,
+.favorites-grid,
+.saved-grid,
+.orders-grid,
+.grid.products {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(150px, 1fr));
+  gap: clamp(10px, 2vw, 22px);
+  width: 100%;
+}
+
+/* =========================================================
+   STANDARD TEXT SYSTEM
+========================================================= */
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
   line-height: 1.3;
 }
 
-.profile-content p {
-
-  font-size: 14px !important;
-  line-height: 1.5;
+h4 {
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
 }
 
-.membership-badge {
-
-  padding: 8px 14px !important;
-  font-size: 12px !important;
-}
-
-/* =========================================================
-   STANDARD TEXT SIZES
-========================================================= */
-
-body,
 p,
 span,
-div,
 li,
 a,
 button,
 input,
 textarea,
 select {
-
-  font-size: 14px;
-}
-
-h1 {
-
-  font-size: 28px !important;
-}
-
-h2 {
-
-  font-size: 22px !important;
-}
-
-h3 {
-
-  font-size: 18px !important;
-}
-
-h4 {
-
-  font-size: 16px !important;
+  font-size: clamp(.92rem, 1vw, 1rem);
+  line-height: 1.6;
 }
 
 /* =========================================================
-   SECTION TITLES
+   ACCOUNT HEADER RESPONSIVE
 ========================================================= */
 
-.section-header h2 {
+.account-header {
+  width: 100%;
+  backdrop-filter: blur(12px);
+}
 
-  font-size: 22px !important;
+.account-header-inner {
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 /* =========================================================
-   REWARD CARDS SMALLER
+   PROFILE SECTION RESPONSIVE
 ========================================================= */
 
-.reward-card {
-
-  min-height: 120px !important;
-  padding: 18px !important;
+.profile-section {
+  width: 100%;
+  flex-wrap: wrap;
 }
 
-.reward-card p {
-
-  font-size: 18px !important;
+.profile-avatar {
+  width: clamp(72px, 12vw, 110px);
+  height: clamp(72px, 12vw, 110px);
 }
 
-.reward-card i {
-
-  font-size: 24px !important;
+.profile-content {
+  flex: 1;
+  min-width: 220px;
 }
 
 /* =========================================================
-   WISHLIST / FAVORITES SIZE CONTROL
+   REWARDS GRID AUTO FIT
 ========================================================= */
 
-.wishlist-card,
-.favorite-card,
-.product-mini-card {
-
-  width: 150px !important;
-  min-width: 150px !important;
-
-  border-radius: 18px;
-  overflow: hidden;
+.rewards-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 
 /* =========================================================
-   WISHLIST IMAGES
+   QUICK ACTIONS RESPONSIVE
 ========================================================= */
 
-.wishlist-card img,
-.favorite-card img,
-.product-mini-card img {
-
-  width: 150px !important;
-  height: 150px !important;
-
-  object-fit: cover;
+.quick-actions {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
 }
 
 /* =========================================================
-   PRODUCT CONTENT SMALLER
+   SUPPORT GRID RESPONSIVE
 ========================================================= */
 
-.product-mini-content {
-
-  padding: 12px !important;
-}
-
-.product-mini-content h3 {
-
-  font-size: 14px !important;
-  line-height: 1.4;
-}
-
-.product-mini-content p {
-
-  font-size: 13px !important;
+.support-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
 }
 
 /* =========================================================
-   QUICK ACTIONS SMALLER
-========================================================= */
-
-.quick-action {
-
-  padding: 18px !important;
-}
-
-.quick-action i {
-
-  font-size: 24px !important;
-}
-
-.quick-action p {
-
-  font-size: 14px !important;
-}
-
-/* =========================================================
-   ORDER CARD COMPACT
-========================================================= */
-
-.order-card {
-
-  padding: 18px !important;
-}
-
-.order-status {
-
-  font-size: 20px !important;
-}
-
-.order-name {
-
-  font-size: 16px !important;
-}
-
-.order-id {
-
-  font-size: 13px !important;
-}
-
-/* =========================================================
-   LOYALTY CARD SMALLER
-========================================================= */
-
-.loyalty-card {
-
-  padding: 22px !important;
-}
-
-.loyalty-member h3 {
-
-  font-size: 18px !important;
-}
-
-.loyalty-points h2 {
-
-  font-size: 28px !important;
-}
-
-/* =========================================================
-   SETTINGS CARDS SMALLER
+   SETTINGS RESPONSIVE
 ========================================================= */
 
 .settings-item,
 .policy-row {
-
-  padding: 16px 18px !important;
-}
-
-.settings-left i {
-
-  width: 42px !important;
-  height: 42px !important;
-
-  font-size: 16px !important;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 /* =========================================================
-   SUPPORT CARDS SMALLER
+   MODAL RESPONSIVE ENHANCEMENTS
 ========================================================= */
 
-.support-card {
-
-  padding: 18px !important;
+.modal-content,
+#productModal .modal-content.glassy {
+  width: min(98%, 1500px);
+  max-height: 95vh;
+  overflow-y: auto;
+  border-radius: 28px;
 }
 
-.support-card i {
+/* Product modal layout */
+#productModal .modal-content.glassy {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
 
-  width: 52px !important;
-  height: 52px !important;
+/* Viewer responsiveness */
+#productModal .viewer {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
 
-  font-size: 20px !important;
+#productModal .viewer img {
+  width: 100%;
+  max-width: 100%;
+  height: clamp(260px, 50vw, 700px);
+  object-fit: contain;
+  margin: 0 auto;
 }
 
 /* =========================================================
-   BUTTON STANDARDIZATION
+   HORIZONTAL SCROLL MOBILE IMPROVEMENTS
+========================================================= */
+
+.horizontal-scroll,
+.row {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding-bottom: 10px;
+}
+
+.horizontal-scroll > *,
+.row > * {
+  scroll-snap-align: start;
+}
+
+/* =========================================================
+   BUTTON RESPONSIVE SYSTEM
 ========================================================= */
 
 .btn,
-.edit-profile-btn {
-
-  min-height: 42px;
-
-  padding: 10px 16px !important;
-
-  font-size: 14px !important;
-
-  border-radius: 12px !important;
+button {
+  min-height: 44px;
+  min-width: 44px;
+  font-size: clamp(.9rem, 1vw, 1rem);
 }
 
 /* =========================================================
-   INPUT STANDARDIZATION
+   FORM CONTROLS
 ========================================================= */
 
 input,
 textarea,
 select {
-
-  padding: 12px 14px !important;
-
-  border-radius: 12px !important;
-
-  font-size: 14px !important;
+  width: 100%;
+  max-width: 100%;
+  font-size: 1rem;
 }
 
 /* =========================================================
-   MODAL COMPACT
+   IMAGE SAFETY
 ========================================================= */
 
-.modal-content {
-
-  padding: 22px !important;
-
-  border-radius: 22px !important;
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* =========================================================
-   MOBILE SAFE WIDTHS
+   LARGE DESKTOPS
 ========================================================= */
 
-.container {
+@media (min-width: 1600px) {
 
-  max-width: 100% !important;
+  .container,
+  .account-container {
+    max-width: 1700px;
+  }
 
-  padding-left: 14px !important;
-  padding-right: 14px !important;
+  .products-grid,
+  .wishlist-grid,
+  .favorites-grid {
+    grid-template-columns:
+      repeat(auto-fit, minmax(220px, 1fr));
+  }
 }
 
 /* =========================================================
-   MOBILE DEVICE FIX
+   LAPTOPS
+========================================================= */
+
+@media (max-width: 1200px) {
+
+  .account-hero {
+    min-height: 380px;
+  }
+
+  #productModal .modal-content.glassy {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions,
+  .support-grid,
+  .rewards-grid {
+    grid-template-columns:
+      repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+/* =========================================================
+   TABLETS
+========================================================= */
+
+@media (max-width: 1024px) {
+
+  .hero,
+  .account-hero {
+    min-height: 340px;
+  }
+
+  .account-header-inner {
+    justify-content: center;
+  }
+
+  .profile-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .quick-actions,
+  .support-grid,
+  .rewards-grid,
+  .products-grid {
+    grid-template-columns:
+      repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+/* =========================================================
+   MOBILE LARGE
 ========================================================= */
 
 @media (max-width: 768px) {
 
-  .account-hero {
+  .container,
+  .account-container {
+    padding-inline: 14px;
+  }
 
-    min-height: 400px !important;
+  .account-hero,
+  .hero {
+    min-height: 300px;
+    border-radius: 24px;
+  }
 
-    border-radius: 20px !important;
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 
   .quick-actions,
+  .support-grid,
   .rewards-grid,
-  .support-grid {
-
-    grid-template-columns: 1fr !important;
+  .products-grid,
+  .wishlist-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
   }
 
-  .wishlist-card,
-  .favorite-card,
-  .product-mini-card {
-
-    width: 140px !important;
-    min-width: 140px !important;
+  .modal-content {
+    padding: 22px;
   }
 
-  .wishlist-card img,
-  .favorite-card img,
-  .product-mini-card img {
+  .settings-item,
+  .policy-row {
+    padding: 18px;
+  }
+}
 
-    width: 140px !important;
-    height: 140px !important;
+/* =========================================================
+   MOBILE SMALL
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .account-hero,
+  .hero {
+    min-height: 200px;
+  }
+
+  .quick-actions,
+  .support-grid,
+  .rewards-grid,
+  .products-grid,
+  .wishlist-grid,
+  .favorites-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .wishlist-item,
+  .favorite-item,
+  .saved-item,
+  .p-card {
+    min-width: 100%;
+  }
+
+  .wishlist-item img,
+  .favorite-item img,
+  .saved-item img,
+  .p-card img {
+    height: 150px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  p,
+  span,
+  li,
+  a {
+    font-size: .95rem;
   }
 }
 
@@ -1748,64 +1866,109 @@ select {
 
 @media (max-width: 480px) {
 
-  .account-hero {
+  .container,
+  .account-container {
+    padding-inline: 10px;
+  }
 
-    min-height: 380px !important;
-
-    padding: 18px !important;
+  .account-hero,
+  .hero {
+    min-height: 160px;
+    border-radius: 20px;
   }
 
   .profile-avatar {
-
-    width: 64px !important;
-    height: 64px !important;
+    width: 74px;
+    height: 74px;
   }
 
-  .profile-content h2 {
-
-    font-size: 20px !important;
+  .quick-actions,
+  .support-grid,
+  .rewards-grid,
+  .products-grid,
+  .wishlist-grid,
+  .favorites-grid {
+    grid-template-columns: 1fr;
   }
 
-  .wishlist-card,
-  .favorite-card,
-  .product-mini-card {
-
-    width: 130px !important;
-    min-width: 130px !important;
+  .header-icons {
+    gap: 10px;
   }
 
-  .wishlist-card img,
-  .favorite-card img,
-  .product-mini-card img {
+  .header-icon {
+    width: 42px;
+    height: 42px;
+  }
 
-    width: 130px !important;
-    height: 130px !important;
+  .btn {
+    width: 100%;
   }
 
   .modal-content {
-
-    padding: 18px !important;
+    border-radius: 20px;
+    padding: 18px;
   }
 }
 
 /* =========================================================
-   PREVENT FULLSCREEN STRETCHING
+   ULTRA SMALL DEVICES
+========================================================= */
+
+@media (max-width: 360px) {
+
+  html {
+    font-size: 13px;
+  }
+
+  .account-title {
+    font-size: 1.4rem;
+  }
+
+  .account-hero,
+  .hero {
+    min-height: 200px;
+  }
+
+  .profile-content h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* =========================================================
+   SMOOTH PREMIUM EFFECTS
 ========================================================= */
 
 .account-hero,
-.order-card,
 .reward-card,
 .quick-action,
 .support-card,
 .settings-item,
 .policy-row,
-.loyalty-card {
-
-  max-width: 100%;
+.product-mini-card,
+.p-card,
+.wishlist-item,
+.favorite-item {
+  backdrop-filter: blur(12px);
 }
 
 /* =========================================================
-   END
+   PREMIUM CARD HOVER
+========================================================= */
+
+.reward-card:hover,
+.quick-action:hover,
+.support-card:hover,
+.settings-item:hover,
+.policy-row:hover,
+.product-mini-card:hover,
+.p-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.18);
+}
+
+/* =========================================================
+   END EXTENSION
 ========================================================= */
 </style>
 </head>
@@ -2016,6 +2179,348 @@ select {
         </div>
 
       </section>
+      <style>
+       Add this extra CSS below your current styles.
+It compresses the hero section height, reduces oversized spacing, makes buttons compact, scales typography better, and keeps everything balanced across desktop/tablet/mobile.
+
+/* =========================================
+   COMPACT PROFILE HERO LAYOUT
+========================================= */
+
+section.bg-black {
+
+    /* reduce oversized spacing */
+    padding: 24px !important;
+
+    /* compact height */
+    min-height: auto !important;
+
+    border-radius: 28px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* =========================================
+   TOP FLEX AREA
+========================================= */
+
+section.bg-black > div:first-child {
+
+    gap: 20px !important;
+    align-items: center;
+}
+
+/* =========================================
+   LEFT PROFILE AREA
+========================================= */
+
+section.bg-black .flex.items-center.gap-6 {
+
+    gap: 16px !important;
+    flex-wrap: wrap;
+}
+
+/* PROFILE IMAGE */
+#profile-image {
+
+    width: 88px !important;
+    height: 88px !important;
+    min-width: 88px !important;
+
+    border-width: 3px !important;
+}
+
+/* =========================================
+   USER TEXT
+========================================= */
+
+#user-name {
+
+    font-size: clamp(1.5rem, 2.5vw, 2.4rem) !important;
+    line-height: 1.05;
+
+    margin: 0;
+}
+
+#membership-tier {
+
+    margin-top: 6px !important;
+
+    font-size: clamp(0.85rem, 1vw, 1rem) !important;
+}
+
+/* BADGES */
+section.bg-black span {
+
+    padding: 7px 14px !important;
+
+    font-size: 0.75rem !important;
+
+    border-radius: 999px;
+}
+
+/* =========================================
+   BUTTON AREA
+========================================= */
+
+section.bg-black .flex.flex-col.gap-4 {
+
+    gap: 10px !important;
+}
+
+/* BUTTONS */
+section.bg-black button {
+
+    width: auto !important;
+
+    min-width: 180px !important;
+
+    padding: 11px 18px !important;
+
+    font-size: 0.88rem !important;
+
+    border-radius: 16px !important;
+
+    white-space: nowrap;
+}
+
+/* BUTTON ICONS */
+section.bg-black button i {
+
+    font-size: 0.9rem !important;
+}
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+section.bg-black .w-full.h-px {
+
+    margin-top: 24px !important;
+    margin-bottom: 24px !important;
+}
+
+/* =========================================
+   REWARD CARDS COMPACT
+========================================= */
+
+section.bg-black .grid > div {
+
+    min-height: 145px !important;
+
+    padding: 18px !important;
+}
+
+/* CARD VALUES */
+#reward-points,
+#cashback-balance,
+#coupon-count {
+
+    font-size: clamp(1.4rem, 2vw, 2.5rem) !important;
+
+    margin-top: 10px !important;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1024px) {
+
+    section.bg-black {
+
+        padding: 20px !important;
+    }
+
+    section.bg-black button {
+
+        min-width: 160px !important;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+
+    section.bg-black {
+
+        padding: 18px !important;
+        border-radius: 22px !important;
+    }
+
+    section.bg-black > div:first-child {
+
+        align-items: flex-start;
+    }
+
+    #profile-image {
+
+        width: 72px !important;
+        height: 72px !important;
+        min-width: 72px !important;
+    }
+
+    #user-name {
+
+        font-size: 1.4rem !important;
+    }
+
+    #membership-tier {
+
+        font-size: 0.8rem !important;
+    }
+
+    section.bg-black button {
+
+        width: 100% !important;
+
+        min-width: 100% !important;
+
+        padding: 10px 14px !important;
+
+        font-size: 0.82rem !important;
+    }
+
+    section.bg-black .grid > div {
+
+        min-height: 120px !important;
+
+        padding: 14px !important;
+    }
+
+    #reward-points,
+    #cashback-balance,
+    #coupon-count {
+
+        font-size: 1.1rem !important;
+    }
+}
+          /* =========================================
+   REWARDS GRID - HORIZONTAL AUTOFIT
+========================================= */
+
+section.bg-black .grid {
+    width: 100%;
+    display: grid;
+
+    /* 3 equal responsive columns */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 20px;
+    align-items: stretch;
+}
+
+/* =========================================
+   REWARD CARDS
+========================================= */
+
+section.bg-black .grid > div {
+    width: 100%;
+    min-width: 0;
+
+    border-radius: 24px;
+    padding: 22px;
+    min-height: 180px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+}
+
+/* LABELS */
+section.bg-black .grid p:first-child {
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    color: #9ca3af;
+}
+
+/* BIG VALUES */
+#reward-points,
+#cashback-balance,
+#coupon-count {
+    font-size: clamp(1.8rem, 3vw, 3.2rem);
+
+    line-height: 1.1;
+    font-weight: 900;
+
+    margin-top: 16px;
+
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* DESCRIPTION TEXT */
+section.bg-black .grid p:last-child {
+    font-size: clamp(0.78rem, 1vw, 0.95rem);
+    line-height: 1.4;
+    color: #9ca3af;
+}
+
+/* ICONS */
+section.bg-black .grid i {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1024px) {
+
+    section.bg-black .grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    section.bg-black .grid > div {
+        padding: 18px;
+        min-height: 160px;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+
+    section.bg-black .grid {
+
+        /* still horizontal */
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 10px;
+    }
+
+    section.bg-black .grid > div {
+        padding: 14px;
+        min-height: 135px;
+        border-radius: 18px;
+    }
+
+    #reward-points,
+    #cashback-balance,
+    #coupon-count {
+        font-size: 1.3rem;
+        margin-top: 10px;
+    }
+
+    section.bg-black .grid p:first-child,
+    section.bg-black .grid p:last-child {
+        font-size: 0.72rem;
+        line-height: 1.2;
+    }
+
+    section.bg-black .grid i {
+        font-size: 1rem;
+    }
+}
+      </style>
 
       <!-- ===================================================== -->
       <!-- ORDERS SECTION -->
