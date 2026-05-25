@@ -2360,6 +2360,319 @@ section.bg-black span {
         min-width: 100% !important;
     }
 }
+/* =========================================
+   GLOBAL RESPONSIVE ZOOM SYSTEM
+========================================= */
+
+:root {
+
+    /* =====================================
+       MASTER SCALE FACTOR
+    ===================================== */
+
+    --scale-factor: clamp(0.78, 0.72 + 0.45vw, 1.08);
+
+    /* TYPOGRAPHY */
+    --text-xs: calc(0.65rem * var(--scale-factor));
+    --text-sm: calc(0.82rem * var(--scale-factor));
+    --text-md: calc(1rem * var(--scale-factor));
+    --text-lg: calc(1.2rem * var(--scale-factor));
+    --text-xl: calc(1.6rem * var(--scale-factor));
+    --text-2xl: calc(2.2rem * var(--scale-factor));
+
+    /* SPACING */
+    --space-xs: calc(4px * var(--scale-factor));
+    --space-sm: calc(8px * var(--scale-factor));
+    --space-md: calc(16px * var(--scale-factor));
+    --space-lg: calc(24px * var(--scale-factor));
+    --space-xl: calc(32px * var(--scale-factor));
+
+    /* RADIUS */
+    --radius-sm: calc(10px * var(--scale-factor));
+    --radius-md: calc(18px * var(--scale-factor));
+    --radius-lg: calc(28px * var(--scale-factor));
+
+    /* BUTTONS */
+    --btn-padding-y: calc(10px * var(--scale-factor));
+    --btn-padding-x: calc(18px * var(--scale-factor));
+
+    /* CARDS */
+    --card-padding: calc(18px * var(--scale-factor));
+}
+
+/* =========================================
+   GLOBAL PAGE SCALING
+========================================= */
+
+html {
+
+    font-size: calc(15px * var(--scale-factor));
+
+    scroll-behavior: smooth;
+}
+
+body {
+
+    overflow-x: hidden;
+
+    text-rendering: optimizeLegibility;
+
+    -webkit-font-smoothing: antialiased;
+
+    min-width: 320px;
+}
+
+/* =========================================
+   MAIN CONTAINERS
+========================================= */
+
+main,
+.container,
+.wrapper,
+.dashboard,
+.content {
+
+    width: 100%;
+
+    max-width: 100%;
+
+    padding-left: clamp(10px, 2vw, 28px);
+    padding-right: clamp(10px, 2vw, 28px);
+
+    box-sizing: border-box;
+}
+
+/* =========================================
+   GLOBAL FLEX + GRID FIXES
+========================================= */
+
+* {
+
+    box-sizing: border-box;
+
+    min-width: 0;
+}
+
+/* FLEX ITEMS */
+.flex,
+[class*="flex"] {
+
+    min-width: 0;
+}
+
+/* GRID ITEMS */
+.grid,
+[class*="grid"] {
+
+    min-width: 0;
+}
+
+/* =========================================
+   TYPOGRAPHY
+========================================= */
+
+h1 {
+
+    font-size: clamp(1.8rem, 4vw, 3.8rem);
+}
+
+h2 {
+
+    font-size: clamp(1.5rem, 3vw, 3rem);
+}
+
+h3 {
+
+    font-size: clamp(1.2rem, 2vw, 2rem);
+}
+
+h4 {
+
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
+}
+
+p,
+span,
+li,
+a,
+button,
+input,
+textarea {
+
+    font-size: var(--text-sm);
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+button,
+.btn {
+
+    padding:
+        var(--btn-padding-y)
+        var(--btn-padding-x);
+
+    border-radius: var(--radius-sm);
+
+    font-size: var(--text-sm);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+    white-space: nowrap;
+}
+
+button:hover,
+.btn:hover {
+
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.card,
+[class*="card"],
+section {
+
+    border-radius: var(--radius-md);
+
+    padding: var(--card-padding);
+
+    overflow: hidden;
+}
+
+/* =========================================
+   IMAGES
+========================================= */
+
+img {
+
+    max-width: 100%;
+
+    height: auto;
+
+    object-fit: cover;
+}
+
+/* =========================================
+   ICONS
+========================================= */
+
+i,
+svg {
+
+    flex-shrink: 0;
+}
+
+/* =========================================
+   INPUTS
+========================================= */
+
+input,
+textarea,
+select {
+
+    width: 100%;
+
+    padding:
+        calc(10px * var(--scale-factor))
+        calc(14px * var(--scale-factor));
+
+    border-radius: var(--radius-sm);
+
+    font-size: var(--text-sm);
+}
+
+/* =========================================
+   TABLETS
+========================================= */
+
+@media (max-width: 1024px) {
+
+    :root {
+
+        --scale-factor: clamp(0.72, 0.65 + 0.35vw, 0.92);
+    }
+
+    .grid {
+
+        gap: calc(10px * var(--scale-factor));
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    :root {
+
+        --scale-factor: clamp(0.65, 0.6 + 0.25vw, 0.85);
+    }
+
+    body {
+
+        overflow-x: hidden;
+    }
+
+    .flex-row,
+    [class*="flex-row"] {
+
+        flex-wrap: wrap;
+    }
+
+    button,
+    .btn {
+
+        width: 100%;
+    }
+
+    .grid {
+
+        gap: 8px;
+    }
+}
+
+/* =========================================
+   SMALL PHONES
+========================================= */
+
+@media (max-width: 480px) {
+
+    :root {
+
+        --scale-factor: 0.62;
+    }
+
+    html {
+
+        font-size: 13px;
+    }
+}
+
+/* =========================================
+   ULTRA WIDE SCREENS
+========================================= */
+
+@media (min-width: 1600px) {
+
+    :root {
+
+        --scale-factor: 1.12;
+    }
+
+    body {
+
+        max-width: 1800px;
+
+        margin: 0 auto;
+    }
+}
   </style>
 </head>
 <b
