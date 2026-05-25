@@ -1970,7 +1970,397 @@ img {
 /* =========================================================
    END EXTENSION
 ========================================================= */
-</style>
+/* =========================================
+   PROFILE HERO CARD IMPROVEMENTS
+   Works alongside existing hero/mini-card layout
+========================================= */
+
+:root {
+  --profile-radius: 24px;
+  --profile-padding: 20px;
+}
+
+/* ---------- HERO CARD BASE ---------- */
+section.bg-black {
+    border-radius: var(--profile-radius) !important;
+    padding: var(--profile-padding) !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 18px;
+    min-height: auto;
+}
+
+/* ---------- TOP FLEX AREA ---------- */
+section.bg-black > div:first-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+/* ---------- LEFT PROFILE ---------- */
+section.bg-black .flex.items-center.gap-6 {
+    gap: 14px !important;
+    align-items: center;
+}
+
+#profile-image {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    object-fit: cover;
+}
+
+#user-name {
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    line-height: 1.1;
+    font-weight: 800;
+    margin: 0;
+}
+
+#membership-tier {
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    color: #d1d5db;
+    margin-top: 4px;
+}
+
+/* BADGES */
+section.bg-black span {
+    font-size: clamp(0.65rem, 0.9vw, 0.85rem);
+    padding: 6px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+/* ---------- RIGHT BUTTONS ---------- */
+section.bg-black .flex.flex-col.gap-4 {
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+section.bg-black button {
+    width: auto;
+    min-width: 140px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+section.bg-black button i {
+    font-size: 0.85rem;
+    margin-right: 6px;
+}
+
+/* ---------- DIVIDER ---------- */
+section.bg-black .w-full.h-px {
+    margin: 18px 0 !important;
+    background-color: rgba(255,255,255,0.1);
+}
+
+/* ---------- REWARD GRID ---------- */
+section.bg-black .grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+section.bg-black .grid > div {
+    min-height: 140px;
+    padding: 18px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgba(255,255,255,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section.bg-black .grid > div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+#reward-points,
+#cashback-balance,
+#coupon-count {
+    font-size: clamp(1.4rem, 2vw, 2.5rem);
+    font-weight: 900;
+    margin-top: 10px;
+    line-height: 1.05;
+}
+
+section.bg-black .grid p:first-child {
+    font-size: clamp(0.75rem, 0.9vw, 0.95rem);
+    color: #9ca3af;
+}
+
+section.bg-black .grid p:last-child {
+    font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+    color: #9ca3af;
+    margin-top: 4px;
+}
+
+section.bg-black .grid i {
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+}
+
+/* ---------- RESPONSIVE ADJUSTMENTS ---------- */
+
+/* Tablets */
+@media (max-width: 1024px) {
+    section.bg-black {
+        padding: 18px;
+    }
+    #profile-image {
+        width: 70px;
+        height: 70px;
+    }
+    #user-name {
+        font-size: 1.6rem;
+    }
+    #membership-tier {
+        font-size: 0.85rem;
+    }
+    section.bg-black button {
+        min-width: 120px;
+        font-size: 0.8rem;
+        padding: 8px 14px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+    section.bg-black {
+        padding: 14px;
+        border-radius: 18px;
+    }
+    section.bg-black > div:first-child {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #profile-image {
+        width: 60px;
+        height: 60px;
+    }
+    #user-name {
+        font-size: 1.3rem;
+    }
+    #membership-tier {
+        font-size: 0.75rem;
+    }
+    section.bg-black button {
+        width: 100%;
+        font-size: 0.78rem;
+        padding: 8px 12px;
+    }
+    section.bg-black .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    section.bg-black .grid > div {
+        min-height: 120px;
+        padding: 14px;
+    }
+    #reward-points,
+    #cashback-balance,
+    #coupon-count {
+        font-size: 1.2rem;
+    }
+}
+/* =========================================
+   COMPACT HERO SECTION HEIGHT FIX
+========================================= */
+
+/* MAIN CONTAINER */
+main.max-w-7xl {
+    padding-top: 12px !important;
+}
+
+/* PROFILE HERO */
+section.bg-black {
+
+    /* FIX HEIGHT */
+    height: 30vh !important;
+    min-height: 260px !important;
+    max-height: 340px !important;
+
+    /* POSITION */
+    margin-top: 0 !important;
+
+    /* PREVENT FULL PAGE EXPANSION */
+    flex: 0 0 auto !important;
+
+    /* INTERNAL LAYOUT */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+}
+
+/* TOP SECTION */
+section.bg-black > div:first-child {
+
+    flex: 0 0 auto;
+    align-items: center;
+}
+
+/* REMOVE EXCESS SPACE */
+section.bg-black .w-full.h-px {
+    margin-top: 12px !important;
+    margin-bottom: 12px !important;
+}
+
+/* REWARD GRID */
+section.bg-black .grid {
+
+    flex: 1;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+
+    align-items: stretch;
+}
+
+/* REWARD CARDS */
+section.bg-black .grid > div {
+
+    min-height: unset !important;
+
+    height: 100%;
+
+    padding: 14px !important;
+}
+
+/* BIG NUMBERS */
+#reward-points,
+#cashback-balance,
+#coupon-count {
+
+    font-size: clamp(1.2rem, 2vw, 2rem) !important;
+
+    margin-top: 6px !important;
+}
+
+/* BUTTONS */
+section.bg-black button {
+
+    padding: 8px 14px !important;
+
+    min-width: 140px !important;
+
+    font-size: 0.8rem !important;
+}
+
+/* USER IMAGE */
+#profile-image {
+
+    width: 68px !important;
+    height: 68px !important;
+    min-width: 68px !important;
+}
+
+/* USER NAME */
+#user-name {
+
+    font-size: clamp(1.2rem, 2vw, 2rem) !important;
+}
+
+/* MEMBERSHIP */
+#membership-tier {
+
+    font-size: 0.8rem !important;
+}
+
+/* BADGES */
+section.bg-black span {
+
+    padding: 5px 10px !important;
+
+    font-size: 0.7rem !important;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1024px) {
+
+    section.bg-black {
+
+        height: auto !important;
+        min-height: 280px !important;
+    }
+
+    section.bg-black .grid {
+
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+
+    section.bg-black {
+
+        height: auto !important;
+
+        min-height: auto !important;
+
+        padding: 14px !important;
+    }
+
+    section.bg-black > div:first-child {
+
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px !important;
+    }
+
+    section.bg-black .grid {
+
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 8px;
+    }
+
+    section.bg-black .grid > div {
+
+        padding: 10px !important;
+
+        border-radius: 14px !important;
+    }
+
+    #reward-points,
+    #cashback-balance,
+    #coupon-count {
+
+        font-size: 1rem !important;
+    }
+
+    section.bg-black button {
+
+        width: 100% !important;
+
+        min-width: 100% !important;
+    }
+}
+  </style>
 </head>
 <b
 <body<body class="bg-gray-100 font-sans antialiased text-gray-800">
