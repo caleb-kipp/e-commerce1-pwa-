@@ -3044,8 +3044,281 @@ section.bg-black .grid i {
         </div>
 
       </section>
+<style>
+/* =========================================
+   RESPONSIVE HERO ZOOM-FIT SYSTEM
+========================================= */
 
-      <!-- ===================================================== -->
+/* HERO CONTAINER */
+section.bg-black {
+
+    /* HERO HEIGHT */
+    height: 30vh !important;
+
+    min-height: 240px !important;
+    max-height: 360px !important;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    position: relative;
+
+    /* SCALE SYSTEM */
+    container-type: inline-size;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    padding: clamp(10px, 1.2vw, 24px) !important;
+
+    border-radius: clamp(18px, 2vw, 32px);
+
+    gap: clamp(8px, 1vw, 18px);
+}
+
+/* =========================================
+   TOP AREA
+========================================= */
+
+section.bg-black > div:first-child {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: clamp(10px, 1vw, 24px);
+
+    flex-wrap: nowrap;
+
+    min-width: 0;
+}
+
+/* =========================================
+   LEFT PROFILE SIDE
+========================================= */
+
+section.bg-black .flex.items-center.gap-6 {
+
+    gap: clamp(8px, 1vw, 18px) !important;
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+/* PROFILE IMAGE */
+#profile-image {
+
+    width: clamp(52px, 5vw, 95px) !important;
+    height: clamp(52px, 5vw, 95px) !important;
+
+    min-width: clamp(52px, 5vw, 95px) !important;
+
+    border-width: clamp(2px, 0.2vw, 4px) !important;
+
+    flex-shrink: 0;
+}
+
+/* =========================================
+   TEXTS
+========================================= */
+
+#user-name {
+
+    font-size: clamp(1rem, 2.2vw, 2.7rem) !important;
+
+    line-height: 1.05;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#membership-tier {
+
+    font-size: clamp(0.7rem, 1vw, 1rem) !important;
+
+    margin-top: 2px !important;
+}
+
+/* BADGES */
+section.bg-black span {
+
+    font-size: clamp(0.55rem, 0.7vw, 0.85rem) !important;
+
+    padding:
+        clamp(3px, 0.4vw, 8px)
+        clamp(7px, 0.8vw, 14px) !important;
+
+    border-radius: 999px;
+
+    white-space: nowrap;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+section.bg-black .flex.flex-col.gap-4 {
+
+    gap: clamp(6px, 0.8vw, 14px) !important;
+
+    flex-shrink: 0;
+}
+
+/* BUTTON STYLE */
+section.bg-black button {
+
+    width: auto !important;
+
+    min-width: clamp(110px, 10vw, 200px) !important;
+
+    padding:
+        clamp(6px, 0.7vw, 13px)
+        clamp(10px, 1vw, 20px) !important;
+
+    font-size: clamp(0.65rem, 0.8vw, 0.95rem) !important;
+
+    border-radius: clamp(10px, 1vw, 18px) !important;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* BUTTON ICONS */
+section.bg-black button i {
+
+    font-size: clamp(0.65rem, 0.8vw, 1rem) !important;
+}
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+section.bg-black .w-full.h-px {
+
+    margin:
+        clamp(6px, 0.8vw, 18px)
+        0 !important;
+}
+
+/* =========================================
+   REWARD GRID
+========================================= */
+
+section.bg-black .grid {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: clamp(6px, 0.8vw, 18px);
+
+    align-items: stretch;
+}
+
+/* =========================================
+   REWARD CARDS
+========================================= */
+
+section.bg-black .grid > div {
+
+    min-width: 0;
+
+    min-height: unset !important;
+
+    padding: clamp(8px, 1vw, 22px) !important;
+
+    border-radius: clamp(12px, 1vw, 24px);
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* CARD LABELS */
+section.bg-black .grid p:first-child {
+
+    font-size: clamp(0.55rem, 0.7vw, 0.95rem);
+}
+
+/* BIG VALUES */
+#reward-points,
+#cashback-balance,
+#coupon-count {
+
+    font-size: clamp(0.95rem, 2vw, 3rem) !important;
+
+    line-height: 1;
+
+    margin-top: clamp(2px, 0.4vw, 10px) !important;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* DESCRIPTION */
+section.bg-black .grid p:last-child {
+
+    font-size: clamp(0.5rem, 0.7vw, 0.85rem);
+
+    line-height: 1.2;
+}
+
+/* CARD ICONS */
+section.bg-black .grid i {
+
+    font-size: clamp(0.8rem, 1.2vw, 1.8rem);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+
+    section.bg-black {
+
+        height: auto !important;
+
+        min-height: auto !important;
+    }
+
+    section.bg-black > div:first-child {
+
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 10px !important;
+    }
+
+    section.bg-black .flex.flex-col.gap-4 {
+
+        width: 100%;
+    }
+
+    section.bg-black button {
+
+        width: 100% !important;
+    }
+
+    section.bg-black .grid {
+
+        gap: 6px;
+    }
+}
+    
+</style>
+      <!-s- ===================================================== -->
       <!-- WISHLIST -->
       <!-- ===================================================== -->
       <section class="space-y-6">
