@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LUXORA — Secure Checkout</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   LUXORA CHECKOUT — MEGA SINGLE FILE
+   Production Style MVP Checkout
+   HTML + CSS + JS IN ONE FILE
+========================================================= */
+
+:root{
+--bg:#0b0f14;
+--card:#121825;
+--muted:#6b7280;
+--text:#e5e7eb;
+--brand:#22c55e;
+--brand-2:#06b6d4;
+--accent:#f59e0b;
+--danger:#ef4444;
+--success:#10b981;
+--blue:#3b82f6;
+--shadow:0 10px 30px rgba(0,0,0,.25);
+--radius:16px;
+--radius-sm:12px;
+--radius-lg:22px;
+--max:1600px;
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html,body{
+width:100%;
+overflow-x:hidden;
+font-family:Inter,system-ui,sans-serif;
+background:linear-gradient(180deg,#0b0f14,#0e141c);
+color:var(--text);
+scroll-behavior:smooth;
+}
+
+img{
+max-width:100%;
+display:block;
+}
+
+button,input,select{
+font-family:inherit;
+outline:none;
+}
+
+a{
+text-decoration:none;
+color:inherit;
+}
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+.container{
+max-width:var(--max);
+margin:auto;
+padding:0 18px;
+}
+
+.flex{
+display:flex;
+}
+
+.center{
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.grid{
+display:grid;
+}
+
+.hidden{
+display:none;
+}
+
+.text-muted{
+color:var(--muted);
+}
+
+.badge{
+padding:5px 10px;
+border-radius:999px;
+font-size:.75rem;
+font-weight:700;
+}
+
+.badge-success{
+background:rgba(16,185,129,.15);
+color:#6ee7b7;
+}
+
+.badge-blue{
+background:rgba(59,130,246,.15);
+color:#93c5fd;
+}
+
+.mt-20{
+margin-top:20px;
+}
+
+.mb-20{
+margin-bottom:20px;
+}
+
+.w-100{
+width:100%;
+}
+
+/* =========================================================
+   TOP HEADER
+========================================================= */
+
+header{
+position:sticky;
+top:0;
+z-index:999;
+backdrop-filter:blur(10px);
+background:rgba(11,15,20,.92);
+border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.topbar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:16px 0;
+gap:20px;
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:12px;
+font-weight:900;
+font-size:1.4rem;
+letter-spacing:1px;
+}
+
+.logo-icon{
+width:42px;
+height:42px;
+border-radius:14px;
+background:linear-gradient(135deg,var(--brand),var(--brand-2));
+display:grid;
+place-items:center;
+font-weight:900;
+color:#00140a;
+font-size:1rem;
+box-shadow:var(--shadow);
+}
+
+.secure{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:700;
+font-size:.95rem;
+color:#9ae6b4;
+}
+
+.header-right{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.select{
+background:#0f1623;
+border:1px solid rgba(255,255,255,.08);
+padding:10px 12px;
+border-radius:12px;
+color:var(--text);
+}
+
+/* =========================================================
+   TRUST BAR
+========================================================= */
+
+.trust-bar{
+border-bottom:1px solid rgba(255,255,255,.06);
+background:#0f1623;
+}
+
+.trust-wrap{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:14px;
+padding:14px 0;
+}
+
+.trust-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:12px;
+border-radius:14px;
+background:rgba(255,255,255,.02);
+border:1px solid rgba(255,255,255,.04);
+}
+
+.trust-item i{
+font-size:1.3rem;
+color:var(--brand);
+}
+
+.trust-item h4{
+font-size:.9rem;
+margin-bottom:3px;
+}
+
+.trust-item p{
+font-size:.8rem;
+color:var(--muted);
+}
+
+/* =========================================================
+   MAIN CHECKOUT
+========================================================= */
+
+.checkout-layout{
+display:grid;
+grid-template-columns:1.65fr .9fr;
+gap:26px;
+padding:30px 0 100px;
+align-items:start;
+}
+
+/* =========================================================
+   LEFT COLUMN
+========================================================= */
+
+.checkout-left{
+display:flex;
+flex-direction:column;
+gap:24px;
+}
+
+/* =========================================================
+   STEP CARD
+========================================================= */
+
+.step-card{
+background:var(--card);
+border-radius:var(--radius-lg);
+border:1px solid rgba(255,255,255,.06);
+overflow:hidden;
+box-shadow:var(--shadow);
+transition:.25s ease;
+}
+
+.step-header{
+padding:22px 24px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+cursor:pointer;
+}
+
+.step-left{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.step-number{
+width:38px;
+height:38px;
+border-radius:50%;
+background:rgba(59,130,246,.15);
+display:grid;
+place-items:center;
+font-weight:800;
+color:#93c5fd;
+}
+
+.step-title{
+font-size:1.1rem;
+font-weight:700;
+}
+
+.step-status{
+font-size:.9rem;
+color:var(--muted);
+}
+
+.step-content{
+padding:0 24px 24px;
+display:block;
+}
+
+.step-card.collapsed .step-content{
+display:none;
+}
+
+.step-card.active{
+border:1px solid rgba(59,130,246,.45);
+}
+
+/* =========================================================
+   FORMS
+========================================================= */
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+}
+
+.field{
+display:flex;
+flex-direction:column;
+gap:8px;
+margin-top:16px;
+}
+
+.field label{
+font-size:.9rem;
+font-weight:600;
+}
+
+.field input,
+.field select,
+.field textarea{
+background:#0f1623;
+border:1px solid rgba(255,255,255,.08);
+border-radius:14px;
+padding:14px;
+font-size:1rem;
+color:var(--text);
+transition:.2s ease;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+border-color:rgba(59,130,246,.6);
+box-shadow:0 0 0 4px rgba(59,130,246,.15);
+}
+
+.field small{
+color:var(--muted);
+font-size:.8rem;
+}
+
+.checkbox{
+display:flex;
+align-items:center;
+gap:12px;
+margin-top:18px;
+font-size:.92rem;
+}
+
+.checkbox input{
+width:18px;
+height:18px;
+accent-color:var(--brand);
+}
+
+/* =========================================================
+   SHIPPING OPTIONS
+========================================================= */
+
+.shipping-option,
+.payment-option{
+margin-top:14px;
+border:1px solid rgba(255,255,255,.08);
+background:#0f1623;
+border-radius:16px;
+padding:18px;
+cursor:pointer;
+transition:.25s ease;
+}
+
+.shipping-option.active,
+.payment-option.active{
+border-color:#3b82f6;
+background:rgba(59,130,246,.08);
+}
+
+.option-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:16px;
+}
+
+.option-left{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.radio{
+width:20px;
+height:20px;
+border-radius:50%;
+border:2px solid rgba(255,255,255,.3);
+display:grid;
+place-items:center;
+}
+
+.radio::after{
+content:'';
+width:10px;
+height:10px;
+border-radius:50%;
+background:#3b82f6;
+display:none;
+}
+
+.active .radio::after{
+display:block;
+}
+
+.option-title{
+font-weight:700;
+}
+
+.option-sub{
+font-size:.85rem;
+color:var(--muted);
+margin-top:4px;
+}
+
+.option-price{
+font-weight:800;
+}
+
+/* =========================================================
+   PAYMENT
+========================================================= */
+
+.payment-icons{
+display:flex;
+gap:8px;
+margin-top:14px;
+flex-wrap:wrap;
+}
+
+.pay-icon{
+background:#fff;
+color:#000;
+padding:10px 12px;
+border-radius:10px;
+font-size:.85rem;
+font-weight:800;
+min-width:62px;
+text-align:center;
+}
+
+.card-fields{
+margin-top:18px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+}
+
+.card-fields .full{
+grid-column:1/-1;
+}
+
+/* =========================================================
+   CTA BUTTONS
+========================================================= */
+
+.cta-group{
+display:flex;
+gap:14px;
+margin-top:24px;
+flex-wrap:wrap;
+}
+
+.btn{
+border:none;
+cursor:pointer;
+transition:.25s ease;
+font-weight:700;
+}
+
+.btn-primary{
+background:#fff;
+color:#000;
+padding:16px 24px;
+border-radius:16px;
+font-size:1rem;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:12px;
+flex:1;
+}
+
+.btn-primary:hover{
+transform:translateY(-2px);
+}
+
+.btn-outline{
+background:transparent;
+border:1px solid rgba(255,255,255,.12);
+padding:16px 24px;
+border-radius:16px;
+color:var(--text);
+font-size:1rem;
+}
+
+.btn-outline:hover{
+background:rgba(255,255,255,.04);
+}
+
+/* =========================================================
+   RIGHT SIDEBAR
+========================================================= */
+
+.checkout-sidebar{
+position:sticky;
+top:110px;
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+/* =========================================================
+   ORDER SUMMARY
+========================================================= */
+
+.summary-card{
+background:var(--card);
+border-radius:var(--radius-lg);
+border:1px solid rgba(255,255,255,.06);
+padding:24px;
+box-shadow:var(--shadow);
+}
+
+.summary-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:22px;
+}
+
+.summary-header h3{
+font-size:1.25rem;
+}
+
+.edit-cart{
+font-size:.9rem;
+color:#93c5fd;
+}
+
+.product-item{
+display:flex;
+gap:14px;
+margin-bottom:18px;
+padding-bottom:18px;
+border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.product-item img{
+width:92px;
+height:92px;
+object-fit:cover;
+border-radius:16px;
+}
+
+.product-info{
+flex:1;
+}
+
+.product-info h4{
+font-size:1rem;
+margin-bottom:5px;
+}
+
+.product-info p{
+font-size:.86rem;
+color:var(--muted);
+margin-bottom:6px;
+}
+
+.product-price{
+font-weight:800;
+}
+
+.qty-pill{
+display:inline-flex;
+padding:4px 10px;
+background:rgba(255,255,255,.08);
+border-radius:999px;
+font-size:.75rem;
+margin-top:6px;
+}
+
+.summary-totals{
+margin-top:20px;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.total-row{
+display:flex;
+justify-content:space-between;
+font-size:.95rem;
+}
+
+.total-final{
+padding-top:18px;
+margin-top:12px;
+border-top:1px solid rgba(255,255,255,.08);
+font-size:1.2rem;
+font-weight:800;
+}
+
+/* =========================================================
+   COUPON
+========================================================= */
+
+.coupon{
+display:flex;
+gap:10px;
+margin-top:20px;
+}
+
+.coupon input{
+flex:1;
+background:#0f1623;
+border:1px solid rgba(255,255,255,.08);
+border-radius:14px;
+padding:14px;
+color:#fff;
+}
+
+.coupon button{
+padding:14px 20px;
+border-radius:14px;
+background:linear-gradient(135deg,var(--brand),#16a34a);
+border:none;
+font-weight:700;
+cursor:pointer;
+}
+
+/* =========================================================
+   SECURITY BOX
+========================================================= */
+
+.secure-box{
+background:rgba(16,185,129,.08);
+border:1px solid rgba(16,185,129,.2);
+padding:18px;
+border-radius:18px;
+display:flex;
+gap:14px;
+align-items:flex-start;
+}
+
+.secure-box i{
+font-size:1.6rem;
+color:#6ee7b7;
+}
+
+/* =========================================================
+   HELP BOX
+========================================================= */
+
+.help-box{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.help-link{
+display:flex;
+justify-content:space-between;
+padding:14px;
+border-radius:14px;
+background:#0f1623;
+border:1px solid rgba(255,255,255,.06);
+transition:.2s ease;
+}
+
+.help-link:hover{
+background:#131c2c;
+}
+
+/* =========================================================
+   MOBILE ORDER SUMMARY
+========================================================= */
+
+.mobile-summary{
+display:none;
+margin-top:20px;
+}
+
+.mobile-summary-toggle{
+background:var(--card);
+padding:18px;
+border-radius:16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border:1px solid rgba(255,255,255,.06);
+cursor:pointer;
+}
+
+.mobile-summary-content{
+display:none;
+margin-top:14px;
+}
+
+/* =========================================================
+   STICKY MOBILE CTA
+========================================================= */
+
+.mobile-paybar{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+z-index:999;
+padding:14px;
+background:rgba(11,15,20,.96);
+backdrop-filter:blur(12px);
+border-top:1px solid rgba(255,255,255,.06);
+display:none;
+}
+
+.mobile-paybar .btn-primary{
+width:100%;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+border-top:1px solid rgba(255,255,255,.06);
+background:#0f1623;
+padding:40px 0;
+}
+
+.footer-trust{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+}
+
+.footer-badge{
+display:flex;
+align-items:center;
+gap:12px;
+background:#121825;
+padding:18px;
+border-radius:16px;
+border:1px solid rgba(255,255,255,.05);
+}
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+.fade-up{
+animation:fadeUp .5s ease;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1200px){
+
+.checkout-layout{
+grid-template-columns:1fr;
+}
+
+.checkout-sidebar{
+position:relative;
+top:0;
+}
+
+}
+
+@media(max-width:900px){
+
+.trust-wrap{
+grid-template-columns:1fr 1fr;
+}
+
+.form-grid{
+grid-template-columns:1fr;
+}
+
+.card-fields{
+grid-template-columns:1fr;
+}
+
+.footer-trust{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:768px){
+
+.topbar{
+padding:14px 0;
+}
+
+.secure{
+display:none;
+}
+
+.header-right{
+display:none;
+}
+
+.checkout-layout{
+padding-top:20px;
+}
+
+.checkout-sidebar{
+display:none;
+}
+
+.mobile-summary{
+display:block;
+}
+
+.mobile-paybar{
+display:block;
+}
+
+.step-card{
+border-radius:18px;
+}
+
+.step-header{
+padding:18px;
+}
+
+.step-content{
+padding:0 18px 20px;
+}
+
+.trust-wrap{
+grid-template-columns:1fr;
+}
+
+.footer-trust{
+grid-template-columns:1fr;
+}
+
+body{
+padding-bottom:100px;
+}
+
+}
+
+@media(max-width:480px){
+
+.logo{
+font-size:1.1rem;
+}
+
+.logo-icon{
+width:38px;
+height:38px;
+}
+
+.step-title{
+font-size:1rem;
+}
+
+.btn-primary,
+.btn-outline{
+font-size:.95rem;
+padding:15px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+<div class="container">
+
+<div class="topbar">
+
+<div class="logo">
+<div class="logo-icon">L</div>
+LUXORA
+</div>
+
+<div class="secure">
+🔒 Secure Checkout
+</div>
+
+<div class="header-right">
+<select class="select">
+<option>English</option>
+<option>French</option>
+<option>German</option>
+</select>
+
+<select class="select">
+<option>USD ($)</option>
+<option>EUR (€)</option>
+<option>GBP (£)</option>
+</select>
+</div>
+
+</div>
+
+</div>
+
+</header>
+
+<!-- =====================================================
+     TRUST BAR
+===================================================== -->
+
+<section class="trust-bar">
+
+<div class="container">
+
+<div class="trust-wrap">
+
+<div class="trust-item">
+<div>🚚</div>
+<div>
+<h4>Free Shipping</h4>
+<p>Orders over $50</p>
+</div>
+</div>
+
+<div class="trust-item">
+<div>↩️</div>
+<div>
+<h4>30-Day Returns</h4>
+<p>Easy refund guarantee</p>
+</div>
+</div>
+
+<div class="trust-item">
+<div>🔒</div>
+<div>
+<h4>Encrypted Checkout</h4>
+<p>256-bit SSL security</p>
+</div>
+</div>
+
+<div class="trust-item">
+<div>💬</div>
+<div>
+<h4>24/7 Support</h4>
+<p>Live assistance anytime</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="container">
+
+<!-- MOBILE SUMMARY -->
+
+<div class="mobile-summary">
+
+<div class="mobile-summary-toggle" id="summaryToggle">
+
+<div>
+<strong>Order Summary</strong>
+<span class="text-muted">(2 items)</span>
+</div>
+
+<div>
+<strong>$89.98</strong> ▼
+</div>
+
+</div>
+
+<div class="mobile-summary-content" id="summaryContent">
+
+<div class="summary-card">
+
+<div class="product-item">
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop">
+
+<div class="product-info">
+<h4>Premium Sneakers</h4>
+<p>Black / Size 42</p>
+<div class="qty-pill">Qty 1</div>
+</div>
+
+<div class="product-price">$49.99</div>
+
+</div>
+
+<div class="product-item">
+<img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop">
+
+<div class="product-info">
+<h4>Oversized T-Shirt</h4>
+<p>White / XL</p>
+<div class="qty-pill">Qty 1</div>
+</div>
+
+<div class="product-price">$39.99</div>
+
+</div>
+
+<div class="summary-totals">
+
+<div class="total-row">
+<span>Subtotal</span>
+<strong>$89.98</strong>
+</div>
+
+<div class="total-row">
+<span>Shipping</span>
+<strong>FREE</strong>
+</div>
+
+<div class="total-row">
+<span>Estimated Tax</span>
+<strong>$6.80</strong>
+</div>
+
+<div class="total-row total-final">
+<span>Total</span>
+<strong>$96.78</strong>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+     CHECKOUT GRID
+===================================================== -->
+
+<div class="checkout-layout">
+
+<!-- =====================================================
+     LEFT COLUMN
+===================================================== -->
+
+<div class="checkout-left">
+
+<!-- STEP 1 -->
+
+<div class="step-card active fade-up" id="step1">
+
+<div class="step-header">
+
+<div class="step-left">
+
+<div class="step-number">1</div>
+
+<div>
+<div class="step-title">Contact Information</div>
+<div class="step-status">Enter your email address</div>
+</div>
+
+</div>
+
+<a href="#">Sign In</a>
+
+</div>
+
+<div class="step-content">
+
+<div class="field">
+<label>Email Address</label>
+<input type="email" placeholder="john@example.com">
+<small>We'll send order updates here.</small>
+</div>
+
+<div class="checkbox">
+<input type="checkbox">
+<span>Email me with news and exclusive offers</span>
+</div>
+
+</div>
+
+</div>
+
+<!-- STEP 2 -->
+
+<div class="step-card fade-up" id="step2">
+
+<div class="step-header">
+
+<div class="step-left">
+
+<div class="step-number">2</div>
+
+<div>
+<div class="step-title">Shipping Information</div>
+<div class="step-status">Delivery address</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="step-content">
+
+<div class="form-grid">
+
+<div class="field">
+<label>First Name</label>
+<input type="text" placeholder="John">
+</div>
+
+<div class="field">
+<label>Last Name</label>
+<input type="text" placeholder="Doe">
+</div>
+
+<div class="field">
+<label>Phone Number (Optional)</label>
+<input type="tel" placeholder="+1 234 567 890">
+</div>
+
+<div class="field">
+<label>Company (Optional)</label>
+<input type="text" placeholder="Company name">
+</div>
+
+<div class="field" style="grid-column:1/-1">
+<label>Address Line 1</label>
+<input type="text" placeholder="Street address">
+</div>
+
+<div class="field" style="grid-column:1/-1">
+<label>Address Line 2 (Optional)</label>
+<input type="text" placeholder="Apartment, suite, etc">
+</div>
+
+<div class="field">
+<label>Country</label>
+<select>
+<option>United States</option>
+<option>Canada</option>
+<option>United Kingdom</option>
+<option>Germany</option>
+</select>
+</div>
+
+<div class="field">
+<label>State</label>
+<select>
+<option>California</option>
+<option>Texas</option>
+<option>Florida</option>
+</select>
+</div>
+
+<div class="field">
+<label>City</label>
+<input type="text" placeholder="Los Angeles">
+</div>
+
+<div class="field">
+<label>ZIP Code</label>
+<input type="text" placeholder="90001">
+</div>
+
+</div>
+
+<div class="checkbox">
+<input type="checkbox">
+<span>Save this information for next time</span>
+</div>
+
+</div>
+
+</div>
+
+<!-- STEP 3 -->
+
+<div class="step-card fade-up" id="step3">
+
+<div class="step-header">
+
+<div class="step-left">
+
+<div class="step-number">3</div>
+
+<div>
+<div class="step-title">Shipping Method</div>
+<div class="step-status">Choose delivery speed</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="step-content">
+
+<div class="shipping-option active">
+
+<div class="option-row">
+
+<div class="option-left">
+
+<div class="radio"></div>
+
+<div>
+<div class="option-title">
+Standard Shipping
+</div>
+
+<div class="option-sub">
+FREE • Estimated delivery: May 30 – June 2
+</div>
+</div>
+
+</div>
+
+<div class="option-price">
+FREE
+</div>
+
+</div>
+
+</div>
+
+<div class="shipping-option">
+
+<div class="option-row">
+
+<div class="option-left">
+
+<div class="radio"></div>
+
+<div>
+<div class="option-title">
+Express Shipping
+</div>
+
+<div class="option-sub">
+2–3 business days
+</div>
+</div>
+
+</div>
+
+<div class="option-price">
+$9.99
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- STEP 4 -->
+
+<div class="step-card fade-up" id="step4">
+
+<div class="step-header">
+
+<div class="step-left">
+
+<div class="step-number">4</div>
+
+<div>
+<div class="step-title">Payment Method</div>
+<div class="step-status">All transactions are encrypted</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="step-content">
+
+<div class="payment-option active">
+
+<div class="option-row">
+
+<div class="option-left">
+
+<div class="radio"></div>
+
+<div>
+<div class="option-title">
+Credit / Debit Card
+</div>
+
+<div class="option-sub">
+Visa, Mastercard, Amex
+</div>
+</div>
+
+</div>
+
+<div class="payment-icons">
+<div class="pay-icon">VISA</div>
+<div class="pay-icon">MC</div>
+<div class="pay-icon">AMEX</div>
+</div>
+
+</div>
+
+<div class="card-fields">
+
+<div class="field full">
+<label>Card Number</label>
+<input type="text" placeholder="4242 4242 4242 4242">
+</div>
+
+<div class="field">
+<label>Expiry Date</label>
+<input type="text" placeholder="MM / YY">
+</div>
+
+<div class="field">
+<label>CVV</label>
+<input type="password" placeholder="123">
+</div>
+
+<div class="field full">
+<label>Cardholder Name</label>
+<input type="text" placeholder="John Doe">
+</div>
+
+</div>
+
+</div>
+
+<div class="payment-option">
+<div class="option-row">
+<div class="option-left">
+<div class="radio"></div>
+<div>
+<div class="option-title">PayPal</div>
+<div class="option-sub">Fast & secure PayPal checkout</div>
+</div>
+</div>
+<div class="pay-icon">PayPal</div>
+</div>
+</div>
+
+<div class="payment-option">
+<div class="option-row">
+<div class="option-left">
+<div class="radio"></div>
+<div>
+<div class="option-title">Apple Pay</div>
+<div class="option-sub">Pay using Apple Wallet</div>
+</div>
+</div>
+<div class="pay-icon">Apple</div>
+</div>
+</div>
+
+<div class="payment-option">
+<div class="option-row">
+<div class="option-left">
+<div class="radio"></div>
+<div>
+<div class="option-title">Google Pay</div>
+<div class="option-sub">One-tap checkout</div>
+</div>
+</div>
+<div class="pay-icon">GPay</div>
+</div>
+</div>
+
+<div class="payment-option">
+<div class="option-row">
+<div class="option-left">
+<div class="radio"></div>
+<div>
+<div class="option-title">Shop Pay</div>
+<div class="option-sub">Accelerated checkout</div>
+</div>
+</div>
+<div class="pay-icon">Shop</div>
+</div>
+</div>
+
+<div class="payment-option">
+<div class="option-row">
+<div class="option-left">
+<div class="radio"></div>
+<div>
+<div class="option-title">Klarna</div>
+<div class="option-sub">Buy now, pay later</div>
+</div>
+</div>
+<div class="pay-icon">Klarna</div>
+</div>
+</div>
+
+<div class="cta-group">
+
+<button class="btn btn-primary">
+🔒 Pay Securely Now $89.98
+</button>
+
+<button class="btn btn-outline">
+Checkout as Guest
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+     RIGHT SIDEBAR
+===================================================== -->
+
+<div class="checkout-sidebar">
+
+<!-- ORDER SUMMARY -->
+
+<div class="summary-card">
+
+<div class="summary-header">
+
+<h3>Order Summary</h3>
+
+<a href="#" class="edit-cart">Edit Cart</a>
+
+</div>
+
+<div class="product-item">
+
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop">
+
+<div class="product-info">
+
+<h4>Premium Sneakers</h4>
+
+<p>Black / Size 42</p>
+
+<div class="qty-pill">Qty 1</div>
+
+</div>
+
+<div class="product-price">$49.99</div>
+
+</div>
+
+<div class="product-item">
+
+<img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop">
+
+<div class="product-info">
+
+<h4>Oversized T-Shirt</h4>
+
+<p>White / XL</p>
+
+<div class="qty-pill">Qty 1</div>
+
+</div>
+
+<div class="product-price">$39.99</div>
+
+</div>
+
+<!-- COUPON -->
+
+<div class="coupon">
+
+<input type="text" placeholder="Promo code">
+
+<button>Apply</button>
+
+</div>
+
+<!-- TOTALS -->
+
+<div class="summary-totals">
+
+<div class="total-row">
+<span>Subtotal</span>
+<strong>$89.98</strong>
+</div>
+
+<div class="total-row">
+<span>Shipping</span>
+<strong>FREE</strong>
+</div>
+
+<div class="total-row">
+<span>Estimated Tax</span>
+<strong>$6.80</strong>
+</div>
+
+<div class="total-row total-final">
+<span>Total</span>
+<strong>$96.78</strong>
+</div>
+
+</div>
+
+</div>
+
+<!-- SECURITY -->
+
+<div class="summary-card">
+
+<div class="secure-box">
+
+<div>🔒</div>
+
+<div>
+
+<h4>Secure Checkout</h4>
+
+<p class="text-muted mt-20">
+Your payment is protected with 256-bit SSL encryption and advanced fraud prevention systems.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- TRUST -->
+
+<div class="summary-card">
+
+<h3 style="margin-bottom:18px">Why Shop With Us</h3>
+
+<div class="help-box">
+
+<div class="help-link">
+<span>↩️ 30-Day Easy Returns</span>
+<span>›</span>
+</div>
+
+<div class="help-link">
+<span>🚚 Free Shipping</span>
+<span>›</span>
+</div>
+
+<div class="help-link">
+<span>💬 24/7 Support</span>
+<span>›</span>
+</div>
+
+</div>
+
+</div>
+
+<!-- HELP -->
+
+<div class="summary-card">
+
+<h3 style="margin-bottom:18px">Need Help?</h3>
+
+<div class="help-box">
+
+<div class="help-link">
+<span>💬 Live Chat</span>
+<span>Online</span>
+</div>
+
+<div class="help-link">
+<span>📧 support@luxora.com</span>
+<span>›</span>
+</div>
+
+<div class="help-link">
+<span>📞 +1 (800) 555-0199</span>
+<span>›</span>
+</div>
+
+<div class="help-link">
+<span>📚 Help Center</span>
+<span>›</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- MOBILE STICKY CTA -->
+
+<div class="mobile-paybar">
+
+<button class="btn btn-primary">
+🔒 Pay Securely Now $89.98
+</button>
+
+</div>
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+<div class="container">
+
+<div class="footer-trust">
+
+<div class="footer-badge">
+<div>🔒</div>
+<div>
+<h4>Secure Checkout</h4>
+<p class="text-muted">SSL encrypted payments</p>
+</div>
+</div>
+
+<div class="footer-badge">
+<div>🛡️</div>
+<div>
+<h4>Privacy Protected</h4>
+<p class="text-muted">Your data stays secure</p>
+</div>
+</div>
+
+<div class="footer-badge">
+<div>✅</div>
+<div>
+<h4>100% Satisfaction</h4>
+<p class="text-muted">Risk-free shopping</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</footer>
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+/* =========================================================
+   MOBILE ORDER SUMMARY TOGGLE
+========================================================= */
+
+const summaryToggle = document.getElementById('summaryToggle');
+const summaryContent = document.getElementById('summaryContent');
+
+summaryToggle.addEventListener('click', () => {
+
+if(summaryContent.style.display === 'block'){
+summaryContent.style.display = 'none';
+} else {
+summaryContent.style.display = 'block';
+}
+
+});
+
+/* =========================================================
+   SHIPPING OPTION SELECTION
+========================================================= */
+
+const shippingOptions = document.querySelectorAll('.shipping-option');
+
+shippingOptions.forEach(option => {
+
+option.addEventListener('click', () => {
+
+shippingOptions.forEach(o => o.classList.remove('active'));
+
+option.classList.add('active');
+
+});
+
+});
+
+/* =========================================================
+   PAYMENT OPTION SELECTION
+========================================================= */
+
+const paymentOptions = document.querySelectorAll('.payment-option');
+
+paymentOptions.forEach(option => {
+
+option.addEventListener('click', () => {
+
+paymentOptions.forEach(o => o.classList.remove('active'));
+
+option.classList.add('active');
+
+});
+
+});
+
+/* =========================================================
+   MOBILE ACCORDION STEPS
+========================================================= */
+
+const stepCards = document.querySelectorAll('.step-card');
+
+if(window.innerWidth <= 768){
+
+stepCards.forEach((card,index) => {
+
+if(index !== 0){
+card.classList.add('collapsed');
+}
+
+const header = card.querySelector('.step-header');
+
+header.addEventListener('click', () => {
+
+stepCards.forEach(c => {
+
+if(c !== card){
+c.classList.add('collapsed');
+}
+
+});
+
+card.classList.toggle('collapsed');
+
+});
+
+});
+
+}
+
+/* =========================================================
+   INLINE VALIDATION
+========================================================= */
+
+const requiredInputs = document.querySelectorAll('input[type="email"], input[type="text"]');
+
+requiredInputs.forEach(input => {
+
+input.addEventListener('blur', () => {
+
+if(input.value.trim() === ''){
+
+input.style.borderColor = 'rgba(239,68,68,.6)';
+
+} else {
+
+input.style.borderColor = 'rgba(34,197,94,.4)';
+
+}
+
+});
+
+});
+
+/* =========================================================
+   CREDIT CARD AUTO FORMAT
+========================================================= */
+
+const cardInput = document.querySelector('input[placeholder="4242 4242 4242 4242"]');
+
+cardInput.addEventListener('input', (e) => {
+
+let value = e.target.value.replace(/\D/g,'');
+
+value = value.replace(/(.{4})/g,'$1 ').trim();
+
+e.target.value = value;
+
+});
+
+/* =========================================================
+   EXPIRY FORMAT
+========================================================= */
+
+const expiryInput = document.querySelector('input[placeholder="MM / YY"]');
+
+expiryInput.addEventListener('input', (e) => {
+
+let value = e.target.value.replace(/\D/g,'');
+
+if(value.length >= 2){
+value = value.substring(0,2) + ' / ' + value.substring(2,4);
+}
+
+e.target.value = value;
+
+});
+
+/* =========================================================
+   CTA LOADING STATE
+========================================================= */
+
+const payButtons = document.querySelectorAll('.btn-primary');
+
+payButtons.forEach(btn => {
+
+btn.addEventListener('click', () => {
+
+const original = btn.innerHTML;
+
+btn.innerHTML = 'Processing Payment...';
+
+btn.disabled = true;
+
+setTimeout(() => {
+
+btn.innerHTML = '✅ Payment Authorized';
+
+setTimeout(() => {
+
+btn.innerHTML = original;
+btn.disabled = false;
+
+},2000);
+
+},2500);
+
+});
+
+});
+
+/* =========================================================
+   AUTO DETECT CARD BRAND
+========================================================= */
+
+cardInput.addEventListener('keyup', () => {
+
+const val = cardInput.value;
+
+if(val.startsWith('4')){
+console.log('Visa detected');
+}
+
+if(/^5[1-5]/.test(val)){
+console.log('Mastercard detected');
+}
+
+});
+
+/* =========================================================
+   FAKE SAVE CHECKOUT STATE
+========================================================= */
+
+const allFields = document.querySelectorAll('input, select');
+
+allFields.forEach(field => {
+
+field.addEventListener('change', () => {
+
+localStorage.setItem(field.placeholder || field.name || Math.random(), field.value);
+
+});
+
+});
+
+/* =========================================================
+   ACCESSIBILITY IMPROVEMENTS
+========================================================= */
+
+document.querySelectorAll('input').forEach(input => {
+
+input.setAttribute('aria-label', input.placeholder);
+
+});
+
+/* =========================================================
+   DYNAMIC TAX / SHIPPING RECALCULATION (MVP DEMO)
+========================================================= */
+
+function updateTotals(){
+
+const subtotal = 89.98;
+
+const expressSelected = shippingOptions[1].classList.contains('active');
+
+const shipping = expressSelected ? 9.99 : 0;
+
+const tax = ((subtotal + shipping) * 0.075).toFixed(2);
+
+const total = (subtotal + shipping + parseFloat(tax)).toFixed(2);
+
+document.querySelectorAll('.total-row strong')[1].textContent =
+shipping === 0 ? 'FREE' : '$' + shipping.toFixed(2);
+
+document.querySelectorAll('.total-final strong').forEach(el => {
+el.textContent = '$' + total;
+});
+
+document.querySelectorAll('.btn-primary').forEach(btn => {
+btn.innerHTML = '🔒 Pay Securely Now $' + total;
+});
+
+}
+
+shippingOptions.forEach(option => {
+option.addEventListener('click', updateTotals);
+});
+
+updateTotals();
+
+/* =========================================================
+   FAKE PROMO CODE
+========================================================= */
+
+const promoBtn = document.querySelector('.coupon button');
+
+promoBtn.addEventListener('click', () => {
+
+promoBtn.innerHTML = 'Applied ✓';
+
+promoBtn.style.background = '#10b981';
+
+});
+
+/* =========================================================
+   END
+========================================================= */
+
+</script>
+
+</body>
+</html>
