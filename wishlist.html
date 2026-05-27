@@ -1,0 +1,2402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LuxeAura — My Wishlist</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   LUXEAURA WISHLIST — MEGA SINGLE FILE MVP
+   HTML + CSS + JS
+   ========================================================= */
+
+:root{
+  --bg:#0b0f14;
+  --bg-2:#0f1722;
+  --card:#121825;
+  --card-2:#151d2d;
+  --muted:#8b96a7;
+  --text:#f3f6fb;
+
+  --line:rgba(255,255,255,.07);
+
+  --brand:#ff4fa3;
+  --brand-2:#ff84c2;
+  --cyan:#06b6d4;
+  --green:#22c55e;
+  --amber:#f59e0b;
+  --red:#ef4444;
+
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+
+  --radius:20px;
+  --radius-lg:28px;
+  --radius-sm:14px;
+
+  --max:1700px;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:
+  radial-gradient(circle at top left, rgba(255,79,163,.12), transparent 20%),
+  radial-gradient(circle at top right, rgba(6,182,212,.08), transparent 20%),
+  linear-gradient(180deg,#0b0f14,#0d131d 40%,#101827);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  overflow-x:hidden;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+img{
+  width:100%;
+  display:block;
+}
+
+button,
+input,
+select{
+  font-family:inherit;
+}
+
+.container{
+  width:100%;
+  max-width:var(--max);
+  margin:auto;
+  padding:0 24px;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar{
+  width:10px;
+  height:10px;
+}
+
+::-webkit-scrollbar-track{
+  background:#101827;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#2d3a53;
+  border-radius:999px;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:999;
+  backdrop-filter:blur(16px);
+  background:rgba(10,14,20,.78);
+  border-bottom:1px solid var(--line);
+}
+
+.topbar{
+  height:82px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.left-top{
+  display:flex;
+  align-items:center;
+  gap:40px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:900;
+  letter-spacing:.5px;
+  font-size:1.2rem;
+}
+
+.logo-badge{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--brand),var(--brand-2));
+  display:grid;
+  place-items:center;
+  box-shadow:0 10px 30px rgba(255,79,163,.35);
+}
+
+.logo-badge span{
+  font-size:1.1rem;
+  font-weight:900;
+}
+
+nav{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+nav a{
+  padding:10px 16px;
+  border-radius:999px;
+  font-size:.95rem;
+  color:#dce3f1;
+  transition:.25s ease;
+}
+
+nav a:hover{
+  background:rgba(255,255,255,.05);
+}
+
+nav .sale{
+  color:#ff6b81;
+  font-weight:700;
+}
+
+.right-top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.search{
+  position:relative;
+}
+
+.search input{
+  width:320px;
+  background:#111826;
+  border:1px solid var(--line);
+  border-radius:999px;
+  height:48px;
+  padding:0 50px 0 18px;
+  color:white;
+  outline:none;
+}
+
+.search svg{
+  position:absolute;
+  right:18px;
+  top:50%;
+  transform:translateY(-50%);
+  opacity:.7;
+}
+
+.icon-btn{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  background:#111826;
+  border:1px solid var(--line);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:.25s ease;
+  position:relative;
+}
+
+.icon-btn:hover{
+  transform:translateY(-2px);
+  background:#151d2d;
+}
+
+.badge{
+  position:absolute;
+  top:-4px;
+  right:-4px;
+  min-width:22px;
+  height:22px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:var(--brand);
+  color:white;
+  font-size:.72rem;
+  font-weight:800;
+  border:2px solid #0b0f14;
+}
+
+/* =========================================================
+   MOBILE HEADER
+   ========================================================= */
+
+.mobile-header{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:999;
+  backdrop-filter:blur(16px);
+  background:rgba(10,14,20,.85);
+  border-bottom:1px solid var(--line);
+}
+
+.mobile-header-inner{
+  height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+}
+
+.mobile-header h2{
+  font-size:1.1rem;
+}
+
+.mobile-icons{
+  display:flex;
+  gap:10px;
+}
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+.page{
+  padding:34px 0 120px;
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:320px 1fr 360px;
+  gap:24px;
+}
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.card{
+  background:
+  linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+  position:sticky;
+  top:110px;
+  height:max-content;
+}
+
+.side-card{
+  padding:24px;
+}
+
+.side-title{
+  font-size:1rem;
+  font-weight:800;
+  margin-bottom:18px;
+}
+
+.account-links{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.account-link{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-radius:16px;
+  background:#101827;
+  transition:.25s ease;
+  cursor:pointer;
+}
+
+.account-link:hover{
+  background:#141f30;
+}
+
+.account-link.active{
+  background:rgba(255,79,163,.14);
+  border:1px solid rgba(255,79,163,.25);
+}
+
+.account-link span{
+  color:var(--muted);
+}
+
+.alert-box{
+  padding:20px;
+  border-radius:18px;
+  background:
+  linear-gradient(135deg,
+  rgba(255,79,163,.18),
+  rgba(255,132,194,.06));
+}
+
+.alert-box h3{
+  font-size:1rem;
+  margin-bottom:10px;
+}
+
+.alert-box p{
+  color:#c9d4e7;
+  font-size:.93rem;
+  line-height:1.6;
+  margin-bottom:18px;
+}
+
+.primary-btn{
+  border:none;
+  outline:none;
+  cursor:pointer;
+  background:
+  linear-gradient(135deg,var(--brand),var(--brand-2));
+  color:white;
+  height:52px;
+  border-radius:16px;
+  padding:0 24px;
+  font-weight:700;
+  transition:.25s ease;
+  box-shadow:0 10px 30px rgba(255,79,163,.28);
+}
+
+.primary-btn:hover{
+  transform:translateY(-2px);
+}
+
+.secondary-btn{
+  height:50px;
+  border-radius:16px;
+  background:#101827;
+  border:1px solid var(--line);
+  color:white;
+  padding:0 22px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.insight-list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.insight{
+  padding:16px;
+  border-radius:18px;
+  background:#101827;
+  border:1px solid rgba(255,255,255,.05);
+}
+
+.insight p{
+  color:#dfe8f7;
+  line-height:1.5;
+}
+
+.insight strong{
+  color:#fff;
+}
+
+.view-insights{
+  margin-top:16px;
+  color:var(--brand-2);
+  font-weight:700;
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.main-content{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+.page-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.page-header h1{
+  font-size:3rem;
+  line-height:1;
+  margin-bottom:10px;
+}
+
+.page-header p{
+  color:var(--muted);
+}
+
+.header-actions{
+  display:flex;
+  gap:14px;
+}
+
+.glass-btn{
+  height:52px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:#101827;
+  color:white;
+  padding:0 22px;
+  cursor:pointer;
+  font-weight:700;
+  transition:.25s ease;
+}
+
+.glass-btn:hover{
+  transform:translateY(-2px);
+}
+
+.alert-banner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:22px 24px;
+  border-radius:24px;
+  background:
+  linear-gradient(135deg,
+  rgba(6,182,212,.16),
+  rgba(255,255,255,.03));
+  border:1px solid rgba(6,182,212,.25);
+}
+
+.alert-banner h3{
+  margin-bottom:6px;
+}
+
+.alert-banner p{
+  color:#d7e5f6;
+}
+
+.alert-link{
+  color:#6ee7ff;
+  font-weight:700;
+}
+
+/* =========================================================
+   BULK BAR
+   ========================================================= */
+
+.bulk-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:20px 24px;
+}
+
+.bulk-left{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.checkbox{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.checkbox input{
+  width:18px;
+  height:18px;
+}
+
+.sort-select{
+  background:#101827;
+  border:1px solid var(--line);
+  color:white;
+  border-radius:14px;
+  padding:12px 16px;
+  outline:none;
+}
+
+.view-toggle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.toggle-btn{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:#101827;
+  border:1px solid var(--line);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+}
+
+.toggle-btn.active{
+  background:rgba(255,79,163,.18);
+  border-color:rgba(255,79,163,.25);
+}
+
+/* =========================================================
+   WISHLIST ITEMS
+   ========================================================= */
+
+.wishlist{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.wishlist-card{
+  display:grid;
+  grid-template-columns:36px 160px 1fr auto;
+  gap:24px;
+  align-items:center;
+  padding:20px;
+  transition:.3s ease;
+}
+
+.wishlist-card:hover{
+  transform:translateY(-3px);
+}
+
+.wishlist-checkbox{
+  display:flex;
+  justify-content:center;
+}
+
+.wishlist-checkbox input{
+  width:20px;
+  height:20px;
+}
+
+.product-image{
+  width:160px;
+  height:160px;
+  border-radius:22px;
+  overflow:hidden;
+  position:relative;
+}
+
+.product-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:.5s ease;
+}
+
+.wishlist-card:hover .product-image img{
+  transform:scale(1.06);
+}
+
+.discount-pill{
+  position:absolute;
+  top:12px;
+  left:12px;
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(8px);
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:.75rem;
+  font-weight:800;
+}
+
+.product-info{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.product-brand{
+  color:var(--muted);
+  font-size:.95rem;
+}
+
+.product-title{
+  font-size:1.35rem;
+  font-weight:700;
+}
+
+.variant{
+  color:#c8d6ea;
+}
+
+.price-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.price{
+  font-size:1.6rem;
+  font-weight:800;
+}
+
+.old-price{
+  color:#7f8aa1;
+  text-decoration:line-through;
+}
+
+.stock{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  width:max-content;
+  padding:10px 14px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:.9rem;
+}
+
+.stock.green{
+  background:rgba(34,197,94,.12);
+  color:#4ade80;
+}
+
+.stock.orange{
+  background:rgba(245,158,11,.12);
+  color:#fbbf24;
+}
+
+.stock.gray{
+  background:rgba(255,255,255,.06);
+  color:#d4d4d8;
+}
+
+.shipping{
+  color:#9fb0c7;
+  font-size:.95rem;
+}
+
+.social-proof{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#ffb7ce;
+  font-size:.92rem;
+}
+
+.product-actions{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  min-width:240px;
+}
+
+.action-row{
+  display:flex;
+  gap:12px;
+}
+
+.action-btn{
+  flex:1;
+  height:52px;
+  border-radius:16px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+  transition:.25s ease;
+}
+
+.action-btn.primary{
+  background:linear-gradient(135deg,var(--brand),var(--brand-2));
+  color:white;
+}
+
+.action-btn.secondary{
+  background:#101827;
+  border:1px solid var(--line);
+  color:white;
+}
+
+.action-btn.notify{
+  background:linear-gradient(135deg,var(--cyan),#3dd9f5);
+  color:#02151b;
+}
+
+.action-btn:hover{
+  transform:translateY(-2px);
+}
+
+.icon-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+}
+
+.circle-icon{
+  width:46px;
+  height:46px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:#101827;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+}
+
+/* =========================================================
+   RIGHT SIDEBAR
+   ========================================================= */
+
+.rightbar{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+  position:sticky;
+  top:110px;
+  height:max-content;
+}
+
+.summary-card{
+  padding:24px;
+}
+
+.summary-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
+
+.analytics{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.analytics-card{
+  padding:18px;
+  border-radius:18px;
+  background:#101827;
+}
+
+.analytics-card h3{
+  font-size:1.8rem;
+  margin-bottom:8px;
+}
+
+.analytics-card p{
+  color:var(--muted);
+  font-size:.92rem;
+}
+
+.activity-list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.activity{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+  padding:14px;
+  border-radius:18px;
+  background:#101827;
+}
+
+.activity-icon{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:rgba(255,79,163,.15);
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+}
+
+.activity p{
+  line-height:1.5;
+  margin-bottom:6px;
+}
+
+.activity span{
+  color:var(--muted);
+  font-size:.85rem;
+}
+
+.pref-list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.pref{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px;
+  border-radius:18px;
+  background:#101827;
+}
+
+.switch{
+  width:58px;
+  height:32px;
+  border-radius:999px;
+  background:#273246;
+  position:relative;
+  cursor:pointer;
+}
+
+.switch.active{
+  background:linear-gradient(135deg,var(--brand),var(--brand-2));
+}
+
+.switch span{
+  position:absolute;
+  top:4px;
+  left:4px;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:white;
+  transition:.25s ease;
+}
+
+.switch.active span{
+  left:30px;
+}
+
+/* =========================================================
+   RECOMMENDATIONS
+   ========================================================= */
+
+.recommend-section{
+  margin-top:10px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:24px;
+}
+
+.section-title h2{
+  font-size:2rem;
+}
+
+.carousel{
+  display:flex;
+  gap:22px;
+  overflow:auto;
+  padding-bottom:10px;
+}
+
+.carousel-card{
+  flex:0 0 280px;
+  background:#121825;
+  border:1px solid var(--line);
+  border-radius:26px;
+  overflow:hidden;
+  transition:.35s ease;
+}
+
+.carousel-card:hover{
+  transform:translateY(-4px);
+}
+
+.carousel-image{
+  height:320px;
+  overflow:hidden;
+}
+
+.carousel-image img{
+  height:100%;
+  object-fit:cover;
+  transition:.5s ease;
+}
+
+.carousel-card:hover img{
+  transform:scale(1.06);
+}
+
+.carousel-meta{
+  padding:20px;
+}
+
+.carousel-meta h3{
+  margin-bottom:10px;
+  line-height:1.4;
+}
+
+.carousel-meta p{
+  color:var(--muted);
+  margin-bottom:14px;
+}
+
+.carousel-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.carousel-price{
+  font-size:1.3rem;
+  font-weight:800;
+}
+
+/* =========================================================
+   MOBILE SORT BAR
+   ========================================================= */
+
+.mobile-sort{
+  display:none;
+  position:sticky;
+  top:70px;
+  z-index:90;
+  backdrop-filter:blur(12px);
+  background:rgba(10,14,20,.88);
+  border-bottom:1px solid var(--line);
+  padding:14px 18px;
+}
+
+.mobile-sort-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.mobile-sort select{
+  background:#101827;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px 14px;
+  color:white;
+}
+
+/* =========================================================
+   BOTTOM NAV
+   ========================================================= */
+
+.bottom-nav{
+  display:none;
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:999;
+  background:rgba(10,14,20,.96);
+  backdrop-filter:blur(16px);
+  border-top:1px solid var(--line);
+  padding:10px 0 12px;
+}
+
+.bottom-nav-inner{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+
+.bottom-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  color:#9eb0c8;
+  font-size:.75rem;
+}
+
+.bottom-item.active{
+  color:var(--brand-2);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1450px){
+
+  .layout{
+    grid-template-columns:280px 1fr 320px;
+  }
+
+}
+
+@media(max-width:1200px){
+
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar,
+  .rightbar{
+    position:relative;
+    top:0;
+  }
+
+}
+
+@media(max-width:900px){
+
+  header{
+    display:none;
+  }
+
+  .mobile-header{
+    display:block;
+  }
+
+  .mobile-sort{
+    display:block;
+  }
+
+  .bottom-nav{
+    display:block;
+  }
+
+  .page{
+    padding-top:20px;
+  }
+
+  .container{
+    padding:0 16px;
+  }
+
+  .sidebar{
+    order:2;
+  }
+
+  .rightbar{
+    order:3;
+  }
+
+  .page-header{
+    flex-direction:column;
+  }
+
+  .header-actions{
+    width:100%;
+  }
+
+  .header-actions button{
+    flex:1;
+  }
+
+  .wishlist-card{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+
+  .wishlist-checkbox{
+    display:none;
+  }
+
+  .product-image{
+    width:100%;
+    height:320px;
+  }
+
+  .product-actions{
+    width:100%;
+    min-width:auto;
+  }
+
+  .icon-actions{
+    justify-content:flex-start;
+  }
+
+  .alert-banner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .bulk-bar{
+    display:none;
+  }
+
+  .page-header h1{
+    font-size:2.2rem;
+  }
+
+  .carousel{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .carousel-card{
+    flex:unset;
+  }
+
+}
+
+@media(max-width:640px){
+
+  .carousel{
+    grid-template-columns:1fr;
+  }
+
+  .product-image{
+    height:260px;
+  }
+
+  .action-row{
+    flex-direction:column;
+  }
+
+  .analytics{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .page-header h1{
+    font-size:1.9rem;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ======================================================
+     DESKTOP HEADER
+====================================================== -->
+
+<header>
+
+  <div class="container">
+
+    <div class="topbar">
+
+      <div class="left-top">
+
+        <div class="logo">
+          <div class="logo-badge">
+            <span>L</span>
+          </div>
+          LuxeAura
+        </div>
+
+        <nav>
+          <a href="#">Shop</a>
+          <a href="#">New In</a>
+          <a href="#">Women</a>
+          <a href="#">Men</a>
+          <a href="#">Home</a>
+          <a href="#">Beauty</a>
+          <a href="#" class="sale">Sale</a>
+        </nav>
+
+      </div>
+
+      <div class="right-top">
+
+        <div class="search">
+
+          <input
+          type="text"
+          placeholder="Search products, brands, collections...">
+
+          <svg width="20" height="20" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+
+        </div>
+
+        <div class="icon-btn">👤</div>
+
+        <div class="icon-btn">
+          ❤
+          <div class="badge">3</div>
+        </div>
+
+        <div class="icon-btn">👜</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+<!-- ======================================================
+     MOBILE HEADER
+====================================================== -->
+
+<div class="mobile-header">
+
+  <div class="mobile-header-inner">
+
+    <div class="mobile-icons">
+      <div class="icon-btn">←</div>
+    </div>
+
+    <h2>Wishlist</h2>
+
+    <div class="mobile-icons">
+      <div class="icon-btn">↗</div>
+      <div class="icon-btn">⋯</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ======================================================
+     MOBILE SORT BAR
+====================================================== -->
+
+<div class="mobile-sort">
+
+  <div class="mobile-sort-inner">
+
+    <select>
+      <option>Sort: Recently Added</option>
+      <option>Price Low to High</option>
+      <option>Price High to Low</option>
+      <option>Most Popular</option>
+    </select>
+
+    <div class="view-toggle">
+      <div class="toggle-btn active">☷</div>
+      <div class="toggle-btn">☰</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ======================================================
+     PAGE
+====================================================== -->
+
+<div class="page">
+
+  <div class="container">
+
+    <div class="layout">
+
+      <!-- ==================================================
+           LEFT SIDEBAR
+      =================================================== -->
+
+      <aside class="sidebar">
+
+        <div class="card side-card">
+
+          <div class="side-title">
+            Account
+          </div>
+
+          <div class="account-links">
+
+            <div class="account-link active">
+              <strong>My Wishlist</strong>
+              <span>10</span>
+            </div>
+
+            <div class="account-link">
+              <strong>Shared With Me</strong>
+              <span>2</span>
+            </div>
+
+            <div class="account-link">
+              <strong>Recently Viewed</strong>
+            </div>
+
+            <div class="account-link">
+              <strong>Account Settings</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="card side-card">
+
+          <div class="alert-box">
+
+            <h3>Back In Stock Alerts</h3>
+
+            <p>
+              Get instant notifications when your saved products
+              are back in stock or discounted.
+            </p>
+
+            <button class="primary-btn">
+              Turn On Alerts
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="card side-card">
+
+          <div class="side-title">
+            Wishlist Insights
+          </div>
+
+          <div class="insight-list">
+
+            <div class="insight">
+              <p>
+                You love
+                <strong>minimalist totes</strong>
+                — 4 items saved
+              </p>
+            </div>
+
+            <div class="insight">
+              <p>
+                You're into
+                <strong>neutral sneakers</strong>
+                — 3 items saved
+              </p>
+            </div>
+
+            <div class="insight">
+              <p>
+                You like
+                <strong>modern home accents</strong>
+                — 3 items saved
+              </p>
+            </div>
+
+          </div>
+
+          <a class="view-insights" href="#">
+            View all insights →
+          </a>
+
+        </div>
+
+      </aside>
+
+      <!-- ==================================================
+           MAIN CONTENT
+      =================================================== -->
+
+      <main class="main-content">
+
+        <!-- HEADER -->
+
+        <div class="page-header">
+
+          <div>
+
+            <h1>
+              My Wishlist
+            </h1>
+
+            <p>
+              10 curated items saved for later.
+            </p>
+
+          </div>
+
+          <div class="header-actions">
+
+            <button class="glass-btn">
+              Share Wishlist
+            </button>
+
+            <button class="primary-btn">
+              Add More Items
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- ALERT BANNER -->
+
+        <div class="alert-banner card">
+
+          <div>
+
+            <h3>
+              Get notified when items are back in stock or on sale
+            </h3>
+
+            <p>
+              Enable smart alerts and never miss a restock,
+              limited drop, or exclusive markdown.
+            </p>
+
+          </div>
+
+          <a href="#" class="alert-link">
+            Turn on alerts →
+          </a>
+
+        </div>
+
+        <!-- BULK BAR -->
+
+        <div class="bulk-bar card">
+
+          <div class="bulk-left">
+
+            <label class="checkbox">
+              <input type="checkbox">
+              <span>Select all</span>
+            </label>
+
+            <select class="sort-select">
+              <option>Recently Added</option>
+              <option>Price Low → High</option>
+              <option>Price High → Low</option>
+              <option>Most Popular</option>
+            </select>
+
+          </div>
+
+          <div class="view-toggle">
+
+            <div class="toggle-btn active">☷</div>
+            <div class="toggle-btn">☰</div>
+
+          </div>
+
+        </div>
+
+        <!-- ==================================================
+             WISHLIST ITEMS
+        =================================================== -->
+
+        <div class="wishlist">
+
+          <!-- ITEM -->
+
+          <div class="wishlist-card card">
+
+            <div class="wishlist-checkbox">
+              <input type="checkbox">
+            </div>
+
+            <div class="product-image">
+
+              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop">
+
+              <div class="discount-pill">
+                -18%
+              </div>
+
+            </div>
+
+            <div class="product-info">
+
+              <div class="product-brand">
+                LuxeAura
+              </div>
+
+              <div class="product-title">
+                The Everyday Tote
+              </div>
+
+              <div class="variant">
+                Taupe • Premium Italian Leather
+              </div>
+
+              <div class="price-row">
+                <div class="price">$129</div>
+                <div class="old-price">$159</div>
+              </div>
+
+              <div class="stock green">
+                ● In Stock
+              </div>
+
+              <div class="shipping">
+                Ships in 1–2 business days
+              </div>
+
+              <div class="social-proof">
+                🔥 24 people have this in cart
+              </div>
+
+            </div>
+
+            <div class="product-actions">
+
+              <div class="action-row">
+
+                <button class="action-btn primary">
+                  Add to Cart
+                </button>
+
+                <button class="action-btn secondary">
+                  Move to Bag
+                </button>
+
+              </div>
+
+              <div class="icon-actions">
+
+                <div class="circle-icon">❤</div>
+                <div class="circle-icon">⋯</div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ITEM -->
+
+          <div class="wishlist-card card">
+
+            <div class="wishlist-checkbox">
+              <input type="checkbox">
+            </div>
+
+            <div class="product-image">
+
+              <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop">
+
+              <div class="discount-pill">
+                Trending
+              </div>
+
+            </div>
+
+            <div class="product-info">
+
+              <div class="product-brand">
+                AudioPulse
+              </div>
+
+              <div class="product-title">
+                Wireless Noise Cancelling Headphones
+              </div>
+
+              <div class="variant">
+                Matte Black • Studio Edition
+              </div>
+
+              <div class="price-row">
+                <div class="price">$249</div>
+                <div class="old-price">$299</div>
+              </div>
+
+              <div class="stock orange">
+                ● Low stock — 3 left
+              </div>
+
+              <div class="shipping">
+                Estimated delivery by Friday
+              </div>
+
+              <div class="social-proof">
+                ⚡ 18 shoppers viewed today
+              </div>
+
+            </div>
+
+            <div class="product-actions">
+
+              <div class="action-row">
+
+                <button class="action-btn primary">
+                  Add to Cart
+                </button>
+
+                <button class="action-btn secondary">
+                  Compare
+                </button>
+
+              </div>
+
+              <div class="icon-actions">
+
+                <div class="circle-icon">❤</div>
+                <div class="circle-icon">⋯</div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ITEM -->
+
+          <div class="wishlist-card card">
+
+            <div class="wishlist-checkbox">
+              <input type="checkbox">
+            </div>
+
+            <div class="product-image">
+
+              <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200&auto=format&fit=crop">
+
+              <div class="discount-pill">
+                Limited
+              </div>
+
+            </div>
+
+            <div class="product-info">
+
+              <div class="product-brand">
+                MotionX
+              </div>
+
+              <div class="product-title">
+                Smart Fitness Watch
+              </div>
+
+              <div class="variant">
+                Silver • 44mm • LTE
+              </div>
+
+              <div class="price-row">
+                <div class="price">$199</div>
+                <div class="old-price">$229</div>
+              </div>
+
+              <div class="stock gray">
+                ● Out of stock
+              </div>
+
+              <div class="shipping">
+                Restock expected in 5–7 days
+              </div>
+
+              <div class="social-proof">
+                💖 81 people wishlisted this
+              </div>
+
+            </div>
+
+            <div class="product-actions">
+
+              <div class="action-row">
+
+                <button class="action-btn notify">
+                  Notify Me
+                </button>
+
+                <button class="action-btn secondary">
+                  Compare
+                </button>
+
+              </div>
+
+              <div class="icon-actions">
+
+                <div class="circle-icon">❤</div>
+                <div class="circle-icon">⋯</div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ITEM -->
+
+          <div class="wishlist-card card">
+
+            <div class="wishlist-checkbox">
+              <input type="checkbox">
+            </div>
+
+            <div class="product-image">
+
+              <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop">
+
+              <div class="discount-pill">
+                Best Seller
+              </div>
+
+            </div>
+
+            <div class="product-info">
+
+              <div class="product-brand">
+                Aureline
+              </div>
+
+              <div class="product-title">
+                Neutral Street Sneakers
+              </div>
+
+              <div class="variant">
+                Cream White • Limited Capsule
+              </div>
+
+              <div class="price-row">
+                <div class="price">$178</div>
+                <div class="old-price">$210</div>
+              </div>
+
+              <div class="stock green">
+                ● In Stock
+              </div>
+
+              <div class="shipping">
+                Free express shipping included
+              </div>
+
+              <div class="social-proof">
+                🛒 34 people added today
+              </div>
+
+            </div>
+
+            <div class="product-actions">
+
+              <div class="action-row">
+
+                <button class="action-btn primary">
+                  Add to Cart
+                </button>
+
+                <button class="action-btn secondary">
+                  Move to Bag
+                </button>
+
+              </div>
+
+              <div class="icon-actions">
+
+                <div class="circle-icon">❤</div>
+                <div class="circle-icon">⋯</div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ==================================================
+             RECOMMENDATIONS
+        =================================================== -->
+
+        <section class="recommend-section">
+
+          <div class="section-title">
+
+            <h2>
+              You Might Also Love
+            </h2>
+
+            <a href="#" class="alert-link">
+              Explore all →
+            </a>
+
+          </div>
+
+          <div class="carousel">
+
+            <div class="carousel-card">
+
+              <div class="carousel-image">
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop">
+              </div>
+
+              <div class="carousel-meta">
+
+                <h3>
+                  Minimal Oversized Tee
+                </h3>
+
+                <p>
+                  Modern essentials collection
+                </p>
+
+                <div class="carousel-bottom">
+
+                  <div class="carousel-price">
+                    $64
+                  </div>
+
+                  <div class="circle-icon">❤</div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="carousel-card">
+
+              <div class="carousel-image">
+                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop">
+              </div>
+
+              <div class="carousel-meta">
+
+                <h3>
+                  Luxe Structured Blazer
+                </h3>
+
+                <p>
+                  Tailored premium fit
+                </p>
+
+                <div class="carousel-bottom">
+
+                  <div class="carousel-price">
+                    $248
+                  </div>
+
+                  <div class="circle-icon">❤</div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="carousel-card">
+
+              <div class="carousel-image">
+                <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=1200&auto=format&fit=crop">
+              </div>
+
+              <div class="carousel-meta">
+
+                <h3>
+                  Elevated Knit Hoodie
+                </h3>
+
+                <p>
+                  Lightweight luxury comfort
+                </p>
+
+                <div class="carousel-bottom">
+
+                  <div class="carousel-price">
+                    $118
+                  </div>
+
+                  <div class="circle-icon">❤</div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="carousel-card">
+
+              <div class="carousel-image">
+                <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop">
+              </div>
+
+              <div class="carousel-meta">
+
+                <h3>
+                  Cloud Runner Sneakers
+                </h3>
+
+                <p>
+                  Cushioned lifestyle edition
+                </p>
+
+                <div class="carousel-bottom">
+
+                  <div class="carousel-price">
+                    $159
+                  </div>
+
+                  <div class="circle-icon">❤</div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="carousel-card">
+
+              <div class="carousel-image">
+                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop">
+              </div>
+
+              <div class="carousel-meta">
+
+                <h3>
+                  Signature Layered Coat
+                </h3>
+
+                <p>
+                  New winter collection
+                </p>
+
+                <div class="carousel-bottom">
+
+                  <div class="carousel-price">
+                    $349
+                  </div>
+
+                  <div class="circle-icon">❤</div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- ==================================================
+           RIGHT SIDEBAR
+      =================================================== -->
+
+      <aside class="rightbar">
+
+        <!-- ANALYTICS -->
+
+        <div class="card summary-card">
+
+          <div class="summary-head">
+
+            <div>
+
+              <h2>
+                Wishlist Analytics
+              </h2>
+
+              <p style="color:var(--muted); margin-top:8px;">
+                Personalized wishlist performance
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="analytics">
+
+            <div class="analytics-card">
+              <h3>24</h3>
+              <p>Wishlist Items</p>
+            </div>
+
+            <div class="analytics-card">
+              <h3>$2.4k</h3>
+              <p>Saved Value</p>
+            </div>
+
+            <div class="analytics-card">
+              <h3>6</h3>
+              <p>Price Drops</p>
+            </div>
+
+            <div class="analytics-card">
+              <h3>3</h3>
+              <p>Restocked</p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- RECENT ACTIVITY -->
+
+        <div class="card summary-card">
+
+          <div class="summary-head">
+
+            <div>
+
+              <h2>
+                Recent Activity
+              </h2>
+
+            </div>
+
+          </div>
+
+          <div class="activity-list">
+
+            <div class="activity">
+
+              <div class="activity-icon">
+                🔥
+              </div>
+
+              <div>
+
+                <p>
+                  Price dropped 12% on Wireless Headphones
+                </p>
+
+                <span>
+                  1 hour ago
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="activity">
+
+              <div class="activity-icon">
+                📦
+              </div>
+
+              <div>
+
+                <p>
+                  Everyday Tote is back in stock
+                </p>
+
+                <span>
+                  3 hours ago
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="activity">
+
+              <div class="activity-icon">
+                ⚡
+              </div>
+
+              <div>
+
+                <p>
+                  2 wishlist items qualify for express shipping
+                </p>
+
+                <span>
+                  Yesterday
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- PREFERENCES -->
+
+        <div class="card summary-card">
+
+          <div class="summary-head">
+
+            <div>
+
+              <h2>
+                Preferences
+              </h2>
+
+              <p style="color:var(--muted); margin-top:8px;">
+                Configure smart alerts
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="pref-list">
+
+            <div class="pref">
+
+              <span>
+                Price Drop Alerts
+              </span>
+
+              <div class="switch active">
+                <span></span>
+              </div>
+
+            </div>
+
+            <div class="pref">
+
+              <span>
+                Restock Notifications
+              </span>
+
+              <div class="switch active">
+                <span></span>
+              </div>
+
+            </div>
+
+            <div class="pref">
+
+              <span>
+                AI Recommendations
+              </span>
+
+              <div class="switch active">
+                <span></span>
+              </div>
+
+            </div>
+
+            <div class="pref">
+
+              <span>
+                Weekly Wishlist Digest
+              </span>
+
+              <div class="switch">
+                <span></span>
+              </div>
+
+            </div>
+
+          </div>
+
+          <button
+          class="primary-btn"
+          style="margin-top:20px; width:100%;">
+            Save Preferences
+          </button>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ======================================================
+     MOBILE BOTTOM NAV
+====================================================== -->
+
+<div class="bottom-nav">
+
+  <div class="bottom-nav-inner">
+
+    <div class="bottom-item">
+      <div>🏠</div>
+      <span>Home</span>
+    </div>
+
+    <div class="bottom-item">
+      <div>🛍</div>
+      <span>Shop</span>
+    </div>
+
+    <div class="bottom-item active">
+      <div>❤</div>
+      <span>Wishlist</span>
+    </div>
+
+    <div class="bottom-item">
+      <div>👜</div>
+      <span>Bag</span>
+    </div>
+
+    <div class="bottom-item">
+      <div>👤</div>
+      <span>Account</span>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ======================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script>
+
+/* ======================================================
+   TOGGLE SWITCHES
+====================================================== */
+
+document.querySelectorAll('.switch').forEach(sw => {
+
+  sw.addEventListener('click', () => {
+    sw.classList.toggle('active');
+  });
+
+});
+
+/* ======================================================
+   WISHLIST REMOVE
+====================================================== */
+
+document.querySelectorAll('.circle-icon').forEach(icon => {
+
+  if(icon.innerText === '❤'){
+
+    icon.addEventListener('click', () => {
+
+      const card = icon.closest('.wishlist-card');
+
+      if(card){
+
+        card.style.transition = '.4s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+
+        setTimeout(() => {
+          card.remove();
+        },400);
+
+      }
+
+    });
+
+  }
+
+});
+
+/* ======================================================
+   ADD TO CART DEMO
+====================================================== */
+
+document.querySelectorAll('.action-btn.primary').forEach(btn => {
+
+  btn.addEventListener('click', () => {
+
+    const original = btn.innerHTML;
+
+    btn.innerHTML = 'Added ✓';
+
+    btn.style.opacity = '.9';
+
+    setTimeout(() => {
+      btn.innerHTML = original;
+    },2000);
+
+  });
+
+});
+
+/* ======================================================
+   NOTIFY BUTTON DEMO
+====================================================== */
+
+document.querySelectorAll('.notify').forEach(btn => {
+
+  btn.addEventListener('click', () => {
+
+    btn.innerHTML = 'Alerts Enabled ✓';
+
+    setTimeout(() => {
+      btn.innerHTML = 'Notify Me';
+    },2200);
+
+  });
+
+});
+
+/* ======================================================
+   FAKE SHARE BUTTON
+====================================================== */
+
+document.querySelectorAll('.glass-btn').forEach(btn => {
+
+  btn.addEventListener('click', () => {
+
+    alert('Wishlist share link copied!');
+
+  });
+
+});
+
+/* ======================================================
+   VIEW TOGGLE UI
+====================================================== */
+
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+
+  btn.addEventListener('click', () => {
+
+    btn.parentElement
+      .querySelectorAll('.toggle-btn')
+      .forEach(x => x.classList.remove('active'));
+
+    btn.classList.add('active');
+
+  });
+
+});
+
+/* ======================================================
+   SEARCH DEMO
+====================================================== */
+
+const searchInput = document.querySelector('.search input');
+
+if(searchInput){
+
+  searchInput.addEventListener('keyup', (e)=>{
+
+    const value = e.target.value.toLowerCase();
+
+    document.querySelectorAll('.wishlist-card').forEach(card=>{
+
+      const title = card.innerText.toLowerCase();
+
+      if(title.includes(value)){
+        card.style.display = 'grid';
+      }else{
+        card.style.display = 'none';
+      }
+
+    });
+
+  });
+
+}
+
+/* ======================================================
+   MOBILE ALERT DISMISS
+====================================================== */
+
+const banner = document.querySelector('.alert-banner');
+
+if(window.innerWidth < 768){
+
+  banner.addEventListener('click', ()=>{
+
+    banner.style.display='none';
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>
