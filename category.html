@@ -1,0 +1,2444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FurniHome — Sofas & Sectionals</title>
+
+<meta name="description" content="Explore premium sofas & sectionals at FurniHome. Discover modern, leather, sectional and recliner sofas with fast delivery and secure checkout." />
+
+<style>
+
+/* =========================================================
+   ROOT VARIABLES
+========================================================= */
+
+:root{
+--bg:#f6f7fb;
+--card:#ffffff;
+--muted:#6b7280;
+--text:#111827;
+--brand:#ff8a3d;
+--brand-2:#ffb26b;
+--accent:#f59e0b;
+--danger:#ef4444;
+--success:#22c55e;
+--border:#e5e7eb;
+--shadow:0 10px 30px rgba(0,0,0,.08);
+--radius:16px;
+--radius-sm:12px;
+--radius-lg:24px;
+--max:1600px;
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+font-family:Inter,system-ui,-apple-system,sans-serif;
+background:var(--bg);
+color:var(--text);
+overflow-x:hidden;
+}
+
+img{
+width:100%;
+display:block;
+}
+
+a{
+text-decoration:none;
+color:inherit;
+}
+
+button{
+font-family:inherit;
+cursor:pointer;
+}
+
+.container{
+max-width:var(--max);
+margin:auto;
+padding:0 20px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header{
+position:sticky;
+top:0;
+z-index:999;
+background:rgba(255,255,255,.95);
+backdrop-filter:blur(10px);
+border-bottom:1px solid var(--border);
+}
+
+.topbar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:20px;
+padding:16px 0;
+flex-wrap:wrap;
+}
+
+.brand-wrap{
+display:flex;
+align-items:center;
+gap:16px;
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:10px;
+font-size:1.5rem;
+font-weight:800;
+}
+
+.logo-icon{
+width:42px;
+height:42px;
+border-radius:12px;
+background:linear-gradient(135deg,var(--brand),var(--brand-2));
+display:grid;
+place-items:center;
+color:#fff;
+font-weight:800;
+font-size:1.1rem;
+}
+
+.category-btn{
+border:none;
+background:#fff7ed;
+padding:12px 18px;
+border-radius:999px;
+font-weight:600;
+display:flex;
+align-items:center;
+gap:10px;
+border:1px solid #fed7aa;
+transition:.3s;
+}
+
+.category-btn:hover{
+background:#ffedd5;
+}
+
+.search{
+position:relative;
+flex:1;
+max-width:700px;
+}
+
+.search input{
+width:100%;
+padding:15px 55px 15px 18px;
+border-radius:999px;
+border:1px solid var(--border);
+background:#fff;
+font-size:15px;
+outline:none;
+transition:.3s;
+}
+
+.search input:focus{
+border-color:var(--brand);
+box-shadow:0 0 0 4px rgba(255,138,61,.15);
+}
+
+.search-icon{
+position:absolute;
+right:18px;
+top:50%;
+transform:translateY(-50%);
+opacity:.7;
+}
+
+.search-dropdown{
+position:absolute;
+top:58px;
+left:0;
+right:0;
+background:#fff;
+border-radius:20px;
+box-shadow:var(--shadow);
+overflow:hidden;
+border:1px solid var(--border);
+}
+
+.search-item{
+padding:14px 18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid #f3f4f6;
+transition:.2s;
+cursor:pointer;
+}
+
+.search-item:last-child{
+border-bottom:none;
+}
+
+.search-item:hover{
+background:#fff7ed;
+}
+
+.search-item span{
+font-size:14px;
+color:var(--muted);
+}
+
+.actions{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.action-btn{
+position:relative;
+width:46px;
+height:46px;
+border-radius:14px;
+border:1px solid var(--border);
+background:#fff;
+display:grid;
+place-items:center;
+font-size:1.1rem;
+transition:.25s;
+}
+
+.action-btn:hover{
+transform:translateY(-2px);
+box-shadow:var(--shadow);
+}
+
+.badge{
+position:absolute;
+top:-5px;
+right:-5px;
+background:var(--danger);
+color:#fff;
+width:20px;
+height:20px;
+border-radius:50%;
+font-size:12px;
+display:grid;
+place-items:center;
+font-weight:700;
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.main-nav{
+display:flex;
+gap:12px;
+overflow:auto;
+padding-bottom:18px;
+}
+
+.main-nav a{
+padding:10px 16px;
+background:#fff;
+border-radius:999px;
+border:1px solid var(--border);
+white-space:nowrap;
+font-weight:500;
+transition:.2s;
+}
+
+.main-nav a:hover{
+background:#fff7ed;
+border-color:#fdba74;
+}
+
+/* =========================================================
+   BREADCRUMB
+========================================================= */
+
+.breadcrumbs{
+padding:24px 0 8px;
+font-size:14px;
+color:var(--muted);
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.breadcrumbs a:hover{
+color:var(--brand);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+display:grid;
+grid-template-columns:1.3fr .7fr;
+gap:24px;
+margin:24px 0 28px;
+}
+
+.hero-main{
+position:relative;
+border-radius:var(--radius-lg);
+overflow:hidden;
+min-height:520px;
+box-shadow:var(--shadow);
+}
+
+.hero-main img{
+height:100%;
+object-fit:cover;
+}
+
+.hero-overlay{
+position:absolute;
+inset:0;
+background:linear-gradient(to top, rgba(0,0,0,.7), rgba(0,0,0,.2));
+display:flex;
+align-items:flex-end;
+padding:40px;
+color:#fff;
+}
+
+.hero-content{
+max-width:580px;
+}
+
+.hero-content h1{
+font-size:3rem;
+line-height:1.1;
+margin-bottom:18px;
+font-weight:800;
+}
+
+.hero-content p{
+font-size:1.05rem;
+line-height:1.7;
+opacity:.92;
+margin-bottom:24px;
+}
+
+.hero-buttons{
+display:flex;
+gap:14px;
+flex-wrap:wrap;
+}
+
+.btn{
+border:none;
+padding:14px 24px;
+border-radius:14px;
+font-weight:700;
+transition:.3s;
+}
+
+.btn-primary{
+background:linear-gradient(135deg,var(--brand),var(--brand-2));
+color:#fff;
+}
+
+.btn-primary:hover{
+transform:translateY(-2px);
+box-shadow:0 10px 25px rgba(255,138,61,.3);
+}
+
+.btn-secondary{
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(8px);
+border:1px solid rgba(255,255,255,.25);
+color:#fff;
+}
+
+.btn-secondary:hover{
+background:rgba(255,255,255,.18);
+}
+
+.hero-side{
+display:grid;
+gap:20px;
+}
+
+.side-card{
+background:#fff;
+border-radius:var(--radius);
+overflow:hidden;
+box-shadow:var(--shadow);
+transition:.3s;
+}
+
+.side-card:hover{
+transform:translateY(-4px);
+}
+
+.side-card img{
+height:240px;
+object-fit:cover;
+}
+
+.side-content{
+padding:18px;
+}
+
+.side-content h3{
+margin-bottom:8px;
+}
+
+.side-content p{
+color:var(--muted);
+font-size:14px;
+line-height:1.6;
+}
+
+/* =========================================================
+   TRUST BAR
+========================================================= */
+
+.trust-bar{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+margin-bottom:40px;
+}
+
+.trust-item{
+background:#fff;
+padding:20px;
+border-radius:var(--radius);
+display:flex;
+align-items:center;
+gap:14px;
+box-shadow:var(--shadow);
+}
+
+.trust-icon{
+width:52px;
+height:52px;
+border-radius:14px;
+background:#fff7ed;
+display:grid;
+place-items:center;
+font-size:1.4rem;
+}
+
+.trust-text h4{
+margin-bottom:5px;
+}
+
+.trust-text p{
+font-size:14px;
+color:var(--muted);
+}
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+
+.main-layout{
+display:grid;
+grid-template-columns:320px 1fr;
+gap:28px;
+align-items:start;
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar{
+position:sticky;
+top:130px;
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+.sidebar-card{
+background:#fff;
+border-radius:var(--radius);
+padding:22px;
+box-shadow:var(--shadow);
+}
+
+.sidebar-title{
+font-size:1.15rem;
+font-weight:800;
+margin-bottom:18px;
+}
+
+.accordion{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.accordion-item{
+border:1px solid var(--border);
+border-radius:14px;
+overflow:hidden;
+}
+
+.accordion-header{
+padding:16px;
+background:#fff;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-weight:700;
+cursor:pointer;
+}
+
+.accordion-body{
+padding:0 16px 16px;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.category-link{
+padding:10px 14px;
+border-radius:10px;
+transition:.2s;
+font-size:14px;
+}
+
+.category-link:hover{
+background:#fff7ed;
+}
+
+.category-link.active{
+background:#fff7ed;
+color:var(--brand);
+font-weight:700;
+}
+
+.filter-group{
+margin-bottom:20px;
+}
+
+.filter-group h4{
+margin-bottom:14px;
+font-size:15px;
+}
+
+.checkbox{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:12px;
+font-size:14px;
+cursor:pointer;
+}
+
+.checkbox input{
+accent-color:var(--brand);
+}
+
+.price-range{
+display:flex;
+gap:10px;
+}
+
+.price-range input{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid var(--border);
+}
+
+/* =========================================================
+   PRODUCT AREA
+========================================================= */
+
+.products-area{
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+/* FILTER BAR */
+
+.filter-bar{
+background:#fff;
+padding:18px;
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:16px;
+flex-wrap:wrap;
+}
+
+.filters-left{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.filter-btn{
+padding:12px 18px;
+border-radius:12px;
+border:1px solid var(--border);
+background:#fff;
+font-weight:600;
+display:flex;
+align-items:center;
+gap:8px;
+transition:.2s;
+}
+
+.filter-btn:hover{
+border-color:#fdba74;
+background:#fff7ed;
+}
+
+.sort-wrap{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.sort-wrap select{
+padding:12px 16px;
+border-radius:12px;
+border:1px solid var(--border);
+background:#fff;
+}
+
+/* ACTIVE FILTERS */
+
+.active-filters{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.filter-chip{
+background:#fff7ed;
+color:var(--brand);
+padding:10px 14px;
+border-radius:999px;
+font-size:14px;
+font-weight:600;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+/* PRODUCT COUNT */
+
+.product-meta{
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.product-meta p{
+color:var(--muted);
+}
+
+/* =========================================================
+   PRODUCT GRID
+========================================================= */
+
+.product-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:24px;
+}
+
+.product-card{
+background:#fff;
+border-radius:var(--radius);
+overflow:hidden;
+box-shadow:var(--shadow);
+position:relative;
+transition:.35s;
+display:flex;
+flex-direction:column;
+}
+
+.product-card:hover{
+transform:translateY(-6px);
+}
+
+.product-image{
+position:relative;
+overflow:hidden;
+}
+
+.product-image img{
+aspect-ratio:1/1;
+object-fit:cover;
+transition:transform .5s;
+}
+
+.product-card:hover .product-image img{
+transform:scale(1.05);
+}
+
+.wishlist{
+position:absolute;
+top:14px;
+right:14px;
+width:42px;
+height:42px;
+border-radius:50%;
+background:#fff;
+display:grid;
+place-items:center;
+box-shadow:var(--shadow);
+border:none;
+z-index:5;
+}
+
+.product-badge{
+position:absolute;
+left:14px;
+top:14px;
+background:var(--brand);
+color:#fff;
+padding:8px 12px;
+border-radius:999px;
+font-size:12px;
+font-weight:700;
+z-index:5;
+}
+
+.product-body{
+padding:18px;
+display:flex;
+flex-direction:column;
+gap:12px;
+flex:1;
+}
+
+.product-brand{
+font-size:13px;
+color:var(--muted);
+font-weight:600;
+}
+
+.product-title{
+font-size:1rem;
+font-weight:700;
+line-height:1.5;
+min-height:48px;
+}
+
+.rating{
+display:flex;
+align-items:center;
+gap:8px;
+font-size:14px;
+}
+
+.stars{
+color:#fbbf24;
+}
+
+.price-wrap{
+display:flex;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.price{
+font-size:1.25rem;
+font-weight:800;
+}
+
+.old-price{
+text-decoration:line-through;
+color:var(--muted);
+font-size:14px;
+}
+
+.stock{
+font-size:13px;
+font-weight:600;
+color:var(--success);
+}
+
+.swatches{
+display:flex;
+align-items:center;
+gap:8px;
+margin-top:auto;
+}
+
+.swatch{
+width:22px;
+height:22px;
+border-radius:50%;
+border:2px solid #fff;
+box-shadow:0 0 0 1px #ddd;
+cursor:pointer;
+}
+
+.more{
+font-size:13px;
+color:var(--muted);
+font-weight:700;
+}
+
+.card-actions{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.card-actions button{
+flex:1;
+padding:12px;
+border-radius:12px;
+border:none;
+font-weight:700;
+}
+
+.view-btn{
+background:#f3f4f6;
+}
+
+.cart-btn{
+background:linear-gradient(135deg,var(--brand),var(--brand-2));
+color:#fff;
+}
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+margin:30px 0 60px;
+flex-wrap:wrap;
+}
+
+.page-btn{
+width:44px;
+height:44px;
+border-radius:12px;
+border:1px solid var(--border);
+background:#fff;
+font-weight:700;
+transition:.2s;
+}
+
+.page-btn:hover{
+background:#fff7ed;
+border-color:#fdba74;
+}
+
+.page-btn.active{
+background:var(--brand);
+color:#fff;
+border-color:var(--brand);
+}
+
+/* =========================================================
+   NEWSLETTER
+========================================================= */
+
+.newsletter{
+background:linear-gradient(135deg,#fff7ed,#ffedd5);
+padding:50px;
+border-radius:var(--radius-lg);
+display:grid;
+grid-template-columns:1fr auto;
+gap:30px;
+align-items:center;
+margin-bottom:60px;
+}
+
+.newsletter h2{
+font-size:2rem;
+margin-bottom:12px;
+}
+
+.newsletter p{
+color:#7c2d12;
+max-width:700px;
+line-height:1.7;
+}
+
+.newsletter-form{
+display:flex;
+gap:14px;
+flex-wrap:wrap;
+}
+
+.newsletter-form input{
+padding:15px 18px;
+border-radius:14px;
+border:none;
+min-width:320px;
+}
+
+.newsletter-form button{
+padding:15px 24px;
+border-radius:14px;
+border:none;
+background:#111827;
+color:#fff;
+font-weight:700;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+background:#111827;
+color:#fff;
+padding:70px 0 30px;
+}
+
+.footer-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:40px;
+margin-bottom:40px;
+}
+
+.footer-col h3{
+margin-bottom:20px;
+font-size:1.1rem;
+}
+
+.footer-links{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.footer-links a{
+color:#d1d5db;
+font-size:14px;
+transition:.2s;
+}
+
+.footer-links a:hover{
+color:#fff;
+}
+
+.footer-bottom{
+padding-top:24px;
+border-top:1px solid rgba(255,255,255,.08);
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:20px;
+flex-wrap:wrap;
+font-size:14px;
+color:#9ca3af;
+}
+
+/* =========================================================
+   QUICK VIEW MODAL
+========================================================= */
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(6px);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+padding:20px;
+}
+
+.modal.active{
+display:flex;
+}
+
+.modal-content{
+background:#fff;
+width:min(1200px,100%);
+border-radius:28px;
+overflow:hidden;
+display:grid;
+grid-template-columns:1fr 1fr;
+position:relative;
+animation:modalIn .35s ease;
+}
+
+@keyframes modalIn{
+from{
+opacity:0;
+transform:translateY(20px) scale(.98);
+}
+to{
+opacity:1;
+transform:none;
+}
+}
+
+.close-modal{
+position:absolute;
+right:18px;
+top:18px;
+width:44px;
+height:44px;
+border-radius:50%;
+border:none;
+background:#fff;
+box-shadow:var(--shadow);
+font-size:1.2rem;
+z-index:10;
+}
+
+.modal-gallery{
+background:#f9fafb;
+padding:30px;
+}
+
+.modal-gallery img{
+border-radius:18px;
+height:100%;
+object-fit:cover;
+}
+
+.modal-info{
+padding:40px;
+overflow:auto;
+max-height:90vh;
+}
+
+.modal-info h2{
+font-size:2rem;
+margin-bottom:10px;
+}
+
+.modal-info p{
+line-height:1.8;
+color:var(--muted);
+margin:16px 0;
+}
+
+.modal-features{
+margin:20px 0;
+display:grid;
+gap:12px;
+}
+
+.modal-features li{
+list-style:none;
+padding-left:28px;
+position:relative;
+}
+
+.modal-features li::before{
+content:"✓";
+position:absolute;
+left:0;
+color:var(--success);
+font-weight:700;
+}
+
+.qty{
+display:flex;
+align-items:center;
+gap:14px;
+margin:20px 0;
+}
+
+.qty button{
+width:40px;
+height:40px;
+border-radius:12px;
+border:1px solid var(--border);
+background:#fff;
+}
+
+.modal-actions{
+display:flex;
+gap:14px;
+flex-wrap:wrap;
+margin-top:24px;
+}
+
+.modal-actions button{
+padding:16px 24px;
+border-radius:14px;
+border:none;
+font-weight:700;
+}
+
+.add-cart{
+background:linear-gradient(135deg,var(--brand),var(--brand-2));
+color:#fff;
+}
+
+.buy-now{
+background:#111827;
+color:#fff;
+}
+
+/* =========================================================
+   MOBILE FILTER DRAWER
+========================================================= */
+
+.mobile-filter{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+z-index:9999;
+display:none;
+}
+
+.mobile-filter.active{
+display:block;
+}
+
+.filter-drawer{
+position:absolute;
+left:0;
+top:0;
+bottom:0;
+width:90%;
+max-width:420px;
+background:#fff;
+padding:24px;
+overflow:auto;
+}
+
+/* =========================================================
+   SKELETON LOADING
+========================================================= */
+
+.skeleton{
+background:linear-gradient(
+90deg,
+#f3f4f6 25%,
+#e5e7eb 50%,
+#f3f4f6 75%
+);
+background-size:200% 100%;
+animation:shimmer 1.4s infinite;
+}
+
+@keyframes shimmer{
+0%{
+background-position:200% 0;
+}
+100%{
+background-position:-200% 0;
+}
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1400px){
+.product-grid{
+grid-template-columns:repeat(3,1fr);
+}
+}
+
+@media(max-width:1100px){
+
+.hero{
+grid-template-columns:1fr;
+}
+
+.main-layout{
+grid-template-columns:1fr;
+}
+
+.sidebar{
+display:none;
+}
+
+.product-grid{
+grid-template-columns:repeat(3,1fr);
+}
+
+.trust-bar{
+grid-template-columns:repeat(2,1fr);
+}
+
+.footer-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.modal-content{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:768px){
+
+.hero-content h1{
+font-size:2.2rem;
+}
+
+.product-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.trust-bar{
+grid-template-columns:1fr;
+}
+
+.newsletter{
+grid-template-columns:1fr;
+padding:30px;
+}
+
+.newsletter-form{
+width:100%;
+}
+
+.newsletter-form input{
+min-width:100%;
+}
+
+.footer-grid{
+grid-template-columns:1fr;
+}
+
+.topbar{
+justify-content:center;
+}
+
+.search{
+order:3;
+width:100%;
+max-width:none;
+}
+
+.main-nav{
+display:none;
+}
+
+.hero-main{
+min-height:420px;
+}
+
+}
+
+@media(max-width:540px){
+
+.product-grid{
+grid-template-columns:1fr;
+}
+
+.hero-content h1{
+font-size:1.8rem;
+}
+
+.filter-bar{
+align-items:flex-start;
+}
+
+.filters-left{
+width:100%;
+}
+
+.filter-btn{
+flex:1;
+justify-content:center;
+}
+
+.hero-overlay{
+padding:24px;
+}
+
+.hero-main{
+min-height:360px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+<div class="container">
+
+<div class="topbar">
+
+<div class="brand-wrap">
+
+<div class="logo">
+<div class="logo-icon">FH</div>
+<span>FurniHome</span>
+</div>
+
+<button class="category-btn">
+☰ Shop by Category
+</button>
+
+</div>
+
+<div class="search">
+
+<input type="text" value="sofa" placeholder="Search products..." />
+
+<div class="search-icon">🔍</div>
+
+<div class="search-dropdown">
+
+<div class="search-item">
+<div>
+<strong>Sofa Sets</strong>
+<br/>
+<span>Living Room</span>
+</div>
+<div>↗</div>
+</div>
+
+<div class="search-item">
+<div>
+<strong>Sofa Beds</strong>
+<br/>
+<span>Living Room</span>
+</div>
+<div>↗</div>
+</div>
+
+<div class="search-item">
+<div>
+<strong>Sectional Sofas</strong>
+<br/>
+<span>Living Room</span>
+</div>
+<div>↗</div>
+</div>
+
+<div class="search-item">
+<div>
+<strong>Sofa Chairs</strong>
+<br/>
+<span>Living Room</span>
+</div>
+<div>↗</div>
+</div>
+
+<div class="search-item">
+<div>
+<strong>Leather Sofas</strong>
+<br/>
+<span>Living Room</span>
+</div>
+<div>↗</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="actions">
+
+<button class="action-btn">👤</button>
+
+<button class="action-btn">♡</button>
+
+<button class="action-btn">
+🛒
+<div class="badge">2</div>
+</button>
+
+</div>
+
+</div>
+
+<nav class="main-nav">
+<a href="#">Living Room</a>
+<a href="#">Bedroom</a>
+<a href="#">Dining Room</a>
+<a href="#">Office</a>
+<a href="#">Outdoor</a>
+<a href="#">Lighting</a>
+<a href="#">Decor</a>
+<a href="#">Sale</a>
+</nav>
+
+</div>
+
+</header>
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+<!-- BREADCRUMBS -->
+
+<div class="breadcrumbs">
+<a href="#">Home</a>
+>
+<a href="#">Living Room</a>
+>
+<span>Sofas & Sectionals</span>
+</div>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="hero-main">
+
+<img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1600&auto=format&fit=crop" />
+
+<div class="hero-overlay">
+
+<div class="hero-content">
+
+<h1>Sofas & Sectionals</h1>
+
+<p>
+Explore our wide range of sofas and sectionals crafted for
+comfort, elegance, and everyday living. From modern
+minimalist designs to oversized family sectionals.
+</p>
+
+<div class="hero-buttons">
+<button class="btn btn-primary">
+Shop Collection
+</button>
+
+<button class="btn btn-secondary">
+Explore Best Sellers
+</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="hero-side">
+
+<div class="side-card">
+<img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1200&auto=format&fit=crop"/>
+
+<div class="side-content">
+<h3>Luxury Leather Sofas</h3>
+<p>
+Modern handcrafted leather seating for timeless interiors.
+</p>
+</div>
+</div>
+
+<div class="side-card">
+<img src="https://images.unsplash.com/photo-1484101403633-562f891dc89a?q=80&w=1200&auto=format&fit=crop"/>
+
+<div class="side-content">
+<h3>Compact Sectionals</h3>
+<p>
+Perfect for apartments, studios and modern living spaces.
+</p>
+</div>
+</div>
+
+</div>
+
+</section>
+
+<!-- TRUST BAR -->
+
+<section class="trust-bar">
+
+<div class="trust-item">
+<div class="trust-icon">🚚</div>
+<div class="trust-text">
+<h4>Free Delivery</h4>
+<p>Orders over $499</p>
+</div>
+</div>
+
+<div class="trust-item">
+<div class="trust-icon">↩</div>
+<div class="trust-text">
+<h4>Easy Returns</h4>
+<p>30-day policy</p>
+</div>
+</div>
+
+<div class="trust-item">
+<div class="trust-icon">🔒</div>
+<div class="trust-text">
+<h4>Secure Payments</h4>
+<p>100% secure checkout</p>
+</div>
+</div>
+
+<div class="trust-item">
+<div class="trust-icon">⭐</div>
+<div class="trust-text">
+<h4>Top Rated</h4>
+<p>4.8/5 from 10K+ customers</p>
+</div>
+</div>
+
+</section>
+
+<!-- MAIN LAYOUT -->
+
+<section class="main-layout">
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar">
+
+<div class="sidebar-card">
+
+<h3 class="sidebar-title">
+Shop by Category
+</h3>
+
+<div class="accordion">
+
+<div class="accordion-item">
+
+<div class="accordion-header">
+<span>Living Room</span>
+<span>−</span>
+</div>
+
+<div class="accordion-body">
+
+<a class="category-link active" href="#">
+Sofas & Sectionals
+</a>
+
+<a class="category-link" href="#">
+Sofa Sets
+</a>
+
+<a class="category-link" href="#">
+Sectional Sofas
+</a>
+
+<a class="category-link" href="#">
+Sofa Beds
+</a>
+
+<a class="category-link" href="#">
+Recliners
+</a>
+
+<a class="category-link" href="#">
+Accent Chairs
+</a>
+
+<a class="category-link" href="#">
+Coffee Tables
+</a>
+
+</div>
+
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header">
+<span>Bedroom</span>
+<span>+</span>
+</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header">
+<span>Dining Room</span>
+<span>+</span>
+</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header">
+<span>Home Office</span>
+<span>+</span>
+</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header">
+<span>Outdoor</span>
+<span>+</span>
+</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header">
+<span>Lighting</span>
+<span>+</span>
+</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header">
+<span>Decor & Accessories</span>
+<span>+</span>
+</div>
+</div>
+
+<div class="accordion-item">
+<div class="accordion-header">
+<span>Sale</span>
+<span>+</span>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- FILTERS -->
+
+<div class="sidebar-card">
+
+<h3 class="sidebar-title">
+Filters
+</h3>
+
+<div class="filter-group">
+
+<h4>Price Range</h4>
+
+<div class="price-range">
+<input type="number" placeholder="$ Min"/>
+<input type="number" placeholder="$ Max"/>
+</div>
+
+</div>
+
+<div class="filter-group">
+
+<h4>Material</h4>
+
+<label class="checkbox">
+<input type="checkbox" checked />
+Fabric
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Leather
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Velvet
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Wood
+</label>
+
+</div>
+
+<div class="filter-group">
+
+<h4>Color</h4>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Beige
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Grey
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+White
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Black
+</label>
+
+</div>
+
+<div class="filter-group">
+
+<h4>Availability</h4>
+
+<label class="checkbox">
+<input type="checkbox" checked />
+In Stock
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Low Stock
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Preorder
+</label>
+
+</div>
+
+</div>
+
+</aside>
+
+<!-- =========================================================
+     PRODUCTS AREA
+========================================================= -->
+
+<div class="products-area">
+
+<!-- FILTER BAR -->
+
+<div class="filter-bar">
+
+<div class="filters-left">
+
+<button class="filter-btn" id="mobileFilterBtn">
+☰ Filter
+</button>
+
+<button class="filter-btn">
+Size ⌄
+</button>
+
+<button class="filter-btn">
+Material ⌄
+</button>
+
+<button class="filter-btn">
+Color ⌄
+</button>
+
+<button class="filter-btn">
+Price ⌄
+</button>
+
+</div>
+
+<div class="sort-wrap">
+
+<label>Sort by</label>
+
+<select>
+<option>Best Selling</option>
+<option>Newest</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Highest Rated</option>
+</select>
+
+</div>
+
+</div>
+
+<!-- ACTIVE FILTERS -->
+
+<div class="active-filters">
+
+<div class="filter-chip">
+Fabric ✕
+</div>
+
+<div class="filter-chip">
+Beige ✕
+</div>
+
+<div class="filter-chip">
+In Stock ✕
+</div>
+
+</div>
+
+<!-- PRODUCT META -->
+
+<div class="product-meta">
+
+<p>
+Showing 1–12 of 120 products
+</p>
+
+<div>
+Grid View ⬜⬜
+</div>
+
+</div>
+
+<!-- PRODUCT GRID -->
+
+<div class="product-grid" id="productGrid">
+
+</div>
+
+<!-- PAGINATION -->
+
+<div class="pagination">
+
+<button class="page-btn">‹</button>
+
+<button class="page-btn active">1</button>
+<button class="page-btn">2</button>
+<button class="page-btn">3</button>
+<button class="page-btn">4</button>
+<button class="page-btn">5</button>
+
+<button class="page-btn">›</button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- NEWSLETTER -->
+
+<section class="newsletter">
+
+<div>
+
+<h2>
+Get Interior Inspiration Weekly
+</h2>
+
+<p>
+Subscribe for exclusive furniture launches, interior design
+guides, styling inspiration and member-only offers.
+</p>
+
+</div>
+
+<form class="newsletter-form">
+
+<input type="email" placeholder="Enter your email"/>
+
+<button>
+Subscribe
+</button>
+
+</form>
+
+</section>
+
+</main>
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+<div class="container">
+
+<div class="footer-grid">
+
+<div class="footer-col">
+
+<h3>Shop</h3>
+
+<div class="footer-links">
+<a href="#">Living Room</a>
+<a href="#">Bedroom</a>
+<a href="#">Dining Room</a>
+<a href="#">Office Furniture</a>
+<a href="#">Outdoor Furniture</a>
+</div>
+
+</div>
+
+<div class="footer-col">
+
+<h3>Company</h3>
+
+<div class="footer-links">
+<a href="#">About Us</a>
+<a href="#">Careers</a>
+<a href="#">Press</a>
+<a href="#">Affiliates</a>
+<a href="#">Sustainability</a>
+</div>
+
+</div>
+
+<div class="footer-col">
+
+<h3>Support</h3>
+
+<div class="footer-links">
+<a href="#">Contact</a>
+<a href="#">Shipping</a>
+<a href="#">Returns</a>
+<a href="#">Warranty</a>
+<a href="#">FAQs</a>
+</div>
+
+</div>
+
+<div class="footer-col">
+
+<h3>Follow Us</h3>
+
+<div class="footer-links">
+<a href="#">Instagram</a>
+<a href="#">Pinterest</a>
+<a href="#">Facebook</a>
+<a href="#">TikTok</a>
+<a href="#">YouTube</a>
+</div>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+
+<p>
+© 2026 FurniHome. All rights reserved.
+</p>
+
+<p>
+Built for high-performance e-commerce experiences.
+</p>
+
+</div>
+
+</div>
+
+</footer>
+
+<!-- =========================================================
+     PRODUCT MODAL
+========================================================= -->
+
+<div class="modal" id="productModal">
+
+<div class="modal-content">
+
+<button class="close-modal" id="closeModal">
+✕
+</button>
+
+<div class="modal-gallery">
+<img id="modalImage" src="" />
+</div>
+
+<div class="modal-info">
+
+<h2 id="modalTitle"></h2>
+
+<div class="rating">
+<div class="stars">★★★★★</div>
+<span>(124 reviews)</span>
+</div>
+
+<div class="price-wrap" style="margin-top:16px;">
+<div class="price" id="modalPrice"></div>
+<div class="old-price">$1,499</div>
+</div>
+
+<p>
+Designed for modern living spaces with premium upholstery,
+deep seating comfort, kiln-dried hardwood frames and durable
+high-density cushioning for long-term support.
+</p>
+
+<ul class="modal-features">
+<li>Premium stain-resistant fabric</li>
+<li>Solid hardwood frame</li>
+<li>Deep comfort cushions</li>
+<li>Easy assembly</li>
+<li>5-year structural warranty</li>
+</ul>
+
+<div class="qty">
+<button>-</button>
+<strong>1</strong>
+<button>+</button>
+</div>
+
+<div class="modal-actions">
+
+<button class="add-cart">
+Add to Cart
+</button>
+
+<button class="buy-now">
+Buy Now
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =========================================================
+     MOBILE FILTER DRAWER
+========================================================= -->
+
+<div class="mobile-filter" id="mobileFilter">
+
+<div class="filter-drawer">
+
+<h2 style="margin-bottom:20px;">
+Filters
+</h2>
+
+<div class="filter-group">
+
+<h4>Material</h4>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Fabric
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Leather
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Velvet
+</label>
+
+</div>
+
+<div class="filter-group">
+
+<h4>Color</h4>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Beige
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Grey
+</label>
+
+<label class="checkbox">
+<input type="checkbox"/>
+Black
+</label>
+
+</div>
+
+<div style="display:flex; gap:12px; margin-top:30px;">
+
+<button class="btn btn-secondary" style="color:#111; border:1px solid #ddd;">
+Clear
+</button>
+
+<button class="btn btn-primary">
+Apply Filters
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   PRODUCT DATA
+========================================================= */
+
+const products = [
+
+{
+id:1,
+title:"Haven 3-Seater Sofa",
+brand:"FurniHome",
+price:"$699",
+oldPrice:"$899",
+rating:4.8,
+reviews:124,
+badge:"Best Seller",
+stock:"In Stock",
+image:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1200&auto=format&fit=crop",
+colors:["#d6c5b4","#5c5c5c","#ffffff"]
+},
+
+{
+id:2,
+title:"Avery Sectional Sofa",
+brand:"Nordic Living",
+price:"$1,299",
+oldPrice:"$1,499",
+rating:4.9,
+reviews:238,
+badge:"Top Rated",
+stock:"Low Stock",
+image:"https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1200&auto=format&fit=crop",
+colors:["#e5e7eb","#111827","#9ca3af"]
+},
+
+{
+id:3,
+title:"Luna Velvet Sofa",
+brand:"Urban Casa",
+price:"$899",
+oldPrice:"$1,099",
+rating:4.7,
+reviews:91,
+badge:"New",
+stock:"In Stock",
+image:"https://images.unsplash.com/photo-1484101403633-562f891dc89a?q=80&w=1200&auto=format&fit=crop",
+colors:["#c084fc","#f472b6","#111827"]
+},
+
+{
+id:4,
+title:"Milo Recliner Sofa",
+brand:"Comfort Studio",
+price:"$1,099",
+oldPrice:"$1,399",
+rating:4.8,
+reviews:177,
+badge:"Limited",
+stock:"In Stock",
+image:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop",
+colors:["#d1d5db","#78350f","#000"]
+},
+
+{
+id:5,
+title:"Oslo Linen Sectional",
+brand:"Scandi Home",
+price:"$1,499",
+oldPrice:"$1,799",
+rating:4.9,
+reviews:212,
+badge:"Best Seller",
+stock:"In Stock",
+image:"https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop",
+colors:["#f3f4f6","#9ca3af","#1f2937"]
+},
+
+{
+id:6,
+title:"Harbor Modular Sofa",
+brand:"Modern Nest",
+price:"$1,899",
+oldPrice:"$2,199",
+rating:4.8,
+reviews:163,
+badge:"Premium",
+stock:"Preorder",
+image:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop",
+colors:["#fff","#444","#999"]
+},
+
+{
+id:7,
+title:"Nova Leather Sofa",
+brand:"Casa Luxe",
+price:"$1,099",
+oldPrice:"$1,299",
+rating:4.6,
+reviews:144,
+badge:"Trending",
+stock:"In Stock",
+image:"https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?q=80&w=1200&auto=format&fit=crop",
+colors:["#111","#6b7280","#fff"]
+},
+
+{
+id:8,
+title:"Brooklyn Fabric Sofa",
+brand:"Loft Design",
+price:"$799",
+oldPrice:"$999",
+rating:4.7,
+reviews:101,
+badge:"New",
+stock:"In Stock",
+image:"https://images.unsplash.com/photo-1484101403633-562f891dc89a?q=80&w=1200&auto=format&fit=crop",
+colors:["#d6d3d1","#444","#0f172a"]
+}
+
+];
+
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
+
+const productGrid = document.getElementById("productGrid");
+
+function renderProducts(){
+
+productGrid.innerHTML = "";
+
+products.forEach(product=>{
+
+const card = document.createElement("div");
+
+card.className = "product-card";
+
+card.innerHTML = `
+
+<div class="product-image">
+
+<div class="product-badge">
+${product.badge}
+</div>
+
+<button class="wishlist">
+♡
+</button>
+
+<img src="${product.image}" alt="${product.title}" />
+
+</div>
+
+<div class="product-body">
+
+<div class="product-brand">
+${product.brand}
+</div>
+
+<div class="product-title">
+${product.title}
+</div>
+
+<div class="rating">
+<div class="stars">★★★★★</div>
+<span>${product.rating} (${product.reviews})</span>
+</div>
+
+<div class="price-wrap">
+<div class="price">${product.price}</div>
+<div class="old-price">${product.oldPrice}</div>
+</div>
+
+<div class="stock">
+${product.stock}
+</div>
+
+<div class="swatches">
+
+${product.colors.map(color=>`
+<div class="swatch" style="background:${color};"></div>
+`).join("")}
+
+<div class="more">+2</div>
+
+</div>
+
+<div class="card-actions">
+
+<button class="view-btn" onclick="openModal(${product.id})">
+View
+</button>
+
+<button class="cart-btn">
+Add to Cart
+</button>
+
+</div>
+
+</div>
+
+`;
+
+productGrid.appendChild(card);
+
+});
+
+}
+
+renderProducts();
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+const modal = document.getElementById("productModal");
+
+function openModal(id){
+
+const product = products.find(p=>p.id === id);
+
+document.getElementById("modalImage").src = product.image;
+document.getElementById("modalTitle").textContent = product.title;
+document.getElementById("modalPrice").textContent = product.price;
+
+modal.classList.add("active");
+
+document.body.style.overflow = "hidden";
+
+}
+
+document.getElementById("closeModal")
+.addEventListener("click", closeModal);
+
+function closeModal(){
+
+modal.classList.remove("active");
+
+document.body.style.overflow = "auto";
+
+}
+
+modal.addEventListener("click", e=>{
+
+if(e.target === modal){
+closeModal();
+}
+
+});
+
+/* =========================================================
+   MOBILE FILTER DRAWER
+========================================================= */
+
+const mobileFilterBtn =
+document.getElementById("mobileFilterBtn");
+
+const mobileFilter =
+document.getElementById("mobileFilter");
+
+mobileFilterBtn.addEventListener("click", ()=>{
+
+mobileFilter.classList.add("active");
+
+});
+
+mobileFilter.addEventListener("click", e=>{
+
+if(e.target === mobileFilter){
+mobileFilter.classList.remove("active");
+}
+
+});
+
+/* =========================================================
+   ANALYTICS MOCK EVENTS
+========================================================= */
+
+function trackEvent(eventName, data={}){
+
+console.log("Analytics Event:", eventName, data);
+
+}
+
+document.querySelectorAll(".cart-btn").forEach(btn=>{
+
+btn.addEventListener("click", ()=>{
+
+trackEvent("add_to_cart", {
+category:"Sofas & Sectionals"
+});
+
+});
+
+});
+
+document.querySelectorAll(".product-card").forEach(card=>{
+
+card.addEventListener("mouseenter", ()=>{
+
+trackEvent("product_impression");
+
+});
+
+});
+
+/* =========================================================
+   URL STATE EXAMPLE
+========================================================= */
+
+const params = new URLSearchParams(window.location.search);
+
+params.set("category","sofas");
+params.set("sort","best_selling");
+
+history.replaceState({}, "", `${location.pathname}?${params}`);
+
+/* =========================================================
+   LAZY IMAGE LOAD SIMULATION
+========================================================= */
+
+document.querySelectorAll("img").forEach(img=>{
+
+img.loading = "lazy";
+
+});
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+document.querySelectorAll("button").forEach(btn=>{
+
+btn.setAttribute("aria-label",
+btn.textContent.trim());
+
+});
+
+/* =========================================================
+   KEYBOARD ESC MODAL CLOSE
+========================================================= */
+
+document.addEventListener("keydown", e=>{
+
+if(e.key === "Escape"){
+closeModal();
+mobileFilter.classList.remove("active");
+}
+
+});
+
+</script>
+
+</body>
+</html>
