@@ -2784,6 +2784,48 @@ body.modal-open{
 /* =========================================================
    END
    ========================================================= */
+/* FULL WIDTH LAYOUT */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Remove parent spacing */
+.container,
+.container-fluid,
+.row,
+.products-wrapper,
+.products-grid {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* 2 products per row */
+.products-grid {
+    display: grid !important;
+    grid-template-columns: 50% 50%;
+    gap: 0 !important;
+}
+
+/* Product card */
+.products-grid .product-item {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box;
+}
+
+/* Remove image whitespace */
+.products-grid .product-item img {
+    width: 100%;
+    display: block;
+}
 </style>
 
 <!-- Payment badges / SEO note / accessibility touches visible -->
