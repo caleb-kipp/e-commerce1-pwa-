@@ -47,7 +47,7 @@ function getActiveUser() {
 /* =========================
    REGISTER
 ========================= */
-registerForm.addEventListener("submit", function (e) {
+registerForm.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const name = document.getElementById("regName").value.trim();
@@ -61,12 +61,19 @@ registerForm.addEventListener("submit", function (e) {
     return;
   }
 
+  const encoder = new TextEncoder();
+  const passwordBuffer = encoder.encode(password);
+  const digest = await crypto.subtle.digest("SHA-256", passwordBuffer);
+  const passwordHash = Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
   localStorage.setItem(
     "user_" + email,
     JSON.stringify({
       name,
       email,
-      password,
+      password: passwordHash,
       orders: [],
       cart: [],
       payments: [],
