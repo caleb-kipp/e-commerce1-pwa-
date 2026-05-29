@@ -787,6 +787,154 @@ header {
 <div class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
   <div class="ball"></div>
 </div>
+      <style>
+/* =========================================================
+   FULL WIDTH PRODUCT MODAL — NO WASTED SPACE
+   ========================================================= */
+
+.product-modal,
+#productModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.88);
+  backdrop-filter:blur(14px);
+
+  display:none;
+  align-items:center;
+  justify-content:center;
+
+  padding:0 !important; /* REMOVE OUTER SPACE */
+  margin:0 !important;
+
+  z-index:9999;
+}
+
+/* FULL SCREEN CONTENT */
+.modal-content,
+#productModal .modal-content.glassy{
+
+  width:100vw !important;
+  height:100vh !important;
+
+  max-width:100vw !important;
+  max-height:100vh !important;
+
+  border-radius:0 !important;
+
+  overflow:hidden;
+
+  display:grid;
+
+  grid-template-columns:58% 42%;
+
+  position:relative;
+
+  margin:0 !important;
+  padding:0 !important;
+}
+
+/* LEFT SIDE */
+.modal-left{
+
+  padding:0 !important; /* REMOVE SPACE */
+
+  border-right:1px solid var(--line);
+
+  display:flex;
+  flex-direction:column;
+
+  overflow:hidden;
+}
+
+/* IMAGE VIEWER */
+.viewer,
+#productModal .viewer{
+
+  width:100%;
+  height:100%;
+
+  min-height:100%;
+
+  border-radius:0 !important;
+
+  overflow:hidden;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0 !important; /* REMOVE INNER SPACE */
+
+  margin:0 !important;
+
+  background:
+  radial-gradient(circle at top right,rgba(6,182,212,.12),transparent 28%),
+  linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
+}
+
+/* IMAGE */
+.viewer img,
+#productModal .viewer img{
+
+  width:100%;
+  height:100%;
+
+  object-fit:contain;
+
+  margin:0 !important;
+  padding:0 !important;
+
+  border-radius:0 !important;
+
+  display:block;
+}
+
+/* RIGHT SIDE CONTENT */
+.modal-right{
+
+  padding:18px !important; /* SMALLER */
+
+  overflow:auto;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:14px;
+}
+
+/* REMOVE EXTRA SPACING */
+#mTitle,
+#mDescLong,
+#mSpecs,
+.panel,
+.tabs,
+.options,
+.qty{
+  margin:0 !important;
+}
+
+/* MOBILE FULL WIDTH */
+@media(max-width:768px){
+
+  .modal-content,
+  #productModal .modal-content.glassy{
+
+    grid-template-columns:1fr;
+
+    width:100vw !important;
+    height:100vh !important;
+  }
+
+  .modal-left{
+    height:50vh;
+  }
+
+  .modal-right{
+    height:50vh;
+    padding:14px !important;
+  }
+}
+        </style>
 <script>
   const toggle = document.getElementById("themeToggle");
   const root = document.documentElement;
