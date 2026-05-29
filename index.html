@@ -1385,6 +1385,51 @@ openCartBtn.addEventListener('click', () => {
   90% { opacity: 1; }
   100% { opacity: 0; }
 }
+  .products-grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    gap: 0;
+}
+
+.products-grid .product-item {
+    width: 50%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* Product container */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;                 /* removes space between products */
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+/* Product item */
+.products-grid .product-item {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Remove accidental spacing from images/content */
+.products-grid .product-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Optional: remove column spacing caused by parent wrappers */
+.products-grid,
+.products-grid * {
+    column-gap: 0 !important;
+    row-gap: 0 !important;
+}
 </style>
 <!-- Promos / Testimonials / Blog teasers -->
 <section class="section" aria-label="Promos, testimonials, blog">
