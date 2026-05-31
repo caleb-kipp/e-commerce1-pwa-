@@ -8676,3 +8676,1924 @@ if (
    - Retry queues
    - Webhook dispatcher
 ========================================================= */
+/* =========================================================
+   CART.JS ENTERPRISE — PART 9
+   Checkout Orchestration + Payments + Fraud + Orders
+   Continues from Part 8
+========================================================= */
+
+(function CartEnterprisePart9(window){
+
+  'use strict';
+
+  const CartEnterprise =
+    window.CartEnterprise || {};
+
+  /* =========================================================
+     CHECKOUT STATE MACHINE
+  ========================================================= */
+
+  const CheckoutStates = Object.freeze({
+    CART: 'cart',
+    CUSTOMER: 'customer',
+    SHIPPING: 'shipping',
+    BILLING: 'billing',
+    PAYMENT: 'payment',
+    REVIEW: 'review',
+    PROCESSING: 'processing',
+    COMPLETED: 'completed',
+    FAILED: 'failed'
+  });
+
+  class CheckoutStateMachine {
+
+    constructor() {
+
+      this.state =
+        CheckoutStates.CART;
+
+      this.history = [];
+    }
+
+    transition(nextState) {
+
+      this.history.push({
+        from: this.state,
+        to: nextState,
+        at: Date.now()
+      });
+
+      this.state = nextState;
+
+      return this.state;
+    }
+
+    getState() {
+      return this.state;
+    }
+
+    canAdvance() {
+
+      const order = [
+        CheckoutStates.CART,
+        CheckoutStates.CUSTOMER,
+        CheckoutStates.SHIPPING,
+        CheckoutStates.BILLING,
+        CheckoutStates.PAYMENT,
+        CheckoutStates.REVIEW,
+        CheckoutStates.PROCESSING,
+        CheckoutStates.COMPLETED
+      ];
+
+      const idx =
+        order.indexOf(this.state);
+
+      return idx < order.length - 1;
+    }
+
+    next() {
+
+      const order = [
+        CheckoutStates.CART,
+        CheckoutStates.CUSTOMER,
+        CheckoutStates.SHIPPING,
+        CheckoutStates.BILLING,
+        CheckoutStates.PAYMENT,
+        CheckoutStates.REVIEW,
+        CheckoutStates.PROCESSING,
+        CheckoutStates.COMPLETED
+      ];
+
+      const idx =
+        order.indexOf(this.state);
+
+      if (idx >= order.length - 1) {
+        return this.state;
+      }
+
+      return this.transition(
+        order[idx + 1]
+      );
+    }
+
+    fail() {
+
+      return this.transition(
+        CheckoutStates.FAILED
+      );
+    }
+
+    reset() {
+
+      this.history = [];
+
+      return this.transition(
+        CheckoutStates.CART
+      );
+    }
+  }
+
+  /* =========================================================
+     ADDRESS VALIDATION SERVICE
+  ========================================================= */
+
+  class AddressValidationService {
+
+    async validate(address) {
+
+      const errors = [];
+
+      if (!address.firstName)
+        errors.push('firstName');
+
+      if (!address.lastName)
+        errors.push('lastName');
+
+      if (!address.address1)
+        errors.push('address1');
+
+      if (!address.city)
+        errors.push('city');
+
+      if (!address.country)
+        errors.push('country');
+
+      if (!address.postalCode)
+        errors.push('postalCode');
+
+      return {
+        valid: errors.length === 0,
+        errors
+      };
+    }
+
+    async normalize(address) {
+
+      return {
+        ...address,
+        city:
+          address.city?.trim(),
+        country:
+          address.country?.trim(),
+        postalCode:
+          address.postalCode?.trim()
+      };
+    }
+  }
+
+  /* =========================================================
+     PAYMENT GATEWAY BASE
+  ========================================================= */
+
+  class PaymentGateway {
+
+    constructor(name) {
+
+      this.name = name;
+    }
+
+    async authorize() {
+      throw new Error(
+        'authorize() not implemented'
+      );
+    }
+
+    async capture() {
+      throw new Error(
+        'capture() not implemented'
+      );
+    }
+
+    async refund() {
+      throw new Error(
+        'refund() not implemented'
+      );
+    }
+  }
+
+  /* =========================================================
+     MOCK STRIPE GATEWAY
+  ========================================================= */
+
+  class StripeGateway
+    extends PaymentGateway {
+
+    constructor() {
+
+      super('Stripe');
+    }
+
+    async authorize(payment) {
+
+      await sleep(500);
+
+      return {
+        success: true,
+        authorizationId:
+          `st_auth_${Date.now()}`,
+        provider: this.name,
+        amount: payment.amount
+      };
+    }
+
+    async capture(authId) {
+
+      await sleep(400);
+
+      return {
+        success: true,
+        captureId:
+          `st_cap_${Date.now()}`,
+        authorizationId: authId
+      };
+    }
+
+    async refund(paymentId, amount) {
+
+      await sleep(400);
+
+      return {
+        success: true,
+        refundId:
+          `st_ref_${Date.now()}`,
+        paymentId,
+        amount
+      };
+    }
+  }
+
+  /* =========================================================
+     MOCK PAYPAL GATEWAY
+  ========================================================= */
+
+  class PayPalGateway
+    extends PaymentGateway {
+
+    constructor() {
+
+      super('PayPal');
+    }
+
+    async authorize(payment) {
+
+      await sleep(450);
+
+      return {
+        success: true,
+        authorizationId:
+          `pp_auth_${Date.now()}`,
+        provider: this.name,
+        amount: payment.amount
+      };
+    }
+
+    async capture(authId) {
+
+      await sleep(450);
+
+      return {
+        success: true,
+        captureId:
+          `pp_cap_${Date.now()}`,
+        authorizationId: authId
+      };
+    }
+
+    async refund(paymentId, amount) {
+
+      return {
+        success: true,
+        refundId:
+          `pp_ref_${Date.now()}`,
+        paymentId,
+        amount
+      };
+    }
+  }
+
+  /* =========================================================
+     PAYMENT REGISTRY
+  ========================================================= */
+
+  class PaymentGatewayRegistry {
+
+    constructor() {
+
+      this.gateways = new Map();
+    }
+
+    register(gateway) {
+
+      this.gateways.set(
+        gateway.name,
+        gateway
+      );
+    }
+
+    get(name) {
+
+      return this.gateways.get(name);
+    }
+
+    list() {
+
+      return [
+        ...this.gateways.keys()
+      ];
+    }
+  }
+
+  /* =========================================================
+     FRAUD DETECTION ENGINE
+  ========================================================= */
+
+  class FraudDetectionEngine {
+
+    constructor() {
+
+      this.rules = [];
+    }
+
+    registerRule(rule) {
+
+      this.rules.push(rule);
+    }
+
+    evaluate(order) {
+
+      let score = 0;
+      const flags = [];
+
+      for (const rule of this.rules) {
+
+        const result =
+          rule.evaluate(order);
+
+        if (result.triggered) {
+
+          score += result.score;
+
+          flags.push({
+            rule: rule.name,
+            score: result.score
+          });
+        }
+      }
+
+      return {
+        score,
+        flags,
+        riskLevel:
+          score >= 80
+            ? 'HIGH'
+            : score >= 40
+              ? 'MEDIUM'
+              : 'LOW'
+      };
+    }
+  }
+
+  class HighValueOrderRule {
+
+    constructor() {
+
+      this.name =
+        'HIGH_VALUE_ORDER';
+    }
+
+    evaluate(order) {
+
+      if (
+        order.totals.grandTotal > 1000
+      ) {
+
+        return {
+          triggered: true,
+          score: 35
+        };
+      }
+
+      return {
+        triggered: false,
+        score: 0
+      };
+    }
+  }
+
+  class VelocityRule {
+
+    constructor() {
+
+      this.name =
+        'ORDER_VELOCITY';
+    }
+
+    evaluate(order) {
+
+      const recentOrders =
+        order.customerRecentOrders || 0;
+
+      if (recentOrders > 10) {
+
+        return {
+          triggered: true,
+          score: 30
+        };
+      }
+
+      return {
+        triggered: false,
+        score: 0
+      };
+    }
+  }
+
+  /* =========================================================
+     ORDER NUMBER SERVICE
+  ========================================================= */
+
+  class OrderNumberService {
+
+    generate() {
+
+      const date =
+        new Date()
+          .toISOString()
+          .slice(0,10)
+          .replace(/-/g,'');
+
+      const random =
+        Math.random()
+          .toString()
+          .slice(2,8);
+
+      return `ORD-${date}-${random}`;
+    }
+  }
+
+  /* =========================================================
+     ORDER REPOSITORY
+  ========================================================= */
+
+  class OrderRepository {
+
+    constructor() {
+
+      this.orders =
+        new Map();
+    }
+
+    save(order) {
+
+      this.orders.set(
+        order.orderNumber,
+        order
+      );
+
+      return order;
+    }
+
+    get(orderNumber) {
+
+      return this.orders.get(
+        orderNumber
+      );
+    }
+
+    all() {
+
+      return [
+        ...this.orders.values()
+      ];
+    }
+  }
+
+  /* =========================================================
+     CHECKOUT SESSION
+  ========================================================= */
+
+  class CheckoutSession {
+
+    constructor() {
+
+      this.id =
+        crypto.randomUUID();
+
+      this.createdAt =
+        Date.now();
+
+      this.customer = null;
+      this.shipping = null;
+      this.billing = null;
+      this.payment = null;
+      this.cart = null;
+    }
+
+    setCustomer(data) {
+      this.customer = data;
+    }
+
+    setShipping(data) {
+      this.shipping = data;
+    }
+
+    setBilling(data) {
+      this.billing = data;
+    }
+
+    setPayment(data) {
+      this.payment = data;
+    }
+
+    setCart(cart) {
+      this.cart = cart;
+    }
+  }
+
+  /* =========================================================
+     CHECKOUT ORCHESTRATOR
+  ========================================================= */
+
+  class CheckoutOrchestrator {
+
+    constructor({
+
+      paymentRegistry,
+      fraudEngine,
+      orderNumbers,
+      orders,
+      addressValidator
+
+    }) {
+
+      this.paymentRegistry =
+        paymentRegistry;
+
+      this.fraudEngine =
+        fraudEngine;
+
+      this.orderNumbers =
+        orderNumbers;
+
+      this.orders = orders;
+
+      this.addressValidator =
+        addressValidator;
+    }
+
+    async submit(session) {
+
+      const shippingValidation =
+        await this.addressValidator
+          .validate(
+            session.shipping
+          );
+
+      if (
+        !shippingValidation.valid
+      ) {
+
+        return {
+          success: false,
+          reason:
+            'INVALID_SHIPPING_ADDRESS',
+          errors:
+            shippingValidation.errors
+        };
+      }
+
+      const gateway =
+        this.paymentRegistry.get(
+          session.payment.provider
+        );
+
+      if (!gateway) {
+
+        return {
+          success: false,
+          reason:
+            'PAYMENT_PROVIDER_NOT_FOUND'
+        };
+      }
+
+      const fraudCheck =
+        this.fraudEngine.evaluate({
+
+          customer:
+            session.customer,
+
+          totals:
+            session.cart.totals,
+
+          customerRecentOrders: 0
+        });
+
+      if (
+        fraudCheck.riskLevel ===
+        'HIGH'
+      ) {
+
+        return {
+          success: false,
+          reason:
+            'FRAUD_REVIEW_REQUIRED',
+          fraudCheck
+        };
+      }
+
+      const authorization =
+        await gateway.authorize({
+
+          amount:
+            session.cart.totals
+              .grandTotal
+        });
+
+      if (
+        !authorization.success
+      ) {
+
+        return {
+          success: false,
+          reason:
+            'PAYMENT_AUTH_FAILED'
+        };
+      }
+
+      const capture =
+        await gateway.capture(
+          authorization.authorizationId
+        );
+
+      const orderNumber =
+        this.orderNumbers.generate();
+
+      const order = {
+
+        orderNumber,
+
+        createdAt: Date.now(),
+
+        customer:
+          session.customer,
+
+        shipping:
+          session.shipping,
+
+        billing:
+          session.billing,
+
+        payment: {
+
+          provider:
+            gateway.name,
+
+          authorizationId:
+            authorization.authorizationId,
+
+          captureId:
+            capture.captureId
+        },
+
+        items:
+          session.cart.items,
+
+        totals:
+          session.cart.totals,
+
+        fraudCheck
+      };
+
+      this.orders.save(order);
+
+      return {
+        success: true,
+        order
+      };
+    }
+  }
+
+  /* =========================================================
+     WEBHOOK EVENT BUS
+  ========================================================= */
+
+  class WebhookDispatcher {
+
+    constructor() {
+
+      this.handlers = new Map();
+    }
+
+    subscribe(event, handler) {
+
+      if (
+        !this.handlers.has(event)
+      ) {
+
+        this.handlers.set(
+          event,
+          []
+        );
+      }
+
+      this.handlers
+        .get(event)
+        .push(handler);
+    }
+
+    async dispatch(
+      event,
+      payload
+    ) {
+
+      const handlers =
+        this.handlers.get(event)
+        || [];
+
+      const results = [];
+
+      for (const handler of handlers) {
+
+        try {
+
+          const result =
+            await handler(payload);
+
+          results.push(result);
+
+        } catch (error) {
+
+          console.error(
+            '[Webhook]',
+            event,
+            error
+          );
+        }
+      }
+
+      return results;
+    }
+  }
+
+  /* =========================================================
+     RETRY QUEUE
+  ========================================================= */
+
+  class RetryQueue {
+
+    constructor() {
+
+      this.jobs = [];
+    }
+
+    add(job) {
+
+      this.jobs.push({
+        attempts: 0,
+        createdAt: Date.now(),
+        job
+      });
+    }
+
+    async process() {
+
+      const pending =
+        [...this.jobs];
+
+      this.jobs = [];
+
+      for (const entry of pending) {
+
+        try {
+
+          await entry.job();
+
+        } catch (error) {
+
+          entry.attempts++;
+
+          if (
+            entry.attempts < 5
+          ) {
+
+            this.jobs.push(entry);
+          }
+        }
+      }
+    }
+  }
+
+  /* =========================================================
+     UTILITIES
+  ========================================================= */
+
+  function sleep(ms) {
+
+    return new Promise(
+      resolve =>
+        setTimeout(resolve, ms)
+    );
+  }
+
+  /* =========================================================
+     GLOBAL REGISTRATION
+  ========================================================= */
+
+  CartEnterprise.payments =
+    new PaymentGatewayRegistry();
+
+  CartEnterprise.payments.register(
+    new StripeGateway()
+  );
+
+  CartEnterprise.payments.register(
+    new PayPalGateway()
+  );
+
+  CartEnterprise.fraud =
+    new FraudDetectionEngine();
+
+  CartEnterprise.fraud.registerRule(
+    new HighValueOrderRule()
+  );
+
+  CartEnterprise.fraud.registerRule(
+    new VelocityRule()
+  );
+
+  CartEnterprise.orderNumbers =
+    new OrderNumberService();
+
+  CartEnterprise.orders =
+    new OrderRepository();
+
+  CartEnterprise.addressValidation =
+    new AddressValidationService();
+
+  CartEnterprise.webhooks =
+    new WebhookDispatcher();
+
+  CartEnterprise.retryQueue =
+    new RetryQueue();
+
+  CartEnterprise.checkout =
+    new CheckoutOrchestrator({
+
+      paymentRegistry:
+        CartEnterprise.payments,
+
+      fraudEngine:
+        CartEnterprise.fraud,
+
+      orderNumbers:
+        CartEnterprise.orderNumbers,
+
+      orders:
+        CartEnterprise.orders,
+
+      addressValidator:
+        CartEnterprise.addressValidation
+    });
+
+  CartEnterprise.CheckoutStates =
+    CheckoutStates;
+
+  CartEnterprise.CheckoutStateMachine =
+    CheckoutStateMachine;
+
+  CartEnterprise.CheckoutSession =
+    CheckoutSession;
+
+  window.CartEnterprise =
+    CartEnterprise;
+
+  console.info(
+    '[Cart Enterprise] Part 9 loaded'
+  );
+
+})(window);
+
+/* =========================================================
+   END OF PART 9
+=========================================================
+
+   Enterprise Completion Status
+   ----------------------------
+   Part 1-9 ≈ 4,500+ lines equivalent architecture
+
+   NEXT RECOMMENDED MODULES
+
+   PART 10
+   Customer Accounts & Identity
+   - JWT auth
+   - OAuth (Google, Apple)
+   - Session management
+   - MFA
+   - RBAC
+   - Customer profiles
+
+   PART 11
+   Analytics & BI Platform
+   - Funnel tracking
+   - Product analytics
+   - Revenue metrics
+   - Cohort reports
+   - Attribution engine
+
+   PART 12
+   Marketplace & Multi-Vendor
+   - Vendor onboarding
+   - Vendor payouts
+   - Commission engine
+   - Split payments
+   - Vendor inventory
+
+   PART 13
+   OMS/WMS Integration
+   - Warehouse routing
+   - Pick/pack workflows
+   - Fulfillment centers
+   - Shipment orchestration
+
+   PART 14
+   Enterprise Admin Panel APIs
+   - Product management
+   - Customer management
+   - Orders dashboard
+   - Returns dashboard
+   - Audit center
+
+   PART 15
+   AI Commerce Layer
+   - Recommendations
+   - Search ranking
+   - Dynamic pricing
+   - Churn prediction
+   - Customer segmentation
+
+========================================================= */
+/* =========================================================
+   CART.JS ENTERPRISE — PART 10
+   Identity, Authentication, Sessions, MFA, RBAC
+   Continues from Part 9
+========================================================= */
+
+(function CartEnterprisePart10(window){
+
+  'use strict';
+
+  const CartEnterprise =
+    window.CartEnterprise || {};
+
+  /* =========================================================
+     AUTH CONSTANTS
+  ========================================================= */
+
+  const UserRoles = Object.freeze({
+    CUSTOMER: 'customer',
+    SUPPORT: 'support',
+    MANAGER: 'manager',
+    ADMIN: 'admin',
+    SUPER_ADMIN: 'super_admin'
+  });
+
+  const SessionStatus = Object.freeze({
+    ACTIVE: 'active',
+    EXPIRED: 'expired',
+    REVOKED: 'revoked'
+  });
+
+  /* =========================================================
+     SIMPLE JWT SERVICE (DEMO STRUCTURE)
+     Replace with production JWT library server-side
+  ========================================================= */
+
+  class JWTService {
+
+    constructor(secret = 'enterprise-secret') {
+      this.secret = secret;
+    }
+
+    generate(payload, expiresInMs = 86400000) {
+
+      const tokenPayload = {
+        ...payload,
+        iat: Date.now(),
+        exp: Date.now() + expiresInMs
+      };
+
+      return btoa(
+        JSON.stringify(tokenPayload)
+      );
+    }
+
+    verify(token) {
+
+      try {
+
+        const decoded =
+          JSON.parse(atob(token));
+
+        if (
+          decoded.exp &&
+          decoded.exp < Date.now()
+        ) {
+
+          return {
+            valid: false,
+            reason: 'TOKEN_EXPIRED'
+          };
+        }
+
+        return {
+          valid: true,
+          payload: decoded
+        };
+
+      } catch {
+
+        return {
+          valid: false,
+          reason: 'INVALID_TOKEN'
+        };
+      }
+    }
+  }
+
+  /* =========================================================
+     PASSWORD POLICY
+  ========================================================= */
+
+  class PasswordPolicy {
+
+    validate(password) {
+
+      const errors = [];
+
+      if (password.length < 12) {
+        errors.push(
+          'Minimum length 12'
+        );
+      }
+
+      if (!/[A-Z]/.test(password)) {
+        errors.push(
+          'Uppercase required'
+        );
+      }
+
+      if (!/[a-z]/.test(password)) {
+        errors.push(
+          'Lowercase required'
+        );
+      }
+
+      if (!/[0-9]/.test(password)) {
+        errors.push(
+          'Number required'
+        );
+      }
+
+      if (
+        !/[!@#$%^&*()]/.test(password)
+      ) {
+        errors.push(
+          'Special character required'
+        );
+      }
+
+      return {
+        valid: errors.length === 0,
+        errors
+      };
+    }
+  }
+
+  /* =========================================================
+     PASSWORD HASHING
+     DEMO ONLY
+  ========================================================= */
+
+  class PasswordHasher {
+
+    async hash(password) {
+
+      const buffer =
+        new TextEncoder()
+          .encode(password);
+
+      const hash =
+        await crypto.subtle.digest(
+          'SHA-256',
+          buffer
+        );
+
+      return Array.from(
+        new Uint8Array(hash)
+      )
+      .map(b =>
+        b.toString(16)
+          .padStart(2,'0')
+      )
+      .join('');
+    }
+
+    async verify(
+      password,
+      hashed
+    ) {
+
+      const attempt =
+        await this.hash(password);
+
+      return attempt === hashed;
+    }
+  }
+
+  /* =========================================================
+     USER ENTITY
+  ========================================================= */
+
+  class User {
+
+    constructor(data = {}) {
+
+      this.id =
+        data.id ||
+        crypto.randomUUID();
+
+      this.email =
+        data.email || '';
+
+      this.firstName =
+        data.firstName || '';
+
+      this.lastName =
+        data.lastName || '';
+
+      this.role =
+        data.role ||
+        UserRoles.CUSTOMER;
+
+      this.mfaEnabled =
+        data.mfaEnabled || false;
+
+      this.createdAt =
+        data.createdAt ||
+        Date.now();
+
+      this.lastLoginAt =
+        data.lastLoginAt || null;
+
+      this.status =
+        data.status || 'active';
+
+      this.preferences =
+        data.preferences || {};
+    }
+  }
+
+  /* =========================================================
+     USER REPOSITORY
+  ========================================================= */
+
+  class UserRepository {
+
+    constructor() {
+
+      this.users =
+        new Map();
+    }
+
+    save(user) {
+
+      this.users.set(
+        user.id,
+        user
+      );
+
+      return user;
+    }
+
+    findByEmail(email) {
+
+      for (
+        const user
+        of this.users.values()
+      ) {
+
+        if (
+          user.email.toLowerCase() ===
+          email.toLowerCase()
+        ) {
+
+          return user;
+        }
+      }
+
+      return null;
+    }
+
+    findById(id) {
+
+      return this.users.get(id);
+    }
+
+    all() {
+
+      return [
+        ...this.users.values()
+      ];
+    }
+  }
+
+  /* =========================================================
+     CREDENTIAL STORE
+  ========================================================= */
+
+  class CredentialStore {
+
+    constructor() {
+
+      this.credentials =
+        new Map();
+    }
+
+    save(
+      userId,
+      passwordHash
+    ) {
+
+      this.credentials.set(
+        userId,
+        passwordHash
+      );
+    }
+
+    get(userId) {
+
+      return this.credentials.get(
+        userId
+      );
+    }
+  }
+
+  /* =========================================================
+     MFA SERVICE
+  ========================================================= */
+
+  class MFAService {
+
+    constructor() {
+
+      this.codes =
+        new Map();
+    }
+
+    generate(userId) {
+
+      const code =
+        Math.floor(
+          100000 +
+          Math.random() * 900000
+        ).toString();
+
+      this.codes.set(
+        userId,
+        {
+          code,
+          expires:
+            Date.now() +
+            300000
+        }
+      );
+
+      return code;
+    }
+
+    verify(
+      userId,
+      code
+    ) {
+
+      const record =
+        this.codes.get(userId);
+
+      if (!record) return false;
+
+      if (
+        record.expires <
+        Date.now()
+      ) {
+
+        this.codes.delete(userId);
+
+        return false;
+      }
+
+      const valid =
+        record.code === code;
+
+      if (valid) {
+        this.codes.delete(userId);
+      }
+
+      return valid;
+    }
+  }
+
+  /* =========================================================
+     SESSION ENTITY
+  ========================================================= */
+
+  class Session {
+
+    constructor({
+      userId,
+      token
+    }) {
+
+      this.id =
+        crypto.randomUUID();
+
+      this.userId =
+        userId;
+
+      this.token =
+        token;
+
+      this.createdAt =
+        Date.now();
+
+      this.expiresAt =
+        Date.now() +
+        86400000;
+
+      this.status =
+        SessionStatus.ACTIVE;
+    }
+  }
+
+  /* =========================================================
+     SESSION MANAGER
+  ========================================================= */
+
+  class SessionManager {
+
+    constructor() {
+
+      this.sessions =
+        new Map();
+    }
+
+    create(
+      userId,
+      token
+    ) {
+
+      const session =
+        new Session({
+          userId,
+          token
+        });
+
+      this.sessions.set(
+        session.id,
+        session
+      );
+
+      return session;
+    }
+
+    revoke(sessionId) {
+
+      const session =
+        this.sessions.get(
+          sessionId
+        );
+
+      if (session) {
+
+        session.status =
+          SessionStatus.REVOKED;
+      }
+    }
+
+    validate(sessionId) {
+
+      const session =
+        this.sessions.get(
+          sessionId
+        );
+
+      if (!session) {
+        return false;
+      }
+
+      if (
+        session.status !==
+        SessionStatus.ACTIVE
+      ) {
+        return false;
+      }
+
+      if (
+        session.expiresAt <
+        Date.now()
+      ) {
+
+        session.status =
+          SessionStatus.EXPIRED;
+
+        return false;
+      }
+
+      return true;
+    }
+
+    getUserSessions(
+      userId
+    ) {
+
+      return [
+        ...this.sessions.values()
+      ].filter(
+        s => s.userId === userId
+      );
+    }
+  }
+
+  /* =========================================================
+     ROLE BASED ACCESS CONTROL
+  ========================================================= */
+
+  class RBACService {
+
+    constructor() {
+
+      this.permissions =
+        new Map();
+
+      this.seed();
+    }
+
+    seed() {
+
+      this.permissions.set(
+        UserRoles.CUSTOMER,
+        [
+          'profile.read',
+          'profile.update',
+          'order.read'
+        ]
+      );
+
+      this.permissions.set(
+        UserRoles.SUPPORT,
+        [
+          'customer.read',
+          'order.read',
+          'ticket.manage'
+        ]
+      );
+
+      this.permissions.set(
+        UserRoles.MANAGER,
+        [
+          'analytics.read',
+          'order.manage',
+          'customer.read',
+          'product.manage'
+        ]
+      );
+
+      this.permissions.set(
+        UserRoles.ADMIN,
+        ['*']
+      );
+
+      this.permissions.set(
+        UserRoles.SUPER_ADMIN,
+        ['*']
+      );
+    }
+
+    hasPermission(
+      user,
+      permission
+    ) {
+
+      const perms =
+        this.permissions.get(
+          user.role
+        ) || [];
+
+      return (
+        perms.includes('*') ||
+        perms.includes(permission)
+      );
+    }
+  }
+
+  /* =========================================================
+     AUTH SERVICE
+  ========================================================= */
+
+  class AuthenticationService {
+
+    constructor({
+      users,
+      credentials,
+      jwt,
+      hasher,
+      passwordPolicy,
+      sessions,
+      mfa
+    }) {
+
+      this.users = users;
+      this.credentials =
+        credentials;
+      this.jwt = jwt;
+      this.hasher =
+        hasher;
+      this.passwordPolicy =
+        passwordPolicy;
+      this.sessions =
+        sessions;
+      this.mfa = mfa;
+    }
+
+    async register(data) {
+
+      const existing =
+        this.users.findByEmail(
+          data.email
+        );
+
+      if (existing) {
+
+        return {
+          success: false,
+          reason:
+            'EMAIL_EXISTS'
+        };
+      }
+
+      const policy =
+        this.passwordPolicy
+          .validate(
+            data.password
+          );
+
+      if (!policy.valid) {
+
+        return {
+          success: false,
+          reason:
+            'WEAK_PASSWORD',
+          errors:
+            policy.errors
+        };
+      }
+
+      const user =
+        new User(data);
+
+      const hash =
+        await this.hasher.hash(
+          data.password
+        );
+
+      this.users.save(user);
+
+      this.credentials.save(
+        user.id,
+        hash
+      );
+
+      return {
+        success: true,
+        user
+      };
+    }
+
+    async login(
+      email,
+      password
+    ) {
+
+      const user =
+        this.users.findByEmail(
+          email
+        );
+
+      if (!user) {
+
+        return {
+          success: false,
+          reason:
+            'USER_NOT_FOUND'
+        };
+      }
+
+      const hash =
+        this.credentials.get(
+          user.id
+        );
+
+      const valid =
+        await this.hasher.verify(
+          password,
+          hash
+        );
+
+      if (!valid) {
+
+        return {
+          success: false,
+          reason:
+            'INVALID_CREDENTIALS'
+        };
+      }
+
+      if (user.mfaEnabled) {
+
+        const code =
+          this.mfa.generate(
+            user.id
+          );
+
+        return {
+          success: true,
+          requiresMFA: true,
+          userId: user.id,
+          code // demo only
+        };
+      }
+
+      return this.createSession(
+        user
+      );
+    }
+
+    createSession(user) {
+
+      const token =
+        this.jwt.generate({
+
+          userId: user.id,
+          role: user.role,
+          email: user.email
+        });
+
+      const session =
+        this.sessions.create(
+          user.id,
+          token
+        );
+
+      user.lastLoginAt =
+        Date.now();
+
+      return {
+        success: true,
+        token,
+        session,
+        user
+      };
+    }
+
+    verifyMFA(
+      userId,
+      code
+    ) {
+
+      const valid =
+        this.mfa.verify(
+          userId,
+          code
+        );
+
+      if (!valid) {
+
+        return {
+          success: false
+        };
+      }
+
+      const user =
+        this.users.findById(
+          userId
+        );
+
+      return this.createSession(
+        user
+      );
+    }
+  }
+
+  /* =========================================================
+     OAUTH PROVIDERS (MOCK)
+  ========================================================= */
+
+  class OAuthProvider {
+
+    constructor(name) {
+      this.name = name;
+    }
+
+    async authenticate() {
+
+      return {
+        provider:
+          this.name,
+        externalId:
+          crypto.randomUUID(),
+        email:
+          `${this.name.toLowerCase()}@oauth.test`
+      };
+    }
+  }
+
+  class GoogleProvider
+    extends OAuthProvider {
+
+    constructor() {
+      super('Google');
+    }
+  }
+
+  class AppleProvider
+    extends OAuthProvider {
+
+    constructor() {
+      super('Apple');
+    }
+  }
+
+  /* =========================================================
+     OAUTH REGISTRY
+  ========================================================= */
+
+  class OAuthRegistry {
+
+    constructor() {
+
+      this.providers =
+        new Map();
+    }
+
+    register(provider) {
+
+      this.providers.set(
+        provider.name,
+        provider
+      );
+    }
+
+    get(name) {
+
+      return this.providers.get(
+        name
+      );
+    }
+  }
+
+  /* =========================================================
+     CUSTOMER PROFILE SERVICE
+  ========================================================= */
+
+  class CustomerProfileService {
+
+    updateProfile(
+      user,
+      updates
+    ) {
+
+      Object.assign(
+        user,
+        updates
+      );
+
+      return user;
+    }
+
+    updatePreferences(
+      user,
+      preferences
+    ) {
+
+      user.preferences = {
+        ...user.preferences,
+        ...preferences
+      };
+
+      return user;
+    }
+  }
+
+  /* =========================================================
+     INITIALIZATION
+  ========================================================= */
+
+  CartEnterprise.users =
+    new UserRepository();
+
+  CartEnterprise.credentials =
+    new CredentialStore();
+
+  CartEnterprise.jwt =
+    new JWTService();
+
+  CartEnterprise.passwordHasher =
+    new PasswordHasher();
+
+  CartEnterprise.passwordPolicy =
+    new PasswordPolicy();
+
+  CartEnterprise.sessions =
+    new SessionManager();
+
+  CartEnterprise.mfa =
+    new MFAService();
+
+  CartEnterprise.rbac =
+    new RBACService();
+
+  CartEnterprise.auth =
+    new AuthenticationService({
+
+      users:
+        CartEnterprise.users,
+
+      credentials:
+        CartEnterprise.credentials,
+
+      jwt:
+        CartEnterprise.jwt,
+
+      hasher:
+        CartEnterprise.passwordHasher,
+
+      passwordPolicy:
+        CartEnterprise.passwordPolicy,
+
+      sessions:
+        CartEnterprise.sessions,
+
+      mfa:
+        CartEnterprise.mfa
+    });
+
+  CartEnterprise.oauth =
+    new OAuthRegistry();
+
+  CartEnterprise.oauth.register(
+    new GoogleProvider()
+  );
+
+  CartEnterprise.oauth.register(
+    new AppleProvider()
+  );
+
+  CartEnterprise.profiles =
+    new CustomerProfileService();
+
+  CartEnterprise.UserRoles =
+    UserRoles;
+
+  CartEnterprise.SessionStatus =
+    SessionStatus;
+
+  window.CartEnterprise =
+    CartEnterprise;
+
+  console.info(
+    '[Cart Enterprise] Part 10 loaded'
+  );
+
+})(window);
+
+/* =========================================================
+   END OF PART 10
+=========================================================
+
+NEXT:
+PART 11
+Enterprise Analytics & BI Platform
+
+- Event Tracking Engine
+- Product Analytics
+- Customer Journey Tracking
+- Revenue Attribution
+- Conversion Funnels
+- Cohort Analysis
+- LTV Engine
+- Real-Time Dashboards
+- KPI Aggregation
+- Data Warehouse Connector
+- A/B Testing Framework
+- Recommendation Analytics
+
+========================================================= */
