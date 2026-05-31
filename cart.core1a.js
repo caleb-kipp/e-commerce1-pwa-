@@ -5058,3 +5058,1782 @@ window.EnterpriseCartApplication =
    - Plugin Architecture
    - Enterprise Bootstrap Kernel
 ========================================================= */
+/**********************************************************************
+ * ENTERPRISE CART.JS
+ * PART 5
+ * Promotions + Loyalty + Tax + Shipping Engine
+ **********************************************************************/
+
+const PromotionEngine = (() => {
+
+  const PROMO_TYPES = {
+    PERCENTAGE: "percentage",
+    FIXED: "fixed",
+    FREE_SHIPPING: "free_shipping",
+    BUY_X_GET_Y: "buy_x_get_y",
+    CATEGORY_PERCENT: "category_percentage",
+    CART_THRESHOLD: "cart_threshold"
+  };
+
+  class Promotion {
+
+    constructor(config = {}) {
+
+      this.id = config.id;
+      this.code = config.code?.toUpperCase();
+
+      this.name = config.name || "";
+      this.description = config.description || "";
+
+      this.type = config.type;
+
+      this.value = config.value || 0;
+
+      this.active = config.active ?? true;
+
+      this.startDate = config.startDate || null;
+      this.endDate = config.endDate || null;
+
+      this.minCartValue = config.minCartValue || 0;
+
+      this.maxDiscount = config.maxDiscount || Infinity;
+
+      this.applicableCategories =
+        config.applicableCategories || [];
+
+      this.excludedProducts =
+        config.excludedProducts || [];
+
+      this.requiredProducts =
+        config.requiredProducts || [];
+
+      this.usageLimit =
+        config.usageLimit || Infinity;
+
+      this.usedCount = 0;
+    }
+
+    isExpired() {
+
+      const now = Date.now();
+
+      if (
+        this.startDate &&
+        now < this.startDate
+      ) {
+        return true;
+      }
+
+      if (
+        this.endDate &&
+        now > this.endDate
+      ) {
+        return true;
+      }
+
+      return false;
+    }
+
+    isAvailable() {
+
+      return (
+        this.active &&
+        !this.isExpired() &&
+        this.usedCount < this.usageLimit
+      );
+    }
+  }
+
+  const promotions = new Map();
+
+  function registerPromotion(config) {
+
+    const promo = new Promotion(config);
+
+    promotions.set(
+      promo.code,
+      promo
+    );
+
+    return promo;
+  }
+
+  function getPromotion(code) {
+
+    if (!code) return null;
+
+    return promotions.get(
+      code.toUpperCase()
+    );
+  }
+
+  function validatePromotion(
+    promo,
+    cart
+  ) {
+
+    if (!promo) {
+      return {
+        valid: false,
+        reason: "Coupon not found"
+      };
+    }
+
+    if (!promo.isAvailable()) {
+      return {
+        valid: false,
+        reason: "Coupon expired"
+      };
+    }
+
+    if (
+      cart.subtotal <
+      promo.minCartValue
+    ) {
+      return {
+        valid: false,
+        reason:
+          `Minimum order ${promo.minCartValue}`
+      };
+    }
+
+    return {
+      valid: true
+    };
+  }
+
+  function calculateDiscount(
+    promo,
+    cart
+  ) {
+
+    let discount = 0;
+
+    switch (promo.type) {
+
+      case PROMO_TYPES.PERCENTAGE:
+
+        discount =
+          cart.subtotal *
+          (promo.value / 100);
+
+        break;
+
+      case PROMO_TYPES.FIXED:
+
+        discount = promo.value;
+
+        break;
+
+      case PROMO_TYPES.CATEGORY_PERCENT:
+
+        discount =
+          cart.items
+            .filter(item =>
+              promo.applicableCategories
+                .includes(item.category)
+            )
+            .reduce(
+              (sum, item) =>
+                sum +
+                item.price *
+                item.quantity,
+              0
+            ) *
+          (promo.value / 100);
+
+        break;
+
+      case PROMO_TYPES.CART_THRESHOLD:
+
+        if (
+          cart.subtotal >=
+          promo.minCartValue
+        ) {
+          discount = promo.value;
+        }
+
+        break;
+
+      default:
+        break;
+    }
+
+    return Math.min(
+      discount,
+      promo.maxDiscount
+    );
+  }
+
+  return {
+
+    registerPromotion,
+
+    getPromotion,
+
+    validatePromotion,
+
+    calculateDiscount,
+
+    PROMO_TYPES
+  };
+
+})();
+
+/**********************************************************************
+ * GIFT CARD SYSTEM
+ **********************************************************************/
+
+const GiftCardService = (() => {
+
+  const STORAGE_KEY =
+    "enterprise_gift_cards";
+
+  let cards =
+    StorageService.get(
+      STORAGE_KEY,
+      {}
+    );
+
+  function generateCode() {
+
+    const segment = () =>
+      Math.random()
+        .toString(36)
+        .substring(2, 6)
+        .toUpperCase();
+
+    return (
+      segment() +
+      "-" +
+      segment() +
+      "-" +
+      segment()
+    );
+  }
+
+  function create(balance) {
+
+    const code = generateCode();
+
+    cards[code] = {
+
+      code,
+
+      balance,
+
+      createdAt: Date.now(),
+
+      active: true
+    };
+
+    persist();
+
+    return cards[code];
+  }
+
+  function get(code) {
+
+    return cards[code] || null;
+  }
+
+  function redeem(
+    code,
+    amount
+  ) {
+
+    const card = get(code);
+
+    if (!card) {
+      throw new Error(
+        "Gift card not found"
+      );
+    }
+
+    if (!card.active) {
+      throw new Error(
+        "Gift card inactive"
+      );
+    }
+
+    const applied =
+      Math.min(
+        amount,
+        card.balance
+      );
+
+    card.balance -= applied;
+
+    if (
+      card.balance <= 0
+    ) {
+      card.active = false;
+    }
+
+    persist();
+
+    return applied;
+  }
+
+  function persist() {
+
+    StorageService.set(
+      STORAGE_KEY,
+      cards
+    );
+  }
+
+  return {
+
+    create,
+
+    get,
+
+    redeem
+  };
+
+})();
+
+/**********************************************************************
+ * LOYALTY PROGRAM
+ **********************************************************************/
+
+const LoyaltyService = (() => {
+
+  const STORAGE_KEY =
+    "enterprise_loyalty";
+
+  let state =
+    StorageService.get(
+      STORAGE_KEY,
+      {
+        points: 0,
+        tier: "bronze",
+        lifetimeSpent: 0
+      }
+    );
+
+  const TIERS = {
+
+    bronze: {
+      multiplier: 1
+    },
+
+    silver: {
+      multiplier: 1.25
+    },
+
+    gold: {
+      multiplier: 1.5
+    },
+
+    platinum: {
+      multiplier: 2
+    }
+  };
+
+  function calculateTier() {
+
+    const spent =
+      state.lifetimeSpent;
+
+    if (spent >= 10000) {
+      state.tier =
+        "platinum";
+    }
+    else if (spent >= 5000) {
+      state.tier =
+        "gold";
+    }
+    else if (spent >= 1000) {
+      state.tier =
+        "silver";
+    }
+    else {
+      state.tier =
+        "bronze";
+    }
+  }
+
+  function awardPoints(
+    orderTotal
+  ) {
+
+    const multiplier =
+      TIERS[
+        state.tier
+      ].multiplier;
+
+    const earned =
+      Math.floor(
+        orderTotal *
+        multiplier
+      );
+
+    state.points += earned;
+
+    state.lifetimeSpent +=
+      orderTotal;
+
+    calculateTier();
+
+    save();
+
+    return earned;
+  }
+
+  function redeemPoints(
+    requested
+  ) {
+
+    const usable =
+      Math.min(
+        requested,
+        state.points
+      );
+
+    state.points -= usable;
+
+    save();
+
+    return usable / 100;
+  }
+
+  function getState() {
+
+    return {
+      ...state
+    };
+  }
+
+  function save() {
+
+    StorageService.set(
+      STORAGE_KEY,
+      state
+    );
+  }
+
+  return {
+
+    awardPoints,
+
+    redeemPoints,
+
+    getState
+  };
+
+})();
+
+/**********************************************************************
+ * TAX ENGINE
+ **********************************************************************/
+
+const TaxEngine = (() => {
+
+  const taxRates = {
+
+    NL: 0.21,
+    DE: 0.19,
+    FR: 0.20,
+    BE: 0.21,
+    UK: 0.20,
+    US: 0.08,
+    CA: 0.13
+  };
+
+  function calculate({
+
+    subtotal,
+
+    country
+
+  }) {
+
+    const rate =
+      taxRates[country] || 0;
+
+    return {
+
+      rate,
+
+      tax:
+        subtotal * rate
+    };
+  }
+
+  return {
+
+    calculate
+  };
+
+})();
+
+/**********************************************************************
+ * SHIPPING ENGINE
+ **********************************************************************/
+
+const ShippingEngine = (() => {
+
+  const methods = [
+
+    {
+      id: "standard",
+      label:
+        "Standard Shipping",
+      cost: 5.99,
+      eta: "3-5 days"
+    },
+
+    {
+      id: "express",
+      label:
+        "Express Shipping",
+      cost: 12.99,
+      eta: "1-2 days"
+    },
+
+    {
+      id: "priority",
+      label:
+        "Priority Shipping",
+      cost: 19.99,
+      eta: "Next Day"
+    }
+
+  ];
+
+  function calculate({
+
+    subtotal,
+
+    country,
+
+    method
+
+  }) {
+
+    const selected =
+      methods.find(
+        m =>
+          m.id === method
+      ) ||
+      methods[0];
+
+    let shipping =
+      selected.cost;
+
+    if (
+      subtotal >= 100
+    ) {
+      shipping = 0;
+    }
+
+    if (
+      country === "US"
+    ) {
+      shipping += 2;
+    }
+
+    return {
+
+      shipping,
+
+      eta:
+        selected.eta,
+
+      method:
+        selected.label
+    };
+  }
+
+  function getMethods() {
+
+    return [...methods];
+  }
+
+  return {
+
+    calculate,
+
+    getMethods
+  };
+
+})();
+
+/**********************************************************************
+ * CHECKOUT PRICE PIPELINE
+ **********************************************************************/
+
+const PricingPipeline = (() => {
+
+  async function calculate(
+    cart,
+    options = {}
+  ) {
+
+    let subtotal =
+      cart.items.reduce(
+        (
+          total,
+          item
+        ) =>
+          total +
+          item.price *
+          item.quantity,
+        0
+      );
+
+    let discount = 0;
+
+    let loyaltyDiscount = 0;
+
+    let giftCardDiscount = 0;
+
+    if (
+      options.coupon
+    ) {
+
+      const promo =
+        PromotionEngine
+          .getPromotion(
+            options.coupon
+          );
+
+      const valid =
+        PromotionEngine
+          .validatePromotion(
+            promo,
+            {
+              subtotal,
+              items:
+                cart.items
+            }
+          );
+
+      if (
+        valid.valid
+      ) {
+        discount =
+          PromotionEngine
+            .calculateDiscount(
+              promo,
+              {
+                subtotal,
+                items:
+                  cart.items
+              }
+            );
+      }
+    }
+
+    if (
+      options.loyaltyPoints
+    ) {
+
+      loyaltyDiscount =
+        LoyaltyService
+          .redeemPoints(
+            options.loyaltyPoints
+          );
+    }
+
+    if (
+      options.giftCard
+    ) {
+
+      giftCardDiscount =
+        GiftCardService
+          .redeem(
+            options.giftCard,
+            subtotal
+          );
+    }
+
+    const discountedSubtotal =
+      Math.max(
+        0,
+        subtotal -
+          discount -
+          loyaltyDiscount -
+          giftCardDiscount
+      );
+
+    const shipping =
+      ShippingEngine
+        .calculate({
+
+          subtotal:
+            discountedSubtotal,
+
+          country:
+            options.country,
+
+          method:
+            options.shippingMethod
+        });
+
+    const tax =
+      TaxEngine
+        .calculate({
+
+          subtotal:
+            discountedSubtotal,
+
+          country:
+            options.country
+        });
+
+    const grandTotal =
+      discountedSubtotal +
+      shipping.shipping +
+      tax.tax;
+
+    return {
+
+      subtotal,
+
+      discount,
+
+      loyaltyDiscount,
+
+      giftCardDiscount,
+
+      shipping:
+        shipping.shipping,
+
+      shippingMethod:
+        shipping.method,
+
+      tax:
+        tax.tax,
+
+      taxRate:
+        tax.rate,
+
+      total:
+        grandTotal
+    };
+  }
+
+  return {
+
+    calculate
+  };
+
+})();
+
+/**********************************************************************
+ * DEFAULT PROMOTIONS
+ **********************************************************************/
+
+PromotionEngine.registerPromotion({
+
+  id: "promo_001",
+
+  code: "WELCOME10",
+
+  name:
+    "Welcome Discount",
+
+  type:
+    PromotionEngine
+      .PROMO_TYPES
+      .PERCENTAGE,
+
+  value: 10,
+
+  minCartValue: 25
+});
+
+PromotionEngine.registerPromotion({
+
+  id: "promo_002",
+
+  code: "SAVE20",
+
+  name:
+    "Save €20",
+
+  type:
+    PromotionEngine
+      .PROMO_TYPES
+      .FIXED,
+
+  value: 20,
+
+  minCartValue: 150
+});
+
+PromotionEngine.registerPromotion({
+
+  id: "promo_003",
+
+  code: "FREESHIP",
+
+  name:
+    "Free Shipping",
+
+  type:
+    PromotionEngine
+      .PROMO_TYPES
+      .FREE_SHIPPING
+});
+
+/**********************************************************************
+ * END OF PART 5
+ * NEXT:
+ * PART 6 = Checkout Orchestration,
+ * Payment Gateway Layer,
+ * Fraud Detection,
+ * Order Management,
+ * Invoice Generation,
+ * Webhooks,
+ * Analytics Tracking
+ **********************************************************************/
+/**********************************************************************
+ * ENTERPRISE CART.JS
+ * PART 6
+ * Checkout + Payments + Orders + Invoicing
+ **********************************************************************/
+
+/**********************************************************************
+ * EVENT BUS
+ **********************************************************************/
+
+const CommerceEventBus = (() => {
+
+  const listeners = new Map();
+
+  function on(event, callback) {
+
+    if (!listeners.has(event)) {
+      listeners.set(event, []);
+    }
+
+    listeners.get(event).push(callback);
+
+    return () => off(event, callback);
+  }
+
+  function off(event, callback) {
+
+    const events = listeners.get(event);
+
+    if (!events) return;
+
+    const index = events.indexOf(callback);
+
+    if (index > -1) {
+      events.splice(index, 1);
+    }
+  }
+
+  async function emit(event, payload = {}) {
+
+    const events = listeners.get(event);
+
+    if (!events) return;
+
+    for (const listener of events) {
+
+      try {
+        await listener(payload);
+      }
+      catch (error) {
+
+        console.error(
+          "[CommerceEventBus]",
+          error
+        );
+      }
+    }
+  }
+
+  return {
+    on,
+    off,
+    emit
+  };
+
+})();
+
+/**********************************************************************
+ * ORDER STATUS ENUM
+ **********************************************************************/
+
+const ORDER_STATUS = {
+
+  CREATED: "created",
+
+  PENDING_PAYMENT:
+    "pending_payment",
+
+  PAID: "paid",
+
+  PROCESSING:
+    "processing",
+
+  PACKED: "packed",
+
+  SHIPPED: "shipped",
+
+  DELIVERED:
+    "delivered",
+
+  REFUNDED: "refunded",
+
+  CANCELLED:
+    "cancelled",
+
+  FAILED: "failed"
+};
+
+/**********************************************************************
+ * PAYMENT PROVIDER CONTRACT
+ **********************************************************************/
+
+class PaymentProvider {
+
+  constructor(name) {
+
+    this.name = name;
+  }
+
+  async authorize() {
+
+    throw new Error(
+      "authorize() not implemented"
+    );
+  }
+
+  async capture() {
+
+    throw new Error(
+      "capture() not implemented"
+    );
+  }
+
+  async refund() {
+
+    throw new Error(
+      "refund() not implemented"
+    );
+  }
+}
+
+/**********************************************************************
+ * STRIPE PROVIDER
+ **********************************************************************/
+
+class StripeProvider
+  extends PaymentProvider {
+
+  constructor() {
+
+    super("stripe");
+  }
+
+  async authorize(data) {
+
+    await delay(800);
+
+    return {
+
+      success: true,
+
+      provider: this.name,
+
+      transactionId:
+        generateTransactionId(),
+
+      authorizationCode:
+        randomCode()
+    };
+  }
+
+  async capture(data) {
+
+    await delay(500);
+
+    return {
+
+      success: true,
+
+      capturedAt:
+        Date.now(),
+
+      transactionId:
+        data.transactionId
+    };
+  }
+
+  async refund(data) {
+
+    await delay(500);
+
+    return {
+
+      success: true,
+
+      refundedAmount:
+        data.amount
+    };
+  }
+}
+
+/**********************************************************************
+ * PAYPAL PROVIDER
+ **********************************************************************/
+
+class PayPalProvider
+  extends PaymentProvider {
+
+  constructor() {
+
+    super("paypal");
+  }
+
+  async authorize() {
+
+    await delay(1000);
+
+    return {
+
+      success: true,
+
+      provider: this.name,
+
+      transactionId:
+        generateTransactionId()
+    };
+  }
+
+  async capture(data) {
+
+    return {
+
+      success: true,
+
+      transactionId:
+        data.transactionId
+    };
+  }
+
+  async refund(data) {
+
+    return {
+
+      success: true,
+
+      amount:
+        data.amount
+    };
+  }
+}
+
+/**********************************************************************
+ * PAYMENT FACTORY
+ **********************************************************************/
+
+const PaymentFactory = (() => {
+
+  const providers = {
+
+    stripe:
+      new StripeProvider(),
+
+    paypal:
+      new PayPalProvider()
+  };
+
+  function getProvider(type) {
+
+    const provider =
+      providers[type];
+
+    if (!provider) {
+
+      throw new Error(
+        `Unknown provider ${type}`
+      );
+    }
+
+    return provider;
+  }
+
+  return {
+    getProvider
+  };
+
+})();
+
+/**********************************************************************
+ * FRAUD ENGINE
+ **********************************************************************/
+
+const FraudEngine = (() => {
+
+  const HIGH_RISK_COUNTRIES = [
+
+    "KP",
+    "IR",
+    "SY"
+  ];
+
+  async function evaluate(
+    checkout
+  ) {
+
+    let score = 0;
+
+    if (
+      checkout.total >
+      1000
+    ) {
+      score += 25;
+    }
+
+    if (
+      HIGH_RISK_COUNTRIES.includes(
+        checkout.country
+      )
+    ) {
+      score += 50;
+    }
+
+    if (
+      checkout.cart.items.length >
+      20
+    ) {
+      score += 10;
+    }
+
+    if (
+      checkout.customer?.email
+        ?.includes("temp")
+    ) {
+      score += 15;
+    }
+
+    return {
+
+      score,
+
+      approved:
+        score < 70
+    };
+  }
+
+  return {
+    evaluate
+  };
+
+})();
+
+/**********************************************************************
+ * ORDER REPOSITORY
+ **********************************************************************/
+
+const OrderRepository = (() => {
+
+  const STORAGE_KEY =
+    "enterprise_orders";
+
+  function getAll() {
+
+    return StorageService.get(
+      STORAGE_KEY,
+      []
+    );
+  }
+
+  function save(order) {
+
+    const orders =
+      getAll();
+
+    orders.push(order);
+
+    StorageService.set(
+      STORAGE_KEY,
+      orders
+    );
+
+    return order;
+  }
+
+  function update(
+    orderId,
+    updates
+  ) {
+
+    const orders =
+      getAll();
+
+    const index =
+      orders.findIndex(
+        o => o.id === orderId
+      );
+
+    if (index === -1) {
+
+      return null;
+    }
+
+    orders[index] = {
+
+      ...orders[index],
+
+      ...updates,
+
+      updatedAt:
+        Date.now()
+    };
+
+    StorageService.set(
+      STORAGE_KEY,
+      orders
+    );
+
+    return orders[index];
+  }
+
+  function find(orderId) {
+
+    return getAll().find(
+      o => o.id === orderId
+    );
+  }
+
+  return {
+
+    save,
+
+    update,
+
+    find,
+
+    getAll
+  };
+
+})();
+
+/**********************************************************************
+ * INVOICE SERVICE
+ **********************************************************************/
+
+const InvoiceService = (() => {
+
+  function generate(order) {
+
+    return {
+
+      invoiceNumber:
+        generateInvoiceNumber(),
+
+      orderId:
+        order.id,
+
+      createdAt:
+        Date.now(),
+
+      customer:
+        order.customer,
+
+      items:
+        order.items,
+
+      totals: {
+
+        subtotal:
+          order.pricing.subtotal,
+
+        tax:
+          order.pricing.tax,
+
+        shipping:
+          order.pricing.shipping,
+
+        total:
+          order.pricing.total
+      }
+    };
+  }
+
+  return {
+    generate
+  };
+
+})();
+
+/**********************************************************************
+ * WEBHOOK DISPATCHER
+ **********************************************************************/
+
+const WebhookDispatcher = (() => {
+
+  const endpoints = [];
+
+  function register(url) {
+
+    endpoints.push(url);
+  }
+
+  async function dispatch(
+    event,
+    payload
+  ) {
+
+    for (const endpoint of endpoints) {
+
+      try {
+
+        console.log(
+          "[Webhook]",
+          endpoint,
+          event,
+          payload
+        );
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+      }
+    }
+  }
+
+  return {
+
+    register,
+
+    dispatch
+  };
+
+})();
+
+/**********************************************************************
+ * ANALYTICS TRACKING
+ **********************************************************************/
+
+const AnalyticsTracker = (() => {
+
+  function track(
+    event,
+    payload = {}
+  ) {
+
+    console.log(
+      "[Analytics]",
+      event,
+      payload
+    );
+
+    CommerceEventBus.emit(
+      "analytics",
+      {
+        event,
+        payload
+      }
+    );
+  }
+
+  function pageView(page) {
+
+    track(
+      "page_view",
+      { page }
+    );
+  }
+
+  function purchase(order) {
+
+    track(
+      "purchase",
+      {
+        orderId:
+          order.id,
+        value:
+          order.pricing.total
+      }
+    );
+  }
+
+  return {
+
+    track,
+
+    pageView,
+
+    purchase
+  };
+
+})();
+
+/**********************************************************************
+ * CHECKOUT ORCHESTRATOR
+ **********************************************************************/
+
+const CheckoutOrchestrator =
+(() => {
+
+  async function checkout({
+
+    cart,
+
+    customer,
+
+    paymentMethod,
+
+    shippingMethod,
+
+    country,
+
+    coupon
+
+  }) {
+
+    if (
+      !cart ||
+      !cart.items.length
+    ) {
+      throw new Error(
+        "Cart empty"
+      );
+    }
+
+    const pricing =
+      await PricingPipeline
+        .calculate(
+          cart,
+          {
+            country,
+            shippingMethod,
+            coupon
+          }
+        );
+
+    const fraud =
+      await FraudEngine
+        .evaluate({
+
+          cart,
+
+          customer,
+
+          total:
+            pricing.total,
+
+          country
+        });
+
+    if (
+      !fraud.approved
+    ) {
+
+      throw new Error(
+        "Order flagged for review"
+      );
+    }
+
+    const provider =
+      PaymentFactory
+        .getProvider(
+          paymentMethod
+        );
+
+    const authorization =
+      await provider.authorize({
+
+        amount:
+          pricing.total,
+
+        currency:
+          "EUR"
+      });
+
+    if (
+      !authorization.success
+    ) {
+
+      throw new Error(
+        "Payment authorization failed"
+      );
+    }
+
+    const order = {
+
+      id:
+        generateOrderId(),
+
+      customer,
+
+      items:
+        cart.items,
+
+      pricing,
+
+      status:
+        ORDER_STATUS.PAID,
+
+      payment: {
+
+        provider:
+          paymentMethod,
+
+        transactionId:
+          authorization
+            .transactionId
+      },
+
+      createdAt:
+        Date.now()
+    };
+
+    OrderRepository.save(
+      order
+    );
+
+    const invoice =
+      InvoiceService
+        .generate(order);
+
+    AnalyticsTracker.purchase(
+      order
+    );
+
+    await WebhookDispatcher
+      .dispatch(
+        "order.created",
+        {
+          order,
+          invoice
+        }
+      );
+
+    await CommerceEventBus
+      .emit(
+        "order.created",
+        {
+          order,
+          invoice
+        }
+      );
+
+    return {
+
+      success: true,
+
+      order,
+
+      invoice
+    };
+  }
+
+  return {
+    checkout
+  };
+
+})();
+
+/**********************************************************************
+ * ORDER SERVICE
+ **********************************************************************/
+
+const OrderService = (() => {
+
+  async function markProcessing(
+    orderId
+  ) {
+
+    return OrderRepository
+      .update(
+        orderId,
+        {
+          status:
+            ORDER_STATUS
+              .PROCESSING
+        }
+      );
+  }
+
+  async function ship(
+    orderId,
+    trackingNumber
+  ) {
+
+    return OrderRepository
+      .update(
+        orderId,
+        {
+          status:
+            ORDER_STATUS
+              .SHIPPED,
+
+          trackingNumber,
+
+          shippedAt:
+            Date.now()
+        }
+      );
+  }
+
+  async function deliver(
+    orderId
+  ) {
+
+    return OrderRepository
+      .update(
+        orderId,
+        {
+          status:
+            ORDER_STATUS
+              .DELIVERED,
+
+          deliveredAt:
+            Date.now()
+        }
+      );
+  }
+
+  async function refund(
+    orderId
+  ) {
+
+    const order =
+      OrderRepository.find(
+        orderId
+      );
+
+    if (!order) {
+
+      throw new Error(
+        "Order not found"
+      );
+    }
+
+    const provider =
+      PaymentFactory
+        .getProvider(
+          order.payment
+            .provider
+        );
+
+    await provider.refund({
+
+      transactionId:
+        order.payment
+          .transactionId,
+
+      amount:
+        order.pricing
+          .total
+    });
+
+    return OrderRepository
+      .update(
+        orderId,
+        {
+          status:
+            ORDER_STATUS
+              .REFUNDED
+        }
+      );
+  }
+
+  return {
+
+    markProcessing,
+
+    ship,
+
+    deliver,
+
+    refund
+  };
+
+})();
+
+/**********************************************************************
+ * HELPERS
+ **********************************************************************/
+
+function delay(ms) {
+
+  return new Promise(
+    resolve =>
+      setTimeout(
+        resolve,
+        ms
+      )
+  );
+}
+
+function randomCode() {
+
+  return Math.random()
+    .toString(36)
+    .substring(2, 10)
+    .toUpperCase();
+}
+
+function generateOrderId() {
+
+  return (
+    "ORD-" +
+    Date.now() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .substring(2, 8)
+      .toUpperCase()
+  );
+}
+
+function generateInvoiceNumber() {
+
+  return (
+    "INV-" +
+    Date.now()
+  );
+}
+
+function generateTransactionId() {
+
+  return (
+    "TXN-" +
+    crypto.randomUUID()
+  );
+}
+
+/**********************************************************************
+ * ORDER EVENTS
+ **********************************************************************/
+
+CommerceEventBus.on(
+  "order.created",
+  async ({ order }) => {
+
+    console.log(
+      "Order created:",
+      order.id
+    );
+
+  }
+);
+
+/**********************************************************************
+ * END OF PART 6
+ *
+ * NEXT:
+ * PART 7
+ * Enterprise Inventory System
+ * Multi-Warehouse Management
+ * Stock Reservations
+ * Backorders
+ * Procurement
+ * Supplier Management
+ * Real-Time Inventory Sync
+ **********************************************************************/
