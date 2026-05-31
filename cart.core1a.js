@@ -10597,3 +10597,1293 @@ Enterprise Analytics & BI Platform
 - Recommendation Analytics
 
 ========================================================= */
+/* =========================================================
+   ENTERPRISE CART.JS — PART 11
+   Module: Promotions Engine + Loyalty + Gift Cards
+   Depends on:
+   - CartStore
+   - EventBus
+   - ApiClient
+   - PriceEngine
+   - SecurityManager
+   ========================================================= */
+
+(function (window) {
+  'use strict';
+
+  /* =========================================================
+     Promotion Types
+     ========================================================= */
+
+  const PromotionType = Object.freeze({
+    PERCENTAGE: 'percentage',
+    FIXED: 'fixed',
+    FREE_SHIPPING: 'free_shipping',
+    BUY_X_GET_Y: 'buy_x_get_y',
+    CATEGORY_DISCOUNT: 'category_discount',
+    CART_THRESHOLD: 'cart_threshold',
+    LOYALTY_REWARD: 'loyalty_reward',
+    GIFT_CARD: 'gift_card'
+  });
+
+  /* =========================================================
+     Promotion Validator
+     ========================================================= */
+
+  class PromotionValidator {
+
+    static validate(promotion, cart) {
+
+      if (!promotion) {
+        return {
+          valid: false,
+          reason: 'PROMOTION_NOT_FOUND'
+        };
+      }
+
+      if (!promotion.active) {
+        return {
+          valid: false,
+          reason: 'PROMOTION_INACTIVE'
+        };
+      }
+
+      const now = Date.now();
+
+      if (promotion.startsAt && now < promotion.startsAt) {
+        return {
+          valid: false,
+          reason: 'PROMOTION_NOT_STARTED'
+        };
+      }
+
+      if (promotion.expiresAt && now > promotion.expiresAt) {
+        return {
+          valid: false,
+          reason: 'PROMOTION_EXPIRED'
+        };
+      }
+
+      if (
+        promotion.minimumSubtotal &&
+        cart.subtotal < promotion.minimumSubtotal
+      ) {
+        return {
+          valid: false,
+          reason: 'MINIMUM_SUBTOTAL_REQUIRED'
+        };
+      }
+
+      if (
+        promotion.maxUses &&
+        promotion.usedCount >= promotion.maxUses
+      ) {
+        return {
+          valid: false,
+          reason: 'PROMOTION_USAGE_LIMIT_REACHED'
+        };
+      }
+
+      return {
+        valid: true
+      };
+    }
+
+  }
+
+  /* =========================================================
+     Promotion Calculator
+     ========================================================= */
+
+  class PromotionCalculator {
+
+    static calculate(cart, promotion) {
+
+      let discount = 0;
+
+      switch (promotion.type) {
+
+        case PromotionType.PERCENTAGE:
+          discount = this.percentageDiscount(
+            cart.subtotal,
+            promotion.value
+          );
+          break;
+
+        case PromotionType.FIXED:
+          discount = this.fixedDiscount(
+            cart.subtotal,
+            promotion.value
+          );
+          break;
+
+        case PromotionType.CATEGORY_DISCOUNT:
+          discount = this.categoryDiscount(
+            cart,
+            promotion
+          );
+          break;
+
+        case PromotionType.CART_THRESHOLD:
+          discount = this.thresholdDiscount(
+            cart,
+            promotion
+          );
+          break;
+
+        case PromotionType.BUY_X_GET_Y:
+          discount = this.buyXGetY(
+            cart,
+            promotion
+          );
+          break;
+
+        case PromotionType.LOYALTY_REWARD:
+          discount = this.loyaltyReward(
+            cart,
+            promotion
+          );
+          break;
+
+        default:
+          discount = 0;
+
+      }
+
+      return {
+        promotionId: promotion.id,
+        code: promotion.code,
+        type: promotion.type,
+        amount: Number(discount.toFixed(2))
+      };
+    }
+
+    static percentageDiscount(subtotal, percent) {
+      return subtotal * (percent / 100);
+    }
+
+    static fixedDiscount(subtotal, value) {
+      return Math.min(subtotal, value);
+    }
+
+    static categoryDiscount(cart, promotion) {
+
+      let eligibleTotal = 0;
+
+      cart.items.forEach(item => {
+
+        if (
+          promotion.categories &&
+          promotion.categories.includes(item.category)
+        ) {
+          eligibleTotal += item.lineTotal;
+        }
+
+      });
+
+      return eligibleTotal * (promotion.value / 100);
+    }
+
+    static thresholdDiscount(cart, promotion) {
+
+      if (cart.subtotal >= promotion.threshold) {
+        return promotion.value;
+      }
+
+      return 0;
+    }
+
+    static buyXGetY(cart, promotion) {
+
+      let discount = 0;
+
+      cart.items.forEach(item => {
+
+        if (item.sku !== promotion.sku) {
+          return;
+        }
+
+        const freeUnits =
+          Math.floor(item.quantity / promotion.buyQty) *
+          promotion.freeQty;
+
+        discount += freeUnits * item.price;
+
+      });
+
+      return discount;
+    }
+
+    static loyaltyReward(cart, promotion) {
+
+      const maxDiscount =
+        cart.subtotal * (promotion.maxPercent / 100);
+
+      return Math.min(
+        promotion.value,
+        maxDiscount
+      );
+    }
+
+  }
+
+  /* =========================================================
+     Loyalty Service
+     ========================================================= */
+
+  class LoyaltyService {
+
+    constructor() {
+
+      this.points = 0;
+      this.tier = 'BRONZE';
+
+      this.tiers = [
+        {
+          name: 'BRONZE',
+          minPoints: 0,
+          multiplier: 1
+        },
+        {
+          name: 'SILVER',
+          minPoints: 500,
+          multiplier: 1.25
+        },
+        {
+          name: 'GOLD',
+          minPoints: 2000,
+          multiplier: 1.5
+        },
+        {
+          name: 'PLATINUM',
+          minPoints: 5000,
+          multiplier: 2
+        }
+      ];
+
+    }
+
+    load(profile) {
+
+      this.points = profile.points || 0;
+      this.determineTier();
+
+    }
+
+    determineTier() {
+
+      let current = this.tiers[0];
+
+      this.tiers.forEach(tier => {
+
+        if (this.points >= tier.minPoints) {
+          current = tier;
+        }
+
+      });
+
+      this.tier = current.name;
+
+      return current;
+    }
+
+    earn(orderTotal) {
+
+      const tier = this.determineTier();
+
+      const earned = Math.floor(
+        orderTotal * tier.multiplier
+      );
+
+      this.points += earned;
+
+      EventBus.emit(
+        'loyalty.pointsEarned',
+        {
+          earned,
+          totalPoints: this.points
+        }
+      );
+
+      return earned;
+    }
+
+    redeem(points) {
+
+      if (points > this.points) {
+        throw new Error(
+          'INSUFFICIENT_LOYALTY_POINTS'
+        );
+      }
+
+      this.points -= points;
+
+      EventBus.emit(
+        'loyalty.pointsRedeemed',
+        {
+          points,
+          remaining: this.points
+        }
+      );
+
+      return points;
+    }
+
+    getRewardValue(points) {
+
+      return Number(
+        (points * 0.01).toFixed(2)
+      );
+
+    }
+
+  }
+
+  /* =========================================================
+     Gift Card Service
+     ========================================================= */
+
+  class GiftCardService {
+
+    constructor(apiClient) {
+
+      this.apiClient = apiClient;
+      this.appliedCards = [];
+
+    }
+
+    async validate(code) {
+
+      const response =
+        await this.apiClient.post(
+          '/giftcards/validate',
+          {
+            code
+          }
+        );
+
+      return response;
+
+    }
+
+    async apply(code, cart) {
+
+      const card =
+        await this.validate(code);
+
+      if (!card.valid) {
+        throw new Error(
+          card.message || 'INVALID_GIFT_CARD'
+        );
+      }
+
+      const amount = Math.min(
+        card.balance,
+        cart.total
+      );
+
+      const applied = {
+        code,
+        amount,
+        cardId: card.id
+      };
+
+      this.appliedCards.push(applied);
+
+      EventBus.emit(
+        'giftcard.applied',
+        applied
+      );
+
+      return applied;
+    }
+
+    remove(code) {
+
+      this.appliedCards =
+        this.appliedCards.filter(
+          c => c.code !== code
+        );
+
+      EventBus.emit(
+        'giftcard.removed',
+        { code }
+      );
+
+    }
+
+    getTotalApplied() {
+
+      return this.appliedCards.reduce(
+        (sum, card) => sum + card.amount,
+        0
+      );
+
+    }
+
+  }
+
+  /* =========================================================
+     Enterprise Promotion Manager
+     ========================================================= */
+
+  class PromotionManager {
+
+    constructor(options = {}) {
+
+      this.promotions = [];
+      this.appliedPromotions = [];
+
+      this.apiClient =
+        options.apiClient;
+
+      this.loyalty =
+        options.loyaltyService;
+
+      this.giftCards =
+        options.giftCardService;
+
+    }
+
+    async loadPromotions() {
+
+      try {
+
+        const result =
+          await this.apiClient.get(
+            '/promotions/active'
+          );
+
+        this.promotions =
+          result.promotions || [];
+
+        EventBus.emit(
+          'promotions.loaded',
+          {
+            count:
+              this.promotions.length
+          }
+        );
+
+      } catch (error) {
+
+        console.error(
+          'Failed loading promotions',
+          error
+        );
+
+      }
+
+    }
+
+    findByCode(code) {
+
+      return this.promotions.find(
+        p =>
+          p.code.toUpperCase() ===
+          code.toUpperCase()
+      );
+
+    }
+
+    applyCoupon(code, cart) {
+
+      const promotion =
+        this.findByCode(code);
+
+      const validation =
+        PromotionValidator.validate(
+          promotion,
+          cart
+        );
+
+      if (!validation.valid) {
+
+        EventBus.emit(
+          'promotion.rejected',
+          {
+            code,
+            reason:
+              validation.reason
+          }
+        );
+
+        return validation;
+      }
+
+      const result =
+        PromotionCalculator.calculate(
+          cart,
+          promotion
+        );
+
+      this.appliedPromotions.push(
+        result
+      );
+
+      EventBus.emit(
+        'promotion.applied',
+        result
+      );
+
+      return {
+        valid: true,
+        discount: result
+      };
+    }
+
+    removePromotion(code) {
+
+      this.appliedPromotions =
+        this.appliedPromotions.filter(
+          p => p.code !== code
+        );
+
+      EventBus.emit(
+        'promotion.removed',
+        { code }
+      );
+
+    }
+
+    calculateDiscounts() {
+
+      return this.appliedPromotions.reduce(
+        (sum, promotion) =>
+          sum + promotion.amount,
+        0
+      );
+
+    }
+
+    clear() {
+
+      this.appliedPromotions = [];
+
+    }
+
+  }
+
+  /* =========================================================
+     Public Exports
+     ========================================================= */
+
+  window.PromotionType =
+    PromotionType;
+
+  window.PromotionValidator =
+    PromotionValidator;
+
+  window.PromotionCalculator =
+    PromotionCalculator;
+
+  window.LoyaltyService =
+    LoyaltyService;
+
+  window.GiftCardService =
+    GiftCardService;
+
+  window.PromotionManager =
+    PromotionManager;
+
+})(window);
+
+/* =========================================================
+   END PART 11
+   NEXT:
+   PART 12 = Tax Engine + VAT/GST + Regional Pricing
+   ========================================================= */
+/* =========================================================
+   ENTERPRISE CART.JS — PART 12
+   Module: Tax Engine + VAT/GST + Regional Pricing
+   Version: Enterprise Commerce Suite
+   Depends On:
+   - EventBus
+   - ApiClient
+   - PromotionManager
+   - SecurityManager
+
+   Responsibilities:
+   ✔ VAT (EU)
+   ✔ GST (Canada / Australia / NZ)
+   ✔ US Sales Tax
+   ✔ Tax Inclusive Pricing
+   ✔ Tax Exclusive Pricing
+   ✔ Nexus Rules
+   ✔ Product Tax Categories
+   ✔ Digital Product Taxation
+   ✔ Reverse Charge VAT
+   ✔ B2B Tax Exemptions
+   ✔ Regional Pricing
+   ✔ Currency-Aware Tax Calculations
+========================================================= */
+
+(function(window){
+
+'use strict';
+
+/* =========================================================
+   Tax Constants
+========================================================= */
+
+const TaxMode = Object.freeze({
+    INCLUSIVE : 'inclusive',
+    EXCLUSIVE : 'exclusive'
+});
+
+const CustomerType = Object.freeze({
+    CONSUMER : 'consumer',
+    BUSINESS : 'business'
+});
+
+const TaxCategory = Object.freeze({
+    STANDARD : 'standard',
+    REDUCED : 'reduced',
+    ZERO : 'zero',
+    DIGITAL : 'digital',
+    FOOD : 'food',
+    BOOKS : 'books',
+    MEDICAL : 'medical',
+    LUXURY : 'luxury'
+});
+
+/* =========================================================
+   Country Tax Rules
+========================================================= */
+
+const COUNTRY_TAX_RULES = {
+
+    NL: {
+        country: 'Netherlands',
+        type: 'VAT',
+        mode: TaxMode.INCLUSIVE,
+        standardRate: 21,
+        reducedRate: 9,
+        currency: 'EUR'
+    },
+
+    DE: {
+        country: 'Germany',
+        type: 'VAT',
+        mode: TaxMode.INCLUSIVE,
+        standardRate: 19,
+        reducedRate: 7,
+        currency: 'EUR'
+    },
+
+    FR: {
+        country: 'France',
+        type: 'VAT',
+        mode: TaxMode.INCLUSIVE,
+        standardRate: 20,
+        reducedRate: 10,
+        currency: 'EUR'
+    },
+
+    ES: {
+        country: 'Spain',
+        type: 'VAT',
+        mode: TaxMode.INCLUSIVE,
+        standardRate: 21,
+        reducedRate: 10,
+        currency: 'EUR'
+    },
+
+    IT: {
+        country: 'Italy',
+        type: 'VAT',
+        mode: TaxMode.INCLUSIVE,
+        standardRate: 22,
+        reducedRate: 10,
+        currency: 'EUR'
+    },
+
+    BE: {
+        country: 'Belgium',
+        type: 'VAT',
+        mode: TaxMode.INCLUSIVE,
+        standardRate: 21,
+        reducedRate: 6,
+        currency: 'EUR'
+    },
+
+    GB: {
+        country: 'United Kingdom',
+        type: 'VAT',
+        mode: TaxMode.INCLUSIVE,
+        standardRate: 20,
+        reducedRate: 5,
+        currency: 'GBP'
+    },
+
+    AU: {
+        country: 'Australia',
+        type: 'GST',
+        mode: TaxMode.INCLUSIVE,
+        standardRate: 10,
+        reducedRate: 10,
+        currency: 'AUD'
+    },
+
+    NZ: {
+        country: 'New Zealand',
+        type: 'GST',
+        mode: TaxMode.INCLUSIVE,
+        standardRate: 15,
+        reducedRate: 15,
+        currency: 'NZD'
+    },
+
+    CA: {
+        country: 'Canada',
+        type: 'GST',
+        mode: TaxMode.EXCLUSIVE,
+        standardRate: 5,
+        reducedRate: 5,
+        currency: 'CAD'
+    },
+
+    US: {
+        country: 'United States',
+        type: 'SALES_TAX',
+        mode: TaxMode.EXCLUSIVE,
+        standardRate: 0,
+        reducedRate: 0,
+        currency: 'USD'
+    }
+
+};
+
+/* =========================================================
+   US State Tax Rules
+========================================================= */
+
+const US_STATE_TAX = {
+
+    CA: 7.25,
+    NY: 4.00,
+    TX: 6.25,
+    FL: 6.00,
+    WA: 6.50,
+    IL: 6.25,
+    PA: 6.00,
+    OH: 5.75,
+    MI: 6.00,
+    NJ: 6.625
+
+};
+
+/* =========================================================
+   Tax Category Resolver
+========================================================= */
+
+class ProductTaxResolver {
+
+    static getRate(rule, category){
+
+        switch(category){
+
+            case TaxCategory.ZERO:
+                return 0;
+
+            case TaxCategory.REDUCED:
+            case TaxCategory.BOOKS:
+            case TaxCategory.FOOD:
+            case TaxCategory.MEDICAL:
+                return rule.reducedRate;
+
+            default:
+                return rule.standardRate;
+        }
+    }
+
+}
+
+/* =========================================================
+   VAT Validator
+========================================================= */
+
+class VATValidator {
+
+    static validateVATNumber(vat){
+
+        if(!vat) return false;
+
+        const cleaned =
+            vat.replace(/\s+/g,'');
+
+        return /^[A-Z]{2}[A-Z0-9]{8,14}$/
+            .test(cleaned);
+    }
+
+}
+
+/* =========================================================
+   Reverse Charge Rules
+========================================================= */
+
+class ReverseChargeEngine {
+
+    static eligible(customer){
+
+        return (
+            customer.type === CustomerType.BUSINESS &&
+            customer.vatNumber &&
+            VATValidator.validateVATNumber(
+                customer.vatNumber
+            )
+        );
+    }
+
+}
+
+/* =========================================================
+   Tax Calculator
+========================================================= */
+
+class TaxCalculator {
+
+    static calculateLineTax(item, rule){
+
+        const rate =
+            ProductTaxResolver.getRate(
+                rule,
+                item.taxCategory ||
+                TaxCategory.STANDARD
+            );
+
+        const subtotal =
+            item.lineTotal;
+
+        let tax = 0;
+
+        if(rule.mode === TaxMode.INCLUSIVE){
+
+            tax =
+                subtotal -
+                (
+                    subtotal /
+                    (1 + rate/100)
+                );
+
+        } else {
+
+            tax =
+                subtotal *
+                (rate/100);
+
+        }
+
+        return Number(
+            tax.toFixed(2)
+        );
+    }
+
+}
+
+/* =========================================================
+   Tax Breakdown Builder
+========================================================= */
+
+class TaxBreakdownBuilder {
+
+    static build(cart, rule){
+
+        const lines = [];
+
+        let totalTax = 0;
+
+        cart.items.forEach(item => {
+
+            const tax =
+                TaxCalculator.calculateLineTax(
+                    item,
+                    rule
+                );
+
+            totalTax += tax;
+
+            lines.push({
+                productId : item.id,
+                title : item.title,
+                tax
+            });
+
+        });
+
+        return {
+
+            country:
+                rule.country,
+
+            taxType:
+                rule.type,
+
+            totalTax:
+                Number(
+                    totalTax.toFixed(2)
+                ),
+
+            lines
+
+        };
+    }
+
+}
+
+/* =========================================================
+   Regional Pricing Engine
+========================================================= */
+
+class RegionalPricingEngine {
+
+    constructor(){
+
+        this.exchangeRates = {};
+
+    }
+
+    setRates(rates){
+
+        this.exchangeRates =
+            rates || {};
+
+    }
+
+    convert(amount, currency){
+
+        if(currency === 'USD')
+            return amount;
+
+        const rate =
+            this.exchangeRates[currency];
+
+        if(!rate)
+            return amount;
+
+        return Number(
+            (
+                amount *
+                rate
+            ).toFixed(2)
+        );
+    }
+
+}
+
+/* =========================================================
+   Enterprise Tax Engine
+========================================================= */
+
+class EnterpriseTaxEngine {
+
+    constructor(options={}){
+
+        this.apiClient =
+            options.apiClient;
+
+        this.regionPricing =
+            new RegionalPricingEngine();
+
+        this.currentRule =
+            COUNTRY_TAX_RULES.US;
+
+    }
+
+    setCountry(country){
+
+        this.currentRule =
+            COUNTRY_TAX_RULES[country] ||
+            COUNTRY_TAX_RULES.US;
+
+        EventBus.emit(
+            'tax.country.changed',
+            {
+                country
+            }
+        );
+    }
+
+    async detectCountry(){
+
+        try{
+
+            const response =
+                await this.apiClient.get(
+                    '/geo/location'
+                );
+
+            this.setCountry(
+                response.countryCode
+            );
+
+            return response.countryCode;
+
+        }catch(error){
+
+            console.error(error);
+
+            return 'US';
+        }
+    }
+
+    getRule(){
+
+        return this.currentRule;
+    }
+
+    calculate(cart, customer={}){
+
+        const rule =
+            this.currentRule;
+
+        if(
+            ReverseChargeEngine.eligible(
+                customer
+            )
+        ){
+
+            return {
+
+                reverseCharge : true,
+
+                taxTotal : 0,
+
+                breakdown : []
+
+            };
+
+        }
+
+        const breakdown =
+            TaxBreakdownBuilder.build(
+                cart,
+                rule
+            );
+
+        return {
+
+            reverseCharge : false,
+
+            taxTotal :
+                breakdown.totalTax,
+
+            breakdown
+
+        };
+    }
+
+    calculateUSStateTax(
+        subtotal,
+        state
+    ){
+
+        const rate =
+            US_STATE_TAX[state] || 0;
+
+        return Number(
+            (
+                subtotal *
+                rate /
+                100
+            ).toFixed(2)
+        );
+    }
+
+}
+
+/* =========================================================
+   Tax Exemption Manager
+========================================================= */
+
+class TaxExemptionManager {
+
+    constructor(){
+
+        this.certificates =
+            new Map();
+
+    }
+
+    add(customerId, certificate){
+
+        this.certificates.set(
+            customerId,
+            certificate
+        );
+
+    }
+
+    remove(customerId){
+
+        this.certificates.delete(
+            customerId
+        );
+
+    }
+
+    has(customerId){
+
+        return this.certificates.has(
+            customerId
+        );
+
+    }
+
+}
+
+/* =========================================================
+   Digital Tax Engine
+========================================================= */
+
+class DigitalTaxEngine {
+
+    calculate(item, country){
+
+        const rule =
+            COUNTRY_TAX_RULES[country];
+
+        if(!rule)
+            return 0;
+
+        const rate =
+            rule.standardRate;
+
+        return Number(
+            (
+                item.lineTotal *
+                rate /
+                100
+            ).toFixed(2)
+        );
+    }
+
+}
+
+/* =========================================================
+   VAT Reporting Service
+========================================================= */
+
+class VATReportingService {
+
+    generate(order){
+
+        return {
+
+            orderId:
+                order.id,
+
+            vatNumber:
+                order.customer?.vatNumber,
+
+            country:
+                order.shippingCountry,
+
+            taxAmount:
+                order.taxTotal,
+
+            createdAt:
+                new Date()
+                    .toISOString()
+
+        };
+    }
+
+}
+
+/* =========================================================
+   Tax Audit Trail
+========================================================= */
+
+class TaxAuditTrail {
+
+    constructor(){
+
+        this.logs = [];
+
+    }
+
+    log(event){
+
+        this.logs.push({
+
+            timestamp:
+                Date.now(),
+
+            ...event
+
+        });
+
+    }
+
+    export(){
+
+        return [...this.logs];
+
+    }
+
+}
+
+/* =========================================================
+   Public Exports
+========================================================= */
+
+window.TaxMode =
+    TaxMode;
+
+window.CustomerType =
+    CustomerType;
+
+window.TaxCategory =
+    TaxCategory;
+
+window.COUNTRY_TAX_RULES =
+    COUNTRY_TAX_RULES;
+
+window.US_STATE_TAX =
+    US_STATE_TAX;
+
+window.ProductTaxResolver =
+    ProductTaxResolver;
+
+window.VATValidator =
+    VATValidator;
+
+window.ReverseChargeEngine =
+    ReverseChargeEngine;
+
+window.TaxCalculator =
+    TaxCalculator;
+
+window.TaxBreakdownBuilder =
+    TaxBreakdownBuilder;
+
+window.RegionalPricingEngine =
+    RegionalPricingEngine;
+
+window.EnterpriseTaxEngine =
+    EnterpriseTaxEngine;
+
+window.TaxExemptionManager =
+    TaxExemptionManager;
+
+window.DigitalTaxEngine =
+    DigitalTaxEngine;
+
+window.VATReportingService =
+    VATReportingService;
+
+window.TaxAuditTrail =
+    TaxAuditTrail;
+
+})(window);
+
+/* =========================================================
+   END PART 12
+
+   NEXT:
+   PART 13
+   Shipping Engine + Warehouses + Carrier APIs
+   + Delivery ETA Intelligence
+   + Multi-Origin Fulfillment
+========================================================= */
