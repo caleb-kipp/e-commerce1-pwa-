@@ -6837,3 +6837,1842 @@ CommerceEventBus.on(
  * Supplier Management
  * Real-Time Inventory Sync
  **********************************************************************/
+/**********************************************************************
+ * ENTERPRISE CART.JS
+ * PART 7
+ * INVENTORY + WAREHOUSES + PROCUREMENT
+ **********************************************************************/
+
+/**********************************************************************
+ * INVENTORY CONSTANTS
+ **********************************************************************/
+
+const INVENTORY_STATUS = {
+
+  IN_STOCK:
+    "in_stock",
+
+  LOW_STOCK:
+    "low_stock",
+
+  OUT_OF_STOCK:
+    "out_of_stock",
+
+  RESERVED:
+    "reserved",
+
+  BACKORDER:
+    "backorder",
+
+  DISCONTINUED:
+    "discontinued"
+};
+
+const MOVEMENT_TYPES = {
+
+  PURCHASE:
+    "purchase",
+
+  SALE:
+    "sale",
+
+  RETURN:
+    "return",
+
+  ADJUSTMENT:
+    "adjustment",
+
+  TRANSFER:
+    "transfer",
+
+  RESERVATION:
+    "reservation",
+
+  RELEASE:
+    "release"
+};
+
+/**********************************************************************
+ * SUPPLIER ENTITY
+ **********************************************************************/
+
+class Supplier {
+
+  constructor(config = {}) {
+
+    this.id =
+      config.id ||
+      crypto.randomUUID();
+
+    this.name =
+      config.name;
+
+    this.email =
+      config.email;
+
+    this.phone =
+      config.phone;
+
+    this.country =
+      config.country;
+
+    this.currency =
+      config.currency || "EUR";
+
+    this.leadTimeDays =
+      config.leadTimeDays || 14;
+
+    this.rating =
+      config.rating || 5;
+
+    this.active =
+      config.active ?? true;
+
+    this.createdAt =
+      Date.now();
+  }
+}
+
+/**********************************************************************
+ * WAREHOUSE ENTITY
+ **********************************************************************/
+
+class Warehouse {
+
+  constructor(config = {}) {
+
+    this.id =
+      config.id ||
+      crypto.randomUUID();
+
+    this.name =
+      config.name;
+
+    this.country =
+      config.country;
+
+    this.city =
+      config.city;
+
+    this.address =
+      config.address;
+
+    this.priority =
+      config.priority || 1;
+
+    this.active =
+      config.active ?? true;
+
+    this.createdAt =
+      Date.now();
+  }
+}
+
+/**********************************************************************
+ * INVENTORY ITEM
+ **********************************************************************/
+
+class InventoryItem {
+
+  constructor(config = {}) {
+
+    this.productId =
+      config.productId;
+
+    this.warehouseId =
+      config.warehouseId;
+
+    this.stock =
+      config.stock || 0;
+
+    this.reserved =
+      config.reserved || 0;
+
+    this.reorderPoint =
+      config.reorderPoint || 5;
+
+    this.reorderQuantity =
+      config.reorderQuantity || 25;
+
+    this.costPrice =
+      config.costPrice || 0;
+
+    this.lastUpdated =
+      Date.now();
+  }
+
+  get available() {
+
+    return Math.max(
+      0,
+      this.stock -
+      this.reserved
+    );
+  }
+
+  get status() {
+
+    if (
+      this.available <= 0
+    ) {
+      return INVENTORY_STATUS
+        .OUT_OF_STOCK;
+    }
+
+    if (
+      this.available <=
+      this.reorderPoint
+    ) {
+      return INVENTORY_STATUS
+        .LOW_STOCK;
+    }
+
+    return INVENTORY_STATUS
+      .IN_STOCK;
+  }
+}
+
+/**********************************************************************
+ * INVENTORY STORAGE
+ **********************************************************************/
+
+const InventoryStorage = (() => {
+
+  const KEYS = {
+
+    INVENTORY:
+      "enterprise_inventory",
+
+    WAREHOUSES:
+      "enterprise_warehouses",
+
+    SUPPLIERS:
+      "enterprise_suppliers",
+
+    MOVEMENTS:
+      "enterprise_stock_movements",
+
+    PURCHASE_ORDERS:
+      "enterprise_purchase_orders"
+  };
+
+  function get(key) {
+
+    return StorageService.get(
+      key,
+      []
+    );
+  }
+
+  function save(
+    key,
+    value
+  ) {
+
+    StorageService.set(
+      key,
+      value
+    );
+  }
+
+  return {
+
+    KEYS,
+
+    get,
+
+    save
+  };
+
+})();
+
+/**********************************************************************
+ * STOCK MOVEMENT LOG
+ **********************************************************************/
+
+const StockMovementService =
+(() => {
+
+  function record({
+
+    productId,
+
+    warehouseId,
+
+    type,
+
+    quantity,
+
+    reason,
+
+    metadata = {}
+
+  }) {
+
+    const records =
+      InventoryStorage.get(
+        InventoryStorage
+          .KEYS
+          .MOVEMENTS
+      );
+
+    records.unshift({
+
+      id:
+        crypto.randomUUID(),
+
+      productId,
+
+      warehouseId,
+
+      type,
+
+      quantity,
+
+      reason,
+
+      metadata,
+
+      timestamp:
+        Date.now()
+    });
+
+    InventoryStorage.save(
+      InventoryStorage
+        .KEYS
+        .MOVEMENTS,
+      records
+    );
+  }
+
+  function history(
+    productId
+  ) {
+
+    return InventoryStorage
+      .get(
+        InventoryStorage
+          .KEYS
+          .MOVEMENTS
+      )
+      .filter(
+        x =>
+          x.productId ===
+          productId
+      );
+  }
+
+  return {
+
+    record,
+
+    history
+  };
+
+})();
+
+/**********************************************************************
+ * WAREHOUSE SERVICE
+ **********************************************************************/
+
+const WarehouseService = (() => {
+
+  function all() {
+
+    return InventoryStorage
+      .get(
+        InventoryStorage
+          .KEYS
+          .WAREHOUSES
+      );
+  }
+
+  function create(data) {
+
+    const warehouses =
+      all();
+
+    const warehouse =
+      new Warehouse(data);
+
+    warehouses.push(
+      warehouse
+    );
+
+    InventoryStorage.save(
+      InventoryStorage
+        .KEYS
+        .WAREHOUSES,
+      warehouses
+    );
+
+    return warehouse;
+  }
+
+  function find(id) {
+
+    return all().find(
+      w => w.id === id
+    );
+  }
+
+  return {
+
+    create,
+
+    all,
+
+    find
+  };
+
+})();
+
+/**********************************************************************
+ * SUPPLIER SERVICE
+ **********************************************************************/
+
+const SupplierService = (() => {
+
+  function all() {
+
+    return InventoryStorage
+      .get(
+        InventoryStorage
+          .KEYS
+          .SUPPLIERS
+      );
+  }
+
+  function create(data) {
+
+    const suppliers =
+      all();
+
+    const supplier =
+      new Supplier(data);
+
+    suppliers.push(
+      supplier
+    );
+
+    InventoryStorage.save(
+      InventoryStorage
+        .KEYS
+        .SUPPLIERS,
+      suppliers
+    );
+
+    return supplier;
+  }
+
+  function find(id) {
+
+    return all().find(
+      s => s.id === id
+    );
+  }
+
+  return {
+
+    create,
+
+    all,
+
+    find
+  };
+
+})();
+
+/**********************************************************************
+ * INVENTORY SERVICE
+ **********************************************************************/
+
+const InventoryService = (() => {
+
+  function all() {
+
+    return InventoryStorage
+      .get(
+        InventoryStorage
+          .KEYS
+          .INVENTORY
+      );
+  }
+
+  function save(items) {
+
+    InventoryStorage.save(
+      InventoryStorage
+        .KEYS
+        .INVENTORY,
+      items
+    );
+  }
+
+  function getInventoryItem(
+    productId,
+    warehouseId
+  ) {
+
+    return all().find(
+      item =>
+        item.productId ===
+          productId &&
+        item.warehouseId ===
+          warehouseId
+    );
+  }
+
+  function createInventory(
+    config
+  ) {
+
+    const inventory =
+      all();
+
+    const item =
+      new InventoryItem(
+        config
+      );
+
+    inventory.push(item);
+
+    save(inventory);
+
+    return item;
+  }
+
+  function increaseStock({
+
+    productId,
+
+    warehouseId,
+
+    quantity
+
+  }) {
+
+    const inventory =
+      all();
+
+    const item =
+      getInventoryItem(
+        productId,
+        warehouseId
+      );
+
+    if (!item) {
+
+      throw new Error(
+        "Inventory item not found"
+      );
+    }
+
+    item.stock += quantity;
+
+    item.lastUpdated =
+      Date.now();
+
+    save(inventory);
+
+    StockMovementService
+      .record({
+
+        productId,
+
+        warehouseId,
+
+        quantity,
+
+        type:
+          MOVEMENT_TYPES
+            .PURCHASE,
+
+        reason:
+          "Stock received"
+      });
+
+    return item;
+  }
+
+  function decreaseStock({
+
+    productId,
+
+    warehouseId,
+
+    quantity
+
+  }) {
+
+    const inventory =
+      all();
+
+    const item =
+      getInventoryItem(
+        productId,
+        warehouseId
+      );
+
+    if (!item) {
+
+      throw new Error(
+        "Inventory item not found"
+      );
+    }
+
+    if (
+      item.available <
+      quantity
+    ) {
+
+      throw new Error(
+        "Insufficient stock"
+      );
+    }
+
+    item.stock -= quantity;
+
+    item.lastUpdated =
+      Date.now();
+
+    save(inventory);
+
+    StockMovementService
+      .record({
+
+        productId,
+
+        warehouseId,
+
+        quantity,
+
+        type:
+          MOVEMENT_TYPES
+            .SALE,
+
+        reason:
+          "Order fulfilled"
+      });
+
+    return item;
+  }
+
+  function status(
+    productId
+  ) {
+
+    const items =
+      all().filter(
+        item =>
+          item.productId ===
+          productId
+      );
+
+    const total =
+      items.reduce(
+        (
+          total,
+          item
+        ) =>
+          total +
+          item.available,
+        0
+      );
+
+    if (total <= 0) {
+
+      return INVENTORY_STATUS
+        .OUT_OF_STOCK;
+    }
+
+    return INVENTORY_STATUS
+      .IN_STOCK;
+  }
+
+  return {
+
+    all,
+
+    createInventory,
+
+    increaseStock,
+
+    decreaseStock,
+
+    status,
+
+    getInventoryItem
+  };
+
+})();
+
+/**********************************************************************
+ * STOCK RESERVATION ENGINE
+ **********************************************************************/
+
+const ReservationEngine = (() => {
+
+  const reservations =
+    new Map();
+
+  function reserve({
+
+    productId,
+
+    warehouseId,
+
+    quantity,
+
+    orderId
+
+  }) {
+
+    const item =
+      InventoryService
+        .getInventoryItem(
+          productId,
+          warehouseId
+        );
+
+    if (
+      !item ||
+      item.available <
+      quantity
+    ) {
+
+      return false;
+    }
+
+    item.reserved +=
+      quantity;
+
+    const key =
+      `${orderId}:${productId}`;
+
+    reservations.set(
+      key,
+      {
+
+        productId,
+
+        warehouseId,
+
+        quantity,
+
+        orderId,
+
+        createdAt:
+          Date.now()
+      }
+    );
+
+    StockMovementService
+      .record({
+
+        productId,
+
+        warehouseId,
+
+        quantity,
+
+        type:
+          MOVEMENT_TYPES
+            .RESERVATION,
+
+        reason:
+          "Order reservation"
+      });
+
+    return true;
+  }
+
+  function release(
+    orderId
+  ) {
+
+    for (
+      const [key, value]
+      of reservations
+    ) {
+
+      if (
+        value.orderId ===
+        orderId
+      ) {
+
+        const item =
+          InventoryService
+            .getInventoryItem(
+              value.productId,
+              value.warehouseId
+            );
+
+        if (item) {
+
+          item.reserved -=
+            value.quantity;
+        }
+
+        reservations.delete(
+          key
+        );
+      }
+    }
+  }
+
+  return {
+
+    reserve,
+
+    release
+  };
+
+})();
+
+/**********************************************************************
+ * BACKORDER SYSTEM
+ **********************************************************************/
+
+const BackorderService =
+(() => {
+
+  const STORAGE_KEY =
+    "enterprise_backorders";
+
+  function all() {
+
+    return StorageService.get(
+      STORAGE_KEY,
+      []
+    );
+  }
+
+  function create({
+
+    productId,
+
+    quantity,
+
+    customerId
+
+  }) {
+
+    const records =
+      all();
+
+    const entry = {
+
+      id:
+        crypto.randomUUID(),
+
+      productId,
+
+      quantity,
+
+      customerId,
+
+      status:
+        "pending",
+
+      createdAt:
+        Date.now()
+    };
+
+    records.push(
+      entry
+    );
+
+    StorageService.set(
+      STORAGE_KEY,
+      records
+    );
+
+    return entry;
+  }
+
+  return {
+
+    all,
+
+    create
+  };
+
+})();
+
+/**********************************************************************
+ * PURCHASE ORDERS
+ **********************************************************************/
+
+const ProcurementService =
+(() => {
+
+  function createPO({
+
+    supplierId,
+
+    warehouseId,
+
+    lines
+
+  }) {
+
+    const orders =
+      InventoryStorage.get(
+        InventoryStorage
+          .KEYS
+          .PURCHASE_ORDERS
+      );
+
+    const po = {
+
+      id:
+        generatePO(),
+
+      supplierId,
+
+      warehouseId,
+
+      lines,
+
+      status:
+        "created",
+
+      createdAt:
+        Date.now()
+    };
+
+    orders.push(po);
+
+    InventoryStorage.save(
+      InventoryStorage
+        .KEYS
+        .PURCHASE_ORDERS,
+      orders
+    );
+
+    return po;
+  }
+
+  function receivePO(
+    poId
+  ) {
+
+    const orders =
+      InventoryStorage.get(
+        InventoryStorage
+          .KEYS
+          .PURCHASE_ORDERS
+      );
+
+    const po =
+      orders.find(
+        p => p.id === poId
+      );
+
+    if (!po) {
+
+      throw new Error(
+        "PO not found"
+      );
+    }
+
+    for (
+      const line
+      of po.lines
+    ) {
+
+      InventoryService
+        .increaseStock({
+
+          productId:
+            line.productId,
+
+          warehouseId:
+            po.warehouseId,
+
+          quantity:
+            line.quantity
+        });
+    }
+
+    po.status =
+      "received";
+
+    InventoryStorage.save(
+      InventoryStorage
+        .KEYS
+        .PURCHASE_ORDERS,
+      orders
+    );
+
+    return po;
+  }
+
+  return {
+
+    createPO,
+
+    receivePO
+  };
+
+})();
+
+/**********************************************************************
+ * AUTO REORDER ENGINE
+ **********************************************************************/
+
+const AutoReorderEngine =
+(() => {
+
+  function scan() {
+
+    const inventory =
+      InventoryService
+        .all();
+
+    const generated =
+      [];
+
+    inventory.forEach(
+      item => {
+
+        if (
+          item.available <=
+          item.reorderPoint
+        ) {
+
+          generated.push({
+
+            productId:
+              item.productId,
+
+            quantity:
+              item.reorderQuantity,
+
+            warehouseId:
+              item.warehouseId
+          });
+        }
+      }
+    );
+
+    return generated;
+  }
+
+  return {
+    scan
+  };
+
+})();
+
+/**********************************************************************
+ * REAL-TIME INVENTORY SYNC
+ **********************************************************************/
+
+const InventoryRealtime =
+(() => {
+
+  const subscribers =
+    new Set();
+
+  function subscribe(
+    callback
+  ) {
+
+    subscribers.add(
+      callback
+    );
+
+    return () =>
+      subscribers.delete(
+        callback
+      );
+  }
+
+  function broadcast(
+    payload
+  ) {
+
+    subscribers.forEach(
+      callback => {
+
+        try {
+
+          callback(
+            payload
+          );
+
+        } catch (error) {
+
+          console.error(
+            error
+          );
+        }
+      }
+    );
+  }
+
+  return {
+
+    subscribe,
+
+    broadcast
+  };
+
+})();
+
+/**********************************************************************
+ * INVENTORY EVENTS
+ **********************************************************************/
+
+CommerceEventBus.on(
+  "order.created",
+  async ({ order }) => {
+
+    for (
+      const item
+      of order.items
+    ) {
+
+      InventoryRealtime
+        .broadcast({
+
+          productId:
+            item.id,
+
+          quantity:
+            item.quantity,
+
+          type:
+            "inventory_update"
+        });
+    }
+  }
+);
+
+/**********************************************************************
+ * HELPERS
+ **********************************************************************/
+
+function generatePO() {
+
+  return (
+    "PO-" +
+    Date.now() +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2, 7)
+      .toUpperCase()
+  );
+}
+
+/**********************************************************************
+ * DEFAULT WAREHOUSES
+ **********************************************************************/
+
+if (
+  WarehouseService
+    .all()
+    .length === 0
+) {
+
+  WarehouseService.create({
+
+    name:
+      "Amsterdam DC",
+
+    country:
+      "NL",
+
+    city:
+      "Amsterdam",
+
+    priority: 1
+  });
+
+  WarehouseService.create({
+
+    name:
+      "Berlin DC",
+
+    country:
+      "DE",
+
+    city:
+      "Berlin",
+
+    priority: 2
+  });
+
+  WarehouseService.create({
+
+    name:
+      "Paris DC",
+
+    country:
+      "FR",
+
+    city:
+      "Paris",
+
+    priority: 3
+  });
+}
+
+/**********************************************************************
+ * END OF PART 7
+ *
+ * NEXT:
+ * PART 8
+ * Enterprise Search Engine
+ * Recommendation AI
+ * Personalization
+ * Customer Segmentation
+ * Behavioral Analytics
+ * Product Ranking Algorithms
+ * Smart Merchandising Engine
+ **********************************************************************/
+/* =========================================================
+   CART.JS ENTERPRISE — PART 8
+   Inventory Reservation + Promotion Engine + Tax Services
+   Continues from Part 7
+========================================================= */
+
+(function CartEnterprisePart8(window){
+
+  'use strict';
+
+  /* =========================================================
+     INVENTORY RESERVATION SERVICE
+  ========================================================= */
+
+  class InventoryReservationService {
+
+    constructor({
+      reservationTTL = 15 * 60 * 1000,
+      syncInterval = 30000
+    } = {}) {
+
+      this.reservationTTL = reservationTTL;
+      this.syncInterval = syncInterval;
+
+      this.reservations = new Map();
+      this.inventoryCache = new Map();
+
+      this.syncTimer = null;
+    }
+
+    start() {
+
+      if (this.syncTimer) return;
+
+      this.syncTimer = setInterval(() => {
+        this.cleanupExpiredReservations();
+      }, this.syncInterval);
+    }
+
+    stop() {
+
+      if (!this.syncTimer) return;
+
+      clearInterval(this.syncTimer);
+      this.syncTimer = null;
+    }
+
+    setInventory(productId, quantity) {
+
+      this.inventoryCache.set(productId, {
+        quantity,
+        updatedAt: Date.now()
+      });
+    }
+
+    getInventory(productId) {
+
+      const item = this.inventoryCache.get(productId);
+
+      if (!item) {
+        return {
+          quantity: 0,
+          reserved: 0,
+          available: 0
+        };
+      }
+
+      const reserved = this.getReservedQuantity(productId);
+
+      return {
+        quantity: item.quantity,
+        reserved,
+        available: Math.max(item.quantity - reserved, 0)
+      };
+    }
+
+    reserve(productId, qty, customerId) {
+
+      const inventory = this.getInventory(productId);
+
+      if (inventory.available < qty) {
+
+        return {
+          success: false,
+          reason: 'INSUFFICIENT_STOCK',
+          available: inventory.available
+        };
+      }
+
+      const reservationId =
+        `res_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+
+      this.reservations.set(reservationId, {
+        reservationId,
+        productId,
+        qty,
+        customerId,
+        createdAt: Date.now(),
+        expiresAt: Date.now() + this.reservationTTL
+      });
+
+      return {
+        success: true,
+        reservationId
+      };
+    }
+
+    release(reservationId) {
+
+      return this.reservations.delete(reservationId);
+    }
+
+    confirm(reservationId) {
+
+      const reservation = this.reservations.get(reservationId);
+
+      if (!reservation) return false;
+
+      const inventory = this.inventoryCache.get(
+        reservation.productId
+      );
+
+      if (inventory) {
+        inventory.quantity -= reservation.qty;
+      }
+
+      this.reservations.delete(reservationId);
+
+      return true;
+    }
+
+    getReservedQuantity(productId) {
+
+      let total = 0;
+
+      for (const reservation of this.reservations.values()) {
+
+        if (reservation.productId === productId) {
+          total += reservation.qty;
+        }
+      }
+
+      return total;
+    }
+
+    cleanupExpiredReservations() {
+
+      const now = Date.now();
+
+      for (const [id, reservation] of this.reservations.entries()) {
+
+        if (reservation.expiresAt <= now) {
+          this.reservations.delete(id);
+        }
+      }
+    }
+  }
+
+  /* =========================================================
+     PROMOTION RULE ENGINE
+  ========================================================= */
+
+  class PromotionEngine {
+
+    constructor() {
+
+      this.rules = [];
+    }
+
+    addRule(rule) {
+
+      this.rules.push(rule);
+    }
+
+    evaluate(cart) {
+
+      const results = [];
+
+      for (const rule of this.rules) {
+
+        try {
+
+          const outcome = rule.evaluate(cart);
+
+          if (outcome?.eligible) {
+            results.push(outcome);
+          }
+
+        } catch (error) {
+
+          console.error(
+            '[PromotionEngine]',
+            rule.name,
+            error
+          );
+        }
+      }
+
+      return results;
+    }
+
+    getBestDiscount(cart) {
+
+      const results = this.evaluate(cart);
+
+      if (!results.length) return null;
+
+      return results.sort(
+        (a, b) => b.discountAmount - a.discountAmount
+      )[0];
+    }
+  }
+
+  /* =========================================================
+     PROMOTION RULES
+  ========================================================= */
+
+  class PercentageDiscountRule {
+
+    constructor({
+      name,
+      minimumSpend = 0,
+      percentage = 0
+    }) {
+
+      this.name = name;
+      this.minimumSpend = minimumSpend;
+      this.percentage = percentage;
+    }
+
+    evaluate(cart) {
+
+      const subtotal = cart.getSubtotal();
+
+      if (subtotal < this.minimumSpend) {
+
+        return {
+          eligible: false
+        };
+      }
+
+      return {
+        eligible: true,
+        type: 'percentage',
+        rule: this.name,
+        discountAmount:
+          subtotal * (this.percentage / 100)
+      };
+    }
+  }
+
+  class BuyXGetYRule {
+
+    constructor({
+      productId,
+      buyQty,
+      freeQty
+    }) {
+
+      this.productId = productId;
+      this.buyQty = buyQty;
+      this.freeQty = freeQty;
+    }
+
+    evaluate(cart) {
+
+      const item = cart.items.find(
+        i => i.productId === this.productId
+      );
+
+      if (!item) {
+        return { eligible: false };
+      }
+
+      if (item.quantity < this.buyQty) {
+        return { eligible: false };
+      }
+
+      const freeUnits =
+        Math.floor(item.quantity / this.buyQty)
+        * this.freeQty;
+
+      const discountAmount =
+        freeUnits * item.unitPrice;
+
+      return {
+        eligible: true,
+        type: 'bxgy',
+        freeUnits,
+        discountAmount
+      };
+    }
+  }
+
+  class CategoryPromotionRule {
+
+    constructor({
+      category,
+      percentage
+    }) {
+
+      this.category = category;
+      this.percentage = percentage;
+    }
+
+    evaluate(cart) {
+
+      const matchingItems =
+        cart.items.filter(
+          item => item.category === this.category
+        );
+
+      if (!matchingItems.length) {
+        return {
+          eligible: false
+        };
+      }
+
+      const total =
+        matchingItems.reduce(
+          (sum, item) =>
+            sum + item.unitPrice * item.quantity,
+          0
+        );
+
+      return {
+        eligible: true,
+        type: 'category',
+        category: this.category,
+        discountAmount:
+          total * (this.percentage / 100)
+      };
+    }
+  }
+
+  /* =========================================================
+     COUPON SERVICE
+  ========================================================= */
+
+  class CouponService {
+
+    constructor() {
+
+      this.coupons = new Map();
+    }
+
+    registerCoupon(coupon) {
+
+      this.coupons.set(
+        coupon.code.toUpperCase(),
+        coupon
+      );
+    }
+
+    validate(code, cart) {
+
+      const coupon =
+        this.coupons.get(
+          String(code).toUpperCase()
+        );
+
+      if (!coupon) {
+
+        return {
+          valid: false,
+          reason: 'INVALID_CODE'
+        };
+      }
+
+      if (
+        coupon.expiresAt &&
+        Date.now() > coupon.expiresAt
+      ) {
+
+        return {
+          valid: false,
+          reason: 'EXPIRED'
+        };
+      }
+
+      if (
+        coupon.minimumSpend &&
+        cart.getSubtotal() < coupon.minimumSpend
+      ) {
+
+        return {
+          valid: false,
+          reason: 'MINIMUM_SPEND'
+        };
+      }
+
+      return {
+        valid: true,
+        coupon
+      };
+    }
+
+    calculateDiscount(code, cart) {
+
+      const validation =
+        this.validate(code, cart);
+
+      if (!validation.valid) {
+        return 0;
+      }
+
+      const coupon =
+        validation.coupon;
+
+      if (
+        coupon.type === 'PERCENTAGE'
+      ) {
+
+        return (
+          cart.getSubtotal() *
+          (coupon.value / 100)
+        );
+      }
+
+      if (
+        coupon.type === 'FIXED'
+      ) {
+
+        return coupon.value;
+      }
+
+      return 0;
+    }
+  }
+
+  /* =========================================================
+     TAX ENGINE
+  ========================================================= */
+
+  class TaxEngine {
+
+    constructor() {
+
+      this.taxZones = new Map();
+    }
+
+    addZone(zoneCode, config) {
+
+      this.taxZones.set(
+        zoneCode,
+        config
+      );
+    }
+
+    calculate({
+      subtotal,
+      shippingCountry,
+      items = []
+    }) {
+
+      const zone =
+        this.taxZones.get(
+          shippingCountry
+        );
+
+      if (!zone) {
+
+        return {
+          tax: 0,
+          breakdown: []
+        };
+      }
+
+      const breakdown = [];
+      let totalTax = 0;
+
+      for (const item of items) {
+
+        const rate =
+          item.taxRate ??
+          zone.defaultRate;
+
+        const itemTax =
+          item.unitPrice *
+          item.quantity *
+          rate;
+
+        totalTax += itemTax;
+
+        breakdown.push({
+          productId: item.productId,
+          rate,
+          tax: itemTax
+        });
+      }
+
+      return {
+        tax: totalTax,
+        breakdown
+      };
+    }
+  }
+
+  /* =========================================================
+     SHIPPING RATE ENGINE
+  ========================================================= */
+
+  class ShippingRateEngine {
+
+    constructor() {
+
+      this.providers = [];
+    }
+
+    registerProvider(provider) {
+
+      this.providers.push(provider);
+    }
+
+    async getRates(shipment) {
+
+      const results = [];
+
+      for (const provider of this.providers) {
+
+        try {
+
+          const rate =
+            await provider.getRate(
+              shipment
+            );
+
+          results.push(rate);
+
+        } catch (error) {
+
+          console.error(
+            '[ShippingRate]',
+            provider.name,
+            error
+          );
+        }
+      }
+
+      return results.sort(
+        (a, b) => a.amount - b.amount
+      );
+    }
+  }
+
+  /* =========================================================
+     MOCK SHIPPING PROVIDERS
+  ========================================================= */
+
+  class StandardShippingProvider {
+
+    constructor() {
+
+      this.name = 'Standard';
+    }
+
+    async getRate(shipment) {
+
+      return {
+        carrier: this.name,
+        service: 'Ground',
+        amount:
+          5 + (shipment.weight * 0.4),
+        etaDays: 5
+      };
+    }
+  }
+
+  class ExpressShippingProvider {
+
+    constructor() {
+
+      this.name = 'Express';
+    }
+
+    async getRate(shipment) {
+
+      return {
+        carrier: this.name,
+        service: 'Priority',
+        amount:
+          12 + (shipment.weight * 0.8),
+        etaDays: 2
+      };
+    }
+  }
+
+  /* =========================================================
+     ENTERPRISE REGISTRY
+  ========================================================= */
+
+  window.CartEnterprise = window.CartEnterprise || {};
+
+  window.CartEnterprise.inventory =
+    new InventoryReservationService();
+
+  window.CartEnterprise.promotions =
+    new PromotionEngine();
+
+  window.CartEnterprise.coupons =
+    new CouponService();
+
+  window.CartEnterprise.taxes =
+    new TaxEngine();
+
+  window.CartEnterprise.shipping =
+    new ShippingRateEngine();
+
+  window.CartEnterprise.shipping.registerProvider(
+    new StandardShippingProvider()
+  );
+
+  window.CartEnterprise.shipping.registerProvider(
+    new ExpressShippingProvider()
+  );
+
+  window.CartEnterprise.promotions.addRule(
+    new PercentageDiscountRule({
+      name: 'ORDER_100_SAVE_10',
+      minimumSpend: 100,
+      percentage: 10
+    })
+  );
+
+  console.info(
+    '[Cart Enterprise] Part 8 loaded'
+  );
+
+})(window);
+
+/* =========================================================
+   END OF PART 8
+   NEXT:
+   PART 9 = Checkout Orchestration Layer
+   - Multi-step checkout state machine
+   - Payment gateway abstraction
+   - Fraud screening
+   - Address validation
+   - Order placement pipeline
+   - Retry queues
+   - Webhook dispatcher
+========================================================= */
