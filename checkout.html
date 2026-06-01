@@ -1659,7 +1659,241 @@ Your payment is protected with 256-bit SSL encryption and advanced fraud prevent
 </div>
 
 </footer>
+document.addEventListener(
+    "DOMContentLoaded",
+    renderCheckoutSummary
+);
 
+function renderCheckoutSummary(){
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem("ss_cart")
+        ) || [];
+
+    const desktopContainer =
+        document.getElementById(
+            "checkoutItemsContainer"
+        );
+
+    const mobileContainer =
+        document.getElementById(
+            "mobileCheckoutItems"
+        );
+
+    if(!desktopContainer) return;
+
+    if(cart.length === 0){
+
+        const emptyHTML = `
+            <div class="empty-cart">
+                <h3>Your cart is empty</h3>
+                <p>
+                    Add products before checking out.
+                </p>
+            </div>
+        `;
+
+        desktopContainer.innerHTML =
+            emptyHTML;
+
+        if(mobileContainer){
+            mobileContainer.innerHTML =
+                emptyHTML;
+        }
+
+        return;
+    }
+
+    let subtotal = 0;
+
+    const itemsHTML =
+        cart.map(item => {
+
+            const lineTotal =
+                item.price * item.qty;
+
+            subtotal += lineTotal;
+
+            return `
+
+                <div class="product-item">
+
+                    <img
+                        src="${item.img}"
+                        alt="${item.title}"
+                    >
+
+                    <div class="product-info">
+
+                        <h4>
+                            ${item.title}
+                        </h4>
+
+                        <p>
+                            SKU: ${item.id}
+                        </p>
+
+                        <div class="qty-pill">
+                            Qty ${item.qty}
+                        </div>
+
+                    </div>
+
+                    <div class="product-price">
+                        $${lineTotal.toFixed(2)}
+                    </div>
+
+                </div>
+
+         <script>   `;
+
+        }).join("");
+
+    desktopContainer.innerHTML =
+        itemsHTML;
+
+    if(mobileContainer){
+
+        mobileContainer.innerHTML =
+            itemsHTML;
+
+    }
+
+    calculateCheckoutTotals(
+        subtotal
+    );
+
+    updateCheckoutItemCount(
+        cart
+    );
+}
+
+function calculateCheckoutTotals(
+    subtotal
+){
+
+    const expressShipping =
+        document.querySelectorAll(
+            ".shipping-option"
+        )[1]?.classList.contains(
+            "active"
+        );
+
+    const shipping =
+        expressShipping
+            ? 9.99
+            : 0;
+
+    const discount = 0;
+
+    const tax =
+        (
+            (subtotal - discount + shipping)
+            * 0.075
+        );
+
+    const total =
+        subtotal -
+        discount +
+        shipping +
+        tax;
+
+    document.getElementById(
+        "checkoutSubtotal"
+    ).textContent =
+        "$" + subtotal.toFixed(2);
+
+    document.getElementById(
+        "checkoutDiscount"
+    ).textContent =
+        "$" + discount.toFixed(2);
+
+    document.getElementById(
+        "checkoutShipping"
+    ).textContent =
+        shipping === 0
+            ? "FREE"
+            : "$" + shipping.toFixed(2);
+
+    document.getElementById(
+        "checkoutTax"
+    ).textContent =
+        "$" + tax.toFixed(2);
+
+    document.getElementById(
+        "checkoutGrandTotal"
+    ).textContent =
+        "$" + total.toFixed(2);
+
+    /* MOBILE */
+
+    const mobileSubtotal =
+        document.getElementById(
+            "mobileSubtotal"
+        );
+
+    if(mobileSubtotal){
+
+        mobileSubtotal.textContent =
+            "$" + subtotal.toFixed(2);
+
+        document.getElementById(
+            "mobileShipping"
+        ).textContent =
+            shipping === 0
+                ? "FREE"
+                : "$" + shipping.toFixed(2);
+
+        document.getElementById(
+            "mobileTax"
+        ).textContent =
+            "$" + tax.toFixed(2);
+
+        document.getElementById(
+            "mobileGrandTotal"
+        ).textContent =
+            "$" + total.toFixed(2);
+
+        document.getElementById(
+            "mobileHeaderTotal"
+        ).textContent =
+            "$" + total.toFixed(2);
+    }
+
+    document.querySelectorAll(
+        ".btn-primary"
+    ).forEach(btn => {
+
+        btn.innerHTML =
+            `🔒 Pay Securely Now $${total.toFixed(2)}`;
+
+    });
+}
+
+function updateCheckoutItemCount(
+    cart
+){
+
+    const totalItems =
+        cart.reduce(
+            (sum,item) =>
+                sum + item.qty,
+            0
+        );
+
+    const itemCount =
+        document.getElementById(
+            "mobileItemCount"
+        );
+
+    if(itemCount){
+
+        itemCount.textContent =
+            `(${totalItems} items)`;
+
+    }
+}</script>
 <!-- =====================================================
      JAVASCRIPT
 ===================================================== -->
