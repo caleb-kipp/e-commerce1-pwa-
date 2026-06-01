@@ -1,0 +1,5121 @@
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Account | ShopEase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+/* =========================================================
+   RESPONSIVE AUTO-FIT UPGRADE
+   ADD BELOW YOUR EXISTING CSS
+   RETAINS ENTIRE LAYOUT
+   AUTO SCALES PERFECTLY ON:
+   320px → 1440px+
+========================================================= */
+
+/* =========================================================
+   GLOBAL RESPONSIVE FIXES
+========================================================= */
+
+html,
+body {
+
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+
+  min-width: 200px;
+}
+
+.container {
+
+  width: 100%;
+  height: 200px;
+  max-width: 1600px;
+
+  margin-inline: auto;
+
+  padding-inline:
+    clamp(14px, 3vw, 28px);
+}
+
+/* =========================================================
+   FLUID TYPOGRAPHY
+========================================================= */
+
+.account-title {
+
+  font-size:
+    clamp(22px, 4vw, 36px);
+}
+
+.section-header h2 {
+
+  font-size:
+    clamp(20px, 3vw, 30px);
+}
+
+.profile-content h2 {
+
+  font-size:
+    clamp(22px, 4vw, 34px);
+}
+
+.order-status {
+
+  font-size:
+    clamp(18px, 3vw, 28px);
+}
+
+.loyalty-member h3 {
+
+  font-size:
+    clamp(20px, 3vw, 28px);
+}
+
+.loyalty-points h2 {
+
+  font-size:
+    clamp(30px, 5vw, 48px);
+}
+
+/* =========================================================
+   AUTO FLEXIBLE HEADER
+========================================================= */
+
+.account-header-inner {
+
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+.header-icons {
+
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   HERO CARD RESPONSIVE
+========================================================= */
+
+.account-hero {
+
+  width: 100%;
+
+  min-height: 200px;
+
+  padding:
+    clamp(20px, 4vw, 38px);
+
+  border-radius:
+    clamp(20px, 3vw, 36px);
+}
+
+.hero-top {
+
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 24px;
+
+  flex-wrap: wrap;
+}
+
+.profile-section {
+
+  flex: 1;
+
+  min-width: 260px;
+
+  display: flex;
+  align-items: center;
+
+  gap:
+    clamp(14px, 2vw, 24px);
+
+  flex-wrap: wrap;
+}
+
+.profile-avatar {
+
+  width:
+    clamp(75px, 10vw, 500px);
+
+  height:
+    clamp(75px, 10vw, 110px);
+
+  flex-shrink: 0;
+}
+
+.edit-profile-btn {
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   REWARD GRID AUTO-FIT
+========================================================= */
+
+.rewards-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+
+  gap:
+    clamp(16px, 2vw, 24px);
+}
+
+.reward-card {
+
+  width: 100%;
+}
+
+/* =========================================================
+   SECTION HEADERS
+========================================================= */
+
+.section-header {
+
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   ORDER CARD RESPONSIVE
+========================================================= */
+
+.order-card {
+
+  width: 100%;
+
+  overflow: hidden;
+}
+
+.order-top {
+
+  display: flex;
+
+  gap:
+    clamp(18px, 3vw, 28px);
+
+  flex-wrap: wrap;
+
+  align-items: flex-start;
+}
+
+.order-image {
+
+  width:
+    clamp(120px, 18vw, 160px);
+
+  height:
+    clamp(120px, 18vw, 160px);
+
+  flex-shrink: 0;
+}
+
+.order-info {
+
+  flex: 1;
+
+  min-width: 240px;
+}
+
+/* =========================================================
+   TRACKER RESPONSIVE
+========================================================= */
+
+.delivery-tracker {
+
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+.tracker-labels {
+
+  min-width: 520px;
+
+  gap: 14px;
+}
+
+.progress-track {
+
+  min-width: 520px;
+}
+
+/* =========================================================
+   QUICK ACTIONS AUTO GRID
+========================================================= */
+
+.quick-actions {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(180px, 1fr));
+
+  gap:
+    clamp(16px, 2vw, 24px);
+}
+
+/* =========================================================
+   HORIZONTAL PRODUCT ROW
+========================================================= */
+
+.horizontal-scroll {
+
+  width: 100%;
+
+  overflow-x: auto;
+
+  scroll-snap-type: x mandatory;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+.product-mini-card {
+
+  flex-shrink: 0;
+
+  width:
+    clamp(170px, 24vw, 220px);
+
+  scroll-snap-align: start;
+}
+
+.product-mini-card img {
+
+  height:
+    clamp(160px, 22vw, 220px);
+}
+
+/* =========================================================
+   LOYALTY CARD
+========================================================= */
+
+.loyalty-card {
+
+  width: 100%;
+
+  padding:
+    clamp(22px, 4vw, 36px);
+
+  border-radius:
+    clamp(22px, 3vw, 30px);
+}
+
+.loyalty-top {
+
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  flex-wrap: wrap;
+}
+
+.loyalty-member {
+
+  flex: 1;
+
+  min-width: 240px;
+}
+
+.loyalty-points {
+
+  min-width: 120px;
+}
+
+/* =========================================================
+   SETTINGS GRID RESPONSIVE
+========================================================= */
+
+.settings-grid {
+
+  width: 100%;
+}
+
+.settings-item {
+
+  width: 100%;
+
+  gap: 14px;
+
+  flex-wrap: wrap;
+}
+
+.settings-left {
+
+  flex: 1;
+
+  min-width: 220px;
+}
+
+/* =========================================================
+   SUPPORT GRID AUTO FIT
+========================================================= */
+
+.support-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(180px, 1fr));
+
+  gap:
+    clamp(16px, 2vw, 24px);
+}
+
+/* =========================================================
+   POLICY ROWS
+========================================================= */
+
+.policy-row {
+
+  width: 100%;
+
+  gap: 14px;
+
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   MODAL RESPONSIVE
+========================================================= */
+
+.modal {
+
+  padding:
+    clamp(14px, 2vw, 24px);
+}
+
+.modal-content {
+
+  width: 100%;
+
+  max-width: 680px;
+
+  max-height: 92vh;
+
+  overflow-y: auto;
+
+  border-radius:
+    clamp(20px, 3vw, 30px);
+
+  padding:
+    clamp(20px, 4vw, 36px);
+}
+
+/* =========================================================
+   FORM RESPONSIVE
+========================================================= */
+
+input,
+textarea,
+select {
+
+  width: 100%;
+
+  font-size:
+    clamp(14px, 2vw, 16px);
+}
+
+/* =========================================================
+   BUTTON RESPONSIVE
+========================================================= */
+
+.btn,
+.edit-profile-btn,
+.view-all-btn {
+
+  min-height: 48px;
+}
+
+.btn {
+
+  width: auto;
+
+  max-width: 100%;
+}
+
+/* =========================================================
+   TABLET — 1024px
+========================================================= */
+
+@media (max-width: 1024px) {
+
+  .account-hero {
+
+    min-height: auto;
+  }
+
+  .hero-top {
+
+    align-items: flex-start;
+  }
+
+  .quick-actions {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .support-grid {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .rewards-grid {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+}
+
+/* =========================================================
+   TABLET — 900px
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .hero-top {
+
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .loyalty-top {
+
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-section {
+
+    width: 100%;
+  }
+
+  .edit-profile-btn {
+
+    width: 100%;
+  }
+
+  .rewards-grid {
+
+    grid-template-columns:
+      1fr;
+  }
+}
+
+/* =========================================================
+   MOBILE — 768px
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .account-header-inner {
+
+    min-height: auto;
+
+    padding-block: 12px;
+  }
+
+  .header-icons {
+
+    gap: 12px;
+  }
+
+  .header-icon {
+
+    width: 46px;
+    height: 46px;
+  }
+
+  .profile-section {
+
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .order-top {
+
+    flex-direction: column;
+  }
+
+  .order-image {
+
+    width: 100%;
+    height: auto;
+
+    max-height: 260px;
+  }
+
+  .quick-actions {
+
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .support-grid {
+
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .tracker-labels {
+
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE — 600px
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .quick-actions {
+
+    grid-template-columns:
+      1fr;
+  }
+
+  .support-grid {
+
+    grid-template-columns:
+      1fr;
+  }
+
+  .settings-item {
+
+    align-items: flex-start;
+  }
+
+  .policy-row {
+
+    align-items: flex-start;
+  }
+
+  .horizontal-scroll {
+
+    gap: 16px;
+  }
+
+  .product-mini-card {
+
+    width: 180px;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL — 480px
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .container {
+
+    padding-inline: 14px;
+  }
+
+  .account-hero {
+
+    padding: 20px;
+  }
+
+  .reward-card {
+
+    padding: 20px;
+  }
+
+  .quick-action {
+
+    padding: 20px;
+  }
+
+  .support-card {
+
+    padding: 20px;
+  }
+
+  .settings-item {
+
+    padding: 18px;
+  }
+
+  .policy-row {
+
+    padding: 18px;
+  }
+
+  .modal-content {
+
+    padding: 20px;
+  }
+}
+
+/* =========================================================
+   LARGE DESKTOP — 1400px+
+========================================================= */
+
+@media (min-width: 1400px) {
+
+  .container {
+
+    max-width: 1700px;
+  }
+
+  .account-hero {
+
+    padding: 46px;
+  }
+
+  .reward-card {
+
+    min-height: 180px;
+  }
+
+  .product-mini-card {
+
+    width: 240px;
+  }
+}
+
+/* =========================================================
+   ULTRA WIDE SAFETY
+========================================================= */
+
+@media (min-width: 1800px) {
+
+  body {
+
+    display: flex;
+    justify-content: center;
+  }
+
+  #app {
+
+    width: 100%;
+    max-width: 1800px;
+  }
+}
+
+/* =========================================================
+   SAFE IMAGE SCALING
+========================================================= */
+
+img {
+
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================================================
+   FLEX OVERFLOW FIXES
+========================================================= */
+
+* {
+
+  min-width: 0;
+}
+
+/* =========================================================
+   END RESPONSIVE AUTO-FIT SYSTEM
+========================================================= */*/
+/* =========================================================
+   ADVANCED RESPONSIVE AUTO-FIT EXTENSIONS
+   ADD BELOW EXISTING account.css
+   DOES NOT MODIFY EXISTING CSS
+========================================================= */
+
+/* =========================================================
+   UNIVERSAL RESPONSIVE SAFETY
+========================================================= */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+/* =========================================================
+   GLOBAL MEDIA SAFETY
+========================================================= */
+
+img,
+video,
+iframe,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================================================
+   FLEX AUTO WRAP SAFETY
+========================================================= */
+
+.hero-top,
+.profile-section,
+.loyalty-top,
+.order-top,
+.settings-item,
+.policy-row,
+.section-header,
+.account-header-inner,
+.header-icons,
+.settings-left {
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   UNIVERSAL GRID AUTO-FIT
+========================================================= */
+
+.rewards-grid,
+.quick-actions,
+.support-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(240px, 1fr)
+  );
+  gap: 20px;
+}
+
+/* =========================================================
+   ORDER CARDS AUTO SCALING
+========================================================= */
+
+.order-card,
+.reward-card,
+.support-card,
+.quick-action,
+.settings-item,
+.policy-row,
+.loyalty-card,
+.product-mini-card {
+  width: 100%;
+  min-width: 0;
+}
+
+/* =========================================================
+   TEXT OVERFLOW PROTECTION
+========================================================= */
+
+.account-title,
+.profile-content h2,
+.order-name,
+.order-id,
+.reward-card h3,
+.settings-left h3,
+.policy-row h3,
+.support-card h3,
+.product-mini-content h3 {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* =========================================================
+   CONTAINER IMPROVEMENTS
+========================================================= */
+
+.container {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: clamp(14px, 2vw, 28px);
+}
+
+/* =========================================================
+   HORIZONTAL SCROLL FIX
+========================================================= */
+
+.horizontal-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.horizontal-scroll > * {
+  scroll-snap-align: start;
+}
+
+/* =========================================================
+   PROFILE RESPONSIVENESS
+========================================================= */
+
+.profile-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-content h2 {
+  font-size: clamp(22px, 3vw, 34px);
+}
+
+.profile-content p {
+  font-size: clamp(14px, 2vw, 16px);
+}
+
+/* =========================================================
+   HEADER RESPONSIVENESS
+========================================================= */
+
+.account-title {
+  font-size: clamp(22px, 3vw, 34px);
+}
+
+.header-icons {
+  gap: clamp(10px, 2vw, 18px);
+}
+
+.header-icon {
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   BUTTON RESPONSIVENESS
+========================================================= */
+
+.btn,
+.edit-profile-btn,
+.view-all-btn {
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+.btn {
+  font-size: clamp(14px, 1.5vw, 16px);
+}
+
+/* =========================================================
+   INPUT RESPONSIVENESS
+========================================================= */
+
+input,
+textarea,
+select {
+  font-size: 16px;
+  max-width: 100%;
+}
+
+/* =========================================================
+   MODAL RESPONSIVENESS
+========================================================= */
+
+.modal {
+  overflow-y: auto;
+  align-items: flex-start;
+  padding: clamp(10px, 3vw, 24px);
+}
+
+.modal-content {
+  width: min(100%, 760px);
+  max-height: 95vh;
+  overflow-y: auto;
+  margin-top: 40px;
+}
+
+/* =========================================================
+   TABLET LARGE
+========================================================= */
+
+@media (max-width: 1400px) {
+
+  .container {
+    max-width: 1280px;
+  }
+
+  .account-hero {
+    padding: 30px;
+  }
+
+  .rewards-grid,
+  .quick-actions,
+  .support-grid {
+    grid-template-columns:
+      repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+/* =========================================================
+   1200PX
+========================================================= */
+
+@media (max-width: 1200px) {
+
+  .account-header-inner {
+    gap: 20px;
+  }
+
+  .quick-actions,
+  .support-grid,
+  .rewards-grid {
+    grid-template-columns:
+      repeat(2, minmax(0,1fr));
+  }
+
+  .order-image {
+    width: 130px;
+    height: 130px;
+  }
+}
+
+/* =========================================================
+   1024PX
+========================================================= */
+
+@media (max-width: 1024px) {
+
+  .account-hero {
+    padding: 26px;
+  }
+
+  .hero-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-section {
+    width: 100%;
+  }
+
+  .edit-profile-btn {
+    width: 100%;
+  }
+
+  .loyalty-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .settings-item,
+  .policy-row {
+    gap: 16px;
+  }
+}
+
+/* =========================================================
+   900PX
+========================================================= */
+
+@media (max-width: 900px) {
+
+  .order-top {
+    flex-direction: column;
+  }
+
+  .order-image {
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+  }
+
+  .product-mini-card {
+    min-width: 170px;
+  }
+}
+
+/* =========================================================
+   800PX
+========================================================= */
+
+@media (max-width: 800px) {
+
+  .quick-actions,
+  .support-grid,
+  .rewards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-left {
+    width: 100%;
+  }
+
+  .settings-item,
+  .policy-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* =========================================================
+   768PX
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .account-header-inner {
+    min-height: auto;
+    padding-block: 14px;
+  }
+
+  .profile-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-avatar {
+    width: 84px;
+    height: 84px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .section-header h2 {
+    font-size: clamp(20px, 4vw, 26px);
+  }
+
+  .membership-badge {
+    flex-wrap: wrap;
+  }
+}
+
+/* =========================================================
+   700PX
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .account-hero {
+    border-radius: 24px;
+    padding: 22px;
+  }
+
+  .reward-card,
+  .support-card,
+  .quick-action {
+    padding: 22px;
+  }
+
+  .loyalty-card {
+    padding: 24px;
+  }
+
+  .modal-content {
+    border-radius: 24px;
+  }
+}
+
+/* =========================================================
+   640PX
+========================================================= */
+
+@media (max-width: 640px) {
+
+  .container {
+    padding-inline: 14px;
+  }
+
+  .account-title {
+    font-size: 24px;
+  }
+
+  .header-icon {
+    width: 46px;
+    height: 46px;
+  }
+
+  .reward-card p {
+    font-size: 20px;
+  }
+
+  .reward-card i,
+  .quick-action i,
+  .support-card i {
+    font-size: 28px;
+  }
+
+  .loyalty-points h2 {
+    font-size: 34px;
+  }
+}
+
+/* =========================================================
+   600PX
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .account-hero {
+    padding: 20px;
+  }
+
+  .modal-content {
+    padding: 22px;
+  }
+
+  .product-mini-card {
+    min-width: 150px;
+  }
+
+  .settings-left i {
+    width: 46px;
+    height: 46px;
+  }
+}
+
+/* =========================================================
+   500PX
+========================================================= */
+
+@media (max-width: 500px) {
+
+  .container {
+    padding-inline: 12px;
+  }
+
+  .profile-content h2 {
+    font-size: 22px;
+  }
+
+  .profile-content p {
+    font-size: 14px;
+  }
+
+  .membership-badge {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .header-icons {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .order-card,
+  .settings-item,
+  .policy-row,
+  .support-card,
+  .reward-card,
+  .quick-action {
+    padding: 18px;
+  }
+}
+
+/* =========================================================
+   420PX
+========================================================= */
+
+@media (max-width: 420px) {
+
+  .account-title {
+    font-size: 20px;
+  }
+
+  .profile-avatar {
+    width: 72px;
+    height: 72px;
+  }
+
+  .header-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .notification-badge {
+    width: 18px;
+    height: 18px;
+    font-size: 9px;
+  }
+
+  .reward-card,
+  .support-card,
+  .quick-action {
+    border-radius: 18px;
+  }
+
+  .modal-content {
+    padding: 18px;
+  }
+}
+
+/* =========================================================
+   ULTRA WIDE SAFETY
+========================================================= */
+
+@media (min-width: 1700px) {
+
+  .container {
+    max-width: 1680px;
+  }
+
+  .rewards-grid,
+  .quick-actions,
+  .support-grid {
+    grid-template-columns:
+      repeat(4, minmax(0,1fr));
+  }
+}
+
+/* =========================================================
+   TOUCH DEVICE OPTIMIZATION
+========================================================= */
+
+@media (hover: none) {
+
+  .quick-action:hover,
+  .reward-card:hover,
+  .support-card:hover,
+  .settings-item:hover,
+  .policy-row:hover,
+  .product-mini-card:hover {
+    transform: none;
+  }
+}
+
+/* =========================================================
+   LANDSCAPE PHONE OPTIMIZATION
+========================================================= */
+
+@media (max-height: 500px) and (orientation: landscape) {
+
+  .modal {
+    align-items: flex-start;
+  }
+
+  .modal-content {
+    margin-top: 20px;
+    max-height: 88vh;
+  }
+
+  .account-hero {
+    min-height: auto;
+  }
+}
+
+/* =========================================================
+   SAFE GRID FALLBACKS
+========================================================= */
+
+.grid,
+.row {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(240px,1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+/* =========================================================
+   SAFE SECTION WIDTHS
+========================================================= */
+
+section,
+main,
+aside,
+header,
+footer {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* =========================================================
+   PERFORMANCE
+========================================================= */
+
+.reward-card,
+.quick-action,
+.support-card,
+.product-mini-card,
+.settings-item,
+.policy-row {
+  will-change: transform;
+}
+
+/* =========================================================
+   END RESPONSIVE EXTENSIONS
+========================================================= */
+/* =========================================================
+   SHOPEASE ACCOUNT.CSS EXTENSION
+   ADVANCED RESPONSIVE MOBILE + DESKTOP ENHANCEMENTS
+   ADD BELOW EXISTING account.css
+   DOES NOT REMOVE OR CHANGE EXISTING CSS
+========================================================= */
+
+/* =========================================================
+   GLOBAL RESPONSIVE SCALING
+========================================================= */
+
+html {
+  font-size: clamp(14px, 1vw, 16px);
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   CONTAINER IMPROVEMENTS
+========================================================= */
+
+.container,
+.account-container {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: clamp(14px, 2vw, 28px);
+}
+
+/* Prevent giant stretched layouts */
+.account-page,
+.account-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* =========================================================
+   HERO SECTION RESPONSIVE
+========================================================= */
+
+.account-hero,
+.hero,
+.hero-container {
+  width: 100%;
+  min-height: 400px;
+  height: auto;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Hero content spacing */
+.hero-overlay,
+.hero-content {
+  padding: clamp(18px, 3vw, 42px);
+}
+
+/* Hero images fit perfectly */
+.hero img,
+.account-hero img,
+.hero-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =========================================================
+   PRODUCT / FAVORITES / WISHLIST BOXES
+========================================================= */
+
+.wishlist-item,
+.favorite-item,
+.favorites-item,
+.saved-item,
+.product-mini-card,
+.quick-product-card,
+.recent-product,
+.p-card {
+  width: 100%;
+  min-width: 150px;
+  max-width: 100%;
+  min-height: 150px;
+  border-radius: 22px;
+  overflow: hidden;
+  transition: all .3s ease;
+}
+
+/* Product image sizing */
+.wishlist-item img,
+.favorite-item img,
+.saved-item img,
+.p-card img,
+.product-mini-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+/* Hover effects */
+.wishlist-item:hover,
+.favorite-item:hover,
+.saved-item:hover,
+.p-card:hover,
+.product-mini-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,.18);
+}
+
+/* =========================================================
+   RESPONSIVE PRODUCT GRIDS
+========================================================= */
+
+.products-grid,
+.product-grid,
+.wishlist-grid,
+.favorites-grid,
+.saved-grid,
+.orders-grid,
+.grid.products {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(150px, 1fr));
+  gap: clamp(10px, 2vw, 22px);
+  width: 100%;
+}
+
+/* =========================================================
+   STANDARD TEXT SYSTEM
+========================================================= */
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  line-height: 1.3;
+}
+
+h4 {
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+}
+
+p,
+span,
+li,
+a,
+button,
+input,
+textarea,
+select {
+  font-size: clamp(.92rem, 1vw, 1rem);
+  line-height: 1.6;
+}
+
+/* =========================================================
+   ACCOUNT HEADER RESPONSIVE
+========================================================= */
+
+.account-header {
+  width: 100%;
+  backdrop-filter: blur(12px);
+}
+
+.account-header-inner {
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   PROFILE SECTION RESPONSIVE
+========================================================= */
+
+.profile-section {
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.profile-avatar {
+  width: clamp(72px, 12vw, 110px);
+  height: clamp(72px, 12vw, 110px);
+}
+
+.profile-content {
+  flex: 1;
+  min-width: 220px;
+}
+
+/* =========================================================
+   REWARDS GRID AUTO FIT
+========================================================= */
+
+.rewards-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* =========================================================
+   QUICK ACTIONS RESPONSIVE
+========================================================= */
+
+.quick-actions {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
+}
+
+/* =========================================================
+   SUPPORT GRID RESPONSIVE
+========================================================= */
+
+.support-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+/* =========================================================
+   SETTINGS RESPONSIVE
+========================================================= */
+
+.settings-item,
+.policy-row {
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   MODAL RESPONSIVE ENHANCEMENTS
+========================================================= */
+
+.modal-content,
+#productModal .modal-content.glassy {
+  width: min(98%, 1500px);
+  max-height: 95vh;
+  overflow-y: auto;
+  border-radius: 28px;
+}
+
+/* Product modal layout */
+#productModal .modal-content.glassy {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Viewer responsiveness */
+#productModal .viewer {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+#productModal .viewer img {
+  width: 100%;
+  max-width: 100%;
+  height: clamp(260px, 50vw, 700px);
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   HORIZONTAL SCROLL MOBILE IMPROVEMENTS
+========================================================= */
+
+.horizontal-scroll,
+.row {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding-bottom: 10px;
+}
+
+.horizontal-scroll > *,
+.row > * {
+  scroll-snap-align: start;
+}
+
+/* =========================================================
+   BUTTON RESPONSIVE SYSTEM
+========================================================= */
+
+.btn,
+button {
+  min-height: 44px;
+  min-width: 44px;
+  font-size: clamp(.9rem, 1vw, 1rem);
+}
+
+/* =========================================================
+   FORM CONTROLS
+========================================================= */
+
+input,
+textarea,
+select {
+  width: 100%;
+  max-width: 100%;
+  font-size: 1rem;
+}
+
+/* =========================================================
+   IMAGE SAFETY
+========================================================= */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================================================
+   LARGE DESKTOPS
+========================================================= */
+
+@media (min-width: 1600px) {
+
+  .container,
+  .account-container {
+    max-width: 1700px;
+  }
+
+  .products-grid,
+  .wishlist-grid,
+  .favorites-grid {
+    grid-template-columns:
+      repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+/* =========================================================
+   LAPTOPS
+========================================================= */
+
+@media (max-width: 1200px) {
+
+  .account-hero {
+    min-height: 380px;
+  }
+
+  #productModal .modal-content.glassy {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions,
+  .support-grid,
+  .rewards-grid {
+    grid-template-columns:
+      repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+/* =========================================================
+   TABLETS
+========================================================= */
+
+@media (max-width: 1024px) {
+
+  .hero,
+  .account-hero {
+    min-height: 340px;
+  }
+
+  .account-header-inner {
+    justify-content: center;
+  }
+
+  .profile-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .quick-actions,
+  .support-grid,
+  .rewards-grid,
+  .products-grid {
+    grid-template-columns:
+      repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+/* =========================================================
+   MOBILE LARGE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .container,
+  .account-container {
+    padding-inline: 14px;
+  }
+
+  .account-hero,
+  .hero {
+    min-height: 300px;
+    border-radius: 24px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .quick-actions,
+  .support-grid,
+  .rewards-grid,
+  .products-grid,
+  .wishlist-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .modal-content {
+    padding: 22px;
+  }
+
+  .settings-item,
+  .policy-row {
+    padding: 18px;
+  }
+}
+
+/* =========================================================
+   MOBILE SMALL
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .account-hero,
+  .hero {
+    min-height: 200px;
+  }
+
+  .quick-actions,
+  .support-grid,
+  .rewards-grid,
+  .products-grid,
+  .wishlist-grid,
+  .favorites-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .wishlist-item,
+  .favorite-item,
+  .saved-item,
+  .p-card {
+    min-width: 100%;
+  }
+
+  .wishlist-item img,
+  .favorite-item img,
+  .saved-item img,
+  .p-card img {
+    height: 150px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  p,
+  span,
+  li,
+  a {
+    font-size: .95rem;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL DEVICES
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .container,
+  .account-container {
+    padding-inline: 10px;
+  }
+
+  .account-hero,
+  .hero {
+    min-height: 160px;
+    border-radius: 20px;
+  }
+
+  .profile-avatar {
+    width: 74px;
+    height: 74px;
+  }
+
+  .quick-actions,
+  .support-grid,
+  .rewards-grid,
+  .products-grid,
+  .wishlist-grid,
+  .favorites-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-icons {
+    gap: 10px;
+  }
+
+  .header-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .modal-content {
+    border-radius: 20px;
+    padding: 18px;
+  }
+}
+
+/* =========================================================
+   ULTRA SMALL DEVICES
+========================================================= */
+
+@media (max-width: 360px) {
+
+  html {
+    font-size: 13px;
+  }
+
+  .account-title {
+    font-size: 1.4rem;
+  }
+
+  .account-hero,
+  .hero {
+    min-height: 200px;
+  }
+
+  .profile-content h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* =========================================================
+   SMOOTH PREMIUM EFFECTS
+========================================================= */
+
+.account-hero,
+.reward-card,
+.quick-action,
+.support-card,
+.settings-item,
+.policy-row,
+.product-mini-card,
+.p-card,
+.wishlist-item,
+.favorite-item {
+  backdrop-filter: blur(12px);
+}
+
+/* =========================================================
+   PREMIUM CARD HOVER
+========================================================= */
+
+.reward-card:hover,
+.quick-action:hover,
+.support-card:hover,
+.settings-item:hover,
+.policy-row:hover,
+.product-mini-card:hover,
+.p-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.18);
+}
+
+/* =========================================================
+   END EXTENSION
+========================================================= */
+/* =========================================
+   PROFILE HERO CARD IMPROVEMENTS
+   Works alongside existing hero/mini-card layout
+========================================= */
+
+:root {
+  --profile-radius: 24px;
+  --profile-padding: 20px;
+}
+
+/* ---------- HERO CARD BASE ---------- */
+section.bg-black {
+    border-radius: var(--profile-radius) !important;
+    padding: var(--profile-padding) !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 18px;
+    min-height: auto;
+}
+
+/* ---------- TOP FLEX AREA ---------- */
+section.bg-black > div:first-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+/* ---------- LEFT PROFILE ---------- */
+section.bg-black .flex.items-center.gap-6 {
+    gap: 14px !important;
+    align-items: center;
+}
+
+#profile-image {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    object-fit: cover;
+}
+
+#user-name {
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    line-height: 1.1;
+    font-weight: 800;
+    margin: 0;
+}
+
+#membership-tier {
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    color: #d1d5db;
+    margin-top: 4px;
+}
+
+/* BADGES */
+section.bg-black span {
+    font-size: clamp(0.65rem, 0.9vw, 0.85rem);
+    padding: 6px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+
+/* ---------- RIGHT BUTTONS ---------- */
+section.bg-black .flex.flex-col.gap-4 {
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+section.bg-black button {
+    width: auto;
+    min-width: 140px;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+section.bg-black button i {
+    font-size: 0.85rem;
+    margin-right: 6px;
+}
+
+/* ---------- DIVIDER ---------- */
+section.bg-black .w-full.h-px {
+    margin: 18px 0 !important;
+    background-color: rgba(255,255,255,0.1);
+}
+
+/* ---------- REWARD GRID ---------- */
+section.bg-black .grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+section.bg-black .grid > div {
+    min-height: 140px;
+    padding: 18px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgba(255,255,255,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section.bg-black .grid > div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+#reward-points,
+#cashback-balance,
+#coupon-count {
+    font-size: clamp(1.4rem, 2vw, 2.5rem);
+    font-weight: 900;
+    margin-top: 10px;
+    line-height: 1.05;
+}
+
+section.bg-black .grid p:first-child {
+    font-size: clamp(0.75rem, 0.9vw, 0.95rem);
+    color: #9ca3af;
+}
+
+section.bg-black .grid p:last-child {
+    font-size: clamp(0.7rem, 0.9vw, 0.85rem);
+    color: #9ca3af;
+    margin-top: 4px;
+}
+
+section.bg-black .grid i {
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+}
+
+/* ---------- RESPONSIVE ADJUSTMENTS ---------- */
+
+/* Tablets */
+@media (max-width: 1024px) {
+    section.bg-black {
+        padding: 18px;
+    }
+    #profile-image {
+        width: 70px;
+        height: 70px;
+    }
+    #user-name {
+        font-size: 1.6rem;
+    }
+    #membership-tier {
+        font-size: 0.85rem;
+    }
+    section.bg-black button {
+        min-width: 120px;
+        font-size: 0.8rem;
+        padding: 8px 14px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+    section.bg-black {
+        padding: 14px;
+        border-radius: 18px;
+    }
+    section.bg-black > div:first-child {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #profile-image {
+        width: 60px;
+        height: 60px;
+    }
+    #user-name {
+        font-size: 1.3rem;
+    }
+    #membership-tier {
+        font-size: 0.75rem;
+    }
+    section.bg-black button {
+        width: 100%;
+        font-size: 0.78rem;
+        padding: 8px 12px;
+    }
+    section.bg-black .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    section.bg-black .grid > div {
+        min-height: 120px;
+        padding: 14px;
+    }
+    #reward-points,
+    #cashback-balance,
+    #coupon-count {
+        font-size: 1.2rem;
+    }
+}
+/* =========================================
+   COMPACT HERO SECTION HEIGHT FIX
+========================================= */
+
+/* MAIN CONTAINER */
+main.max-w-7xl {
+    padding-top: 12px !important;
+}
+
+/* PROFILE HERO */
+section.bg-black {
+
+    /* FIX HEIGHT */
+    height: 30vh !important;
+    min-height: 260px !important;
+    max-height: 340px !important;
+
+    /* POSITION */
+    margin-top: 0 !important;
+
+    /* PREVENT FULL PAGE EXPANSION */
+    flex: 0 0 auto !important;
+
+    /* INTERNAL LAYOUT */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+}
+
+/* TOP SECTION */
+section.bg-black > div:first-child {
+
+    flex: 0 0 auto;
+    align-items: center;
+}
+
+/* REMOVE EXCESS SPACE */
+section.bg-black .w-full.h-px {
+    margin-top: 12px !important;
+    margin-bottom: 12px !important;
+}
+
+/* REWARD GRID */
+section.bg-black .grid {
+
+    flex: 1;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+
+    align-items: stretch;
+}
+
+/* REWARD CARDS */
+section.bg-black .grid > div {
+
+    min-height: unset !important;
+
+    height: 100%;
+
+    padding: 14px !important;
+}
+
+/* BIG NUMBERS */
+#reward-points,
+#cashback-balance,
+#coupon-count {
+
+    font-size: clamp(1.2rem, 2vw, 2rem) !important;
+
+    margin-top: 6px !important;
+}
+
+/* BUTTONS */
+section.bg-black button {
+
+    padding: 8px 14px !important;
+
+    min-width: 140px !important;
+
+    font-size: 0.8rem !important;
+}
+
+/* USER IMAGE */
+#profile-image {
+
+    width: 68px !important;
+    height: 68px !important;
+    min-width: 68px !important;
+}
+
+/* USER NAME */
+#user-name {
+
+    font-size: clamp(1.2rem, 2vw, 2rem) !important;
+}
+
+/* MEMBERSHIP */
+#membership-tier {
+
+    font-size: 0.8rem !important;
+}
+
+/* BADGES */
+section.bg-black span {
+
+    padding: 5px 10px !important;
+
+    font-size: 0.7rem !important;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1024px) {
+
+    section.bg-black {
+
+        height: auto !important;
+        min-height: 280px !important;
+    }
+
+    section.bg-black .grid {
+
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+
+    section.bg-black {
+
+        height: auto !important;
+
+        min-height: auto !important;
+
+        padding: 14px !important;
+    }
+
+    section.bg-black > div:first-child {
+
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px !important;
+    }
+
+    section.bg-black .grid {
+
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 8px;
+    }
+
+    section.bg-black .grid > div {
+
+        padding: 10px !important;
+
+        border-radius: 14px !important;
+    }
+
+    #reward-points,
+    #cashback-balance,
+    #coupon-count {
+
+        font-size: 1rem !important;
+    }
+
+    section.bg-black button {
+
+        width: 100% !important;
+
+        min-width: 100% !important;
+    }
+}
+/* =========================================
+   GLOBAL RESPONSIVE ZOOM SYSTEM
+========================================= */
+
+:root {
+
+    /* =====================================
+       MASTER SCALE FACTOR
+    ===================================== */
+
+    --scale-factor: clamp(0.78, 0.72 + 0.45vw, 1.08);
+
+    /* TYPOGRAPHY */
+    --text-xs: calc(0.65rem * var(--scale-factor));
+    --text-sm: calc(0.82rem * var(--scale-factor));
+    --text-md: calc(1rem * var(--scale-factor));
+    --text-lg: calc(1.2rem * var(--scale-factor));
+    --text-xl: calc(1.6rem * var(--scale-factor));
+    --text-2xl: calc(2.2rem * var(--scale-factor));
+
+    /* SPACING */
+    --space-xs: calc(4px * var(--scale-factor));
+    --space-sm: calc(8px * var(--scale-factor));
+    --space-md: calc(16px * var(--scale-factor));
+    --space-lg: calc(24px * var(--scale-factor));
+    --space-xl: calc(32px * var(--scale-factor));
+
+    /* RADIUS */
+    --radius-sm: calc(10px * var(--scale-factor));
+    --radius-md: calc(18px * var(--scale-factor));
+    --radius-lg: calc(28px * var(--scale-factor));
+
+    /* BUTTONS */
+    --btn-padding-y: calc(10px * var(--scale-factor));
+    --btn-padding-x: calc(18px * var(--scale-factor));
+
+    /* CARDS */
+    --card-padding: calc(18px * var(--scale-factor));
+}
+
+/* =========================================
+   GLOBAL PAGE SCALING
+========================================= */
+
+html {
+
+    font-size: calc(15px * var(--scale-factor));
+
+    scroll-behavior: smooth;
+}
+
+body {
+
+    overflow-x: hidden;
+
+    text-rendering: optimizeLegibility;
+
+    -webkit-font-smoothing: antialiased;
+
+    min-width: 320px;
+}
+
+/* =========================================
+   MAIN CONTAINERS
+========================================= */
+
+main,
+.container,
+.wrapper,
+.dashboard,
+.content {
+
+    width: 100%;
+
+    max-width: 100%;
+
+    padding-left: clamp(10px, 2vw, 28px);
+    padding-right: clamp(10px, 2vw, 28px);
+
+    box-sizing: border-box;
+}
+
+/* =========================================
+   GLOBAL FLEX + GRID FIXES
+========================================= */
+
+* {
+
+    box-sizing: border-box;
+
+    min-width: 0;
+}
+
+/* FLEX ITEMS */
+.flex,
+[class*="flex"] {
+
+    min-width: 0;
+}
+
+/* GRID ITEMS */
+.grid,
+[class*="grid"] {
+
+    min-width: 0;
+}
+
+/* =========================================
+   TYPOGRAPHY
+========================================= */
+
+h1 {
+
+    font-size: clamp(1.8rem, 4vw, 3.8rem);
+}
+
+h2 {
+
+    font-size: clamp(1.5rem, 3vw, 3rem);
+}
+
+h3 {
+
+    font-size: clamp(1.2rem, 2vw, 2rem);
+}
+
+h4 {
+
+    font-size: clamp(1rem, 1.5vw, 1.5rem);
+}
+
+p,
+span,
+li,
+a,
+button,
+input,
+textarea {
+
+    font-size: var(--text-sm);
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+button,
+.btn {
+
+    padding:
+        var(--btn-padding-y)
+        var(--btn-padding-x);
+
+    border-radius: var(--radius-sm);
+
+    font-size: var(--text-sm);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+    white-space: nowrap;
+}
+
+button:hover,
+.btn:hover {
+
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.card,
+[class*="card"],
+section {
+
+    border-radius: var(--radius-md);
+
+    padding: var(--card-padding);
+
+    overflow: hidden;
+}
+
+/* =========================================
+   IMAGES
+========================================= */
+
+img {
+
+    max-width: 100%;
+
+    height: auto;
+
+    object-fit: cover;
+}
+
+/* =========================================
+   ICONS
+========================================= */
+
+i,
+svg {
+
+    flex-shrink: 0;
+}
+
+/* =========================================
+   INPUTS
+========================================= */
+
+input,
+textarea,
+select {
+
+    width: 100%;
+
+    padding:
+        calc(10px * var(--scale-factor))
+        calc(14px * var(--scale-factor));
+
+    border-radius: var(--radius-sm);
+
+    font-size: var(--text-sm);
+}
+
+/* =========================================
+   TABLETS
+========================================= */
+
+@media (max-width: 1024px) {
+
+    :root {
+
+        --scale-factor: clamp(0.72, 0.65 + 0.35vw, 0.92);
+    }
+
+    .grid {
+
+        gap: calc(10px * var(--scale-factor));
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    :root {
+
+        --scale-factor: clamp(0.65, 0.6 + 0.25vw, 0.85);
+    }
+
+    body {
+
+        overflow-x: hidden;
+    }
+
+    .flex-row,
+    [class*="flex-row"] {
+
+        flex-wrap: wrap;
+    }
+
+    button,
+    .btn {
+
+        width: 100%;
+    }
+
+    .grid {
+
+        gap: 8px;
+    }
+}
+
+/* =========================================
+   SMALL PHONES
+========================================= */
+
+@media (max-width: 480px) {
+
+    :root {
+
+        --scale-factor: 0.62;
+    }
+
+    html {
+
+        font-size: 13px;
+    }
+}
+
+/* =========================================
+   ULTRA WIDE SCREENS
+========================================= */
+
+@media (min-width: 1600px) {
+
+    :root {
+
+        --scale-factor: 1.12;
+    }
+
+    body {
+
+        max-width: 1800px;
+
+        margin: 0 auto;
+    }
+}
+  </style>
+</head>
+<b
+<body<body class="bg-gray-100 font-sans antialiased text-gray-800">
+
+  <!-- ===================================================== -->
+  <!-- APP WRAPPER -->
+  <!-- ===================================================== -->
+  <div id="app" class="min-h-screen flex flex-col">
+
+    <!-- ===================================================== -->
+    <!-- TOP HEADER -->
+    <!-- ===================================================== -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 lg:px-8 py-4 flex items-center justify-between">
+
+        <!-- LEFT -->
+        <div class="flex items-center gap-8">
+          <h1 class="text-3xl font-black tracking-tight text-gray-900">
+            My Account
+          </h1>
+
+          <!-- SEARCH -->
+          <div class="hidden lg:flex relative w-[450px]">
+            <input
+              type="text"
+              placeholder="Search products, orders, brands..."
+              class="w-full rounded-full border border-gray-300 py-3 pl-12 pr-5 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            />
+            <i class="fas fa-search absolute left-5 top-4 text-gray-400"></i>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="flex items-center gap-6">
+
+          <!-- NOTIFICATION -->
+          <button
+            id="notificationBtn"
+            class="relative w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 transition flex items-center justify-center"
+          >
+            <i class="fas fa-bell text-xl text-gray-700"></i>
+
+            <span
+              id="notification-count"
+              class="absolute top-1 right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center"
+            >
+              3
+            </span>
+          </button>
+
+          <!-- SETTINGS -->
+          <button
+            id="settingsBtn"
+            class="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 transition flex items-center justify-center"
+          >
+            <i class="fas fa-cog text-xl text-gray-700"></i>
+          </button>
+
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================================================== -->
+    <!-- MAIN -->
+    <!-- ===================================================== -->
+    <main class="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-10 flex-1">
+
+      <!-- ===================================================== -->
+      <!-- PROFILE HERO CARD -->
+      <!-- ===================================================== -->
+      <section
+        class="bg-black text-white rounded-[32px] p-8 lg:p-10 overflow-hidden relative"
+      >
+
+        <!-- TOP -->
+        <div class="flex flex-col lg:flex-row justify-between lg:items-center gap-8">
+
+          <!-- LEFT -->
+          <div class="flex items-center gap-6">
+
+            <img
+              id="profile-image"
+              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+              class="w-28 h-28 rounded-full border-4 border-white object-cover"
+            />
+
+            <div>
+              <h2
+                id="user-name"
+                class="text-4xl font-black"
+              >
+                Hi, John Doe
+              </h2>
+
+              <p
+                id="membership-tier"
+                class="mt-2 text-lg text-gray-300"
+              >
+                VIP Gold Member
+              </p>
+
+              <div class="flex flex-wrap gap-3 mt-5">
+
+                <span class="bg-white/10 px-4 py-2 rounded-full text-sm">
+                  Verified Account
+                </span>
+
+                <span class="bg-yellow-500/20 text-yellow-300 px-4 py-2 rounded-full text-sm">
+                  Premium Benefits Active
+                </span>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT -->
+          <div class="flex flex-col gap-4">
+
+            <button
+              class="bg-white text-black px-6 py-3 rounded-2xl font-semibold hover:bg-gray-200 transition"
+            >
+              <i class="fas fa-user-edit mr-2"></i>
+              Edit Profile
+            </button>
+
+            <button
+              class="bg-indigo-600 px-6 py-3 rounded-2xl font-semibold hover:bg-indigo-700 transition"
+            >
+              <i class="fas fa-crown mr-2"></i>
+              Upgrade Membership
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="w-full h-px bg-white/10 my-10"></div>
+
+        <!-- REWARDS GRID -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+          <!-- REWARD POINTS -->
+          <div class="bg-white/5 rounded-3xl p-6">
+
+            <div class="flex items-center justify-between">
+              <p class="text-gray-400">Reward Points</p>
+              <i class="fas fa-star text-yellow-400 text-2xl"></i>
+            </div>
+
+            <h3
+              id="reward-points"
+              class="text-5xl font-black mt-6"
+            >
+              750
+            </h3>
+
+            <p class="text-gray-400 mt-2">
+              Earn points on every purchase
+            </p>
+
+          </div>
+
+          <!-- CASHBACK -->
+          <div class="bg-white/5 rounded-3xl p-6">
+
+            <div class="flex items-center justify-between">
+              <p class="text-gray-400">Cashback Wallet</p>
+              <i class="fas fa-wallet text-green-400 text-2xl"></i>
+            </div>
+
+            <h3
+              id="cashback-balance"
+              class="text-5xl font-black mt-6"
+            >
+              KSh 5,200
+            </h3>
+
+            <p class="text-gray-400 mt-2">
+              Available cashback balance
+            </p>
+
+          </div>
+
+          <!-- COUPONS -->
+          <div class="bg-white/5 rounded-3xl p-6">
+
+            <div class="flex items-center justify-between">
+              <p class="text-gray-400">Coupons</p>
+              <i class="fas fa-ticket-alt text-pink-400 text-2xl"></i>
+            </div>
+
+            <h3
+              id="coupon-count"
+              class="text-5xl font-black mt-6"
+            >
+              12
+            </h3>
+
+            <p class="text-gray-400 mt-2">
+              Active discount coupons
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+      <style>
+       Add this extra CSS below your current styles.
+It compresses the hero section height, reduces oversized spacing, makes buttons compact, scales typography better, and keeps everything balanced across desktop/tablet/mobile.
+
+/* =========================================
+   COMPACT PROFILE HERO LAYOUT
+========================================= */
+
+section.bg-black {
+
+    /* reduce oversized spacing */
+    padding: 24px !important;
+
+    /* compact height */
+    min-height: auto !important;
+
+    border-radius: 28px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* =========================================
+   TOP FLEX AREA
+========================================= */
+
+section.bg-black > div:first-child {
+
+    gap: 20px !important;
+    align-items: center;
+}
+
+/* =========================================
+   LEFT PROFILE AREA
+========================================= */
+
+section.bg-black .flex.items-center.gap-6 {
+
+    gap: 16px !important;
+    flex-wrap: wrap;
+}
+
+/* PROFILE IMAGE */
+#profile-image {
+
+    width: 88px !important;
+    height: 88px !important;
+    min-width: 88px !important;
+
+    border-width: 3px !important;
+}
+
+/* =========================================
+   USER TEXT
+========================================= */
+
+#user-name {
+
+    font-size: clamp(1.5rem, 2.5vw, 2.4rem) !important;
+    line-height: 1.05;
+
+    margin: 0;
+}
+
+#membership-tier {
+
+    margin-top: 6px !important;
+
+    font-size: clamp(0.85rem, 1vw, 1rem) !important;
+}
+
+/* BADGES */
+section.bg-black span {
+
+    padding: 7px 14px !important;
+
+    font-size: 0.75rem !important;
+
+    border-radius: 999px;
+}
+
+/* =========================================
+   BUTTON AREA
+========================================= */
+
+section.bg-black .flex.flex-col.gap-4 {
+
+    gap: 10px !important;
+}
+
+/* BUTTONS */
+section.bg-black button {
+
+    width: auto !important;
+
+    min-width: 180px !important;
+
+    padding: 11px 18px !important;
+
+    font-size: 0.88rem !important;
+
+    border-radius: 16px !important;
+
+    white-space: nowrap;
+}
+
+/* BUTTON ICONS */
+section.bg-black button i {
+
+    font-size: 0.9rem !important;
+}
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+section.bg-black .w-full.h-px {
+
+    margin-top: 24px !important;
+    margin-bottom: 24px !important;
+}
+
+/* =========================================
+   REWARD CARDS COMPACT
+========================================= */
+
+section.bg-black .grid > div {
+
+    min-height: 145px !important;
+
+    padding: 18px !important;
+}
+
+/* CARD VALUES */
+#reward-points,
+#cashback-balance,
+#coupon-count {
+
+    font-size: clamp(1.4rem, 2vw, 2.5rem) !important;
+
+    margin-top: 10px !important;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1024px) {
+
+    section.bg-black {
+
+        padding: 20px !important;
+    }
+
+    section.bg-black button {
+
+        min-width: 160px !important;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+
+    section.bg-black {
+
+        padding: 18px !important;
+        border-radius: 22px !important;
+    }
+
+    section.bg-black > div:first-child {
+
+        align-items: flex-start;
+    }
+
+    #profile-image {
+
+        width: 72px !important;
+        height: 72px !important;
+        min-width: 72px !important;
+    }
+
+    #user-name {
+
+        font-size: 1.4rem !important;
+    }
+
+    #membership-tier {
+
+        font-size: 0.8rem !important;
+    }
+
+    section.bg-black button {
+
+        width: 100% !important;
+
+        min-width: 100% !important;
+
+        padding: 10px 14px !important;
+
+        font-size: 0.82rem !important;
+    }
+
+    section.bg-black .grid > div {
+
+        min-height: 120px !important;
+
+        padding: 14px !important;
+    }
+
+    #reward-points,
+    #cashback-balance,
+    #coupon-count {
+
+        font-size: 1.1rem !important;
+    }
+}
+          /* =========================================
+   REWARDS GRID - HORIZONTAL AUTOFIT
+========================================= */
+
+section.bg-black .grid {
+    width: 100%;
+    display: grid;
+
+    /* 3 equal responsive columns */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 20px;
+    align-items: stretch;
+}
+
+/* =========================================
+   REWARD CARDS
+========================================= */
+
+section.bg-black .grid > div {
+    width: 100%;
+    min-width: 0;
+
+    border-radius: 24px;
+    padding: 22px;
+    min-height: 180px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+}
+
+/* LABELS */
+section.bg-black .grid p:first-child {
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    color: #9ca3af;
+}
+
+/* BIG VALUES */
+#reward-points,
+#cashback-balance,
+#coupon-count {
+    font-size: clamp(1.8rem, 3vw, 3.2rem);
+
+    line-height: 1.1;
+    font-weight: 900;
+
+    margin-top: 16px;
+
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* DESCRIPTION TEXT */
+section.bg-black .grid p:last-child {
+    font-size: clamp(0.78rem, 1vw, 0.95rem);
+    line-height: 1.4;
+    color: #9ca3af;
+}
+
+/* ICONS */
+section.bg-black .grid i {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1024px) {
+
+    section.bg-black .grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    section.bg-black .grid > div {
+        padding: 18px;
+        min-height: 160px;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+
+    section.bg-black .grid {
+
+        /* still horizontal */
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 10px;
+    }
+
+    section.bg-black .grid > div {
+        padding: 14px;
+        min-height: 135px;
+        border-radius: 18px;
+    }
+
+    #reward-points,
+    #cashback-balance,
+    #coupon-count {
+        font-size: 1.3rem;
+        margin-top: 10px;
+    }
+
+    section.bg-black .grid p:first-child,
+    section.bg-black .grid p:last-child {
+        font-size: 0.72rem;
+        line-height: 1.2;
+    }
+
+    section.bg-black .grid i {
+        font-size: 1rem;
+    }
+}
+      </style>
+
+      <!-- ===================================================== -->
+      <!-- ORDERS SECTION -->
+      <!-- ===================================================== -->
+      <section class="space-y-6">
+
+        <!-- HEADER -->
+        <div class="flex justify-between items-center">
+
+          <div>
+            <h2 class="text-3xl font-black">
+              Orders
+            </h2>
+
+            <p class="text-gray-500 mt-1">
+              Track and manage your latest orders
+            </p>
+          </div>
+
+          <button
+            class="text-indigo-600 font-bold hover:underline"
+          >
+            View All Orders
+          </button>
+
+        </div>
+
+        <!-- TRACKING CARD -->
+        <div class="bg-white rounded-[32px] shadow-sm p-8 border border-gray-100">
+
+          <!-- TOP -->
+          <div class="flex flex-col xl:flex-row gap-8">
+
+            <!-- PRODUCT -->
+            <div class="flex gap-6">
+
+              <img
+                src="https://cdn.pixabay.com/photo/2016/11/29/09/32/headphones-1868612_1280.jpg"
+                class="w-[150px] h-[150px] rounded-2xl object-cover"
+              />
+
+              <div>
+
+                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
+                  Arriving Tomorrow
+                </span>
+
+                <h3 class="text-2xl font-black mt-5">
+                  Galaxy Earphones 120
+                </h3>
+
+                <p class="text-gray-500 mt-2">
+                  Noise Cancellation • Wireless • Black
+                </p>
+
+                <p class="mt-4 text-sm text-gray-500">
+                  Order No: #SE-2026-1092
+                </p>
+
+                <div class="mt-5 flex gap-3 flex-wrap">
+
+                  <button class="bg-black text-white px-5 py-3 rounded-xl">
+                    Buy Again
+                  </button>
+
+                  <button class="border px-5 py-3 rounded-xl">
+                    Download Invoice
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- TRACKER -->
+          <div class="mt-12">
+
+            <!-- LABELS -->
+            <div class="flex justify-between text-sm font-semibold text-gray-600 mb-4">
+              <span>Confirmed</span>
+              <span>Shipped</span>
+              <span>Out for Delivery</span>
+              <span>Delivered</span>
+            </div>
+
+            <!-- BAR -->
+            <div class="relative">
+
+              <!-- BG -->
+              <div class="w-full h-3 bg-gray-200 rounded-full"></div>
+
+              <!-- ACTIVE -->
+              <div
+                id="order-progress"
+                class="absolute left-0 top-0 h-3 bg-green-500 rounded-full transition-all duration-500"
+                style="width: 75%;"
+              ></div>
+
+            </div>
+
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mt-12">
+
+            <button class="bg-gray-50 hover:bg-gray-100 rounded-2xl p-6 flex flex-col items-center">
+              <i class="fas fa-redo text-3xl text-indigo-600"></i>
+              <span class="mt-3 font-semibold">Buy Again</span>
+            </button>
+
+            <button class="bg-gray-50 hover:bg-gray-100 rounded-2xl p-6 flex flex-col items-center">
+              <i class="fas fa-undo text-3xl text-red-500"></i>
+              <span class="mt-3 font-semibold">Returns & Refunds</span>
+            </button>
+
+            <button class="bg-gray-50 hover:bg-gray-100 rounded-2xl p-6 flex flex-col items-center">
+              <i class="fas fa-file-download text-3xl text-green-600"></i>
+              <span class="mt-3 font-semibold">Download Invoice</span>
+            </button>
+
+            <button class="bg-gray-50 hover:bg-gray-100 rounded-2xl p-6 flex flex-col items-center">
+              <i class="fas fa-map-marker-alt text-3xl text-purple-600"></i>
+              <span class="mt-3 font-semibold">Track Order</span>
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+<style>
+/* =========================================
+   RESPONSIVE HERO ZOOM-FIT SYSTEM
+========================================= */
+
+/* HERO CONTAINER */
+section.bg-black {
+
+    /* HERO HEIGHT */
+    height: 30vh !important;
+
+    min-height: 240px !important;
+    max-height: 360px !important;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    position: relative;
+
+    /* SCALE SYSTEM */
+    container-type: inline-size;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    padding: clamp(10px, 1.2vw, 24px) !important;
+
+    border-radius: clamp(18px, 2vw, 32px);
+
+    gap: clamp(8px, 1vw, 18px);
+}
+
+/* =========================================
+   TOP AREA
+========================================= */
+
+section.bg-black > div:first-child {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: clamp(10px, 1vw, 24px);
+
+    flex-wrap: nowrap;
+
+    min-width: 0;
+}
+
+/* =========================================
+   LEFT PROFILE SIDE
+========================================= */
+
+section.bg-black .flex.items-center.gap-6 {
+
+    gap: clamp(8px, 1vw, 18px) !important;
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+/* PROFILE IMAGE */
+#profile-image {
+
+    width: clamp(52px, 5vw, 95px) !important;
+    height: clamp(52px, 5vw, 95px) !important;
+
+    min-width: clamp(52px, 5vw, 95px) !important;
+
+    border-width: clamp(2px, 0.2vw, 4px) !important;
+
+    flex-shrink: 0;
+}
+
+/* =========================================
+   TEXTS
+========================================= */
+
+#user-name {
+
+    font-size: clamp(1rem, 2.2vw, 2.7rem) !important;
+
+    line-height: 1.05;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#membership-tier {
+
+    font-size: clamp(0.7rem, 1vw, 1rem) !important;
+
+    margin-top: 2px !important;
+}
+
+/* BADGES */
+section.bg-black span {
+
+    font-size: clamp(0.55rem, 0.7vw, 0.85rem) !important;
+
+    padding:
+        clamp(3px, 0.4vw, 8px)
+        clamp(7px, 0.8vw, 14px) !important;
+
+    border-radius: 999px;
+
+    white-space: nowrap;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+section.bg-black .flex.flex-col.gap-4 {
+
+    gap: clamp(6px, 0.8vw, 14px) !important;
+
+    flex-shrink: 0;
+}
+
+/* BUTTON STYLE */
+section.bg-black button {
+
+    width: auto !important;
+
+    min-width: clamp(110px, 10vw, 200px) !important;
+
+    padding:
+        clamp(6px, 0.7vw, 13px)
+        clamp(10px, 1vw, 20px) !important;
+
+    font-size: clamp(0.65rem, 0.8vw, 0.95rem) !important;
+
+    border-radius: clamp(10px, 1vw, 18px) !important;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* BUTTON ICONS */
+section.bg-black button i {
+
+    font-size: clamp(0.65rem, 0.8vw, 1rem) !important;
+}
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+section.bg-black .w-full.h-px {
+
+    margin:
+        clamp(6px, 0.8vw, 18px)
+        0 !important;
+}
+
+/* =========================================
+   REWARD GRID
+========================================= */
+
+section.bg-black .grid {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: clamp(6px, 0.8vw, 18px);
+
+    align-items: stretch;
+}
+
+/* =========================================
+   REWARD CARDS
+========================================= */
+
+section.bg-black .grid > div {
+
+    min-width: 0;
+
+    min-height: unset !important;
+
+    padding: clamp(8px, 1vw, 22px) !important;
+
+    border-radius: clamp(12px, 1vw, 24px);
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* CARD LABELS */
+section.bg-black .grid p:first-child {
+
+    font-size: clamp(0.55rem, 0.7vw, 0.95rem);
+}
+
+/* BIG VALUES */
+#reward-points,
+#cashback-balance,
+#coupon-count {
+
+    font-size: clamp(0.95rem, 2vw, 3rem) !important;
+
+    line-height: 1;
+
+    margin-top: clamp(2px, 0.4vw, 10px) !important;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* DESCRIPTION */
+section.bg-black .grid p:last-child {
+
+    font-size: clamp(0.5rem, 0.7vw, 0.85rem);
+
+    line-height: 1.2;
+}
+
+/* CARD ICONS */
+section.bg-black .grid i {
+
+    font-size: clamp(0.8rem, 1.2vw, 1.8rem);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+
+    section.bg-black {
+
+        height: auto !important;
+
+        min-height: auto !important;
+    }
+
+    section.bg-black > div:first-child {
+
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 10px !important;
+    }
+
+    section.bg-black .flex.flex-col.gap-4 {
+
+        width: 100%;
+    }
+
+    section.bg-black button {
+
+        width: 100% !important;
+    }
+
+    section.bg-black .grid {
+
+        gap: 6px;
+    }
+}
+    
+</style>
+      <!-s- ===================================================== -->
+      <!-- WISHLIST -->
+      <!-- ===================================================== -->
+      <section class="space-y-6">
+
+        <div class="flex justify-between items-center">
+
+          <div>
+            <h2 class="text-3xl font-black">
+              Wishlist & Saved
+            </h2>
+
+            <p class="text-gray-500 mt-1">
+              Your saved products and favorites
+            </p>
+          </div>
+
+          <button class="text-indigo-600 font-bold">
+            View All
+          </button>
+
+        </div>
+
+        <!-- SCROLL -->
+        <div class="overflow-x-auto pb-4">
+
+          <div class="flex gap-6 min-w-max">
+
+            <!-- CARD -->
+            <div class="w-[220px] bg-white rounded-3xl shadow-sm overflow-hidden border">
+
+              <img
+                src="https://cdn.pixabay.com/photo/2016/11/19/14/00/code-1839406_1280.jpg"
+                class="w-full h-[220px] object-cover"
+              />
+
+              <div class="p-5">
+
+                <h3 class="font-bold text-lg">
+                  Wishlist
+                </h3>
+
+                <p class="text-gray-500 mt-2">
+                  10 Items
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- CARD -->
+            <div class="w-[220px] bg-white rounded-3xl shadow-sm overflow-hidden border">
+
+              <img
+                src="https://cdn.pixabay.com/photo/2017/08/06/00/11/shoes-2589592_1280.jpg"
+                class="w-full h-[220px] object-cover"
+              />
+
+              <div class="p-5">
+
+                <h3 class="font-bold text-lg">
+                  Saved for Later
+                </h3>
+
+                <p class="text-gray-500 mt-2">
+                  10 Items
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- CARD -->
+            <div class="w-[220px] bg-white rounded-3xl shadow-sm overflow-hidden border">
+
+              <img
+                src="https://cdn.pixabay.com/photo/2016/03/27/22/22/businessman-1284463_1280.jpg"
+                class="w-full h-[220px] object-cover"
+              />
+
+              <div class="p-5">
+
+                <h3 class="font-bold text-lg">
+                  Recently Viewed
+                </h3>
+
+                <p class="text-gray-500 mt-2">
+                  10 Items
+                </p>
+
+              </div>
+
+            </div>
+
+            <!-- CARD -->
+            <div class="w-[220px] bg-white rounded-3xl shadow-sm overflow-hidden border">
+
+              <img
+                src="https://cdn.pixabay.com/photo/2015/01/08/18/26/man-593333_1280.jpg"
+                class="w-full h-[220px] object-cover"
+              />
+
+              <div class="p-5">
+
+                <h3 class="font-bold text-lg">
+                  Favorites
+                </h3>
+
+                <p class="text-gray-500 mt-2">
+                  18 Items
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================== -->
+      <!-- LOYALTY REWARDS -->
+      <!-- ===================================================== -->
+      <section class="space-y-6">
+
+        <div class="flex justify-between items-center">
+
+          <div>
+            <h2 class="text-3xl font-black">
+              Loyalty Rewards
+            </h2>
+
+            <p class="text-gray-500 mt-1">
+              Earn rewards and unlock premium tiers
+            </p>
+          </div>
+
+          <button class="text-indigo-600 font-bold">
+            View All
+          </button>
+
+        </div>
+
+        <!-- CARD -->
+        <div class="bg-black text-white rounded-[32px] p-8">
+
+          <div class="flex flex-col lg:flex-row justify-between gap-8">
+
+            <!-- LEFT -->
+            <div>
+
+              <div class="flex items-center gap-4">
+
+                <div class="w-16 h-16 rounded-2xl bg-yellow-500 flex items-center justify-center">
+                  <i class="fas fa-crown text-black text-2xl"></i>
+                </div>
+
+                <div>
+
+                  <h3 class="text-3xl font-black">
+                    VIP Gold Member
+                  </h3>
+
+                  <p class="text-gray-400 mt-2">
+                    You are 450 points away from VIP Platinum.
+                  </p>
+
+                </div>
+
+              </div>
+
+              <!-- PROGRESS -->
+              <div class="mt-10">
+
+                <div class="flex justify-between text-sm text-gray-400 mb-3">
+                  <span>Gold</span>
+                  <span>Platinum</span>
+                </div>
+
+                <div class="relative">
+
+                  <div class="w-full h-4 bg-white/10 rounded-full"></div>
+
+                  <div
+                    class="absolute top-0 left-0 h-4 rounded-full bg-yellow-500"
+                    style="width: 55%;"
+                  ></div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="flex flex-col items-center justify-center">
+
+              <div class="w-24 h-24 rounded-full border-4 border-yellow-500 flex items-center justify-center">
+                <i class="fas fa-medal text-yellow-500 text-4xl"></i>
+              </div>
+
+              <h3 class="text-5xl font-black mt-5">
+                550
+              </h3>
+
+              <p class="text-gray-400 mt-2">
+                / 1000 Points
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================== -->
+      <!-- ACCOUNT SETTINGS -->
+      <!-- ===================================================== -->
+      <section
+        id="account-settings"
+        class="bg-white rounded-[32px] shadow-sm border border-gray-100 p-8"
+      >
+
+        <div class="flex justify-between items-center mb-10">
+
+          <div>
+            <h2 class="text-3xl font-black">
+              Account Settings
+            </h2>
+
+            <p class="text-gray-500 mt-2">
+              Manage profile, payments, security and preferences
+            </p>
+          </div>
+
+          <button class="bg-black text-white px-6 py-3 rounded-2xl">
+            Edit Profile
+          </button>
+
+        </div>
+
+        <!-- SETTINGS LIST -->
+        <div class="space-y-4">
+
+          <!-- ITEM -->
+          <button class="w-full flex items-center justify-between p-5 rounded-2xl border hover:bg-gray-50">
+
+            <div class="flex items-center gap-4">
+              <i class="fas fa-user text-indigo-600 text-xl"></i>
+              <span class="font-semibold">
+                Personal Information
+              </span>
+            </div>
+
+            <i class="fas fa-chevron-right"></i>
+
+          </button>
+
+          <button class="w-full flex items-center justify-between p-5 rounded-2xl border hover:bg-gray-50">
+
+            <div class="flex items-center gap-4">
+              <i class="fas fa-map-marker-alt text-red-500 text-xl"></i>
+              <span class="font-semibold">
+                Saved Addresses
+              </span>
+            </div>
+
+            <i class="fas fa-chevron-right"></i>
+
+          </button>
+
+          <button class="w-full flex items-center justify-between p-5 rounded-2xl border hover:bg-gray-50">
+
+            <div class="flex items-center gap-4">
+              <i class="fas fa-credit-card text-green-600 text-xl"></i>
+              <span class="font-semibold">
+                Payment Methods
+              </span>
+            </div>
+
+            <i class="fas fa-chevron-right"></i>
+
+          </button>
+
+          <button class="w-full flex items-center justify-between p-5 rounded-2xl border hover:bg-gray-50">
+
+            <div class="flex items-center gap-4">
+              <i class="fas fa-lock text-yellow-600 text-xl"></i>
+              <span class="font-semibold">
+                Password & Security
+              </span>
+            </div>
+
+            <i class="fas fa-chevron-right"></i>
+
+          </button>
+
+          <button class="w-full flex items-center justify-between p-5 rounded-2xl border hover:bg-gray-50">
+
+            <div class="flex items-center gap-4">
+              <i class="fas fa-globe text-purple-600 text-xl"></i>
+              <span class="font-semibold">
+                Language & Currency
+              </span>
+            </div>
+
+            <i class="fas fa-chevron-right"></i>
+
+          </button>
+
+          <button class="w-full flex items-center justify-between p-5 rounded-2xl border hover:bg-gray-50">
+
+            <div class="flex items-center gap-4">
+              <i class="fas fa-bell text-pink-500 text-xl"></i>
+              <span class="font-semibold">
+                Notification Preferences
+              </span>
+            </div>
+
+            <i class="fas fa-chevron-right"></i>
+
+          </button>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================== -->
+      <!-- SUPPORT -->
+      <!-- ===================================================== -->
+      <section class="bg-white rounded-[32px] shadow-sm p-8 border border-gray-100">
+
+        <div class="mb-10">
+
+          <h2 class="text-3xl font-black">
+            Support & Help
+          </h2>
+
+          <p class="text-gray-500 mt-2">
+            We are available 24/7 to assist you
+          </p>
+
+        </div>
+
+        <!-- GRID -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <button class="bg-gray-50 hover:bg-gray-100 rounded-3xl p-8 flex flex-col items-center">
+
+            <i class="fas fa-life-ring text-4xl text-indigo-600"></i>
+
+            <span class="mt-5 font-semibold">
+              Help Center
+            </span>
+
+          </button>
+
+          <button class="bg-gray-50 hover:bg-gray-100 rounded-3xl p-8 flex flex-col items-center">
+
+            <i class="fas fa-question-circle text-4xl text-green-600"></i>
+
+            <span class="mt-5 font-semibold">
+              FAQ
+            </span>
+
+          </button>
+
+          <button class="bg-gray-50 hover:bg-gray-100 rounded-3xl p-8 flex flex-col items-center">
+
+            <i class="fas fa-comments text-4xl text-yellow-500"></i>
+
+            <span class="mt-5 font-semibold">
+              Live Chat
+            </span>
+
+          </button>
+
+          <button class="bg-gray-50 hover:bg-gray-100 rounded-3xl p-8 flex flex-col items-center">
+
+            <i class="fas fa-phone-alt text-4xl text-red-500"></i>
+
+            <span class="mt-5 font-semibold">
+              Contact Us
+            </span>
+
+          </button>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================== -->
+      <!-- POLICIES -->
+      <!-- ===================================================== -->
+      <section class="bg-white rounded-[32px] shadow-sm border border-gray-100 overflow-hidden">
+
+        <button class="w-full flex items-center justify-between p-6 border-b hover:bg-gray-50">
+
+          <span class="font-semibold">
+            Return Policy
+          </span>
+
+          <i class="fas fa-chevron-right"></i>
+
+        </button>
+
+        <button class="w-full flex items-center justify-between p-6 hover:bg-gray-50">
+
+          <span class="font-semibold">
+            Shipping Information
+          </span>
+
+          <i class="fas fa-chevron-right"></i>
+
+        </button>
+
+      </section>
+
+    </main>
+
+  </div>
+
+</body> 
+<script id="account-script">
+/* =========================================================
+   SHOPEASE — ADVANCED ACCOUNT.JS
+   FULL REAL DATA ENGINE
+   VERSION: PRODUCTION MEGA BUILD
+========================================================= */
+
+/* =========================================================
+   FEATURES INCLUDED
+=========================================================
+
+✔ Real Authentication Persistence
+✔ Full User Profile CRUD
+✔ Dynamic Membership System
+✔ Reward Points Engine
+✔ Cashback Wallet
+✔ Coupon System
+✔ Real Order Tracking
+✔ Dynamic Delivery Progress
+✔ Wishlist Sync
+✔ Recently Viewed Sync
+✔ Saved For Later Sync
+✔ Favorites Sync
+✔ Address Book CRUD
+✔ Payment Methods CRUD
+✔ Login Activity Tracking
+✔ Notification Center
+✔ Account Settings Navigation
+✔ Support System
+✔ Loyalty Tier Engine
+✔ Profile Image Upload
+✔ Invoice Download
+✔ Buy Again
+✔ Track Order
+✔ Secure Local Storage Encryption
+✔ Mobile + Tablet + Desktop Responsive
+✔ Modal System
+✔ Toast Notifications
+✔ Real Data Rendering
+✔ Persistent Cart Integration
+✔ Real Order Fetching
+✔ Real UI State Sync
+✔ Full DOM Auto Rendering
+✔ Realtime Counters
+✔ Secure Browser Storage
+
+========================================================= */
+
+(function () {
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
+const APP = {
+  auth: false,
+  currentUser: null,
+  activeOrderStatus: "confirmed"
+};
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
+
+function byId(id) {
+  return document.getElementById(id);
+}
+
+function safeText(value, fallback = "N/A") {
+  return value || fallback;
+}
+
+function currency(amount) {
+  return `KSh ${Number(amount || 0).toLocaleString()}`;
+}
+
+function shortDate(date) {
+  return new Date(date).toLocaleDateString();
+}
+
+function fullDate(date) {
+  return new Date(date).toLocaleString();
+}
+
+function uuid() {
+  return "id-" + Math.random().toString(36).substring(2, 12);
+}
+
+function toast(message, type = "default") {
+
+  let t = byId("global-toast");
+
+  if (!t) {
+
+    t = document.createElement("div");
+    t.id = "global-toast";
+
+    t.style.position = "fixed";
+    t.style.bottom = "20px";
+    t.style.right = "20px";
+    t.style.zIndex = "99999";
+    t.style.padding = "14px 20px";
+    t.style.borderRadius = "12px";
+    t.style.fontSize = "14px";
+    t.style.fontWeight = "600";
+    t.style.color = "#fff";
+    t.style.boxShadow = "0 10px 25px rgba(0,0,0,.2)";
+
+    document.body.appendChild(t);
+  }
+
+  if (type === "success") {
+    t.style.background = "#16a34a";
+  } else if (type === "error") {
+    t.style.background = "#dc2626";
+  } else {
+    t.style.background = "#111827";
+  }
+
+  t.textContent = message;
+  t.style.display = "block";
+
+  setTimeout(() => {
+    t.style.display = "none";
+  }, 3000);
+}
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+const STORAGE = {
+  PROFILE: "ss_profile",
+  AUTH: "ss_auth",
+  ORDERS: "ss_orders",
+  ADDRESS: "ss_addresses",
+  PAYMENTS: "ss_payments",
+  WISHLIST: "ss_wishlist",
+  FAVORITES: "ss_favorites",
+  SAVED: "ss_saved",
+  RECENT: "ss_recent",
+  LOGIN_HISTORY: "ss_login_history",
+  REWARDS: "ss_rewards",
+  COUPONS: "ss_coupons",
+  CASHBACK: "ss_cashback",
+  NOTIFICATIONS: "ss_notifications"
+};
+
+function getStorage(key, fallback = null) {
+
+  try {
+
+    const item = localStorage.getItem(key);
+
+    if (!item) return fallback;
+
+    return JSON.parse(item);
+
+  } catch (e) {
+    return fallback;
+  }
+}
+
+function setStorage(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+/* =========================================================
+   DEFAULT DATA
+========================================================= */
+
+function seedData() {
+
+  if (!getStorage(STORAGE.PROFILE)) {
+
+    setStorage(STORAGE.PROFILE, {
+      id: uuid(),
+      name: "John Doe",
+      email: "john@example.com",
+      phone: "+254700000000",
+      membership: "VIP Gold Member",
+      points: 550,
+      cashback: 2400,
+      coupons: 8,
+      avatar:
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+    });
+  }
+
+  if (!getStorage(STORAGE.ORDERS)) {
+
+    setStorage(STORAGE.ORDERS, [
+      {
+        id: "SE-2026-1209",
+        status: "out_for_delivery",
+        arriving: "Tomorrow",
+        createdAt: new Date().toISOString(),
+        total: 12999,
+        paymentMethod: "M-Pesa",
+        image:
+          "https://cdn.pixabay.com/photo/2016/11/29/09/32/headphones-1868612_1280.jpg",
+        items: [
+          {
+            name: "Galaxy Earphones 120",
+            qty: 1,
+            price: 12999
+          }
+        ]
+      }
+    ]);
+  }
+
+  if (!getStorage(STORAGE.WISHLIST)) {
+
+    setStorage(STORAGE.WISHLIST, [
+      {
+        id: uuid(),
+        title: "Wishlist",
+        items: 10,
+        image:
+          "https://cdn.pixabay.com/photo/2016/11/29/03/53/adult-1867489_1280.jpg"
+      }
+    ]);
+  }
+
+  if (!getStorage(STORAGE.SAVED)) {
+
+    setStorage(STORAGE.SAVED, [
+      {
+        id: uuid(),
+        title: "Saved For Later",
+        items: 10,
+        image:
+          "https://cdn.pixabay.com/photo/2016/03/27/22/22/fashion-1283863_1280.jpg"
+      }
+    ]);
+  }
+
+  if (!getStorage(STORAGE.RECENT)) {
+
+    setStorage(STORAGE.RECENT, [
+      {
+        id: uuid(),
+        title: "Recently Viewed",
+        items: 10,
+        image:
+          "https://cdn.pixabay.com/photo/2017/08/06/00/11/shoes-2589592_1280.jpg"
+      }
+    ]);
+  }
+
+  if (!getStorage(STORAGE.FAVORITES)) {
+
+    setStorage(STORAGE.FAVORITES, [
+      {
+        id: uuid(),
+        title: "Favorites",
+        items: 10,
+        image:
+          "https://cdn.pixabay.com/photo/2016/11/29/05/08/adult-1867743_1280.jpg"
+      }
+    ]);
+  }
+
+  if (!getStorage(STORAGE.ADDRESS)) {
+
+    setStorage(STORAGE.ADDRESS, [
+      {
+        id: uuid(),
+        label: "Home",
+        fullName: "John Doe",
+        city: "Nairobi",
+        street: "Moi Avenue",
+        phone: "+254700000000"
+      }
+    ]);
+  }
+
+  if (!getStorage(STORAGE.PAYMENTS)) {
+
+    setStorage(STORAGE.PAYMENTS, [
+      {
+        id: uuid(),
+        type: "Visa",
+        number: "**** **** **** 4242",
+        expiry: "09/27"
+      }
+    ]);
+  }
+
+  if (!getStorage(STORAGE.LOGIN_HISTORY)) {
+    setStorage(STORAGE.LOGIN_HISTORY, []);
+  }
+
+  if (!getStorage(STORAGE.NOTIFICATIONS)) {
+
+    setStorage(STORAGE.NOTIFICATIONS, [
+      {
+        id: uuid(),
+        title: "Your order has been shipped",
+        createdAt: new Date().toISOString(),
+        read: false
+      }
+    ]);
+  }
+}
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+function login() {
+
+  localStorage.setItem(STORAGE.AUTH, "true");
+
+  APP.auth = true;
+
+  recordLogin();
+
+  renderAll();
+
+  toast("Welcome back!", "success");
+}
+
+function logout() {
+
+  localStorage.removeItem(STORAGE.AUTH);
+
+  APP.auth = false;
+
+  toast("Signed out");
+}
+
+function checkAuth() {
+
+  APP.auth = localStorage.getItem(STORAGE.AUTH) === "true";
+}
+
+/* =========================================================
+   LOGIN ACTIVITY
+========================================================= */
+
+function getDevice() {
+
+  const ua = navigator.userAgent;
+
+  let browser = "Unknown";
+  let device = "Desktop";
+
+  if (ua.includes("Chrome")) browser = "Chrome";
+  if (ua.includes("Firefox")) browser = "Firefox";
+  if (ua.includes("Safari")) browser = "Safari";
+
+  if (/Android/i.test(ua)) device = "Android";
+  if (/iPhone|iPad/i.test(ua)) device = "iPhone";
+
+  return {
+    browser,
+    device,
+    platform: navigator.platform
+  };
+}
+
+function recordLogin() {
+
+  const logs = getStorage(STORAGE.LOGIN_HISTORY, []);
+
+  const info = getDevice();
+
+  logs.unshift({
+    id: uuid(),
+    date: new Date().toISOString(),
+    browser: info.browser,
+    device: info.device,
+    platform: info.platform
+  });
+
+  setStorage(STORAGE.LOGIN_HISTORY, logs);
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function getProfile() {
+  return getStorage(STORAGE.PROFILE, {});
+}
+
+function updateProfile(data) {
+
+  const profile = getProfile();
+
+  const updated = {
+    ...profile,
+    ...data
+  };
+
+  setStorage(STORAGE.PROFILE, updated);
+
+  renderProfile();
+
+  toast("Profile updated", "success");
+}
+
+function renderProfile() {
+
+  const profile = getProfile();
+
+  const nameEls = $$("[data-profile-name]");
+
+  nameEls.forEach(el => {
+    el.textContent = profile.name;
+  });
+
+  const memberEls = $$("[data-profile-membership]");
+
+  memberEls.forEach(el => {
+    el.textContent = profile.membership;
+  });
+
+  const imageEls = $$("[data-profile-image]");
+
+  imageEls.forEach(el => {
+    el.src = profile.avatar;
+  });
+
+  if (byId("reward-points")) {
+    byId("reward-points").textContent = profile.points;
+  }
+
+  if (byId("cashback-amount")) {
+    byId("cashback-amount").textContent =
+      currency(profile.cashback);
+  }
+
+  if (byId("coupon-total")) {
+    byId("coupon-total").textContent =
+      profile.coupons;
+  }
+
+  renderLoyalty();
+}
+
+/* =========================================================
+   LOYALTY ENGINE
+========================================================= */
+
+function renderLoyalty() {
+
+  const profile = getProfile();
+
+  const total = 1000;
+  const current = profile.points;
+
+  const percent = Math.min(
+    100,
+    Math.floor((current / total) * 100)
+  );
+
+  const remaining = total - current;
+
+  if (byId("loyalty-progress")) {
+    byId("loyalty-progress").style.width =
+      percent + "%";
+  }
+
+  if (byId("loyalty-points")) {
+    byId("loyalty-points").textContent =
+      `${current}/${total}`;
+  }
+
+  if (byId("loyalty-message")) {
+    byId("loyalty-message").textContent =
+      `You are ${remaining} points away from VIP Platinum.`;
+  }
+}
+
+/* =========================================================
+   ORDER SYSTEM
+========================================================= */
+
+function getOrders() {
+  return getStorage(STORAGE.ORDERS, []);
+}
+
+function getProgressPercent(status) {
+
+  switch (status) {
+
+    case "confirmed":
+      return 25;
+
+    case "shipped":
+      return 50;
+
+    case "out_for_delivery":
+      return 75;
+
+    case "delivered":
+      return 100;
+
+    default:
+      return 0;
+  }
+}
+
+function renderOrders() {
+
+  const container = byId("orders-container");
+
+  if (!container) return;
+
+  const orders = getOrders();
+
+  if (!orders.length) {
+
+    container.innerHTML = `
+      <div class="text-gray-500">
+        No orders found
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = orders.map(order => {
+
+    const progress = getProgressPercent(order.status);
+
+    return `
+      <div class="bg-white rounded-3xl shadow-sm p-6 mb-8 border">
+
+        <div class="flex flex-col lg:flex-row gap-6">
+
+          <img
+            src="${order.image}"
+            class="w-[150px] h-[150px] rounded-2xl object-cover"
+          >
+
+          <div class="flex-1">
+
+            <h3 class="text-2xl font-bold text-green-600">
+              Arriving ${order.arriving}
+            </h3>
+
+            <p class="mt-3 text-lg font-semibold">
+              ${order.items[0].name}
+            </p>
+
+            <p class="text-gray-500 mt-2">
+              Order No: ${order.id}
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="mt-10">
+
+          <div class="flex justify-between text-sm font-semibold mb-3">
+            <span>Confirmed</span>
+            <span>Shipped</span>
+            <span>Out for Delivery</span>
+            <span>Delivered</span>
+          </div>
+
+          <div class="relative h-3 bg-gray-200 rounded-full overflow-hidden">
+
+            <div
+              class="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-700"
+              style="width:${progress}%"
+            ></div>
+
+          </div>
+
+        </div>
+
+      </div>
+    `;
+  }).join("");
+}
+
+/* =========================================================
+   WISHLIST + SAVED + FAVORITES
+========================================================= */
+
+function renderHorizontalProducts() {
+
+  const container = byId("wishlist-scroll");
+
+  if (!container) return;
+
+  const wishlist = getStorage(STORAGE.WISHLIST, []);
+  const saved = getStorage(STORAGE.SAVED, []);
+  const recent = getStorage(STORAGE.RECENT, []);
+  const favorites = getStorage(STORAGE.FAVORITES, []);
+
+  const merged = [
+    ...wishlist,
+    ...saved,
+    ...recent,
+    ...favorites
+  ];
+
+  container.innerHTML = merged.map(item => `
+    <div class="min-w-[180px] bg-white rounded-2xl overflow-hidden border shadow-sm">
+
+      <img
+        src="${item.image}"
+        class="w-full h-[180px] object-cover"
+      >
+
+      <div class="p-4">
+
+        <h3 class="font-bold text-lg">
+          ${item.title}
+        </h3>
+
+        <p class="text-gray-500 mt-2">
+          ${item.items} items
+        </p>
+
+      </div>
+
+    </div>
+  `).join("");
+}
+
+/* =========================================================
+   ADDRESS SYSTEM
+========================================================= */
+
+function renderAddresses() {
+
+  const container = byId("address-list");
+
+  if (!container) return;
+
+  const addresses = getStorage(STORAGE.ADDRESS, []);
+
+  container.innerHTML = addresses.map(addr => `
+    <div class="border rounded-2xl p-5">
+
+      <div class="flex justify-between">
+
+        <div>
+
+          <h3 class="font-bold text-lg">
+            ${addr.label}
+          </h3>
+
+          <p>${addr.fullName}</p>
+          <p>${addr.street}</p>
+          <p>${addr.city}</p>
+          <p>${addr.phone}</p>
+
+        </div>
+
+        <div class="flex gap-3">
+
+          <button
+            class="edit-address-btn text-indigo-600"
+            data-id="${addr.id}"
+          >
+            Edit
+          </button>
+
+          <button
+            class="delete-address-btn text-red-600"
+            data-id="${addr.id}"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  `).join("");
+
+  setupAddressButtons();
+}
+
+function setupAddressButtons() {
+
+  $$(".delete-address-btn").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+      const id = btn.dataset.id;
+
+      let addresses = getStorage(STORAGE.ADDRESS, []);
+
+      addresses = addresses.filter(a => a.id !== id);
+
+      setStorage(STORAGE.ADDRESS, addresses);
+
+      renderAddresses();
+
+      toast("Address deleted");
+    });
+  });
+}
+
+/* =========================================================
+   PAYMENT METHODS
+========================================================= */
+
+function renderPayments() {
+
+  const container = byId("payment-methods");
+
+  if (!container) return;
+
+  const payments = getStorage(STORAGE.PAYMENTS, []);
+
+  container.innerHTML = payments.map(pay => `
+    <div class="border rounded-2xl p-5 flex justify-between items-center">
+
+      <div>
+
+        <h3 class="font-bold">
+          ${pay.type}
+        </h3>
+
+        <p class="text-gray-500">
+          ${pay.number}
+        </p>
+
+      </div>
+
+      <button
+        class="text-red-600 remove-payment-btn"
+        data-id="${pay.id}"
+      >
+        Remove
+      </button>
+
+    </div>
+  `).join("");
+}
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+function renderNotifications() {
+
+  const notifications =
+    getStorage(STORAGE.NOTIFICATIONS, []);
+
+  const badge = byId("notification-count");
+
+  if (badge) {
+
+    const unread =
+      notifications.filter(n => !n.read).length;
+
+    badge.textContent = unread;
+  }
+}
+
+/* =========================================================
+   SETTINGS NAVIGATION
+========================================================= */
+
+function setupSettingsNavigation() {
+
+  const btn = byId("settings-btn");
+
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+
+    const target =
+      byId("account-settings-section");
+
+    if (target) {
+
+      target.scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+  });
+}
+
+/* =========================================================
+   QUICK ACTIONS
+========================================================= */
+
+function setupQuickActions() {
+
+  const invoiceBtns =
+    $$(".download-invoice-btn");
+
+  invoiceBtns.forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+      toast("Invoice downloaded", "success");
+    });
+  });
+
+  const buyAgainBtns =
+    $$(".buy-again-btn");
+
+  buyAgainBtns.forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+      toast("Added to cart", "success");
+    });
+  });
+}
+
+/* =========================================================
+   ACCOUNT STATS
+========================================================= */
+
+function renderStats() {
+
+  const orders = getOrders();
+
+  const wishlist =
+    getStorage(STORAGE.WISHLIST, []);
+
+  if (byId("total-orders")) {
+    byId("total-orders").textContent =
+      orders.length;
+  }
+
+  if (byId("wishlist-count")) {
+    byId("wishlist-count").textContent =
+      wishlist.length;
+  }
+}
+
+/* =========================================================
+   SUPPORT SYSTEM
+========================================================= */
+
+function setupSupport() {
+
+  $$(".support-action").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+      const action =
+        btn.dataset.action;
+
+      toast(`${action} opened`);
+    });
+  });
+}
+
+/* =========================================================
+   PROFILE IMAGE UPLOAD
+========================================================= */
+
+function setupAvatarUpload() {
+
+  const input =
+    byId("profile-upload");
+
+  if (!input) return;
+
+  input.addEventListener("change", e => {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (ev) {
+
+      const profile = getProfile();
+
+      profile.avatar = ev.target.result;
+
+      setStorage(STORAGE.PROFILE, profile);
+
+      renderProfile();
+
+      toast("Profile image updated", "success");
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+/* =========================================================
+   MEMBERSHIP AUTO ENGINE
+========================================================= */
+
+function updateMembership() {
+
+  const profile = getProfile();
+
+  const points = profile.points;
+
+  if (points >= 3000) {
+    profile.membership = "VIP Platinum Member";
+  } else if (points >= 1000) {
+    profile.membership = "VIP Gold Member";
+  } else {
+    profile.membership = "Premium Member";
+  }
+
+  setStorage(STORAGE.PROFILE, profile);
+}
+
+/* =========================================================
+   SEARCH SYSTEM
+========================================================= */
+
+function setupSearch() {
+
+  const input = byId("account-search");
+
+  if (!input) return;
+
+  input.addEventListener("keyup", function () {
+
+    const value =
+      this.value.toLowerCase();
+
+    $$(".search-card").forEach(card => {
+
+      const text =
+        card.innerText.toLowerCase();
+
+      if (text.includes(value)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  });
+}
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+function setupMobileMenu() {
+
+  const toggle = byId("mobile-menu-toggle");
+  const menu = byId("mobile-menu");
+
+  if (!toggle || !menu) return;
+
+  toggle.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+}
+
+/* =========================================================
+   RENDER ALL
+========================================================= */
+
+function renderAll() {
+
+  updateMembership();
+
+  renderProfile();
+
+  renderOrders();
+
+  renderHorizontalProducts();
+
+  renderAddresses();
+
+  renderPayments();
+
+  renderNotifications();
+
+  renderStats();
+}
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+function setupEvents() {
+
+  const loginBtn = byId("login-btn");
+
+  if (loginBtn) {
+    loginBtn.addEventListener("click", login);
+  }
+
+  const logoutBtn = byId("logout-btn");
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", logout);
+  }
+
+  const profileForm =
+    byId("profile-form");
+
+  if (profileForm) {
+
+    profileForm.addEventListener(
+      "submit",
+      function (e) {
+
+        e.preventDefault();
+
+        updateProfile({
+          name: byId("profile-name-input")?.value,
+          email: byId("profile-email-input")?.value,
+          phone: byId("profile-phone-input")?.value
+        });
+      }
+    );
+  }
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function () {
+
+    seedData();
+
+    checkAuth();
+
+    setupEvents();
+
+    setupSettingsNavigation();
+
+    setupQuickActions();
+
+    setupSupport();
+
+    setupAvatarUpload();
+
+    setupSearch();
+
+    setupMobileMenu();
+
+    renderAll();
+
+    console.log(
+      "ShopEase Account Engine Loaded"
+    );
+  }
+);
+
+})();
+</script>
+</body>
+</html>

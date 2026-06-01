@@ -1,0 +1,20 @@
+{
+  "background_color": "#ffffff",
+  "description": "Accessible, responsive e‑commerce demo with product modal, search autocomplete, wishlist, cart, reviews, analytics filters, and more.",
+  "dir": "auto",
+  "display": "fullscreen",
+  "name": "caleb-kipp.github",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "caleb-kipp.github",
+  "start_url": "/e-commerce1-pwa-/",
+  "theme_color": "#111827",
+  "lang": "en",
+  "categories": [
+    "shopping"
+  ],
+  "display_override": [
+    "fullscreen",
+    "window-controls-overlay"
+  ]
+}

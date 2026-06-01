@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ShopVista - Cart</title>
+
+<!-- FONT AWESOME -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+<!-- GOOGLE FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+<style>
+
+:root{
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e2e8f0;
+  --primary:#6d28d9;
+  --primary-hover:#5b21b6;
+  --green:#16a34a;
+  --yellow:#facc15;
+  --danger:#ef4444;
+  --dark:#020617;
+  --radius:18px;
+  --radius-lg:28px;
+  --shadow:0 10px 30px rgba(15,23,42,.06);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ========================================================= */
+/* NAVBAR */
+/* ========================================================= */
+
+.navbar{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(10px);
+}
+
+.nav-inner{
+  max-width:1400px;
+  margin:auto;
+  padding:16px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.logo{
+  font-size:28px;
+  font-weight:900;
+  color:var(--primary);
+}
+
+.nav-left{
+  display:flex;
+  align-items:center;
+  gap:40px;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:#334155;
+  font-size:15px;
+  font-weight:600;
+  transition:.25s;
+}
+
+.nav-links a:hover{
+  color:var(--primary);
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.search-box{
+  position:relative;
+}
+
+.search-box input{
+  width:260px;
+  height:46px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  padding:0 18px 0 45px;
+  outline:none;
+  background:#f8fafc;
+  font-size:14px;
+}
+
+.search-box i{
+  position:absolute;
+  left:16px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#64748b;
+}
+
+.icon-btn{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  background:#f8fafc;
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  position:relative;
+  transition:.25s;
+}
+
+.icon-btn:hover{
+  background:#fff;
+  transform:translateY(-2px);
+}
+
+.badge{
+  position:absolute;
+  top:-6px;
+  right:-6px;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:var(--danger);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:700;
+}
+
+/* ========================================================= */
+/* MAIN */
+/* ========================================================= */
+
+main{
+  width:100%;
+  max-width:1400px;
+  margin:auto;
+  padding:24px;
+  flex:1;
+}
+
+/* ========================================================= */
+/* PROFILE HERO */
+/* ========================================================= */
+
+.profile-hero{
+  background:linear-gradient(135deg,#020617,#0f172a,#1e293b);
+  color:white;
+  border-radius:30px;
+  padding:26px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+
+.profile-hero::before{
+  content:'';
+  position:absolute;
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  background:rgba(255,255,255,.04);
+  right:-120px;
+  top:-120px;
+}
+
+.hero-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.profile-left{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.profile-left img{
+  width:88px;
+  height:88px;
+  border-radius:50%;
+  border:4px solid rgba(255,255,255,.15);
+  object-fit:cover;
+}
+
+.profile-content h2{
+  font-size:30px;
+  font-weight:900;
+  line-height:1.1;
+}
+
+.profile-content p{
+  color:#cbd5e1;
+  margin-top:8px;
+  font-size:15px;
+}
+
+.profile-badges{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+.profile-badges span{
+  font-size:12px;
+  padding:8px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+}
+
+.profile-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.hero-btn{
+  height:46px;
+  border:none;
+  padding:0 18px;
+  border-radius:16px;
+  cursor:pointer;
+  font-weight:700;
+  transition:.25s;
+  font-size:14px;
+}
+
+.hero-btn:hover{
+  transform:translateY(-2px);
+}
+
+.btn-light{
+  background:#fff;
+  color:#000;
+}
+
+.btn-primary{
+  background:var(--primary);
+  color:white;
+}
+
+/* ========================================================= */
+/* BREADCRUMB */
+/* ========================================================= */
+
+.breadcrumb-wrap{
+  margin-top:26px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.page-title{
+  font-size:34px;
+  font-weight:900;
+}
+
+.breadcrumb{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+/* ========================================================= */
+/* SHIPPING BANNER */
+/* ========================================================= */
+
+.shipping-banner{
+  margin-top:20px;
+  background:#dcfce7;
+  border:1px solid #bbf7d0;
+  color:#166534;
+  padding:16px 20px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  font-weight:700;
+  box-shadow:var(--shadow);
+}
+
+/* ========================================================= */
+/* CART GRID */
+/* ========================================================= */
+
+.cart-grid{
+  display:grid;
+  grid-template-columns:1.6fr .8fr;
+  gap:24px;
+  margin-top:24px;
+}
+
+/* ========================================================= */
+/* CART LEFT */
+/* ========================================================= */
+
+.cart-box{
+  background:var(--card);
+  border-radius:28px;
+  padding:24px;
+  box-shadow:var(--shadow);
+}
+
+.cart-header{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+  font-weight:800;
+  color:#64748b;
+  letter-spacing:.5px;
+}
+
+.cart-item{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:16px;
+  align-items:center;
+  padding:22px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.product-info{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.product-info img{
+  width:90px;
+  height:90px;
+  border-radius:18px;
+  object-fit:cover;
+}
+
+.product-content h3{
+  font-size:17px;
+  font-weight:800;
+  margin-bottom:8px;
+}
+
+.product-content p{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.stock{
+  color:var(--green);
+  font-weight:700;
+  font-size:13px;
+}
+
+.price{
+  font-weight:800;
+  font-size:16px;
+}
+
+.qty-box{
+  display:flex;
+  align-items:center;
+  width:130px;
+  height:46px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.qty-btn{
+  width:40px;
+  height:100%;
+  border:none;
+  background:#f8fafc;
+  cursor:pointer;
+  font-size:18px;
+  font-weight:700;
+}
+
+.qty-input{
+  flex:1;
+  height:100%;
+  border:none;
+  text-align:center;
+  outline:none;
+  font-weight:700;
+  background:white;
+}
+
+.total-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.delete-btn{
+  width:40px;
+  height:40px;
+  border:none;
+  background:#fee2e2;
+  color:#dc2626;
+  border-radius:12px;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.delete-btn:hover{
+  transform:scale(1.05);
+}
+
+.cart-actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  margin-top:22px;
+  flex-wrap:wrap;
+}
+
+.action-btn{
+  height:50px;
+  padding:0 22px;
+  border-radius:16px;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.outline-btn{
+  border:1px solid var(--border);
+  background:white;
+}
+
+.dark-btn{
+  background:var(--dark);
+  color:white;
+}
+
+.action-btn:hover{
+  transform:translateY(-2px);
+}
+
+/* ========================================================= */
+/* SUMMARY */
+/* ========================================================= */
+
+.summary{
+  position:sticky;
+  top:100px;
+  background:white;
+  border-radius:28px;
+  padding:24px;
+  height:fit-content;
+  box-shadow:var(--shadow);
+}
+
+.summary h3{
+  font-size:24px;
+  font-weight:900;
+  margin-bottom:24px;
+}
+
+.summary-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+  color:#334155;
+  font-size:15px;
+}
+
+.summary-row strong{
+  font-size:20px;
+  color:black;
+}
+
+.green{
+  color:var(--green);
+  font-weight:800;
+}
+
+.summary-divider{
+  border-top:1px solid var(--border);
+  margin:20px 0;
+}
+
+.checkout-btn{
+  width:100%;
+  height:56px;
+  border:none;
+  border-radius:18px;
+  background:var(--primary);
+  color:white;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.checkout-btn:hover{
+  background:var(--primary-hover);
+}
+
+.paypal-btn{
+  width:100%;
+  height:56px;
+  border:none;
+  border-radius:18px;
+  background:var(--yellow);
+  color:black;
+  margin-top:14px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.secure-text{
+  margin-top:16px;
+  color:#64748b;
+  text-align:center;
+  font-size:13px;
+}
+
+.promo-box{
+  margin-top:26px;
+  padding-top:24px;
+  border-top:1px solid var(--border);
+}
+
+.promo-title{
+  font-weight:800;
+  margin-bottom:16px;
+}
+
+.promo-row{
+  display:flex;
+  gap:10px;
+}
+
+.promo-row input{
+  flex:1;
+  height:50px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:0 14px;
+  outline:none;
+}
+
+.apply-btn{
+  width:110px;
+  border:none;
+  border-radius:14px;
+  background:#111827;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.payment-icons{
+  display:flex;
+  gap:10px;
+  margin-top:24px;
+  flex-wrap:wrap;
+}
+
+.pay-icon{
+  height:44px;
+  min-width:60px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  background:#fff;
+}
+
+/* ========================================================= */
+/* TRUST BAR */
+/* ========================================================= */
+
+.trust-bar{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+
+.trust-card{
+  background:white;
+  padding:24px;
+  border-radius:24px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+
+.trust-card i{
+  font-size:30px;
+  color:var(--primary);
+  margin-bottom:16px;
+}
+
+.trust-card h4{
+  margin-bottom:8px;
+  font-size:18px;
+}
+
+.trust-card p{
+  color:var(--muted);
+  font-size:14px;
+}
+
+/* ========================================================= */
+/* RECOMMENDATIONS */
+/* ========================================================= */
+
+.recommend-section{
+  margin-top:40px;
+}
+
+.section-title{
+  font-size:28px;
+  font-weight:900;
+  margin-bottom:20px;
+}
+
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+
+.product-card{
+  background:white;
+  border-radius:24px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:.25s;
+}
+
+.product-card:hover{
+  transform:translateY(-4px);
+}
+
+.product-card img{
+  width:100%;
+  height:240px;
+  object-fit:cover;
+}
+
+.product-body{
+  padding:18px;
+}
+
+.product-body h4{
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+.product-body p{
+  color:var(--muted);
+  margin-bottom:14px;
+}
+
+.product-foot{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.add-btn{
+  height:42px;
+  padding:0 16px;
+  border:none;
+  border-radius:12px;
+  background:var(--primary);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ========================================================= */
+/* FOOTER */
+/* ========================================================= */
+
+footer{
+  margin-top:60px;
+  background:#020617;
+  color:white;
+}
+
+.footer-inner{
+  max-width:1400px;
+  margin:auto;
+  padding:70px 24px 30px;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr 1fr 1.5fr;
+  gap:30px;
+}
+
+.footer-brand h2{
+  font-size:34px;
+  margin-bottom:16px;
+}
+
+.footer-brand p{
+  color:#cbd5e1;
+  line-height:1.7;
+}
+
+.socials{
+  display:flex;
+  gap:12px;
+  margin-top:20px;
+}
+
+.socials button{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  border:none;
+  background:#111827;
+  color:white;
+  cursor:pointer;
+}
+
+.footer-col h4{
+  margin-bottom:18px;
+  font-size:17px;
+}
+
+.footer-col a{
+  display:block;
+  color:#cbd5e1;
+  text-decoration:none;
+  margin-bottom:12px;
+  font-size:14px;
+}
+
+.newsletter{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.newsletter input{
+  height:50px;
+  border:none;
+  border-radius:14px;
+  padding:0 16px;
+}
+
+.newsletter button{
+  height:50px;
+  border:none;
+  border-radius:14px;
+  background:var(--primary);
+  color:white;
+  font-weight:700;
+}
+
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.08);
+  margin-top:40px;
+  padding-top:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.secure-badge{
+  padding:10px 16px;
+  border-radius:999px;
+  background:#111827;
+}
+
+/* ========================================================= */
+/* MOBILE */
+/* ========================================================= */
+
+.mobile-summary{
+  display:none;
+}
+
+@media(max-width:1200px){
+
+  .product-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+}
+
+@media(max-width:992px){
+
+  .cart-grid{
+    grid-template-columns:1fr;
+  }
+
+  .summary{
+    position:relative;
+    top:0;
+  }
+
+  .trust-bar{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .footer-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .product-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:768px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .search-box{
+    display:none;
+  }
+
+  .page-title{
+    font-size:28px;
+  }
+
+  .cart-header{
+    display:none;
+  }
+
+  .cart-item{
+    grid-template-columns:1fr;
+    gap:16px;
+    background:#f8fafc;
+    padding:18px;
+    border-radius:20px;
+    margin-bottom:14px;
+    border:none;
+  }
+
+  .product-info{
+    align-items:flex-start;
+  }
+
+  .product-info img{
+    width:78px;
+    height:78px;
+  }
+
+  .total-wrap{
+    justify-content:flex-start;
+  }
+
+  .trust-bar{
+    grid-template-columns:1fr;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr;
+  }
+
+  .product-grid{
+    grid-template-columns:1fr;
+  }
+
+  .profile-hero{
+    padding:20px;
+  }
+
+  .profile-content h2{
+    font-size:24px;
+  }
+
+  .profile-left{
+    align-items:flex-start;
+  }
+
+  .mobile-summary{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    background:white;
+    border-top:1px solid var(--border);
+    padding:14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    z-index:999;
+    box-shadow:0 -10px 20px rgba(0,0,0,.08);
+  }
+
+  .mobile-summary button{
+    flex:1;
+    height:52px;
+    border:none;
+    border-radius:16px;
+    background:var(--primary);
+    color:white;
+    font-weight:800;
+  }
+
+  body{
+    padding-bottom:90px;
+  }
+
+}
+
+@media(max-width:600px){
+
+  main{
+    padding:16px;
+  }
+
+  .profile-left{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .hero-top{
+    align-items:flex-start;
+  }
+
+  .profile-actions{
+    width:100%;
+  }
+
+  .hero-btn{
+    flex:1;
+  }
+
+  .cart-box,
+  .summary{
+    padding:18px;
+    border-radius:22px;
+  }
+
+  .shipping-banner{
+    font-size:14px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ========================================================= -->
+<!-- NAVBAR -->
+<!-- ========================================================= -->
+
+<nav class="navbar">
+
+  <div class="nav-inner">
+
+    <div class="nav-left">
+
+      <div class="logo">ShopVista</div>
+
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Shop</a>
+        <a href="#">Categories</a>
+        <a href="#">Deals</a>
+        <a href="#">New Arrivals</a>
+        <a href="#">About Us</a>
+      </div>
+
+    </div>
+
+    <div class="nav-right">
+
+      <div class="search-box">
+        <i class="fa fa-search"></i>
+        <input type="text" placeholder="Search products..." />
+      </div>
+
+      <button class="icon-btn">
+        <i class="fa-regular fa-user"></i>
+      </button>
+
+      <button class="icon-btn">
+        <i class="fa-regular fa-heart"></i>
+      </button>
+
+      <button class="icon-btn">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <div class="badge">3</div>
+      </button>
+
+    </div>
+
+  </div>
+
+</nav>
+
+<!-- ========================================================= -->
+<!-- MAIN -->
+<!-- ========================================================= -->
+
+<main>
+
+  <!-- PROFILE HERO -->
+
+  <section class="profile-hero">
+
+    <div class="hero-top">
+
+      <div class="profile-left">
+
+        <img
+          src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+        />
+
+        <div class="profile-content">
+
+          <h2>Hi, John Doe</h2>
+
+          <p>VIP Gold Member</p>
+
+          <div class="profile-badges">
+
+            <span>Verified Account</span>
+
+            <span style="background:rgba(250,204,21,.12);color:#fde68a">
+              Premium Benefits Active
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="profile-actions">
+
+        <button class="hero-btn btn-light">
+          <i class="fa fa-user-edit"></i>
+          Edit Profile
+        </button>
+
+        <button class="hero-btn btn-primary">
+          <i class="fa fa-crown"></i>
+          Upgrade Membership
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PAGE HEADER -->
+
+  <div class="breadcrumb-wrap">
+
+    <div>
+      <h1 class="page-title">Your Cart (3)</h1>
+    </div>
+
+    <div class="breadcrumb">
+      <span>Home</span>
+      <i class="fa fa-chevron-right"></i>
+      <span>Cart</span>
+    </div>
+
+  </div>
+
+  <!-- SHIPPING BANNER -->
+
+  <div class="shipping-banner">
+    <i class="fa fa-truck-fast"></i>
+    Free shipping unlocked! You are eligible for free shipping.
+  </div>
+
+  <!-- CART GRID -->
+
+  <div class="cart-grid">
+
+    <!-- LEFT -->
+
+    <div class="cart-box">
+
+      <div class="cart-header">
+        <div>PRODUCT</div>
+        <div>PRICE</div>
+        <div>QUANTITY</div>
+        <div>TOTAL</div>
+      </div>
+
+      <!-- ITEM -->
+
+      <div class="cart-item">
+
+        <div class="product-info">
+
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop"/>
+
+          <div class="product-content">
+
+            <h3>Urban Explorer Backpack</h3>
+
+            <p>Color: Black • Size: Large</p>
+
+            <div class="stock">
+              <i class="fa fa-check-circle"></i>
+              In Stock
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="price">$59.99</div>
+
+        <div>
+
+          <div class="qty-box">
+
+            <button class="qty-btn minus">-</button>
+
+            <input class="qty-input" type="text" value="1"/>
+
+            <button class="qty-btn plus">+</button>
+
+          </div>
+
+        </div>
+
+        <div class="total-wrap">
+
+          <div class="price">$59.99</div>
+
+          <button class="delete-btn">
+            <i class="fa fa-trash"></i>
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- ITEM -->
+
+      <div class="cart-item">
+
+        <div class="product-info">
+
+          <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop"/>
+
+          <div class="product-content">
+
+            <h3>Classic White Sneakers</h3>
+
+            <p>Color: White • Size: 42</p>
+
+            <div class="stock">
+              <i class="fa fa-check-circle"></i>
+              In Stock
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="price">$49.99</div>
+
+        <div>
+
+          <div class="qty-box">
+
+            <button class="qty-btn minus">-</button>
+
+            <input class="qty-input" type="text" value="1"/>
+
+            <button class="qty-btn plus">+</button>
+
+          </div>
+
+        </div>
+
+        <div class="total-wrap">
+
+          <div class="price">$49.99</div>
+
+          <button class="delete-btn">
+            <i class="fa fa-trash"></i>
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- ITEM -->
+
+      <div class="cart-item">
+
+        <div class="product-info">
+
+          <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1200&auto=format&fit=crop"/>
+
+          <div class="product-content">
+
+            <h3>Minimal Leather Watch</h3>
+
+            <p>Color: Brown • Premium Edition</p>
+
+            <div class="stock">
+              <i class="fa fa-check-circle"></i>
+              In Stock
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="price">$39.99</div>
+
+        <div>
+
+          <div class="qty-box">
+
+            <button class="qty-btn minus">-</button>
+
+            <input class="qty-input" type="text" value="1"/>
+
+            <button class="qty-btn plus">+</button>
+
+          </div>
+
+        </div>
+
+        <div class="total-wrap">
+
+          <div class="price">$39.99</div>
+
+          <button class="delete-btn">
+            <i class="fa fa-trash"></i>
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- ACTIONS -->
+
+      <div class="cart-actions">
+
+        <button class="action-btn outline-btn">
+          <i class="fa fa-arrow-left"></i>
+          Continue Shopping
+        </button>
+
+        <button class="action-btn dark-btn">
+          <i class="fa fa-rotate"></i>
+          Update Cart
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <aside class="summary">
+
+      <h3>Order Summary</h3>
+
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>$149.97</span>
+      </div>
+
+      <div class="summary-row">
+        <span>Discount</span>
+        <span class="green">-$10.00</span>
+      </div>
+
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span class="green">FREE</span>
+      </div>
+
+      <div class="summary-divider"></div>
+
+      <div class="summary-row">
+        <strong>Total</strong>
+        <strong>$139.97</strong>
+      </div>
+
+      <div class="summary-row green">
+        You saved $10.00
+      </div>
+
+      <button class="checkout-btn">
+        <i class="fa fa-lock"></i>
+        Proceed to Checkout
+      </button>
+
+      <button class="paypal-btn">
+        <i class="fa-brands fa-paypal"></i>
+        PayPal Checkout
+      </button>
+
+      <div class="secure-text">
+        Secure Checkout • Your payment information is encrypted
+      </div>
+
+      <!-- PROMO -->
+
+      <div class="promo-box">
+
+        <div class="promo-title">
+          Promo Code
+        </div>
+
+        <div class="promo-row">
+
+          <input type="text" placeholder="Enter code"/>
+
+          <button class="apply-btn">
+            Apply
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- PAYMENT -->
+
+      <div class="payment-icons">
+
+        <div class="pay-icon">VISA</div>
+
+        <div class="pay-icon">MC</div>
+
+        <div class="pay-icon">AMEX</div>
+
+        <div class="pay-icon">PayPal</div>
+
+        <div class="pay-icon">
+          <i class="fa-brands fa-apple-pay"></i>
+        </div>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- TRUST BAR -->
+
+  <section class="trust-bar">
+
+    <div class="trust-card">
+
+      <i class="fa fa-lock"></i>
+
+      <h4>Secure Payments</h4>
+
+      <p>256-bit SSL encrypted transactions for safe shopping.</p>
+
+    </div>
+
+    <div class="trust-card">
+
+      <i class="fa fa-truck-fast"></i>
+
+      <h4>Free Shipping</h4>
+
+      <p>Enjoy free delivery on all orders over $50.</p>
+
+    </div>
+
+    <div class="trust-card">
+
+      <i class="fa fa-rotate-left"></i>
+
+      <h4>Easy Returns</h4>
+
+      <p>30-day hassle-free returns and exchanges.</p>
+
+    </div>
+
+    <div class="trust-card">
+
+      <i class="fa fa-headset"></i>
+
+      <h4>24/7 Support</h4>
+
+      <p>Dedicated customer service available anytime.</p>
+
+    </div>
+
+  </section>
+
+  <!-- RECOMMEND -->
+
+  <section class="recommend-section">
+
+    <h2 class="section-title">
+      You May Also Like
+    </h2>
+
+    <div class="product-grid">
+
+      <div class="product-card">
+
+        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop"/>
+
+        <div class="product-body">
+
+          <h4>Premium Hoodie</h4>
+
+          <p>Comfortable streetwear essential.</p>
+
+          <div class="product-foot">
+
+            <strong>$34.99</strong>
+
+            <button class="add-btn">
+              Add
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="product-card">
+
+        <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop"/>
+
+        <div class="product-body">
+
+          <h4>Modern Jacket</h4>
+
+          <p>Minimal premium winter collection.</p>
+
+          <div class="product-foot">
+
+            <strong>$79.99</strong>
+
+            <button class="add-btn">
+              Add
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="product-card">
+
+        <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=1200&auto=format&fit=crop"/>
+
+        <div class="product-body">
+
+          <h4>Classic Denim</h4>
+
+          <p>Timeless fit with modern comfort.</p>
+
+          <div class="product-foot">
+
+            <strong>$44.99</strong>
+
+            <button class="add-btn">
+              Add
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="product-card">
+
+        <img src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?q=80&w=1200&auto=format&fit=crop"/>
+
+        <div class="product-body">
+
+          <h4>Minimal Sneakers</h4>
+
+          <p>Elegant design for daily wear.</p>
+
+          <div class="product-foot">
+
+            <strong>$54.99</strong>
+
+            <button class="add-btn">
+              Add
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- MOBILE SUMMARY -->
+
+<div class="mobile-summary">
+
+  <div>
+    <div style="font-size:13px;color:#64748b">
+      Total
+    </div>
+
+    <div style="font-size:22px;font-weight:900">
+      $139.97
+    </div>
+  </div>
+
+  <button>
+    Checkout
+  </button>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+
+  <div class="footer-inner">
+
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+
+        <h2>ShopVista</h2>
+
+        <p>
+          Premium e-commerce shopping experience with curated collections,
+          secure payments, and fast delivery worldwide.
+        </p>
+
+        <div class="socials">
+
+          <button>
+            <i class="fa-brands fa-facebook-f"></i>
+          </button>
+
+          <button>
+            <i class="fa-brands fa-instagram"></i>
+          </button>
+
+          <button>
+            <i class="fa-brands fa-x-twitter"></i>
+          </button>
+
+          <button>
+            <i class="fa-brands fa-youtube"></i>
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="footer-col">
+
+        <h4>SHOP</h4>
+
+        <a href="#">Men</a>
+        <a href="#">Women</a>
+        <a href="#">Accessories</a>
+        <a href="#">Shoes</a>
+        <a href="#">New Arrivals</a>
+
+      </div>
+
+      <div class="footer-col">
+
+        <h4>CUSTOMER SERVICE</h4>
+
+        <a href="#">Contact Us</a>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+        <a href="#">Track Order</a>
+        <a href="#">FAQ</a>
+
+      </div>
+
+      <div class="footer-col">
+
+        <h4>COMPANY</h4>
+
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+
+      </div>
+
+      <div class="footer-col">
+
+        <h4>NEWSLETTER</h4>
+
+        <div class="newsletter">
+
+          <input type="email" placeholder="Enter your email"/>
+
+          <button>
+            Subscribe
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+      <div>
+        © 2026 ShopVista. All rights reserved.
+      </div>
+
+      <div class="secure-badge">
+        <i class="fa fa-lock"></i>
+        Secure Site
+      </div>
+
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- ========================================================= -->
+<!-- JS -->
+<!-- ========================================================= -->
+
+<script>
+
+document.querySelectorAll('.qty-box').forEach(box => {
+
+  const input = box.querySelector('.qty-input');
+  const plus = box.querySelector('.plus');
+  const minus = box.querySelector('.minus');
+
+  plus.addEventListener('click', () => {
+    input.value = parseInt(input.value) + 1;
+  });
+
+  minus.addEventListener('click', () => {
+    if(parseInt(input.value) > 1){
+      input.value = parseInt(input.value) - 1;
+    }
+  });
+
+});
+
+document.querySelectorAll('.delete-btn').forEach(btn => {
+
+  btn.addEventListener('click', () => {
+
+    const item = btn.closest('.cart-item');
+
+    item.style.opacity = '0';
+    item.style.transform = 'translateX(30px)';
+
+    setTimeout(() => {
+      item.remove();
+    },300);
+
+  });
+
+});
+
+</script>
+
+</body>
+</html>

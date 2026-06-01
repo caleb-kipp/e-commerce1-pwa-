@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dynamic Categories Shop</title>
+
+<style>
+:root{
+  --bg:#0b111b;
+  --card:#0f1623;
+  --text:#f1f5f9;
+  --muted:#94a3b8;
+  --brand:#22c55e;
+  --radius:18px;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,body{
+  width:100%;
+  overflow-x:hidden;
+  font-family:system-ui,sans-serif;
+  background:linear-gradient(180deg,#071019,#0b111b,#111827);
+  color:var(--text);
+}
+
+body{
+  min-height:100vh;
+}
+
+img{
+  width:100%;
+  display:block;
+}
+
+.container{
+  width:min(1500px,95%);
+  margin:auto;
+}
+
+/* =========================
+HEADER
+========================= */
+.top{
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter:blur(14px);
+  background:rgba(5,10,18,.75);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.top-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:16px 0;
+}
+
+.brand{
+  font-size:1.4rem;
+  font-weight:800;
+  letter-spacing:.5px;
+  background:linear-gradient(135deg,#22c55e,#38bdf8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.search{
+  flex:1;
+  max-width:520px;
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  border:none;
+  outline:none;
+  padding:14px 48px 14px 18px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  color:white;
+  font-size:15px;
+}
+
+.search svg{
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  opacity:.7;
+}
+
+/* =========================
+HERO
+========================= */
+.hero{
+  padding:30px 0 20px;
+}
+
+.hero-box{
+  border-radius:30px;
+  overflow:hidden;
+  position:relative;
+  min-height:380px;
+  background:url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1600&auto=format&fit=crop') center/cover;
+  display:flex;
+  align-items:flex-end;
+  box-shadow:var(--shadow);
+}
+
+.hero-box::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.75));
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  padding:40px;
+  max-width:700px;
+}
+
+.hero-content h1{
+  font-size:clamp(2rem,5vw,4rem);
+  margin-bottom:12px;
+}
+
+.hero-content p{
+  color:#dbe4ee;
+  line-height:1.7;
+  margin-bottom:20px;
+}
+
+.btn{
+  border:none;
+  cursor:pointer;
+  padding:12px 18px;
+  border-radius:14px;
+  font-weight:700;
+  transition:.25s ease;
+}
+
+.btn-primary{
+  background:linear-gradient(135deg,#22c55e,#14b8a6);
+  color:#04120b;
+}
+
+.btn-primary:hover{
+  transform:translateY(-2px);
+}
+
+/* =========================
+CATEGORY GRID
+========================= */
+.section{
+  padding:24px 0;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
+
+.section-title h2{
+  font-size:1.8rem;
+}
+
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+  gap:18px;
+}
+
+.category-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;
+  padding:16px 10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  cursor:pointer;
+  transition:.28s ease;
+  text-align:center;
+  min-height:150px;
+}
+
+.category-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(34,197,94,.4);
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+.category-icon{
+  width:78px;
+  height:78px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#1e293b,#0f172a);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.category-icon img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+  filter:brightness(1.2);
+}
+
+.category-card h3{
+  font-size:.95rem;
+  font-weight:600;
+}
+
+/* =========================
+PRODUCTS
+========================= */
+.products-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+
+.products-header h2{
+  font-size:1.7rem;
+}
+
+.products-count{
+  color:var(--muted);
+}
+
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:22px;
+}
+
+.product-card{
+  background:var(--card);
+  border-radius:24px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.06);
+  transition:.28s ease;
+  position:relative;
+}
+
+.product-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 15px 30px rgba(0,0,0,.35);
+}
+
+.product-img{
+  position:relative;
+  overflow:hidden;
+}
+
+.product-img img{
+  aspect-ratio:1/1;
+  object-fit:cover;
+  transition:transform .4s ease;
+}
+
+.product-card:hover .product-img img{
+  transform:scale(1.08);
+}
+
+.discount-badge{
+  position:absolute;
+  top:12px;
+  left:12px;
+  background:#ef4444;
+  color:white;
+  font-size:.75rem;
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:700;
+}
+
+.product-content{
+  padding:18px;
+}
+
+.product-title{
+  font-size:1rem;
+  margin-bottom:10px;
+}
+
+.product-meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.price{
+  font-size:1.1rem;
+  font-weight:800;
+  color:#facc15;
+}
+
+.rating{
+  color:#fbbf24;
+  font-size:.9rem;
+}
+
+.product-actions{
+  display:flex;
+  gap:10px;
+}
+
+.product-actions button{
+  flex:1;
+}
+
+.btn-dark{
+  background:#172033;
+  color:white;
+}
+
+.btn-dark:hover{
+  background:#1e293b;
+}
+
+/* =========================
+MODAL
+========================= */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(10px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:999;
+}
+
+.modal.active{
+  display:flex;
+}
+
+.modal-box{
+  width:min(1200px,100%);
+  background:#09111d;
+  border-radius:28px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.modal-left{
+  background:#0f172a;
+  padding:25px;
+}
+
+.modal-left img{
+  width:100%;
+  height:600px;
+  object-fit:contain;
+  border-radius:20px;
+  background:#0b111b;
+}
+
+.modal-right{
+  padding:28px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.modal-right h2{
+  font-size:2rem;
+}
+
+.specs{
+  padding-left:18px;
+  color:#cbd5e1;
+  line-height:1.7;
+}
+
+.close-modal{
+  position:absolute;
+  top:20px;
+  right:20px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:none;
+  background:#111827;
+  color:white;
+  cursor:pointer;
+  font-size:1.2rem;
+}
+
+/* =========================
+FOOTER
+========================= */
+footer{
+  margin-top:60px;
+  border-top:1px solid rgba(255,255,255,.08);
+  background:#09111d;
+}
+
+.footer-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:30px;
+  padding:50px 0;
+}
+
+.footer-grid h4{
+  margin-bottom:14px;
+}
+
+.footer-grid p,
+.footer-grid li{
+  color:#94a3b8;
+  line-height:1.8;
+  list-style:none;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+@media(max-width:900px){
+  .modal-box{
+    grid-template-columns:1fr;
+  }
+
+  .modal-left img{
+    height:320px;
+  }
+}
+
+@media(max-width:768px){
+  .top-inner{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .category-grid{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .category-icon{
+    width:64px;
+    height:64px;
+  }
+
+  .category-icon img{
+    width:34px;
+    height:34px;
+  }
+
+  .hero-content{
+    padding:26px;
+  }
+}
+
+@media(max-width:480px){
+  .products-grid{
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .product-content{
+    padding:12px;
+  }
+
+  .product-title{
+    font-size:.9rem;
+  }
+
+  .price{
+    font-size:1rem;
+  }
+
+  .product-actions{
+    flex-direction:column;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="container top-inner">
+    <div class="brand">MegaShop Categories</div>
+
+    <div class="search">
+      <input type="text" id="searchInput" placeholder="Search products or categories...">
+
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-box">
+      <div class="hero-content">
+        <h1>Browse 50+ Dynamic Categories</h1>
+        <p>
+          Click any category icon below to instantly fetch and display real matching products dynamically.
+          Fully responsive with mobile-first category circles.
+        </p>
+
+        <button class="btn btn-primary" onclick="scrollToCategories()">
+          Explore Categories
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="categoriesSection">
+  <div class="container">
+
+    <div class="section-title">
+      <h2>Shop By Category</h2>
+      <p class="products-count">50+ categories available</p>
+    </div>
+
+    <div class="category-grid" id="categoryGrid"></div>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+
+    <div class="products-header">
+      <div>
+        <h2 id="productsTitle">Featured Products</h2>
+        <p class="products-count" id="productsCount"></p>
+      </div>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-grid">
+
+    <div>
+      <h4>MegaShop</h4>
+      <p>
+        Dynamic shopping category page with responsive product filtering.
+      </p>
+    </div>
+
+    <div>
+      <h4>Categories</h4>
+      <ul>
+        <li>Electronics</li>
+        <li>Sports</li>
+        <li>Kitchen</li>
+        <li>Office</li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Support</h4>
+      <ul>
+        <li>Orders</li>
+        <li>Shipping</li>
+        <li>Returns</li>
+        <li>Help Center</li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li>support@megashop.com</li>
+        <li>+1 000 000 000</li>
+      </ul>
+    </div>
+
+  </div>
+</footer>
+
+<!-- =====================
+PRODUCT MODAL
+===================== -->
+<div class="modal" id="productModal">
+
+  <button class="close-modal" onclick="closeModal()">✕</button>
+
+  <div class="modal-box">
+
+    <div class="modal-left">
+      <img id="modalImage" src="" alt="">
+    </div>
+
+    <div class="modal-right">
+      <h2 id="modalTitle"></h2>
+      <div class="price" id="modalPrice"></div>
+      <div class="rating" id="modalRating"></div>
+      <p id="modalDesc"></p>
+
+      <ul class="specs" id="modalSpecs"></ul>
+
+      <div class="product-actions">
+        <button class="btn btn-primary">Add To Cart</button>
+        <button class="btn btn-dark">Wishlist</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* =========================
+PRODUCT DATABASE
+========================= */
+
+const now = Date.now();
+
+const products = [
+
+{id:'p10', title:'Stainless Steel Knife Set', price:35.00, category:'kitchen', rating:4.5, discount:10,
+images:['https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=900&auto=format&fit=crop'],
+specs:['6-piece set','Ergonomic handle','Premium stainless steel'],
+description:'Professional kitchen knife set with premium ergonomic grip.'},
+
+{id:'p11', title:'Electric Blender Pro', price:58.00, category:'kitchen', rating:4.7, discount:15,
+images:['https://images.unsplash.com/photo-1586201375754-8362c61abf7d?q=80&w=900&auto=format&fit=crop'],
+specs:['600W','Ice crush mode','Fast blend technology'],
+description:'Heavy duty blender perfect for smoothies and ice crushing.'},
+
+{id:'p12', title:'Non-Stick Frying Pan', price:24.00, category:'kitchen', rating:4.3, discount:12,
+images:['https://images.unsplash.com/photo-1604908812651-3f5ce242a3cf?q=80&w=900&auto=format&fit=crop'],
+specs:['Scratch-resistant','Heat resistant'],
+description:'Premium non-stick frying pan for daily cooking.'},
+
+{id:'p16', title:'Luxury Throw Blanket', price:28.00, category:'home', rating:4.5, discount:10,
+images:['https://images.unsplash.com/photo-1600210492493-0946911123ea?q=80&w=900&auto=format&fit=crop'],
+specs:['Ultra soft','Premium cotton'],
+description:'Warm luxury blanket with soft premium fabric.'},
+
+{id:'p17', title:'Decorative Wall Mirror', price:45.00, category:'home', rating:4.6, discount:18,
+images:['https://images.unsplash.com/photo-1567016554429-449b6a99f91f?q=80&w=900&auto=format&fit=crop'],
+specs:['Steel frame','Modern design'],
+description:'Elegant decorative mirror for luxury interiors.'},
+
+{id:'p18', title:'LED Bedroom Lamp', price:34.00, category:'home', rating:4.8, discount:12,
+images:['https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=900&auto=format&fit=crop'],
+specs:['Warm light','LED technology'],
+description:'Modern LED bedroom lamp with warm ambiance.'},
+
+{id:'p22', title:'Ergonomic Office Chair', price:95.00, category:'office', rating:4.7, discount:20,
+images:['https://images.unsplash.com/photo-1505820013142-f86a3439c5f3?q=80&w=900&auto=format&fit=crop'],
+specs:['Lumbar support','Adjustable height'],
+description:'Comfortable ergonomic office chair for productivity.'},
+
+{id:'p23', title:'Adjustable Laptop Stand', price:27.00, category:'office', rating:4.5, discount:12,
+images:['https://images.unsplash.com/photo-1587613754545-2dfd2d595b77?q=80&w=900&auto=format&fit=crop'],
+specs:['Aluminium','Universal support'],
+description:'Portable adjustable stand for all laptops.'},
+
+{id:'p24', title:'Wireless Keyboard', price:30.00, category:'office', rating:4.4, discount:10,
+images:['https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?q=80&w=900&auto=format&fit=crop'],
+specs:['Rechargeable','Wireless connectivity'],
+description:'Slim wireless keyboard with silent keys.'},
+
+{id:'p28', title:'Yoga Mat Premium', price:25.00, category:'sports', rating:4.7, discount:12,
+images:['https://images.unsplash.com/photo-1599058918043-9403f1bff73b?q=80&w=900&auto=format&fit=crop'],
+specs:['Non-slip','6mm comfort'],
+description:'Premium yoga mat with superior grip.'},
+
+{id:'p29', title:'Dumbbell Set 10kg', price:40.00, category:'sports', rating:4.6, discount:18,
+images:['https://images.unsplash.com/photo-1571019613846-1a8f1cbd345c?q=80&w=900&auto=format&fit=crop'],
+specs:['Rubber coated','Gym quality'],
+description:'Professional dumbbell set for strength training.'},
+
+{id:'p31', title:'Football Boots', price:62.00, category:'sports', rating:4.8, discount:20,
+images:['https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=900&auto=format&fit=crop'],
+specs:['Firm ground','Comfort fit'],
+description:'Professional football boots with premium grip.'},
+
+{id:'p34', title:'Wireless Earbuds Pro', price:59.00, category:'electronics', rating:4.8, discount:22,
+images:['https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=900&auto=format&fit=crop'],
+specs:['Noise canceling','Bluetooth 5.2'],
+description:'Premium wireless earbuds with deep bass.'},
+
+{id:'p35', title:'Smartwatch X2', price:75.00, category:'electronics', rating:4.7, discount:15,
+images:['https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=900&auto=format&fit=crop'],
+specs:['Heart-rate monitor','Fitness tracking'],
+description:'Stylish smartwatch with smart health features.'},
+
+{id:'p36', title:'Bluetooth Speaker Mini', price:22.00, category:'electronics', rating:4.5, discount:10,
+images:['https://images.unsplash.com/photo-1512427691650-1f6a75d1d9cf?q=80&w=900&auto=format&fit=crop'],
+specs:['Deep bass','Portable'],
+description:'Compact bluetooth speaker with premium sound.'},
+
+{id:'p37', title:'4K Action Camera', price:99.00, category:'electronics', rating:4.6, discount:20,
+images:['https://images.unsplash.com/photo-1519183071298-a2962be90b8e?q=80&w=900&auto=format&fit=crop'],
+specs:['Waterproof','4K video'],
+description:'Professional 4K action camera for adventure.'}
+];
+
+/* =========================
+50+ CATEGORY DATA
+========================= */
+
+const categories = [
+{name:'Watches', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/992/992700.png'},
+{name:'Kitchen', category:'kitchen', icon:'https://cdn-icons-png.flaticon.com/512/1046/1046857.png'},
+{name:'Home', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/1946/1946488.png'},
+{name:'Office', category:'office', icon:'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'},
+{name:'Sports', category:'sports', icon:'https://cdn-icons-png.flaticon.com/512/857/857455.png'},
+{name:'Electronics', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/3659/3659898.png'},
+{name:'Audio', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/727/727245.png'},
+{name:'Camera', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/1042/1042390.png'},
+{name:'Fitness', category:'sports', icon:'https://cdn-icons-png.flaticon.com/512/2936/2936886.png'},
+{name:'Furniture', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/809/809957.png'},
+{name:'Laptop', category:'office', icon:'https://cdn-icons-png.flaticon.com/512/179/179386.png'},
+{name:'Gaming', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/686/686589.png'},
+{name:'Travel', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/201/201623.png'},
+{name:'Shoes', category:'sports', icon:'https://cdn-icons-png.flaticon.com/512/2589/2589874.png'},
+{name:'Fashion', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/892/892458.png'},
+{name:'Decor', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/3081/3081985.png'},
+{name:'Lighting', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/3075/3075977.png'},
+{name:'Audio Gear', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/3659/3659784.png'},
+{name:'Chargers', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/1072/1072875.png'},
+{name:'Smart Devices', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/3523/3523887.png'},
+{name:'Cooking', category:'kitchen', icon:'https://cdn-icons-png.flaticon.com/512/1830/1830839.png'},
+{name:'Gym', category:'sports', icon:'https://cdn-icons-png.flaticon.com/512/3043/3043888.png'},
+{name:'Accessories', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/1250/1250615.png'},
+{name:'Desk Setup', category:'office', icon:'https://cdn-icons-png.flaticon.com/512/1995/1995574.png'},
+{name:'Bedding', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/2933/2933245.png'},
+{name:'Wireless', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/483/483947.png'},
+{name:'Yoga', category:'sports', icon:'https://cdn-icons-png.flaticon.com/512/2936/2936886.png'},
+{name:'Workout', category:'sports', icon:'https://cdn-icons-png.flaticon.com/512/921/921347.png'},
+{name:'Music', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/3659/3659899.png'},
+{name:'Kitchen Tools', category:'kitchen', icon:'https://cdn-icons-png.flaticon.com/512/2718/2718224.png'},
+{name:'Decor Lights', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/3103/3103446.png'},
+{name:'Storage', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/679/679922.png'},
+{name:'PC Setup', category:'office', icon:'https://cdn-icons-png.flaticon.com/512/3474/3474360.png'},
+{name:'Smart Audio', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/2991/2991148.png'},
+{name:'Outdoor', category:'sports', icon:'https://cdn-icons-png.flaticon.com/512/684/684908.png'},
+{name:'Running', category:'sports', icon:'https://cdn-icons-png.flaticon.com/512/857/857681.png'},
+{name:'Blenders', category:'kitchen', icon:'https://cdn-icons-png.flaticon.com/512/1046/1046751.png'},
+{name:'Pans', category:'kitchen', icon:'https://cdn-icons-png.flaticon.com/512/3143/3143643.png'},
+{name:'Headphones', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/3659/3659898.png'},
+{name:'Smartwatch', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/992/992700.png'},
+{name:'Chair', category:'office', icon:'https://cdn-icons-png.flaticon.com/512/2933/2933885.png'},
+{name:'Keyboard', category:'office', icon:'https://cdn-icons-png.flaticon.com/512/565/565547.png'},
+{name:'Bluetooth', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/633/633759.png'},
+{name:'Camera Gear', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/685/685655.png'},
+{name:'Football', category:'sports', icon:'https://cdn-icons-png.flaticon.com/512/53/53283.png'},
+{name:'Training', category:'sports', icon:'https://cdn-icons-png.flaticon.com/512/3043/3043888.png'},
+{name:'Luxury Home', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/609/609803.png'},
+{name:'Premium', category:'electronics', icon:'https://cdn-icons-png.flaticon.com/512/1828/1828884.png'},
+{name:'Desk Lamp', category:'office', icon:'https://cdn-icons-png.flaticon.com/512/3075/3075977.png'},
+{name:'Modern Home', category:'home', icon:'https://cdn-icons-png.flaticon.com/512/619/619153.png'}
+];
+
+/* =========================
+RENDER CATEGORIES
+========================= */
+
+const categoryGrid = document.getElementById('categoryGrid');
+const productsGrid = document.getElementById('productsGrid');
+const productsTitle = document.getElementById('productsTitle');
+const productsCount = document.getElementById('productsCount');
+
+function renderCategories(){
+
+  categoryGrid.innerHTML = categories.map(cat => `
+    <div class="category-card" onclick="filterProducts('${cat.category}','${cat.name}')">
+      <div class="category-icon">
+        <img src="${cat.icon}" alt="${cat.name}">
+      </div>
+      <h3>${cat.name}</h3>
+    </div>
+  `).join('');
+}
+
+/* =========================
+RENDER PRODUCTS
+========================= */
+
+function renderProducts(items){
+
+  productsCount.innerText = `${items.length} products found`;
+
+  productsGrid.innerHTML = items.map(product => `
+
+    <div class="product-card">
+
+      <div class="product-img">
+        <img src="${product.images[0]}" alt="${product.title}">
+        <div class="discount-badge">-${product.discount}%</div>
+      </div>
+
+      <div class="product-content">
+
+        <h3 class="product-title">${product.title}</h3>
+
+        <div class="product-meta">
+          <div class="price">$${product.price}</div>
+          <div class="rating">⭐ ${product.rating}</div>
+        </div>
+
+        <div class="product-actions">
+          <button class="btn btn-primary" onclick="openModal('${product.id}')">
+            View
+          </button>
+
+          <button class="btn btn-dark">
+            Cart
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  `).join('');
+}
+
+/* =========================
+FILTER PRODUCTS
+========================= */
+
+function filterProducts(category,name){
+
+  const filtered = products.filter(p => p.category === category);
+
+  productsTitle.innerText = `${name} Products`;
+
+  renderProducts(filtered);
+
+  window.scrollTo({
+    top:document.querySelector('.products-header').offsetTop - 100,
+    behavior:'smooth'
+  });
+}
+
+/* =========================
+SEARCH PRODUCTS
+========================= */
+
+const searchInput = document.getElementById('searchInput');
+
+searchInput.addEventListener('input', e => {
+
+  const value = e.target.value.toLowerCase();
+
+  const filtered = products.filter(product =>
+    product.title.toLowerCase().includes(value) ||
+    product.category.toLowerCase().includes(value)
+  );
+
+  productsTitle.innerText = value ? `Search Results` : `Featured Products`;
+
+  renderProducts(filtered);
+});
+
+/* =========================
+PRODUCT MODAL
+========================= */
+
+const modal = document.getElementById('productModal');
+
+function openModal(id){
+
+  const product = products.find(p => p.id === id);
+
+  document.getElementById('modalImage').src = product.images[0];
+  document.getElementById('modalTitle').innerText = product.title;
+  document.getElementById('modalPrice').innerText = `$${product.price}`;
+  document.getElementById('modalRating').innerHTML = `⭐ ${product.rating}`;
+  document.getElementById('modalDesc').innerText = product.description;
+
+  document.getElementById('modalSpecs').innerHTML = product.specs.map(spec => `
+    <li>${spec}</li>
+  `).join('');
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  modal.classList.remove('active');
+  document.body.style.overflow = 'auto';
+}
+
+modal.addEventListener('click', e => {
+  if(e.target === modal){
+    closeModal();
+  }
+});
+
+/* =========================
+SCROLL FUNCTION
+========================= */
+
+function scrollToCategories(){
+  document.getElementById('categoriesSection').scrollIntoView({
+    behavior:'smooth'
+  });
+}
+
+/* =========================
+INITIALIZE
+========================= */
+
+renderCategories();
+renderProducts(products);
+
+</script>
+
+</body>
+</html>

@@ -89,6 +89,14 @@
   const container = document.getElementById('ordersContainer');
 
   function fmt(n){ return '$' + Number(n||0).toFixed(2); }
+  function esc(v){
+    return String(v ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
   function save(){
     localStorage.setItem(ordersKey, JSON.stringify(orders));
@@ -122,8 +130,8 @@
         <div class="card" style="margin-bottom:12px">
           <div style="display:flex;justify-content:space-between">
             <div>
-              <strong>${o.id}</strong>
-              <div class="muted small">${new Date(o.createdAt).toLocaleString()}</div>
+              <strong>${esc(o.id)}</strong>
+              <div class="muted small">${esc(new Date(o.createdAt).toLocaleString())}</div>
             </div>
             <select data-status="${idx}">
               ${['Placed','On Delivery','Delivered','Cancelled']
@@ -135,16 +143,16 @@
 
           <strong>Customer</strong>
           <div class="muted small">
-            ${o.customer.name}<br />
-            ${o.customer.phone}<br />
-            ${o.customer.address}, ${o.customer.city}
+            ${esc(o.customer?.name)}<br />
+            ${esc(o.customer?.phone)}<br />
+            ${esc(o.customer?.address)}, ${esc(o.customer?.city)}
           </div>
 
           <hr />
 
-          ${o.items.map(i=>`
+          ${(o.items || []).map(i=>`
             <div style="display:flex;justify-content:space-between">
-              <div>${i.title} × ${i.qty}</div>
+              <div>${esc(i.title)} × ${esc(i.qty)}</div>
               <div>${fmt(i.total)}</div>
             </div>
           `).join('')}
@@ -157,17 +165,17 @@
           </div>
 
           <div class="muted small" style="margin-top:8px">
-            <strong>Payment:</strong> ${o.paymentMethod}<br />
-            <strong>Shipping:</strong> ${o.shippingMethod}
+            <strong>Payment:</strong> ${esc(o.paymentMethod)}<br />
+            <strong>Shipping:</strong> ${esc(o.shippingMethod)}
           </div>
 
           <hr />
 
           <label class="small">Assign Driver</label>
-          <input placeholder="Driver name" value="${o.driver||''}" data-driver="${idx}" />
+          <input placeholder="Driver name" value="${esc(o.driver||'')}" data-driver="${idx}" />
 
           <label class="small">Delivery Date</label>
-          <input type="date" value="${o.deliveryDate||''}" data-date="${idx}" />
+          <input type="date" value="${esc(o.deliveryDate||'')}" data-date="${idx}" />
 
         </div>
       `).join('');
@@ -175,7 +183,9 @@
     // status change
     container.querySelectorAll('[data-status]').forEach(sel=>{
       sel.addEventListener('change',()=>{
-        orders[sel.dataset.status].status = sel.value;
+        const allowedStatuses = ['Placed','On Delivery','Delivered','Cancelled'];
+        const nextStatus = allowedStatuses.includes(sel.value) ? sel.value : 'Placed';
+        orders[sel.dataset.status].status = nextStatus;
         save();
       });
     });
@@ -183,7 +193,7 @@
     // driver assignment
     container.querySelectorAll('[data-driver]').forEach(inp=>{
       inp.addEventListener('change',()=>{
-        orders[inp.dataset.driver].driver = inp.value;
+        orders[inp.dataset.driver].driver = String(inp.value || '').trim();
         save();
       });
     });
@@ -191,7 +201,8 @@
     // delivery date
     container.querySelectorAll('[data-date]').forEach(inp=>{
       inp.addEventListener('change',()=>{
-        orders[inp.dataset.date].deliveryDate = inp.value;
+        const v = String(inp.value || '').trim();
+        orders[inp.dataset.date].deliveryDate = /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : '';
         save();
       });
     });

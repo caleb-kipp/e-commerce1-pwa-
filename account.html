@@ -1,1025 +1,1294 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My Account | ShopEase</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <style id="app-style">
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f9fafb;
-      color: #1f2937;
-    }
-    
-    .header-shadow {
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-    
-    .card {
-      background-color: white;
-      border-radius: 0.5rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .tab-active {
-      color: #4f46e5;
-      border-bottom: 2px solid #4f46e5;
-    }
-    
-    .badge {
-      font-size: 0.75rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 9999px;
-      font-weight: 500;
-    }
-    
-    .badge-green {
-      background-color: #d1fae5;
-      color: #047857;
-    }
-    
-    .badge-yellow {
-      background-color: #fef3c7;
-      color: #92400e;
-    }
-    
-    .badge-blue {
-      background-color: #dbeafe;
-      color: #1e40af;
-    }
-    
-    .badge-red {
-      background-color: #fee2e2;
-      color: #b91c1c;
-    }
-    
-    .btn {
-      padding: 0.5rem 1rem;
-      border-radius: 0.375rem;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-    
-    .btn-primary {
-      background-color: #4f46e5;
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background-color: #4338ca;
-    }
-    
-    .btn-secondary {
-      background-color: #e5e7eb;
-      color: #4b5563;
-    }
-    
-    .btn-secondary:hover {
-      background-color: #d1d5db;
-    }
-    
-    .btn-danger {
-      background-color: #ef4444;
-      color: white;
-    }
-    
-    .btn-danger:hover {
-      background-color: #dc2626;
-    }
-    
-    .btn-outline {
-      border: 1px solid #d1d5db;
-      background-color: transparent;
-    }
-    
-    .btn-outline:hover {
-      background-color: #f3f4f6;
-    }
-    
-    .progress-bar {
-      height: 8px;
-      border-radius: 4px;
-      background-color: #e5e7eb;
-      overflow: hidden;
-    }
-    
-    .progress-value {
-      height: 100%;
-      background-color: #4f46e5;
-      border-radius: 4px;
-    }
-    
-    .animate-pulse {
-      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: .5;
-      }
-    }
-    
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-    
-    .modal.show {
-      opacity: 1;
-      visibility: visible;
-    }
-    
-    .modal-content {
-      background-color: white;
-      border-radius: 0.5rem;
-      width: 100%;
-      max-width: 500px;
-      max-height: 90vh;
-      overflow-y: auto;
-      transform: translateY(-20px);
-      transition: transform 0.3s ease;
-    }
-    
-    .modal.show .modal-content {
-      transform: translateY(0);
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LUXEAURA — My Account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="cart.core.js"></script>
+   <style>
+/* =========================================================
+   LUXEAURA ACCOUNT PAGE — MEGA MVP
+   ========================================================= */
+
+:root{
+  --bg:#f4f6fb;
+  --bg-2:#eef2f7;
+  --card:#ffffff;
+  --card-2:#f8faff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --line:#e2e8f0;
+
+  --black:#0b1220;
+  --black-2:#111827;
+
+  --brand:#ff4fa3;
+  --brand-2:#ff84c2;
+  --purple:#7c3aed;
+  --cyan:#06b6d4;
+  --green:#16a34a;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --blue:#2563eb;
+
+  --radius:24px;
+  --radius-sm:18px;
+  --shadow:0 20px 40px rgba(15,23,42,.08);
+  --shadow-soft:0 10px 25px rgba(15,23,42,.06);
+
+  --max:1700px;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:linear-gradient(180deg,#f7f9fc,#edf2f7);
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+a{text-decoration:none;color:inherit;}
+img{display:block;width:100%;}
+button,input,select{font-family:inherit;}
+
+.container{
+  width:100%;
+  max-width:var(--max);
+  margin:auto;
+  padding:0 24px;
+}
+
+/* =========================================================
+   STATUS BAR
+   ========================================================= */
+
+.status-bar{
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 24px;
+  font-size:.88rem;
+  font-weight:700;
+}
+
+.status-icons{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* =========================================================
+   MOBILE HEADER
+   ========================================================= */
+
+.mobile-header{
+  position:sticky;
+  top:0;
+  z-index:999;
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,.9);
+  border-bottom:1px solid rgba(15,23,42,.06);
+}
+
+.mobile-header-inner{
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+}
+
+.mobile-header h1{
+  font-size:1.4rem;
+  font-weight:800;
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.icon-btn{
+  width:48px;
+  height:48px;
+  border-radius:18px;
+  border:none;
+  background:white;
+  box-shadow:var(--shadow-soft);
+  display:grid;
+  place-items:center;
+  position:relative;
+  cursor:pointer;
+}
+
+.badge{
+  position:absolute;
+  top:-4px;
+  right:-2px;
+  min-width:22px;
+  height:22px;
+  border-radius:999px;
+  background:var(--red);
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:.72rem;
+  font-weight:800;
+  border:2px solid white;
+}
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.page{
+  padding:22px 0 140px;
+}
+
+.mobile-tabs{
+  display:flex;
+  gap:10px;
+  overflow:auto;
+  padding-bottom:10px;
+  margin-bottom:24px;
+}
+
+.mobile-tab{
+  flex-shrink:0;
+  padding:12px 18px;
+  border-radius:999px;
+  background:white;
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-weight:700;
+}
+
+.mobile-tab.active{
+  background:linear-gradient(135deg,var(--black),#1f2937);
+  color:white;
+}
+
+.section{
+  margin-bottom:26px;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.section-head h2{
+  font-size:1.15rem;
+  font-weight:800;
+}
+
+.section-head a{
+  font-size:.92rem;
+  font-weight:700;
+  color:var(--blue);
+}
+
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(15,23,42,.05);
+}
+
+/* =========================================================
+   USER CARD
+   ========================================================= */
+
+.user-card{
+  background:linear-gradient(135deg,#050816,#111827 70%);
+  color:white;
+  padding:24px;
+  overflow:hidden;
+  position:relative;
+}
+
+.user-card::before{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  background:radial-gradient(circle,var(--brand),transparent 70%);
+  right:-120px;
+  top:-120px;
+  opacity:.35;
+}
+
+.user-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:24px;
+  position:relative;
+  z-index:2;
+}
+
+.user-profile{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.avatar{
+  width:70px;
+  height:70px;
+  border-radius:24px;
+  overflow:hidden;
+  border:3px solid rgba(255,255,255,.15);
+}
+
+.user-info h3{
+  font-size:1.4rem;
+  margin-bottom:8px;
+}
+
+.member-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(10px);
+  font-size:.85rem;
+  font-weight:700;
+}
+
+.edit-btn{
+  height:48px;
+  padding:0 18px;
+  border:none;
+  border-radius:16px;
+  background:white;
+  color:#111827;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  position:relative;
+  z-index:2;
+}
+
+.metric{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:22px;
+  padding:18px;
+}
+
+.metric h4{
+  font-size:1.3rem;
+  margin-bottom:8px;
+}
+
+.metric p{
+  color:#cbd5e1;
+  font-size:.84rem;
+}
+
+/* =========================================================
+   ORDER CARD
+   ========================================================= */
+
+.order-card{
+  padding:22px;
+}
+
+.order-top{
+  display:flex;
+  gap:16px;
+  align-items:center;
+  margin-bottom:22px;
+}
+
+.order-image{
+  width:90px;
+  height:90px;
+  border-radius:22px;
+  overflow:hidden;
+  flex-shrink:0;
+}
+
+.order-meta h3{
+  font-size:1.1rem;
+  margin-bottom:8px;
+}
+
+.order-meta p{
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.arrive{
+  color:var(--green);
+  font-weight:700;
+}
+
+.tracker{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-bottom:24px;
+}
+
+.track-step{
+  text-align:center;
+  position:relative;
+}
+
+.track-dot{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  margin:auto;
+  background:#cbd5e1;
+  position:relative;
+  z-index:2;
+}
+
+.track-step.active .track-dot{
+  background:var(--green);
+}
+
+.track-step::after{
+  content:"";
+  position:absolute;
+  top:8px;
+  left:50%;
+  width:100%;
+  height:3px;
+  background:#dbe4ef;
+}
+
+.track-step:last-child::after{display:none;}
+.track-step.active::after{background:var(--green);}
+
+.track-label{
+  margin-top:10px;
+  font-size:.75rem;
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.quick-btn{
+  border:none;
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:20px;
+  padding:18px 14px;
+  text-align:center;
+  font-weight:700;
+  color:#0f172a;
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.quick-btn:hover{
+  transform:translateY(-2px);
+}
+
+/* =========================================================
+   WISHLIST
+   ========================================================= */
+
+.horizontal-scroll{
+  display:flex;
+  gap:16px;
+  overflow:auto;
+  padding-bottom:6px;
+}
+
+.mini-card{
+  flex:0 0 170px;
+  background:white;
+  border-radius:24px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-soft);
+}
+
+.mini-image{
+  height:140px;
+  overflow:hidden;
+}
+
+.mini-image img{
+  height:100%;
+  object-fit:cover;
+}
+
+.mini-meta{
+  padding:16px;
+}
+
+.mini-meta h3{
+  font-size:1rem;
+  margin-bottom:8px;
+}
+
+.mini-meta p{
+  color:var(--muted);
+  font-size:.88rem;
+}
+
+/* =========================================================
+   LOYALTY
+   ========================================================= */
+
+.loyalty-card{
+  background:linear-gradient(135deg,#050816,#111827);
+  color:white;
+  padding:24px;
+  position:relative;
+  overflow:hidden;
+}
+
+.loyalty-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
+
+.loyalty-top h3{
+  font-size:1.3rem;
+  margin-bottom:6px;
+}
+
+.loyalty-top p{
+  color:#cbd5e1;
+}
+
+.crown{
+  width:72px;
+  height:72px;
+  border-radius:24px;
+  background:rgba(255,255,255,.08);
+  display:grid;
+  place-items:center;
+  font-size:2rem;
+}
+
+.progress-wrap{
+  margin-bottom:14px;
+}
+
+.progress-bar{
+  width:100%;
+  height:14px;
+  border-radius:999px;
+  overflow:hidden;
+  background:rgba(255,255,255,.08);
+  margin-top:12px;
+}
+
+.progress-fill{
+  width:82%;
+  height:100%;
+  background:linear-gradient(90deg,var(--amber),#facc15);
+}
+
+/* =========================================================
+   SECOND SCREEN
+   ========================================================= */
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.stat-card{
+  padding:18px;
+  border-radius:24px;
+  background:white;
+  box-shadow:var(--shadow-soft);
+  border:1px solid var(--line);
+}
+
+.stat-icon{
+  width:52px;
+  height:52px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  margin-bottom:16px;
+  color:white;
+  font-weight:800;
+}
+
+.pink{background:linear-gradient(135deg,var(--brand),var(--brand-2));}
+.blue{background:linear-gradient(135deg,var(--blue),#60a5fa);}
+.green{background:linear-gradient(135deg,var(--green),#4ade80);}
+.purple{background:linear-gradient(135deg,var(--purple),#a78bfa);}
+.orange{background:linear-gradient(135deg,var(--amber),#fbbf24);}
+.cyan{background:linear-gradient(135deg,var(--cyan),#67e8f9);}
+
+.stat-card h3{
+  font-size:1.35rem;
+  margin-bottom:8px;
+}
+
+.stat-card p{
+  color:var(--muted);
+  margin-bottom:14px;
+  font-size:.85rem;
+}
+
+.stat-card a{
+  color:var(--blue);
+  font-weight:700;
+  font-size:.88rem;
+}
+
+.referral-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:24px;
+}
+
+.ref-left{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.ref-icon{
+  width:64px;
+  height:64px;
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  color:white;
+  font-size:1.5rem;
+  background:linear-gradient(135deg,var(--brand),var(--brand-2));
+}
+
+.settings-list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.setting-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:18px;
+  border-radius:22px;
+  background:white;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-soft);
+}
+
+.setting-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.setting-left h4{
+  margin-bottom:4px;
+}
+
+.setting-left p{
+  color:var(--muted);
+  font-size:.85rem;
+}
+
+.chev{
+  color:#94a3b8;
+  font-size:1.2rem;
+  font-weight:800;
+}
+
+.support-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  margin-bottom:14px;
+}
+
+.support-card{
+  background:white;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-soft);
+  border-radius:24px;
+  padding:20px;
+  text-align:center;
+}
+
+.support-icon{
+  width:58px;
+  height:58px;
+  margin:auto auto 14px;
+  border-radius:20px;
+  display:grid;
+  place-items:center;
+  color:white;
+  font-weight:800;
+}
+
+.support-card h3{
+  margin-bottom:6px;
+}
+
+.support-card p{
+  color:var(--muted);
+  font-size:.85rem;
+}
+
+.promo-card{
+  flex:0 0 300px;
+  border-radius:28px;
+  overflow:hidden;
+  background:linear-gradient(135deg,#111827,#1e293b);
+  color:white;
+  position:relative;
+}
+
+.promo-card::before{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  background:radial-gradient(circle,var(--brand),transparent 70%);
+  right:-120px;
+  top:-120px;
+  opacity:.25;
+}
+
+.promo-content{
+  padding:24px;
+  position:relative;
+  z-index:2;
+}
+
+.promo-content h3{
+  font-size:1.5rem;
+  line-height:1.3;
+  margin-bottom:14px;
+}
+
+.promo-content p{
+  color:#cbd5e1;
+  line-height:1.6;
+  margin-bottom:18px;
+}
+
+.shop-btn{
+  height:50px;
+  border:none;
+  border-radius:16px;
+  padding:0 22px;
+  background:white;
+  color:#111827;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.product-stack{
+  display:flex;
+  gap:12px;
+  margin-top:18px;
+}
+
+.product-stack img{
+  width:68px;
+  height:68px;
+  border-radius:18px;
+  object-fit:cover;
+  border:2px solid rgba(255,255,255,.12);
+}
+
+/* =========================================================
+   BOTTOM NAV
+   ========================================================= */
+
+.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:999;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(18px);
+  border-top:1px solid rgba(15,23,42,.06);
+  padding:10px 0 calc(10px + env(safe-area-inset-bottom));
+}
+
+.bottom-nav-inner{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+
+.bottom-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  color:#64748b;
+  font-size:.72rem;
+  position:relative;
+}
+
+.bottom-item.active{
+  color:#111827;
+  font-weight:700;
+}
+
+.cart-badge{
+  position:absolute;
+  top:-2px;
+  right:30%;
+  min-width:20px;
+  height:20px;
+  border-radius:999px;
+  background:var(--red);
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:.7rem;
+  font-weight:800;
+}
+
+/* =========================================================
+   DESKTOP RESPONSIVE
+   ========================================================= */
+
+@media(min-width:1100px){
+
+  .desktop-layout{
+    display:grid;
+    grid-template-columns:320px 1fr 360px;
+    gap:24px;
+    align-items:start;
+  }
+
+  .desktop-sidebar,
+  .desktop-right{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    position:sticky;
+    top:100px;
+  }
+
+  .desktop-menu{
+    background:white;
+    border-radius:28px;
+    padding:20px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--line);
+  }
+
+  .desktop-menu h3{
+    margin-bottom:18px;
+  }
+
+  .menu-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .menu-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 16px;
+    border-radius:18px;
+    color:#0f172a;
+    background:#f8fafc;
+    transition:.25s ease;
+  }
+
+  .menu-item:hover,
+  .menu-item.active{
+    background:#111827;
+    color:white;
+  }
+
+}
+
+@media(max-width:768px){
+
+  .container{padding:0 16px;}
+
+  .metrics,
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
+
+  .quick-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .tracker{
+    gap:4px;
+  }
+
+  .track-label{
+    font-size:.65rem;
+  }
+
+  .support-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="bg-white header-shadow sticky top-0 z-10">
-    <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="javascript:void(0)" class="text-2xl font-bold text-indigo-600">
-        ShopEase
-      </a>
-      
-      <div class="flex items-center space-x-6">
-        <a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900">
-          <i class="fas fa-heart"></i>
-        </a>
-        <a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900">
-          <i class="fas fa-shopping-cart"></i>
-        </a>
-        <a href="javascript:void(0)" class="text-gray-600 hover:text-gray-900">
-          <div class="relative" id="account-icon">
-            <i class="fas fa-user-circle text-xl"></i>
-          </div>
-        </a>
-      </div>
-    </div>
-  </header>
-  
-  <!-- Main Content -->
-  <main class="container mx-auto px-4 py-8">
-    <div id="signin-container" class="hidden">
-      <div class="max-w-md mx-auto bg-white rounded-lg p-8 shadow-md">
-        <h1 class="text-2xl font-bold mb-6 text-center">Sign In</h1>
-        <form id="login-form">
-          <div class="mb-4">
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input type="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-          </div>
-          <div class="mb-6">
-            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input type="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
-          </div>
-          <button type="submit" class="w-full btn btn-primary">Sign In</button>
-        </form>
-        <div class="mt-4 text-center">
-          <a href="javascript:void(0)" class="text-sm text-indigo-600 hover:text-indigo-800">Forgot password?</a>
-        </div>
-        <div class="mt-6 text-center">
-          <p class="text-sm text-gray-600">Don't have an account? <a href="javascript:void(0)" class="text-indigo-600 hover:text-indigo-800">Sign up</a></p>
-        </div>
-      </div>
-    </div>
-    
-    <div id="account-container" class="hidden">
-      <!-- Profile Section -->
-      <div class="bg-white rounded-lg p-6 shadow-sm mb-8">
-        <div class="flex flex-col md:flex-row items-center md:items-start">
-          <div class="flex-shrink-0 mb-4 md:mb-0 md:mr-6">
-            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Profile" class="rounded-full w-24 h-24 object-cover border-2 border-gray-200">
-          </div>
-          <div class="flex-grow text-center md:text-left">
-            <h1 class="text-2xl font-bold" id="user-name">John Doe</h1>
-            <p class="text-gray-600" id="user-email">john.doe@example.com</p>
-            <div class="mt-3">
-              <button id="edit-profile-btn" class="btn btn-outline">
-                <i class="fas fa-pencil-alt mr-2"></i> Edit Profile
-              </button>
-            </div>
-          </div>
-          <div class="hidden md:block ml-auto">
-            <button id="sign-out-btn" class="btn btn-outline text-red-600 border-red-200 hover:bg-red-50">
-              <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Account Sections -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2">
-          <!-- Address Book Section -->
-          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-xl font-semibold">Address Book</h2>
-              <button id="add-address-btn" class="btn btn-outline">
-                <i class="fas fa-plus mr-2"></i> Add Address
-              </button>
-            </div>
-            
-            <div class="space-y-4" id="addresses-container">
-              <!-- Address card 1 -->
-              <div class="border rounded-lg p-4">
-                <div class="flex justify-between mb-2">
-                  <span class="font-medium">Home</span>
-                  <span class="badge badge-blue">Default</span>
-                </div>
-                <p class="text-gray-700">John Doe</p>
-                <p class="text-gray-700">123 Main Street</p>
-                <p class="text-gray-700">Apt 4B</p>
-                <p class="text-gray-700">New York, NY 10001</p>
-                <p class="text-gray-700">United States</p>
-                <p class="text-gray-700">(123) 456-7890</p>
-                <div class="mt-4 flex space-x-2">
-                  <button class="btn btn-secondary btn-sm">
-                    <i class="fas fa-pencil-alt mr-1"></i> Edit
-                  </button>
-                  <button class="btn btn-outline btn-sm text-red-600">
-                    <i class="fas fa-trash-alt mr-1"></i> Delete
-                  </button>
-                </div>
-              </div>
-              
-              <!-- Address card 2 -->
-              <div class="border rounded-lg p-4">
-                <div class="flex justify-between mb-2">
-                  <span class="font-medium">Work</span>
-                </div>
-                <p class="text-gray-700">John Doe</p>
-                <p class="text-gray-700">456 Office Plaza</p>
-                <p class="text-gray-700">Suite 200</p>
-                <p class="text-gray-700">New York, NY 10022</p>
-                <p class="text-gray-700">United States</p>
-                <p class="text-gray-700">(123) 456-7890</p>
-                <div class="mt-4 flex space-x-2">
-                  <button class="btn btn-secondary btn-sm">
-                    <i class="fas fa-pencil-alt mr-1"></i> Edit
-                  </button>
-                  <button class="btn btn-outline btn-sm text-red-600">
-                    <i class="fas fa-trash-alt mr-1"></i> Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
-          
-          <!-- Order Management Section -->
-          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <h2 class="text-xl font-semibold mb-4">Order Management</h2>
-            
-            <!-- Tabs -->
-            <div class="border-b mb-6">
-              <div class="flex">
-                <button class="px-4 py-2 font-medium tab-active" id="order-history-tab">Order History</button>
-                <button class="px-4 py-2 font-medium text-gray-500" id="current-orders-tab">Current Orders</button>
-              </div>
-            </div>
-            
-            <!-- Order History Tab Content -->
-            <div id="order-history-content">
-              <div class="space-y-4">
-                <!-- Order 1 -->
-                <div class="border rounded-lg p-4">
-                  <div class="flex flex-col md:flex-row justify-between mb-4">
-                    <div>
-                      <p class="font-medium">Order #12345</p>
-                      <p class="text-sm text-gray-600">August 15, 2023</p>
-                    </div>
-                    <div class="mt-2 md:mt-0">
-                      <span class="badge badge-green">Delivered</span>
-                    </div>
-                  </div>
-                  <div class="flex justify-between mb-4">
-                    <p class="text-gray-700">3 Items</p>
-                    <p class="font-medium">$124.99</p>
-                  </div>
-                  <button class="btn btn-outline w-full md:w-auto">
-                    <i class="fas fa-redo-alt mr-2"></i> Reorder
-                  </button>
-                </div>
-                
-                <!-- Order 2 -->
-                <div class="border rounded-lg p-4">
-                  <div class="flex flex-col md:flex-row justify-between mb-4">
-                    <div>
-                      <p class="font-medium">Order #12289</p>
-                      <p class="text-sm text-gray-600">July 28, 2023</p>
-                    </div>
-                    <div class="mt-2 md:mt-0">
-                      <span class="badge badge-green">Delivered</span>
-                    </div>
-                  </div>
-                  <div class="flex justify-between mb-4">
-                    <p class="text-gray-700">1 Item</p>
-                    <p class="font-medium">$49.99</p>
-                  </div>
-                  <button class="btn btn-outline w-full md:w-auto">
-                    <i class="fas fa-redo-alt mr-2"></i> Reorder
-                  </button>
-                </div>
-              </div>
-              
-              <!-- Pagination -->
-              <div class="flex justify-center mt-6">
-                <nav class="flex items-center space-x-2">
-                  <a href="javascript:void(0)" class="px-3 py-1 rounded border text-gray-600 hover:bg-gray-100">&laquo;</a>
-                  <a href="javascript:void(0)" class="px-3 py-1 rounded border bg-indigo-600 text-white">1</a>
-                  <a href="javascript:void(0)" class="px-3 py-1 rounded border text-gray-600 hover:bg-gray-100">2</a>
-                  <a href="javascript:void(0)" class="px-3 py-1 rounded border text-gray-600 hover:bg-gray-100">3</a>
-                  <a href="javascript:void(0)" class="px-3 py-1 rounded border text-gray-600 hover:bg-gray-100">&raquo;</a>
-                </nav>
-              </div>
-            </div>
-            
-            <!-- Current Orders Tab Content -->
-            <div id="current-orders-content" class="hidden">
-              <div class="space-y-6">
-                <!-- Current Order 1 -->
-                <div class="border rounded-lg p-4">
-                  <div class="flex flex-col md:flex-row justify-between mb-4">
-                    <div>
-                      <p class="font-medium">Order #12390</p>
-                      <p class="text-sm text-gray-600">September 1, 2023</p>
-                    </div>
-                    <div class="mt-2 md:mt-0">
-                      <span class="badge badge-yellow">In Transit</span>
-                    </div>
-                  </div>
-                  <div class="mb-4">
-                    <p class="text-sm text-gray-700 mb-1">Estimated delivery: Sept 5, 2023</p>
-                    <p class="text-sm text-gray-700 mb-1">Carrier: FedEx</p>
-                    <p class="text-sm text-gray-700 mb-3">Tracking: FX123456789US</p>
-                    <div class="progress-bar">
-                      <div class="progress-value" style="width: 75%"></div>
-                    </div>
-                  </div>
-                  <div class="flex justify-between mb-4">
-                    <p class="text-gray-700">2 Items</p>
-                    <p class="font-medium">$87.50</p>
-                  </div>
-                  <button class="btn btn-outline w-full md:w-auto">
-                    <i class="fas fa-truck mr-2"></i> Track Package
-                  </button>
-                </div>
-                
-                <!-- Current Order 2 -->
-                <div class="border rounded-lg p-4">
-                  <div class="flex flex-col md:flex-row justify-between mb-4">
-                    <div>
-                      <p class="font-medium">Order #12375</p>
-                      <p class="text-sm text-gray-600">August 29, 2023</p>
-                    </div>
-                    <div class="mt-2 md:mt-0">
-                      <span class="badge badge-blue">Processing</span>
-                    </div>
-                  </div>
-                  <div class="mb-4">
-                    <p class="text-sm text-gray-700 mb-1">Estimated delivery: Sept 8, 2023</p>
-                    <div class="progress-bar">
-                      <div class="progress-value" style="width: 25%"></div>
-                    </div>
-                  </div>
-                  <div class="flex justify-between mb-4">
-                    <p class="text-gray-700">4 Items</p>
-                    <p class="font-medium">$199.95</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          
-          <!-- Payment Information Section -->
-          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <div class="flex justify-between items-center mb-6">
-              <h2 class="text-xl font-semibold">Payment Information</h2>
-              <button id="add-payment-btn" class="btn btn-outline">
-                <i class="fas fa-plus mr-2"></i> Add Payment Method
-              </button>
-            </div>
-            
-            <div class="space-y-4" id="payment-methods-container">
-              <!-- Payment Method 1 -->
-              <div class="border rounded-lg p-4">
-                <div class="flex justify-between mb-2">
-                  <div class="flex items-center">
-                    <i class="fab fa-cc-visa text-blue-800 text-2xl mr-2"></i>
-                    <span class="font-medium">Visa ending in 4242</span>
-                  </div>
-                  <span class="badge badge-blue">Default</span>
-                </div>
-                <p class="text-gray-700 mb-2">Expires: 09/2025</p>
-                <div class="flex space-x-2">
-                  <button class="btn btn-secondary btn-sm">
-                    <i class="fas fa-pencil-alt mr-1"></i> Edit
-                  </button>
-                  <button class="btn btn-outline btn-sm text-red-600">
-                    <i class="fas fa-trash-alt mr-1"></i> Remove
-                  </button>
-                </div>
-              </div>
-              
-              <!-- Payment Method 2 -->
-              <div class="border rounded-lg p-4">
-                <div class="flex justify-between mb-2">
-                  <div class="flex items-center">
-                    <i class="fab fa-cc-mastercard text-red-600 text-2xl mr-2"></i>
-                    <span class="font-medium">Mastercard ending in 5678</span>
-                  </div>
-                </div>
-                <p class="text-gray-700 mb-2">Expires: 12/2026</p>
-                <div class="flex space-x-2">
-                  <button class="btn btn-secondary btn-sm">
-                    <i class="fas fa-pencil-alt mr-1"></i> Edit
-                  </button>
-                  <button class="btn btn-outline btn-sm text-red-600">
-                    <i class="fas fa-trash-alt mr-1"></i> Remove
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-        
-        <div class="lg:col-span-1">
-          <!-- Wishlist Section -->
-          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <h2 class="text-xl font-semibold mb-4">Wishlist & Favorites</h2>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-              <!-- Wishlist Item 1 -->
-              <div class="border rounded-lg p-3">
-                <div class="flex">
-                  <img src="https://cdn.pixabay.com/photo/2017/03/29/04/47/high-heels-2184095_1280.jpg" alt="Product" class="w-20 h-20 object-cover rounded">
-                  <div class="ml-3 flex-grow">
-                    <p class="font-medium">Women's Leather Shoes</p>
-                    <p class="text-indigo-600 font-medium mt-1">$89.99</p>
-                    <div class="flex space-x-2 mt-2">
-                      <button class="btn btn-primary btn-sm text-xs">
-                        <i class="fas fa-shopping-cart mr-1"></i> Add to Cart
-                      </button>
-                      <button class="btn btn-outline btn-sm text-xs text-red-600">
-                        <i class="fas fa-trash-alt mr-1"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Wishlist Item 2 -->
-              <div class="border rounded-lg p-3">
-                <div class="flex">
-                  <img src="https://cdn.pixabay.com/photo/2016/11/19/18/06/feet-1840619_1280.jpg" alt="Product" class="w-20 h-20 object-cover rounded">
-                  <div class="ml-3 flex-grow">
-                    <p class="font-medium">Men's Casual Sneakers</p>
-                    <p class="text-indigo-600 font-medium mt-1">$64.99</p>
-                    <div class="flex space-x-2 mt-2">
-                      <button class="btn btn-primary btn-sm text-xs">
-                        <i class="fas fa-shopping-cart mr-1"></i> Add to Cart
-                      </button>
-                      <button class="btn btn-outline btn-sm text-xs text-red-600">
-                        <i class="fas fa-trash-alt mr-1"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Wishlist Item 3 -->
-              <div class="border rounded-lg p-3">
-                <div class="flex">
-                  <img src="https://cdn.pixabay.com/photo/2016/06/03/17/35/shoes-1433925_1280.jpg" alt="Product" class="w-20 h-20 object-cover rounded">
-                  <div class="ml-3 flex-grow">
-                    <p class="font-medium">Running Shoes</p>
-                    <p class="text-indigo-600 font-medium mt-1">$129.99</p>
-                    <div class="flex space-x-2 mt-2">
-                      <button class="btn btn-primary btn-sm text-xs">
-                        <i class="fas fa-shopping-cart mr-1"></i> Add to Cart
-                      </button>
-                      <button class="btn btn-outline btn-sm text-xs text-red-600">
-                        <i class="fas fa-trash-alt mr-1"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="text-center mt-4">
-              <a href="javascript:void(0)" class="text-indigo-600 font-medium hover:text-indigo-800">View all items</a>
-            </div>
-          </section>
-          
-          <!-- Security Section -->
-          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <h2 class="text-xl font-semibold mb-4">Security</h2>
-            
-            <div class="space-y-4">
-              <div class="flex justify-between items-center">
-                <div>
-                  <p class="font-medium">Two-Factor Authentication</p>
-                  <p class="text-sm text-gray-600">Add an extra layer of security</p>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" value="" class="sr-only peer">
-                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                </label>
-              </div>
-              
-              <div>
-                <p class="font-medium mb-2">Login History</p>
-                <div class="border rounded overflow-hidden">
-                  <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                      <tr>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date/Time</th>
-                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
-                      </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                      <tr>
-                        <td class="px-4 py-3 text-sm text-gray-900">September 2, 2023<br>10:15 AM</td>
-                        <td class="px-4 py-3 text-sm text-gray-900">New York, US</td>
-                      </tr>
-                      <tr>
-                        <td class="px-4 py-3 text-sm text-gray-900">August 30, 2023<br>2:45 PM</td>
-                        <td class="px-4 py-3 text-sm text-gray-900">New York, US</td>
-                      </tr>
-                      <tr>
-                        <td class="px-4 py-3 text-sm text-gray-900">August 25, 2023<br>9:30 AM</td>
-                        <td class="px-4 py-3 text-sm text-gray-900">New York, US</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </section>
-          
-          <!-- Preferences Section -->
-          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <h2 class="text-xl font-semibold mb-4">Preferences</h2>
-            
-            <div class="space-y-4">
-              <div class="flex justify-between items-center">
-                <div>
-                  <p class="font-medium">Newsletter Subscription</p>
-                  <p class="text-sm text-gray-600">Receive updates on new products and offers</p>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" checked class="sr-only peer">
-                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
-                </label>
-              </div>
-              
-              <div>
-                <p class="font-medium mb-2">Notification Settings</p>
-                <div class="space-y-2">
-                  <div class="flex items-center">
-                    <input id="order-updates" name="notification-type" type="checkbox" checked class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                    <label for="order-updates" class="ml-2 block text-sm text-gray-700">Order Updates</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="promotions" name="notification-type" type="checkbox" checked class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                    <label for="promotions" class="ml-2 block text-sm text-gray-700">Promotions and Discounts</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="recommendations" name="notification-type" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                    <label for="recommendations" class="ml-2 block text-sm text-gray-700">Product Recommendations</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          
-          <!-- Support & Help Section -->
-          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <h2 class="text-xl font-semibold mb-4">Support & Help</h2>
-            
-            <div class="border-b pb-4 mb-4">
-              <div class="bg-gray-50 p-4 rounded-lg mb-3 text-center">
-                <i class="fas fa-comments text-3xl text-indigo-500 mb-2"></i>
-                <p class="font-medium">Live Chat Support</p>
-                <button class="btn btn-primary mt-2 w-full">Start Chat</button>
-              </div>
-            </div>
-            
-            <div class="space-y-3">
-              <p class="font-medium">Quick Links</p>
-              <a href="javascript:void(0)" class="flex items-center text-indigo-600 hover:text-indigo-800">
-                <i class="fas fa-question-circle mr-2"></i> Frequently Asked Questions
-              </a>
-              <a href="javascript:void(0)" class="flex items-center text-indigo-600 hover:text-indigo-800">
-                <i class="fas fa-exchange-alt mr-2"></i> Return Policy
-              </a>
-              <a href="javascript:void(0)" class="flex items-center text-indigo-600 hover:text-indigo-800">
-                <i class="fas fa-truck mr-2"></i> Shipping Information
-              </a>
-              <a href="javascript:void(0)" class="flex items-center text-indigo-600 hover:text-indigo-800">
-                <i class="fas fa-file-alt mr-2"></i> Terms of Service
-              </a>
-            </div>
-          </section>
-          
-          <!-- Loyalty Program Section -->
-          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <h2 class="text-xl font-semibold mb-4">Loyalty Program</h2>
-            
-            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-4 text-white mb-4">
-              <div class="flex justify-between items-center mb-3">
-                <p class="font-medium text-lg">Silver Member</p>
-                <i class="fas fa-medal text-xl"></i>
-              </div>
-              <p class="text-sm mb-3">Current points balance</p>
-              <p class="text-3xl font-bold">750</p>
-              <div class="mt-3">
-                <p class="text-sm mb-1">250 points until Gold level</p>
-                <div class="progress-bar bg-white/30">
-                  <div class="progress-value bg-white" style="width: 75%"></div>
-                </div>
-              </div>
-            </div>
-            
-            <button class="btn btn-outline w-full">
-              <i class="fas fa-gift mr-2"></i> View Rewards
-            </button>
-          </section>
-          
-          <!-- Account Management Section -->
-          <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
-            <h2 class="text-xl font-semibold text-red-600 mb-4">Account Management</h2>
-            <button id="deactivate-account-btn" class="btn btn-outline border-red-300 text-red-600 hover:bg-red-50 w-full mb-3">
-              <i class="fas fa-user-slash mr-2"></i> Deactivate Account
-            </button>
-            <button id="mobile-sign-out-btn" class="lg:hidden btn btn-outline text-red-600 border-red-300 hover:bg-red-50 w-full">
-              <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
-            </button>
-          </section>
-        </div>
-      </div>
-    </div>
-  </main>
-  
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-8">
-    <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <h3 class="text-lg font-semibold mb-4">ShopEase</h3>
-          <p class="text-gray-400">Your one-stop shop for all your needs. Quality products, competitive prices, and exceptional customer service.</p>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-          <ul class="space-y-2">
-            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Home</a></li>
-            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Shop</a></li>
-            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">About Us</a></li>
-            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Contact</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold mb-4">Customer Service</h3>
-          <ul class="space-y-2">
-            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">FAQs</a></li>
-            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Shipping Policy</a></li>
-            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Returns & Exchanges</a></li>
-            <li><a href="javascript:void(0)" class="text-gray-400 hover:text-white">Track Order</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
-          <div class="flex space-x-4 mb-4">
-            <a href="javascript:void(0)" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-facebook-square"></i></a>
-            <a href="javascript:void(0)" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-twitter-square"></i></a>
-            <a href="javascript:void(0)" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-instagram"></i></a>
-            <a href="javascript:void(0)" class="text-gray-400 hover:text-white text-xl"><i class="fab fa-pinterest-square"></i></a>
-          </div>
-          <p class="text-gray-400">Sign up for our newsletter</p>
-          <div class="mt-2 flex">
-            <input type="email" placeholder="Your email" class="px-3 py-2 bg-gray-700 text-white rounded-l focus:outline-none">
-            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-r">Subscribe</button>
-          </div>
-        </div>
-      </div>
-      <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
-        <p>&copy; 2023 ShopEase. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-  
-  <!-- Modals -->
-  <!-- Edit Profile Modal -->
-  <div id="edit-profile-modal" class="modal">
-    <div class="modal-content p-6">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-bold">Edit Profile</h2>
-        <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="edit-profile-modal">
-          <i class="fas fa-times text-xl"></i>
-        </button>
-      </div>
-      <form id="edit-profile-form">
-        <div class="mb-4 text-center">
-          <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Profile" class="rounded-full w-24 h-24 object-cover border-2 border-gray-200 mx-auto mb-2">
-          <button type="button" class="text-indigo-600 text-sm">Change Profile Picture</button>
-        </div>
-        <div class="mb-4">
-          <label for="edit-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-          <input type="text" id="edit-name" value="John Doe" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="mb-4">
-          <label for="edit-email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-          <input type="email" id="edit-email" value="john.doe@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="mb-4">
-          <label for="edit-phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-          <input type="tel" id="edit-phone" value="(123) 456-7890" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <h3 class="font-medium text-lg mt-6 mb-3">Change Password</h3>
-        <div class="mb-4">
-          <label for="current-password" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-          <input type="password" id="current-password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="mb-4">
-          <label for="new-password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-          <input type="password" id="new-password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="mb-6">
-          <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-          <input type="password" id="confirm-password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" class="btn btn-secondary close-modal" data-modal="edit-profile-modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  
-  <!-- Add Address Modal -->
-  <div id="add-address-modal" class="modal">
-    <div class="modal-content p-6">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-bold">Add New Address</h2>
-        <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-address-modal">
-          <i class="fas fa-times text-xl"></i>
-        </button>
-      </div>
-      <form id="add-address-form">
-        <div class="mb-4">
-          <label for="address-name" class="block text-sm font-medium text-gray-700 mb-1">Address Name</label>
-          <input type="text" id="address-name" placeholder="Home, Work, etc." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="mb-4">
-          <label for="full-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-          <input type="text" id="full-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="mb-4">
-          <label for="street-address" class="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
-          <input type="text" id="street-address" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2">
-          <input type="text" id="street-address-2" placeholder="Apt, Suite, Unit, etc. (Optional)" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <div>
-            <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
-            <input type="text" id="city" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          </div>
-          <div>
-            <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State/Province</label>
-            <input type="text" id="state" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          </div>
-          <div>
-            <label for="zip" class="block text-sm font-medium text-gray-700 mb-1">Zip/Postal Code</label>
-            <input type="text" id="zip" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          </div>
-        </div>
-        <div class="mb-4">
-          <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
-          <select id="country" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="UK">United Kingdom</option>
-            <option value="AU">Australia</option>
-          </select>
-        </div>
-        <div class="mb-4">
-          <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-          <input type="tel" id="phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="mb-6 flex items-center">
-          <input id="default-address" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-          <label for="default-address" class="ml-2 block text-sm text-gray-700">Make this my default address</label>
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" class="btn btn-secondary close-modal" data-modal="add-address-modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Add Address</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  
-  <!-- Add Payment Modal -->
-  <div id="add-payment-modal" class="modal">
-    <div class="modal-content p-6">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-bold">Add Payment Method</h2>
-        <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="add-payment-modal">
-          <i class="fas fa-times text-xl"></i>
-        </button>
-      </div>
-      <form id="add-payment-form">
-        <div class="mb-4">
-          <label for="card-name" class="block text-sm font-medium text-gray-700 mb-1">Name on Card</label>
-          <input type="text" id="card-name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        </div>
-        <div class="mb-4">
-          <label for="card-number" class="block text-sm font-medium text-gray-700 mb-1">Card Number</label>
-          <div class="relative">
-            <input type="text" id="card-number" placeholder="XXXX XXXX XXXX XXXX" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10">
-            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-              <i class="fas fa-credit-card text-gray-400"></i>
-            </div>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-4 mb-6">
-          <div>
-            <label for="expiry" class="block text-sm font-medium text-gray-700 mb-1">Expiry Date</label>
-            <input type="text" id="expiry" placeholder="MM/YY" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          </div>
-          <div>
-            <label for="cvv" class="block text-sm font-medium text-gray-700 mb-1">CVV</label>
-            <input type="text" id="cvv" placeholder="XXX" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          </div>
-        </div>
-        <div class="mb-6 flex items-center">
-          <input id="default-payment" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-          <label for="default-payment" class="ml-2 block text-sm text-gray-700">Make this my default payment method</label>
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" class="btn btn-secondary close-modal" data-modal="add-payment-modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Add Payment Method</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  
-  <!-- Deactivate Account Modal -->
-  <div id="deactivate-account-modal" class="modal">
-    <div class="modal-content p-6">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-bold text-red-600">Deactivate Account</h2>
-        <button class="text-gray-500 hover:text-gray-700 close-modal" data-modal="deactivate-account-modal">
-          <i class="fas fa-times text-xl"></i>
-        </button>
-      </div>
-      <div class="mb-6">
-        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <i class="fas fa-exclamation-triangle text-red-600"></i>
-            </div>
-            <div class="ml-3">
-              <p class="text-sm text-red-600">
-                Warning: This action cannot be undone. All your data will be permanently deleted.
-              </p>
-            </div>
-          </div>
-        </div>
-        <p class="text-gray-700 mb-4">
-          We're sorry to see you go. Before you deactivate your account, please let us know the reason for leaving:
-        </p>
-        <div class="space-y-2 mb-4">
-          <div class="flex items-center">
-            <input id="reason-1" name="deactivation-reason" type="radio" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-            <label for="reason-1" class="ml-2 block text-sm text-gray-700">I found a better service</label>
-          </div>
-          <div class="flex items-center">
-            <input id="reason-2" name="deactivation-reason" type="radio" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-            <label for="reason-2" class="ml-2 block text-sm text-gray-700">I'm not satisfied with the service</label>
-          </div>
-          <div class="flex items-center">
-            <input id="reason-3" name="deactivation-reason" type="radio" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-            <label for="reason-3" class="ml-2 block text-sm text-gray-700">I'm not using my account anymore</label>
-          </div>
-          <div class="flex items-center">
-            <input id="reason-4" name="deactivation-reason" type="radio" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-            <label for="reason-4" class="ml-2 block text-sm text-gray-700">Other reason</label>
-          </div>
-        </div>
-        <textarea placeholder="Additional comments (optional)" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4" rows="3"></textarea>
-        <div class="flex items-center mb-6">
-          <input id="confirm-deactivate" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-          <label for="confirm-deactivate" class="ml-2 block text-sm text-gray-700">I understand that deactivating my account will permanently delete all my data</label>
-        </div>
-      </div>
-      <div class="flex justify-end space-x-2">
-        <button type="button" class="btn btn-secondary close-modal" data-modal="deactivate-account-modal">Cancel</button>
-        <button type="button" class="btn btn-danger" disabled id="confirm-deactivate-btn">Deactivate Account</button>
-      </div>
-    </div>
-  </div>
-  
-  <script id="app-script">
-/* =========================================================
-   CALEB'S STORE — ACCOUNT.JS MOBILE + WEB FULL REAL DATA ENGINE
-   COMPLETE PRODUCTION VERSION
-   FEATURES:
-   ✔ Real authentication persistence
-   ✔ Full profile CRUD
-   ✔ Shared address book sync across:
-      - account.html
-      - cart.html
-      - checkout.html
-   ✔ Real order history from checkout
-   ✔ Real payment history
-   ✔ Wishlist/favorites from index.html
-   ✔ Login history with:
-      - date
-      - time
-      - browser
-      - device
-      - platform
-   ✔ Mobile compatibility fixes
-   ✔ Full modal compatibility
-   ✔ Sign out whole app
-   ✔ Re-login support
-   ✔ Delete/edit addresses
-   ✔ Persistent storage
-========================================================= */
 
-(function(){
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="mobile-header">
+  <div class="mobile-header-inner">
+    <h1>My Account</h1>
+
+    <div class="header-actions">
+      <button class="icon-btn">
+        🔔
+        <span class="badge">4</span>
+      </button>
+
+      <button class="icon-btn">⚙️</button>
+    </div>
+  </div>
+</header>
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="page">
+  <div class="container">
+
+    <!-- =====================================================
+         TABS
+    ====================================================== -->
+
+    <div class="mobile-tabs">
+      <div class="mobile-tab active">Dashboard</div>
+      <div class="mobile-tab">Rewards</div>
+      <div class="mobile-tab">Orders</div>
+      <div class="mobile-tab">Settings</div>
+      <div class="mobile-tab">Support</div>
+    </div>
+
+    <!-- =====================================================
+         DESKTOP LAYOUT
+    ====================================================== -->
+
+    <div class="desktop-layout">
+
+      <!-- ===================================================
+           SIDEBAR
+      ==================================================== -->
+
+      <aside class="desktop-sidebar">
+
+        <div class="desktop-menu">
+          <h3>Account Navigation</h3>
+
+          <div class="menu-list">
+            <div class="menu-item active">Dashboard <span>›</span></div>
+            <div class="menu-item">Orders <span>›</span></div>
+            <div class="menu-item">Returns & Refunds <span>›</span></div>
+            <div class="menu-item">Addresses <span>›</span></div>
+            <div class="menu-item">Payment Methods <span>›</span></div>
+            <div class="menu-item">Wishlist <span>›</span></div>
+            <div class="menu-item">Rewards <span>›</span></div>
+            <div class="menu-item">Notifications <span>›</span></div>
+            <div class="menu-item">Security & Login <span>›</span></div>
+            <div class="menu-item">Support <span>›</span></div>
+            <div class="menu-item">Logout <span>›</span></div>
+          </div>
+        </div>
+<style>
+    /* =========================================================
+   DESKTOP ACCOUNT SIDEBAR
+   ========================================================= */
+
+.desktop-sidebar{
+  position:sticky;
+  top:110px;
+  height:max-content;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+  z-index:20;
+}
+
+.desktop-menu{
+  background:
+  linear-gradient(
+    180deg,
+    rgba(255,255,255,.03),
+    rgba(255,255,255,.015)
+  );
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:26px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  backdrop-filter:blur(12px);
+}
+
+.desktop-menu h3{
+  font-size:1.05rem;
+  font-weight:800;
+  margin-bottom:24px;
+  letter-spacing:.3px;
+  color:#ffffff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.desktop-menu h3::after{
+  content:"";
+  width:42px;
+  height:4px;
+  border-radius:999px;
+  background:linear-gradient(
+    135deg,
+    var(--brand),
+    var(--brand-2)
+  );
+}
+
+.menu-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
 
 /* =========================================================
-   GLOBALS
-========================================================= */
-let isAuthenticated = false;
+   MENU ITEM
+   ========================================================= */
+
+.menu-item{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:16px 18px;
+  min-height:58px;
+  border-radius:18px;
+  background:#101827;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:
+  transform .25s ease,
+  background .25s ease,
+  border-color .25s ease,
+  box-shadow .25s ease;
+  overflow:hidden;
+}
+
+.menu-item::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+  linear-gradient(
+    135deg,
+    rgba(255,79,163,.08),
+    rgba(255,132,194,.03)
+  );
+  opacity:0;
+  transition:.25s ease;
+}
+
+.menu-item:hover{
+  transform:translateY(-2px);
+  background:#141f30;
+  border-color:rgba(255,255,255,.06);
+}
+
+.menu-item:hover::before{
+  opacity:1;
+}
 
 /* =========================================================
-   HELPERS
+   ACTIVE MENU ITEM
+   ========================================================= */
+
+.menu-item.active{
+  background:
+  linear-gradient(
+    135deg,
+    rgba(255,79,163,.18),
+    rgba(255,132,194,.08)
+  );
+  border:1px solid rgba(255,79,163,.25);
+  box-shadow:
+  0 10px 30px rgba(255,79,163,.15);
+}
+
+.menu-item.active::before{
+  opacity:1;
+}
+
+.menu-item.active::after{
+  content:"";
+  position:absolute;
+  left:0;
+  top:10px;
+  bottom:10px;
+  width:4px;
+  border-radius:999px;
+  background:linear-gradient(
+    180deg,
+    var(--brand),
+    var(--brand-2)
+  );
+}
+
+/* =========================================================
+   MENU TEXT
+   ========================================================= */
+
+.menu-item{
+  font-size:.97rem;
+  font-weight:600;
+  color:#f3f6fb;
+  line-height:1;
+}
+
+.menu-item span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+  color:#9fb0c7;
+  font-size:1rem;
+  transition:.25s ease;
+  flex-shrink:0;
+}
+
+.menu-item:hover span{
+  background:rgba(255,255,255,.08);
+  color:#ffffff;
+  transform:translateX(2px);
+}
+
+.menu-item.active span{
+  background:
+  linear-gradient(
+    135deg,
+    var(--brand),
+    var(--brand-2)
+  );
+  color:#fff;
+  box-shadow:
+  0 8px 20px rgba(255,79,163,.25);
+}
+
+/* =========================================================
+   LOGOUT STYLE
+   ========================================================= */
+
+.menu-item:last-child{
+  margin-top:8px;
+  color:#ffb4c8;
+  background:
+  linear-gradient(
+    135deg,
+    rgba(239,68,68,.10),
+    rgba(255,255,255,.02)
+  );
+  border:1px solid rgba(239,68,68,.15);
+}
+
+.menu-item:last-child span{
+  color:#ff9fb5;
+}
+
+/* =========================================================
+   OPTIONAL DROPDOWN STYLE
+   ========================================================= */
+
+.menu-item.dropdown-open{
+  border-color:rgba(255,79,163,.25);
+  background:#141f30;
+}
+
+.menu-item.dropdown-open span{
+  transform:rotate(90deg);
+}
+
+/* =========================================================
+   SUBMENU
+   ========================================================= */
+
+.submenu{
+  display:none;
+  flex-direction:column;
+  gap:10px;
+  margin-top:10px;
+  padding-left:14px;
+}
+
+.submenu.active{
+  display:flex;
+}
+
+.submenu-item{
+  height:46px;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  border-radius:14px;
+  background:#0f1722;
+  border:1px solid rgba(255,255,255,.04);
+  color:#c7d3e5;
+  font-size:.92rem;
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.submenu-item:hover{
+  background:#162235;
+  color:#ffffff;
+  transform:translateX(3px);
+}
+
+/* =========================================================
+   MOBILE RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1200px){
+
+  .desktop-sidebar{
+    position:relative;
+    top:0;
+  }
+
+}
+
+@media(max-width:900px){
+
+  .desktop-sidebar{
+    display:none;
+  }
+
+}
+
+/* =========================================================
+   OPTIONAL MOBILE ACCOUNT MENU
+   ========================================================= */
+
+.mobile-account-menu{
+  display:none;
+}
+
+@media(max-width:900px){
+
+  .mobile-account-menu{
+    display:block;
+    margin-bottom:20px;
+  }
+
+  .mobile-account-toggle{
+    height:58px;
+    border-radius:18px;
+    background:#101827;
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    font-weight:700;
+    color:#fff;
+  }
+
+}
+/* =========================================================
+   METRICS ROW
 ========================================================= */
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
 
-function safe(id){
-  return document.getElementById(id);
+.metrics {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  align-items: center;
+
+  margin-top: 28px;
+
+  background:
+    rgba(255,255,255,.04);
+
+  border:
+    1px solid rgba(255,255,255,.08);
+
+  border-radius:
+    22px;
+
+  overflow: hidden;
 }
 
-function escapeHtml(str){
-  return ('' + str).replace(/[&<>"']/g, c => ({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#39;'
-  }[c]));
+/* =========================================================
+   SINGLE METRIC
+========================================================= */
+
+.metric {
+
+  position: relative;
+
+  padding:
+    20px 16px;
+
+  text-align: center;
 }
 
-function formatCurrency(n){
-  return '$' + Number(n || 0).toFixed(2);
-}
+/* vertical divider */
+.metric:not(:last-child)::after {
 
-function formatDate(dateString){
-  const d = new Date(dateString);
-  return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
-}
+  content: "";
 
 const STORAGE_CRYPTO = {
   passphrase: 'ShopEase_Profile_Local_Encryption_v1',
@@ -1097,698 +1366,709 @@ async function setStorage(key, value){
   }));
 }
 
-function showToast(msg){
-  let toast = safe('global-toast');
+  right: 0;
 
-  if(!toast){
-    toast = document.createElement('div');
-    toast.id = 'global-toast';
-    toast.style.position = 'fixed';
-    toast.style.bottom = '20px';
-    toast.style.right = '20px';
-    toast.style.padding = '12px 18px';
-    toast.style.background = '#111';
-    toast.style.color = '#fff';
-    toast.style.borderRadius = '8px';
-    toast.style.zIndex = '9999';
-    toast.style.fontSize = '14px';
-    document.body.appendChild(toast);
-  }
+  width: 1px;
 
-  toast.textContent = msg;
-  toast.style.display = 'block';
+  height: 60%;
 
-  setTimeout(()=>{
-    toast.style.display = 'none';
-  },2500);
+  background:
+    rgba(255,255,255,.12);
 }
 
-/* =========================================================
-   DEVICE DETECTION
-========================================================= */
-function getDeviceInfo(){
+.metric h4 {
 
-  const ua = navigator.userAgent;
-  let device = 'Desktop';
-  let browser = 'Unknown Browser';
+  font-size:
+    18px;
 
-  if(/android/i.test(ua)) device = 'Android';
-  else if(/iPhone|iPad|iPod/i.test(ua)) device = 'iPhone/iPad';
-  else if(/Mobile/i.test(ua)) device = 'Mobile';
+  font-weight:
+    800;
 
-  if(ua.includes('Chrome')) browser = 'Chrome';
-  else if(ua.includes('Firefox')) browser = 'Firefox';
-  else if(ua.includes('Safari')) browser = 'Safari';
-  else if(ua.includes('Edge')) browser = 'Edge';
+  margin-bottom:
+    8px;
 
-  return {
-    device,
-    browser,
-    platform: navigator.platform || 'Unknown'
-  };
+  color:
+    #fff;
 }
 
-/* =========================================================
-   AUTHENTICATION
-========================================================= */
-function checkAuthStatus(){
+.metric p {
 
-  const authStatus = localStorage.getItem('isAuthenticated');
+  font-size:
+    10px;
 
-  if(authStatus === 'true'){
-    isAuthenticated = true;
-    showAccountPage();
-  }else{
-    isAuthenticated = false;
-    showSignInPage();
-  }
+  color:
+    rgba(255,255,255,.7);
 }
+</style>
+        <div class="card loyalty-card">
+          <div class="loyalty-top">
+            <div>
+              <h3>Premium Benefits</h3>
+              <p>Unlock faster shipping & VIP rewards</p>
+            </div>
+            <div class="crown">👑</div>
+          </div>
 
-function simulateLogin(){
+          <div class="progress-wrap">
+            <strong>2,450 / 3,000 XP</strong>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+          </div>
 
-  localStorage.setItem('isAuthenticated','true');
-  isAuthenticated = true;
+          <p>You are only 550 points away from Platinum.</p>
+        </div>
 
-  recordLogin();
+      </aside>
 
-  showAccountPage();
+      <!-- ===================================================
+           MAIN CONTENT
+      ==================================================== -->
 
-  renderAllData();
-}
+      <main>
 
-function handleSignOut(){
+        <!-- =================================================
+             USER CARD
+        ================================================== -->
 
-  localStorage.removeItem('isAuthenticated');
+        <section class="section">
+          <div class="card user-card">
 
-  isAuthenticated = false;
+            <div class="user-top">
+              <div class="user-profile">
+                <div class="avatar">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=800&auto=format&fit=crop" alt="Avatar">
+                </div>
 
-  showSignInPage();
+                <div class="user-info">
+                  <h3>Hi, Sarah 👋</h3>
 
-  showToast('Signed out successfully');
-}
+                  <div class="member-badge">
+                    ✨ Premium Member
+                  </div>
+                </div>
+              </div>
 
-function showSignInPage(){
+              <button class="edit-btn">Edit Profile</button>
+            </div>
 
-  safe('signin-container')?.classList.remove('hidden');
-  safe('account-container')?.classList.add('hidden');
-}
+            <div class="metrics">
 
-function showAccountPage(){
+              <div class="metric">
+                <h4>2,450</h4>
+                <p>Reward Points</p>
+              </div>
 
-  safe('signin-container')?.classList.add('hidden');
-  safe('account-container')?.classList.remove('hidden');
-}
+              <div class="metric">
+                <h4>$48.60</h4>
+                <p>Cashback Wallet</p>
+              </div>
 
-/* =========================================================
-   LOGIN HISTORY
-========================================================= */
-function recordLogin(){
+              <div class="metric">
+                <h4>12</h4>
+                <p>Available Coupons</p>
+              </div>
 
-  const logins = getStorage('login_history', []);
+            </div>
+          </div>
+        </section>
 
-  const info = getDeviceInfo();
+        <!-- =================================================
+             ORDERS
+        ================================================== -->
 
-  logins.unshift({
-    date: new Date().toISOString(),
-    device: info.device,
-    browser: info.browser,
-    platform: info.platform
-  });
+        <section class="section">
 
-  setStorage('login_history', logins.slice(0,100));
-}
+          <div class="section-head">
+            <h2>Orders</h2>
+            <a href="#">View All Orders</a>
+          </div>
 
-function renderLoginHistory(){
+          <div class="card order-card">
 
-  const container = safe('login-history-container');
-  if(!container) return;
+            <div class="order-top">
+              <div class="order-image">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop" alt="Nike Air Max">
+              </div>
 
-  const history = getStorage('login_history', []);
+              <div class="order-meta">
+                <h3>Nike Air Max 270</h3>
+                <p class="arrive">Arriving Tomorrow</p>
+                <p>Order #123456789</p>
+                <p>Paid via Visa •••• 4242</p>
+              </div>
+            </div>
 
-  if(!history.length){
-    container.innerHTML = '<p>No login history found.</p>';
-    return;
-  }
+            <div class="tracker">
 
-  container.innerHTML = history.map(item=>`
-    <div class="login-history-card">
-      <div><strong>Date:</strong> ${formatDate(item.date)}</div>
-      <div><strong>Device:</strong> ${escapeHtml(item.device)}</div>
-      <div><strong>Browser:</strong> ${escapeHtml(item.browser)}</div>
-      <div><strong>Platform:</strong> ${escapeHtml(item.platform)}</div>
-    </div>
-  `).join('');
-}
+              <div class="track-step active">
+                <div class="track-dot"></div>
+                <div class="track-label">Confirmed</div>
+              </div>
 
 /* =========================================================
    PROFILE
-========================================================= */
-async function getProfile(){
 
-  return await getStorage('ss_profile',{
-    fullName:'',
-    email:'',
-    phone:'',
-    gender:'',
-    dob:'',
-    country:'',
-    city:'',
-    bio:''
-  });
-}
+            <div class="quick-grid">
+              <button class="quick-btn">Buy Again</button>
+              <button class="quick-btn">Returns & Refunds</button>
+              <button class="quick-btn">Download Invoice</button>
+              <button class="quick-btn">Track Order</button>
+            </div>
 
-async function saveProfile(profile){
-  await setStorage('ss_profile', profile);
-}
+          </div>
+        </section>
 
-async function renderProfile(){
-
-  const profile = await getProfile();
-
-  const displayMap = {
-    'profile-name': profile.fullName,
-    'profile-email': profile.email,
-    'profile-phone': profile.phone,
-    'profile-gender': profile.gender,
-    'profile-dob': profile.dob,
-    'profile-country': profile.country,
-    'profile-city': profile.city,
-    'profile-bio': profile.bio
-  };
-
-  Object.keys(displayMap).forEach(id=>{
-    const el = safe(id);
-    if(el){
-      el.textContent = displayMap[id] || 'Not provided';
-    }
-  });
-
-  const formMap = {
-    'edit-fullname': profile.fullName,
-    'edit-email': profile.email,
-    'edit-phone': profile.phone,
-    'edit-gender': profile.gender,
-    'edit-dob': profile.dob,
-    'edit-country': profile.country,
-    'edit-city': profile.city,
-    'edit-bio': profile.bio
-  };
-
-  Object.keys(formMap).forEach(id=>{
-    const el = safe(id);
-    if(el){
-      el.value = formMap[id] || '';
-    }
-  });
-}
+        <!-- =================================================
+             WISHLIST
+        ================================================== -->
 
 async function saveProfileForm(e){
 
-  e.preventDefault();
+          <div class="section-head">
+            <h2>Wishlist & Saved</h2>
+            <a href="#">Manage</a>
+          </div>
 
-  const profile = {
-    fullName: safe('edit-fullname')?.value || '',
-    email: safe('edit-email')?.value || '',
-    phone: safe('edit-phone')?.value || '',
-    gender: safe('edit-gender')?.value || '',
-    dob: safe('edit-dob')?.value || '',
-    country: safe('edit-country')?.value || '',
-    city: safe('edit-city')?.value || '',
-    bio: safe('edit-bio')?.value || ''
-  };
+          <div class="horizontal-scroll">
 
   await saveProfile(profile);
 
   await renderProfile();
 
-  closeModal('edit-profile-modal');
-
-  showToast('Profile updated');
-}
-
-/* =========================================================
-   ADDRESS BOOK
-========================================================= */
-function getAddresses(){
-  return getStorage('addresses', []);
-}
-
-function saveAddresses(addresses){
-  setStorage('addresses', addresses);
-}
-
-function renderAddresses(){
-
-  const addresses = getAddresses();
-
-  const containers = [
-    safe('address-book-list'),
-    safe('saved-addresses'),
-    safe('address-book'),
-    safe('cart-address-sync')
-  ];
-
-  containers.forEach(container=>{
-
-    if(!container) return;
-
-    if(!addresses.length){
-      container.innerHTML = '<p>No saved addresses.</p>';
-      return;
-    }
-
-    container.innerHTML = addresses.map((addr,index)=>`
-      <div class="address-card">
-        <div><strong>${escapeHtml(addr.name)}</strong></div>
-        <div>${escapeHtml(addr.phone || '')}</div>
-        <div>${escapeHtml(addr.street)}</div>
-        <div>${escapeHtml(addr.city)}, ${escapeHtml(addr.country)}</div>
-
-        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-          <button class="btn btn-ghost edit-address-btn"
-                  data-index="${index}">
-            Edit
-          </button>
-
-          <button class="btn btn-ghost delete-address-btn"
-                  data-index="${index}">
-            Delete
-          </button>
-        </div>
-      </div>
-    `).join('');
-  });
-
-  $$('.edit-address-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      editAddress(+btn.dataset.index);
-    });
-  });
-
-  $$('.delete-address-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      deleteAddress(+btn.dataset.index);
-    });
-  });
-}
-
-function addAddressFromForm(e){
-
-  e.preventDefault();
-
-  const address = {
-    name: safe('address-name')?.value || '',
-    phone: safe('address-phone')?.value || '',
-    street: safe('address-street')?.value || '',
-    city: safe('address-city')?.value || '',
-    country: safe('address-country')?.value || ''
-  };
-
-  if(!address.name || !address.street){
-    showToast('Name and address required');
-    return;
-  }
-
-  const addresses = getAddresses();
-  addresses.push(address);
-
-  saveAddresses(addresses);
-
-  renderAddresses();
-
-  closeModal('add-address-modal');
-
-  showToast('Address added');
-}
-
-function editAddress(index){
-
-  const addresses = getAddresses();
-  const addr = addresses[index];
-
-  if(!addr) return;
-
-  const name = prompt('Full Name:', addr.name);
-  const phone = prompt('Phone:', addr.phone);
-  const street = prompt('Street:', addr.street);
-  const city = prompt('City:', addr.city);
-  const country = prompt('Country:', addr.country);
-
-  if(!name || !street) return;
-
-  addresses[index] = {
-    name,
-    phone,
-    street,
-    city,
-    country
-  };
-
-  saveAddresses(addresses);
-
-  renderAddresses();
-
-  showToast('Address updated');
-}
-
-function deleteAddress(index){
-
-  if(!confirm('Delete this address?')) return;
-
-  const addresses = getAddresses();
-
-  addresses.splice(index,1);
-
-  saveAddresses(addresses);
-
-  renderAddresses();
-
-  showToast('Address deleted');
-}
-
-/* =========================================================
-   ORDERS
-========================================================= */
-function renderOrders(){
-
-  const orders = getStorage('ss_orders', []);
-
-  const history = safe('order-history-content');
-  const current = safe('current-orders-content');
-
-  if(history){
-
-    if(!orders.length){
-      history.innerHTML = '<p>No orders yet.</p>';
-    }else{
-      history.innerHTML = orders.map(order=>`
-        <div class="order-card">
-          <div><strong>Order ID:</strong> ${escapeHtml(order.id)}</div>
-          <div><strong>Status:</strong> ${escapeHtml(order.status)}</div>
-          <div><strong>Date:</strong> ${formatDate(order.createdAt)}</div>
-          <div><strong>Total:</strong> ${formatCurrency(order.total)}</div>
-
-          <div style="margin-top:8px;">
-            ${order.items.map(item=>`
-              <div>
-                ${escapeHtml(item.title)} × ${item.qty}
-                = ${formatCurrency(item.total)}
+            <div class="mini-card">
+              <div class="mini-image">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop">
               </div>
-            `).join('')}
+              <div class="mini-meta">
+                <h3>Recently Viewed</h3>
+                <p>20 products visited</p>
+              </div>
+            </div>
+
+            <div class="mini-card">
+              <div class="mini-image">
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop">
+              </div>
+              <div class="mini-meta">
+                <h3>Favorites</h3>
+                <p>6 premium brands</p>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             LOYALTY
+        ================================================== -->
+
+        <section class="section">
+
+          <div class="card loyalty-card">
+
+            <div class="loyalty-top">
+              <div>
+                <h3>VIP Gold Member</h3>
+                <p>Exclusive perks and early product access</p>
+              </div>
+
+              <div class="crown">👑</div>
+            </div>
+
+            <div class="progress-wrap">
+              <strong>2,450 / 3,000 points</strong>
+              <div class="progress-bar">
+                <div class="progress-fill"></div>
+              </div>
+            </div>
+
+            <p>You're 550 points away from VIP Platinum.</p>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             SCREEN 2
+        ================================================== -->
+
+        <section class="section">
+
+          <div class="section-head">
+            <h2>Rewards & Wallet</h2>
+            <a href="#">View Details</a>
+          </div>
+
+          <div class="stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-icon pink">★</div>
+              <h3>2,450</h3>
+              <p>Reward Points</p>
+              <a href="#">Redeem Now</a>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon blue">💳</div>
+              <h3>$48.60</h3>
+              <p>Cashback Wallet</p>
+              <a href="#">View Balance</a>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon green">🎟</div>
+              <h3>12</h3>
+              <p>Coupons Available</p>
+              <a href="#">View All</a>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             REFERRAL
+        ================================================== -->
+
+        <section class="section">
+
+          <div class="card referral-card">
+            <div class="ref-left">
+              <div class="ref-icon">🎁</div>
+
+              <div>
+                <h3>Invite friends and earn up to $20</h3>
+                <p>Share your referral code and get cashback rewards.</p>
+              </div>
+            </div>
+
+            <div class="chev">→</div>
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             SETTINGS
+        ================================================== -->
+
+        <section class="section">
+
+          <div class="section-head">
+            <h2>Account Settings</h2>
+            <a href="#">Manage</a>
+          </div>
+
+          <div class="settings-list">
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon blue">👤</div>
+                <div>
+                  <h4>Personal Information</h4>
+                  <p>Name, email, phone number</p>
+                </div>
+              </div>
+              <div class="chev">›</div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon green">📍</div>
+                <div>
+                  <h4>Saved Addresses</h4>
+                  <p>Shipping & billing locations</p>
+                </div>
+              </div>
+              <div class="chev">›</div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon purple">💳</div>
+                <div>
+                  <h4>Payment Methods</h4>
+                  <p>Visa •••• 4242</p>
+                </div>
+              </div>
+              <div class="chev">›</div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon orange">🔒</div>
+                <div>
+                  <h4>Password & Security</h4>
+                  <p>2FA enabled</p>
+                </div>
+              </div>
+              <div class="chev">›</div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon cyan">🌍</div>
+                <div>
+                  <h4>Language & Currency</h4>
+                  <p>EN / USD</p>
+                </div>
+              </div>
+              <div class="chev">›</div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon pink">🔔</div>
+                <div>
+                  <h4>Notification Preferences</h4>
+                  <p>Email, SMS, Push</p>
+                </div>
+              </div>
+              <div class="chev">›</div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             SUPPORT
+        ================================================== -->
+
+        <section class="section">
+
+          <div class="section-head">
+            <h2>Support & Help</h2>
+            <a href="#">Open Ticket</a>
+          </div>
+
+          <div class="support-grid">
+
+            <div class="support-card">
+              <div class="support-icon blue">❓</div>
+              <h3>Help Center</h3>
+              <p>Browse help articles</p>
+            </div>
+
+            <div class="support-card">
+              <div class="support-icon green">📚</div>
+              <h3>FAQs</h3>
+              <p>Answers to common questions</p>
+            </div>
+
+            <div class="support-card">
+              <div class="support-icon pink">💬</div>
+              <h3>Live Chat</h3>
+              <p>24/7 support assistance</p>
+            </div>
+
+            <div class="support-card">
+              <div class="support-icon orange">☎</div>
+              <h3>Contact Us</h3>
+              <p>Call or email support</p>
+            </div>
+
+          </div>
+
+          <div class="settings-list">
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon purple">↩</div>
+                <div>
+                  <h4>Return Policy</h4>
+                  <p>Understand return eligibility & process</p>
+                </div>
+              </div>
+              <div class="chev">›</div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon cyan">🚚</div>
+                <div>
+                  <h4>Shipping Information</h4>
+                  <p>Delivery estimates & tracking</p>
+                </div>
+              </div>
+              <div class="chev">›</div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- =================================================
+             FOR YOU
+        ================================================== -->
+
+        <section class="section">
+
+          <div class="section-head">
+            <h2>For You</h2>
+            <a href="#">View All</a>
+          </div>
+
+          <div class="horizontal-scroll">
+
+            <div class="promo-card">
+              <div class="promo-content">
+                <h3>Exclusive Member Offer Up To 25% Off</h3>
+                <p>Unlock limited-time premium savings on top brands and collections.</p>
+                <button class="shop-btn">Shop Now</button>
+              </div>
+            </div>
+
+            <div class="promo-card">
+              <div class="promo-content">
+                <h3>Recommended For You</h3>
+                <p>Curated products based on your browsing and purchase history.</p>
+
+                <div class="product-stack">
+                  <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop">
+                  <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop">
+                  <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop">
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- ===================================================
+           RIGHT SIDEBAR
+      ==================================================== -->
+
+      <aside class="desktop-right">
+
+        <div class="card order-card">
+          <div class="section-head">
+            <h2>Recent Activity</h2>
+          </div>
+
+          <div class="settings-list">
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon green">✓</div>
+                <div>
+                  <h4>Order Delivered</h4>
+                  <p>Your Adidas Ultraboost was delivered.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon pink">★</div>
+                <div>
+                  <h4>Reward Redeemed</h4>
+                  <p>You redeemed a $10 coupon.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon blue">💬</div>
+                <div>
+                  <h4>Support Ticket Updated</h4>
+                  <p>Your refund request is in review.</p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
-      `).join('');
-    }
-  }
 
-  if(current){
+        <div class="card order-card">
 
-    const active = orders.filter(
-      o => o.status !== 'Delivered'
-    );
+          <div class="section-head">
+            <h2>Saved Payment Methods</h2>
+          </div>
 
-    if(!active.length){
-      current.innerHTML = '<p>No active orders.</p>';
-    }else{
-      current.innerHTML = active.map(order=>`
-        <div class="order-card">
-          <div><strong>${escapeHtml(order.id)}</strong></div>
-          <div>Status: ${escapeHtml(order.status)}</div>
-          <div>${formatDate(order.createdAt)}</div>
-          <div>${formatCurrency(order.total)}</div>
+          <div class="settings-list">
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon blue">💳</div>
+                <div>
+                  <h4>Visa Ending 4242</h4>
+                  <p>Expires 12/28</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div class="setting-left">
+                <div class="stat-icon black"></div>
+                <div>
+                  <h4>Apple Pay</h4>
+                  <p>Default mobile payment</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
-      `).join('');
-    }
-  }
-}
 
-/* =========================================================
-   PAYMENTS
-========================================================= */
-function renderPayments(){
+      </aside>
 
-  const container = safe('payment-history');
-  if(!container) return;
-
-  const orders = getStorage('ss_orders', []);
-
-  if(!orders.length){
-    container.innerHTML = '<p>No payments found.</p>';
-    return;
-  }
-
-  container.innerHTML = orders.map(order=>`
-    <div class="payment-card">
-      <div><strong>Order:</strong> ${escapeHtml(order.id)}</div>
-      <div><strong>Method:</strong> ${escapeHtml(order.paymentMethod)}</div>
-      <div><strong>Total:</strong> ${formatCurrency(order.total)}</div>
-      <div><strong>Date:</strong> ${formatDate(order.createdAt)}</div>
     </div>
-  `).join('');
-}
+  </div>
+</div>
 
-/* =========================================================
-   WISHLIST / FAVORITES
-========================================================= */
-function renderWishlist(){
+<!-- =========================================================
+     BOTTOM NAVIGATION
+========================================================= -->
 
-  const container = safe('wishlist-container');
-  if(!container) return;
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
 
-  const wishlist = getStorage('wishlist', []);
+    <div class="bottom-item">
+      <div>🏠</div>
+      <span>Home</span>
+    </div>
 
-  if(!wishlist.length){
-    container.innerHTML = '<p>No wishlist items.</p>';
-    return;
-  }
+    <div class="bottom-item">
+      <div>🧩</div>
+      <span>Categories</span>
+    </div>
 
-  container.innerHTML = wishlist.map(item=>`
-    <div class="wishlist-card">
-      <img src="${escapeHtml(item.image)}"
-           alt="${escapeHtml(item.title)}"
-           style="width:80px;height:80px;object-fit:cover;">
-
-      <div>
-        <div><strong>${escapeHtml(item.title)}</strong></div>
-        <div>${formatCurrency(item.price)}</div>
-
-        <div style="margin-top:8px;display:flex;gap:8px;">
-          <button class="btn btn-ghost wishlist-add-cart"
-                  data-id="${escapeHtml(item.id)}">
-            Add to Cart
-          </button>
-
-          <button class="btn btn-ghost wishlist-remove"
-                  data-id="${escapeHtml(item.id)}">
-            Remove
-          </button>
-        </div>
+    <div class="bottom-item">
+      <div style="position:relative;">
+        🛒
+        <div class="cart-badge">3</div>
       </div>
+      <span>Cart</span>
     </div>
-  `).join('');
 
-  $$('.wishlist-add-cart').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      addWishlistItemToCart(btn.dataset.id);
-    });
+    <div class="bottom-item">
+      <div>❤️</div>
+      <span>Saved</span>
+    </div>
+
+    <div class="bottom-item active">
+      <div>👤</div>
+      <span>Account</span>
+    </div>
+
+  </div>
+</nav>
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+// =========================================================
+// SIMPLE TAB INTERACTION
+// =========================================================
+
+const tabs = document.querySelectorAll('.mobile-tab');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
   });
-
-  $$('.wishlist-remove').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      removeWishlistItem(btn.dataset.id);
-    });
-  });
-}
-
-function addWishlistItemToCart(id){
-
-  const wishlist = getStorage('wishlist', []);
-  const item = wishlist.find(w=>w.id==id);
-
-  if(!item) return;
-
-  const cart = getStorage('ss_cart', []);
-
-  const existing = cart.find(c=>c.id===item.id);
-
-  if(existing){
-    existing.quantity += 1;
-  }else{
-    item.quantity = 1;
-    cart.push(item);
-  }
-
-  setStorage('ss_cart', cart);
-
-  showToast('Added to cart');
-}
-
-function removeWishlistItem(id){
-
-  let wishlist = getStorage('wishlist', []);
-
-  wishlist = wishlist.filter(
-    item => item.id != id
-  );
-
-  setStorage('wishlist', wishlist);
-
-  renderWishlist();
-
-  showToast('Removed from wishlist');
-}
-
-/* =========================================================
-   TABS
-========================================================= */
-function setupTabs(){
-
-  const activeTab = localStorage.getItem('activeTab') || 'order-history';
-
-  switchTab(activeTab);
-}
-
-function switchTab(tabName){
-
-  if(tabName === 'order-history'){
-
-    safe('order-history-tab')?.classList.add('tab-active');
-    safe('current-orders-tab')?.classList.remove('tab-active');
-
-    safe('order-history-content')?.classList.remove('hidden');
-    safe('current-orders-content')?.classList.add('hidden');
-
-  }else{
-
-    safe('order-history-tab')?.classList.remove('tab-active');
-    safe('current-orders-tab')?.classList.add('tab-active');
-
-    safe('order-history-content')?.classList.add('hidden');
-    safe('current-orders-content')?.classList.remove('hidden');
-  }
-
-  localStorage.setItem('activeTab', tabName);
-}
-
-/* =========================================================
-   MODALS
-========================================================= */
-function openModal(modalId){
-  safe(modalId)?.classList.add('show');
-}
-
-function closeModal(modalId){
-  safe(modalId)?.classList.remove('show');
-}
-
-/* =========================================================
-   FULL DATA RENDER
-========================================================= */
-function renderAllData(){
-
-  renderProfile();
-  renderAddresses();
-  renderOrders();
-  renderPayments();
-  renderWishlist();
-  renderLoginHistory();
-}
-
-/* =========================================================
-   EVENT LISTENERS
-========================================================= */
-function setupEventListeners(){
-
-  safe('account-icon')?.addEventListener('click',()=>{
-    isAuthenticated
-      ? showAccountPage()
-      : showSignInPage();
-  });
-
-  safe('login-form')?.addEventListener('submit',e=>{
-    e.preventDefault();
-    simulateLogin();
-  });
-
-  safe('sign-out-btn')?.addEventListener(
-    'click',
-    handleSignOut
-  );
-
-  safe('mobile-sign-out-btn')?.addEventListener(
-    'click',
-    handleSignOut
-  );
-
-  safe('order-history-tab')?.addEventListener(
-    'click',
-    ()=>switchTab('order-history')
-  );
-
-  safe('current-orders-tab')?.addEventListener(
-    'click',
-    ()=>switchTab('current-orders')
-  );
-
-  safe('edit-profile-btn')?.addEventListener(
-    'click',
-    ()=>openModal('edit-profile-modal')
-  );
-
-  safe('add-address-btn')?.addEventListener(
-    'click',
-    ()=>openModal('add-address-modal')
-  );
-
-  safe('add-payment-btn')?.addEventListener(
-    'click',
-    ()=>openModal('add-payment-modal')
-  );
-
-  safe('deactivate-account-btn')?.addEventListener(
-    'click',
-    ()=>openModal('deactivate-account-modal')
-  );
-
-  $$('.close-modal').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      closeModal(btn.dataset.modal);
-    });
-  });
-
-  safe('confirm-deactivate')?.addEventListener(
-    'change',
-    function(){
-      safe('confirm-deactivate-btn').disabled = !this.checked;
-    }
-  );
-
-  safe('edit-profile-form')?.addEventListener(
-    'submit',
-    saveProfileForm
-  );
-
-  safe('add-address-form')?.addEventListener(
-    'submit',
-    addAddressFromForm
-  );
-}
-
-/* =========================================================
-   DOM READY
-========================================================= */
-document.addEventListener('DOMContentLoaded',()=>{
-
-  checkAuthStatus();
-
-  setupEventListeners();
-
-  setupTabs();
-
-  renderAllData();
 });
 
-})();
-  </script>
+// =========================================================
+// DEMO TOAST NOTIFICATIONS
+// =========================================================
+
+function showToast(message){
+
+  const toast = document.createElement('div');
+
+  toast.innerHTML = message;
+
+  toast.style.position = 'fixed';
+  toast.style.left = '50%';
+  toast.style.bottom = '110px';
+  toast.style.transform = 'translateX(-50%)';
+  toast.style.background = '#111827';
+  toast.style.color = 'white';
+  toast.style.padding = '16px 22px';
+  toast.style.borderRadius = '18px';
+  toast.style.zIndex = '9999';
+  toast.style.fontWeight = '700';
+  toast.style.boxShadow = '0 20px 40px rgba(0,0,0,.2)';
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+4    toast.style.opacity = '0';
+    toast.style.transition = '.3s ease';
+  }, 2200);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 2600);
+
+}
+
+// =========================================================
+// BUTTON EVENTS
+// =========================================================
+
+const quickButtons = document.querySelectorAll('.quick-btn');
+
+quickButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    showToast(btn.innerText + ' opened');
+  });
+});
+
+const shopButtons = document.querySelectorAll('.shop-btn');
+
+shopButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    showToast('Redirecting to exclusive offers...');
+  });
+});
+
+// =========================================================
+// MENU INTERACTION
+// =========================================================
+
+const menuItems = document.querySelectorAll('.menu-item');
+
+menuItems.forEach(item => {
+  item.addEventListener('click', () => {
+    menuItems.forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+
+// =========================================================
+// ACCESSIBILITY ENHANCEMENTS
+// =========================================================
+
+window.addEventListener('keydown', (e) => {
+
+  if(e.key === 'Escape'){
+    console.log('Escape pressed');
+  }
+
+});
+
+// =========================================================
+// SIMULATED LIVE ORDER STATUS
+// =========================================================
+
+setTimeout(() => {
+  showToast('Your Nike Air Max 270 is out for delivery 🚚');
+}, 3000);
+
+</script>
+
 </body>
 </html>

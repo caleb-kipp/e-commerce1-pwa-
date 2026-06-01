@@ -7,7 +7,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="cart.core.js"></script>
+<script src="cart.core.js"></script>
 <style>
 
 /* =========================================================
@@ -1012,59 +1012,82 @@ LUXORA
 
 <!-- MOBILE SUMMARY -->
 
-<!-- MOBILE SUMMARY -->
-
 <div class="mobile-summary">
 
-    <div class="mobile-summary-toggle" id="summaryToggle">
+<div class="mobile-summary-toggle" id="summaryToggle">
 
-        <div>
-            <strong>Order Summary</strong>
-            <span class="text-muted" id="mobileItemCount">(0 items)</span>
-        </div>
+<div>
+<strong>Order Summary</strong>
+<span class="text-muted">(2 items)</span>
+</div>
 
-        <div>
-            <strong id="mobileHeaderTotal">$0.00</strong> ▼
-        </div>
+<div>
+<strong>$89.98</strong> ▼
+</div>
 
-    </div>
+</div>
 
-    <div class="mobile-summary-content" id="summaryContent">
+<div class="mobile-summary-content" id="summaryContent">
 
-        <div class="summary-card">
+<div class="summary-card">
 
-            <!-- Dynamic Mobile Cart Items -->
-            <div id="mobileCheckoutItems"></div>
+<div class="product-item">
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop">
 
-            <div class="summary-totals">
+<div class="product-info">
+<h4>Premium Sneakers</h4>
+<p>Black / Size 42</p>
+<div class="qty-pill">Qty 1</div>
+</div>
 
-                <div class="total-row">
-                    <span>Subtotal</span>
-                    <strong id="mobileSubtotal">$0.00</strong>
-                </div>
+<div class="product-price">$49.99</div>
 
-                <div class="total-row">
-                    <span>Shipping</span>
-                    <strong id="mobileShipping">FREE</strong>
-                </div>
+</div>
 
-                <div class="total-row">
-                    <span>Estimated Tax</span>
-                    <strong id="mobileTax">$0.00</strong>
-                </div>
+<div class="product-item">
+<img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop">
 
-                <div class="total-row total-final">
-                    <span>Total</span>
-                    <strong id="mobileGrandTotal">$0.00</strong>
-                </div>
+<div class="product-info">
+<h4>Oversized T-Shirt</h4>
+<p>White / XL</p>
+<div class="qty-pill">Qty 1</div>
+</div>
 
-            </div>
+<div class="product-price">$39.99</div>
 
-        </div>
+</div>
 
-    </div>
+<div class="summary-totals">
 
-</div><!-- =====================================================
+<div class="total-row">
+<span>Subtotal</span>
+<strong>$89.98</strong>
+</div>
+
+<div class="total-row">
+<span>Shipping</span>
+<strong>FREE</strong>
+</div>
+
+<div class="total-row">
+<span>Estimated Tax</span>
+<strong>$6.80</strong>
+</div>
+
+<div class="total-row total-final">
+<span>Total</span>
+<strong>$96.78</strong>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =====================================================
      CHECKOUT GRID
 ===================================================== -->
 
@@ -1456,67 +1479,88 @@ Checkout as Guest
 
 <div class="summary-card">
 
-    <div class="summary-header">
+<div class="summary-header">
 
-        <h3>Order Summary</h3>
+<h3>Order Summary</h3>
 
-        <a href="cart.html" class="edit-cart">
-            Edit Cart
-        </a>
-
-    </div>
-
-    <!-- Dynamic Checkout Items -->
-    <div id="checkoutItemsContainer"></div>
-
-    <!-- Coupon -->
-
-    <div class="coupon">
-
-        <input
-            type="text"
-            id="promoCode"
-            placeholder="Promo code"
-        >
-
-        <button id="applyPromoBtn">
-            Apply
-        </button>
-
-    </div>
-
-    <!-- Dynamic Totals -->
-
-    <div class="summary-totals">
-
-        <div class="total-row">
-            <span>Subtotal</span>
-            <strong id="checkoutSubtotal">$0.00</strong>
-        </div>
-
-        <div class="total-row">
-            <span>Discount</span>
-            <strong id="checkoutDiscount">$0.00</strong>
-        </div>
-
-        <div class="total-row">
-            <span>Shipping</span>
-            <strong id="checkoutShipping">FREE</strong>
-        </div>
-
-        <div class="total-row">
-            <span>Estimated Tax</span>
-            <strong id="checkoutTax">$0.00</strong>
-        </div>
-
-        <div class="total-row total-final">
-            <span>Total</span>
-            <strong id="checkoutGrandTotal">$0.00</strong>
-        </div>
-
-    </div>
+<a href="#" class="edit-cart">Edit Cart</a>
 
 </div>
+
+<div class="product-item">
+
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop">
+
+<div class="product-info">
+
+<h4>Premium Sneakers</h4>
+
+<p>Black / Size 42</p>
+
+<div class="qty-pill">Qty 1</div>
+
+</div>
+
+<div class="product-price">$49.99</div>
+
+</div>
+
+<div class="product-item">
+
+<img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1000&auto=format&fit=crop">
+
+<div class="product-info">
+
+<h4>Oversized T-Shirt</h4>
+
+<p>White / XL</p>
+
+<div class="qty-pill">Qty 1</div>
+
+</div>
+
+<div class="product-price">$39.99</div>
+
+</div>
+
+<!-- COUPON -->
+
+<div class="coupon">
+
+<input type="text" placeholder="Promo code">
+
+<button>Apply</button>
+
+</div>
+
+<!-- TOTALS -->
+
+<div class="summary-totals">
+
+<div class="total-row">
+<span>Subtotal</span>
+<strong>$89.98</strong>
+</div>
+
+<div class="total-row">
+<span>Shipping</span>
+<strong>FREE</strong>
+</div>
+
+<div class="total-row">
+<span>Estimated Tax</span>
+<strong>$6.80</strong>
+</div>
+
+<div class="total-row total-final">
+<span>Total</span>
+<strong>$96.78</strong>
+</div>
+
+</div>
+
+</div>
+
 <!-- SECURITY -->
 
 <div class="summary-card">
@@ -1608,16 +1652,10 @@ Your payment is protected with 256-bit SSL encryption and advanced fraud prevent
 
 <div class="mobile-paybar">
 
-<button
-    class="btn btn-primary"
-    id="payNowBtn"
->
-
-    <span id="payNowAmount">
-        🔒 Pay Securely Now $0.00
-    </span>
-
+<button class="btn btn-primary">
+🔒 Pay Securely Now $89.98
 </button>
+
 </div>
 
 <!-- =====================================================
@@ -1659,241 +1697,7 @@ Your payment is protected with 256-bit SSL encryption and advanced fraud prevent
 </div>
 
 </footer>
-<script>document.addEventListener(
-    "DOMContentLoaded",
-    renderCheckoutSummary
-);
 
-function renderCheckoutSummary(){
-
-    const cart =
-        JSON.parse(
-            localStorage.getItem("ss_cart")
-        ) || [];
-
-    const desktopContainer =
-        document.getElementById(
-            "checkoutItemsContainer"
-        );
-
-    const mobileContainer =
-        document.getElementById(
-            "mobileCheckoutItems"
-        );
-
-    if(!desktopContainer) return;
-
-    if(cart.length === 0){
-
-        const emptyHTML = `
-            <div class="empty-cart">
-                <h3>Your cart is empty</h3>
-                <p>
-                    Add products before checking out.
-                </p>
-            </div>
-        `;
-
-        desktopContainer.innerHTML =
-            emptyHTML;
-
-        if(mobileContainer){
-            mobileContainer.innerHTML =
-                emptyHTML;
-        }
-
-        return;
-    }
-
-    let subtotal = 0;
-
-    const itemsHTML =
-        cart.map(item => {
-
-            const lineTotal =
-                item.price * item.qty;
-
-            subtotal += lineTotal;
-
-            return `
-
-                <div class="product-item">
-
-                    <img
-                        src="${item.img}"
-                        alt="${item.title}"
-                    >
-
-                    <div class="product-info">
-
-                        <h4>
-                            ${item.title}
-                        </h4>
-
-                        <p>
-                            SKU: ${item.id}
-                        </p>
-
-                        <div class="qty-pill">
-                            Qty ${item.qty}
-                        </div>
-
-                    </div>
-
-                    <div class="product-price">
-                        $${lineTotal.toFixed(2)}
-                    </div>
-
-                </div>
-
-           `;
-
-        }).join("");
-
-    desktopContainer.innerHTML =
-        itemsHTML;
-
-    if(mobileContainer){
-
-        mobileContainer.innerHTML =
-            itemsHTML;
-
-    }
-
-    calculateCheckoutTotals(
-        subtotal
-    );
-
-    updateCheckoutItemCount(
-        cart
-    );
-}
-
-function calculateCheckoutTotals(
-    subtotal
-){
-
-    const expressShipping =
-        document.querySelectorAll(
-            ".shipping-option"
-        )[1]?.classList.contains(
-            "active"
-        );
-
-    const shipping =
-        expressShipping
-            ? 9.99
-            : 0;
-
-    const discount = 0;
-
-    const tax =
-        (
-            (subtotal - discount + shipping)
-            * 0.075
-        );
-
-    const total =
-        subtotal -
-        discount +
-        shipping +
-        tax;
-
-    document.getElementById(
-        "checkoutSubtotal"
-    ).textContent =
-        "$" + subtotal.toFixed(2);
-
-    document.getElementById(
-        "checkoutDiscount"
-    ).textContent =
-        "$" + discount.toFixed(2);
-
-    document.getElementById(
-        "checkoutShipping"
-    ).textContent =
-        shipping === 0
-            ? "FREE"
-            : "$" + shipping.toFixed(2);
-
-    document.getElementById(
-        "checkoutTax"
-    ).textContent =
-        "$" + tax.toFixed(2);
-
-    document.getElementById(
-        "checkoutGrandTotal"
-    ).textContent =
-        "$" + total.toFixed(2);
-
-    /* MOBILE */
-
-    const mobileSubtotal =
-        document.getElementById(
-            "mobileSubtotal"
-        );
-
-    if(mobileSubtotal){
-
-        mobileSubtotal.textContent =
-            "$" + subtotal.toFixed(2);
-
-        document.getElementById(
-            "mobileShipping"
-        ).textContent =
-            shipping === 0
-                ? "FREE"
-                : "$" + shipping.toFixed(2);
-
-        document.getElementById(
-            "mobileTax"
-        ).textContent =
-            "$" + tax.toFixed(2);
-
-        document.getElementById(
-            "mobileGrandTotal"
-        ).textContent =
-            "$" + total.toFixed(2);
-
-        document.getElementById(
-            "mobileHeaderTotal"
-        ).textContent =
-            "$" + total.toFixed(2);
-    }
-
-    document.querySelectorAll(
-        ".btn-primary"
-    ).forEach(btn => {
-
-        btn.innerHTML =
-            `🔒 Pay Securely Now $${total.toFixed(2)}`;
-
-    });
-}
-
-function updateCheckoutItemCount(
-    cart
-){
-
-    const totalItems =
-        cart.reduce(
-            (sum,item) =>
-                sum + item.qty,
-            0
-        );
-
-    const itemCount =
-        document.getElementById(
-            "mobileItemCount"
-        );
-
-    if(itemCount){
-
-        itemCount.textContent =
-            `(${totalItems} items)`;
-
-    }
-}</script>
 <!-- =====================================================
      JAVASCRIPT
 ===================================================== -->
@@ -2176,287 +1980,6 @@ promoBtn.style.background = '#10b981';
 ========================================================= */
 
 </script>
-<script>
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    renderCheckoutCart();
-
-});
-
-/* ==========================================
-   SHIPPING STATE
-========================================== */
-
-let selectedShipping = 0;
-
-/* ==========================================
-   RENDER CHECKOUT
-========================================== */
-
-function renderCheckoutCart(){
-
-    const cart =
-        JSON.parse(
-            localStorage.getItem("ss_cart")
-        ) || [];
-
-    const desktopContainer =
-        document.getElementById(
-            "checkoutItemsContainer"
-        );
-
-    const mobileContainer =
-        document.getElementById(
-            "mobileCheckoutItems"
-        );
-
-    if(!desktopContainer) return;
-
-    if(cart.length === 0){
-
-        desktopContainer.innerHTML =
-            "<p>Your cart is empty.</p>";
-
-        if(mobileContainer){
-            mobileContainer.innerHTML =
-                "<p>Your cart is empty.</p>";
-        }
-
-        return;
-    }
-
-    let subtotal = 0;
-    let itemCount = 0;
-
-    const itemsHTML =
-        cart.map(item => {
-
-            const lineTotal =
-                item.price * item.qty;
-
-            subtotal += lineTotal;
-
-            itemCount += item.qty;
-
-            return `
-
-            <div class="product-item">
-
-                <img
-                    src="${item.img}"
-                    alt="${item.title}"
-                >
-
-                <div class="product-info">
-
-                    <h4>${item.title}</h4>
-
-                    <p>SKU: ${item.id}</p>
-
-                    <div class="qty-pill">
-                        Qty ${item.qty}
-                    </div>
-
-                </div>
-
-                <div class="product-price">
-
-                    $${lineTotal.toFixed(2)}
-
-                </div>
-
-            </div>
-
-            `;
-
-        }).join("");
-
-    desktopContainer.innerHTML =
-        itemsHTML;
-
-    if(mobileContainer){
-
-        mobileContainer.innerHTML =
-            itemsHTML;
-
-    }
-
-    updateCheckoutTotals(
-        subtotal,
-        itemCount
-    );
-}
-
-/* ==========================================
-   TOTAL CALCULATIONS
-========================================== */
-
-function updateCheckoutTotals(
-    subtotal,
-    itemCount
-){
-
-    const taxRate = 0.075;
-
-    const tax =
-        (subtotal + selectedShipping)
-        * taxRate;
-
-    const total =
-        subtotal +
-        selectedShipping +
-        tax;
-
-    document.getElementById(
-        "checkoutSubtotal"
-    ).textContent =
-        "$" + subtotal.toFixed(2);
-
-    document.getElementById(
-        "checkoutShipping"
-    ).textContent =
-        selectedShipping === 0
-        ? "FREE"
-        : "$" +
-          selectedShipping.toFixed(2);
-
-    document.getElementById(
-        "checkoutTax"
-    ).textContent =
-        "$" + tax.toFixed(2);
-
-    document.getElementById(
-        "checkoutGrandTotal"
-    ).textContent =
-        "$" + total.toFixed(2);
-
-    document.getElementById(
-        "mobileSubtotal"
-    ).textContent =
-        "$" + subtotal.toFixed(2);
-
-    document.getElementById(
-        "mobileShipping"
-    ).textContent =
-        selectedShipping === 0
-        ? "FREE"
-        : "$" +
-          selectedShipping.toFixed(2);
-
-    document.getElementById(
-        "mobileTax"
-    ).textContent =
-        "$" + tax.toFixed(2);
-
-    document.getElementById(
-        "mobileGrandTotal"
-    ).textContent =
-        "$" + total.toFixed(2);
-
-    document.getElementById(
-        "mobileHeaderTotal"
-    ).textContent =
-        "$" + total.toFixed(2);
-
-    document.getElementById(
-        "mobileItemCount"
-    ).textContent =
-        "(" + itemCount + " items)";
-
-    document
-        .querySelectorAll(
-            "#payNowAmount"
-        )
-        .forEach(btn => {
-
-            btn.innerHTML =
-                "🔒 Pay Securely Now $" +
-                total.toFixed(2);
-
-        });
-}
-
-/* ==========================================
-   SHIPPING OPTIONS
-========================================== */
-
-const shippingOptions =
-    document.querySelectorAll(
-        ".shipping-option"
-    );
-
-shippingOptions.forEach(
-    (option,index) => {
-
-        option.addEventListener(
-            "click",
-            () => {
-
-                shippingOptions
-                .forEach(o =>
-                    o.classList
-                     .remove("active")
-                );
-
-                option.classList
-                      .add("active");
-
-                selectedShipping =
-                    index === 0
-                    ? 0
-                    : 9.99;
-
-                const cart =
-                    JSON.parse(
-                        localStorage
-                        .getItem(
-                            "ss_cart"
-                        )
-                    ) || [];
-
-                let subtotal = 0;
-                let items = 0;
-
-                cart.forEach(item => {
-
-                    subtotal +=
-                        item.price *
-                        item.qty;
-
-                    items += item.qty;
-
-                });
-
-                updateCheckoutTotals(
-                    subtotal,
-                    items
-                );
-
-            }
-        );
-
-    }
-);
-
-/* ==========================================
-   EDIT CART
-========================================== */
-
-document
-.querySelector(".edit-cart")
-?.addEventListener(
-    "click",
-    e => {
-
-        e.preventDefault();
-
-        window.location.href =
-            "cart.html";
-
-    }
-);
-
-</script>
 </body>
 </html>

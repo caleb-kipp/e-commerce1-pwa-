@@ -1,0 +1,3824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<script src="cart.core.js"></script>
+
+<title>ShopVista Enterprise Cart</title>
+
+<!--
+=============================================================================
+SHOPVISTA ENTERPRISE CART
+PART 1 OF 5
+
+Contains:
+
+1. Document Shell
+2. Design System
+3. Global CSS
+4. Layout System
+5. Announcement Bars
+6. Desktop Header
+7. Mobile Header
+8. Breadcrumbs
+9. Cart Hero
+10. Shipping Progress
+11. Cart Container
+12. Dynamic Cart Item Architecture
+13. Saved For Later Architecture
+14. Empty State Architecture
+15. Loading State Architecture
+
+Paste PART 2 directly after this section's closing placeholder.
+=============================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+/* ==========================================================================
+   DESIGN TOKENS
+========================================================================== */
+
+:root{
+
+--bg:#0b0f14;
+--bg-secondary:#0f1722;
+--bg-tertiary:#121825;
+
+--surface:#131b29;
+--surface-2:#182131;
+--surface-3:#1d2738;
+
+--white:#ffffff;
+
+--text:#eef3fb;
+--text-secondary:#c6d2e5;
+--text-muted:#8fa0b8;
+
+--line:rgba(255,255,255,.08);
+--line-strong:rgba(255,255,255,.14);
+
+--purple:#8b5cf6;
+--purple-light:#a855f7;
+--purple-dark:#6d28d9;
+
+--green:#22c55e;
+--green-soft:rgba(34,197,94,.12);
+
+--red:#ef4444;
+--orange:#f59e0b;
+--yellow:#facc15;
+--cyan:#06b6d4;
+
+--success:#10b981;
+--warning:#f59e0b;
+--danger:#ef4444;
+--info:#3b82f6;
+
+--radius-xs:10px;
+--radius-sm:16px;
+--radius:22px;
+--radius-lg:30px;
+
+--shadow-sm:0 5px 15px rgba(0,0,0,.15);
+--shadow:0 10px 25px rgba(0,0,0,.25);
+--shadow-lg:0 20px 40px rgba(0,0,0,.35);
+
+--transition:.25s ease;
+
+--container:1700px;
+
+--header-height:84px;
+
+}
+
+/* ==========================================================================
+   RESET
+========================================================================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+
+font-family:'Inter',sans-serif;
+
+background:
+radial-gradient(circle at top left,
+rgba(168,85,247,.12),
+transparent 20%),
+
+radial-gradient(circle at top right,
+rgba(6,182,212,.10),
+transparent 20%),
+
+linear-gradient(
+180deg,
+#0b0f14,
+#0f1722 40%,
+#101827
+);
+
+color:var(--text);
+
+overflow-x:hidden;
+
+min-height:100vh;
+}
+
+img{
+display:block;
+width:100%;
+}
+
+a{
+text-decoration:none;
+color:inherit;
+}
+
+button{
+font-family:inherit;
+cursor:pointer;
+}
+
+input,
+select,
+textarea{
+font-family:inherit;
+outline:none;
+}
+
+/* ==========================================================================
+   SCROLLBAR
+========================================================================== */
+
+::-webkit-scrollbar{
+width:10px;
+height:10px;
+}
+
+::-webkit-scrollbar-track{
+background:#111827;
+}
+
+::-webkit-scrollbar-thumb{
+background:#283548;
+border-radius:999px;
+}
+
+/* ==========================================================================
+   UTILITIES
+========================================================================== */
+
+.container{
+max-width:var(--container);
+margin:auto;
+padding:0 24px;
+}
+
+.card{
+
+background:
+linear-gradient(
+180deg,
+rgba(255,255,255,.03),
+rgba(255,255,255,.015)
+);
+
+border:1px solid var(--line);
+
+border-radius:var(--radius);
+
+box-shadow:var(--shadow);
+}
+
+.flex{
+display:flex;
+}
+
+.grid{
+display:grid;
+}
+
+.hidden{
+display:none;
+}
+
+.text-muted{
+color:var(--text-muted);
+}
+
+.section-space{
+margin-top:40px;
+}
+
+/* ==========================================================================
+   ANNOUNCEMENT BAR
+========================================================================== */
+
+.announcement-bar{
+
+height:44px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:
+
+linear-gradient(
+90deg,
+rgba(139,92,246,.18),
+rgba(6,182,212,.18)
+);
+
+border-bottom:1px solid rgba(255,255,255,.08);
+
+font-size:.92rem;
+font-weight:600;
+}
+
+.announcement-inner{
+
+display:flex;
+align-items:center;
+gap:18px;
+
+}
+
+.announcement-badge{
+
+padding:5px 10px;
+
+border-radius:999px;
+
+background:rgba(255,255,255,.12);
+
+font-size:.8rem;
+font-weight:700;
+}
+
+/* ==========================================================================
+   TOP PROMO BAR
+========================================================================== */
+
+.promo-bar{
+
+height:50px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-bottom:1px solid var(--line);
+
+background:#0f1722;
+}
+
+.promo-items{
+
+display:flex;
+align-items:center;
+gap:40px;
+}
+
+.promo-item{
+
+display:flex;
+align-items:center;
+gap:10px;
+
+font-size:.9rem;
+color:var(--text-secondary);
+}
+
+/* ==========================================================================
+   HEADER
+========================================================================== */
+
+.header{
+
+position:sticky;
+
+top:0;
+
+z-index:1000;
+
+backdrop-filter:blur(20px);
+
+background:rgba(10,14,20,.85);
+
+border-bottom:1px solid var(--line);
+}
+
+.header-inner{
+
+height:84px;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:30px;
+}
+
+.logo{
+
+display:flex;
+align-items:center;
+gap:14px;
+
+font-size:1.2rem;
+font-weight:900;
+}
+
+.logo-icon{
+
+width:46px;
+height:46px;
+
+border-radius:16px;
+
+background:
+linear-gradient(
+135deg,
+var(--purple),
+var(--purple-light)
+);
+
+display:grid;
+place-items:center;
+
+box-shadow:
+0 10px 30px
+rgba(168,85,247,.35);
+}
+
+.logo-icon span{
+font-weight:900;
+font-size:1.1rem;
+}
+
+.header-left{
+
+display:flex;
+align-items:center;
+gap:50px;
+}
+
+.nav{
+
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.nav a{
+
+padding:11px 15px;
+
+border-radius:999px;
+
+font-size:.95rem;
+
+transition:var(--transition);
+}
+
+.nav a:hover{
+background:rgba(255,255,255,.05);
+}
+
+.nav-active{
+
+background:
+rgba(139,92,246,.12);
+
+border:1px solid
+rgba(139,92,246,.2);
+}
+
+.header-right{
+
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.search{
+
+position:relative;
+}
+
+.search input{
+
+width:340px;
+height:50px;
+
+padding:0 48px 0 18px;
+
+background:#111827;
+
+border:1px solid var(--line);
+
+border-radius:999px;
+
+color:white;
+}
+
+.icon-btn{
+
+width:50px;
+height:50px;
+
+border-radius:18px;
+
+background:#111827;
+
+border:1px solid var(--line);
+
+display:grid;
+place-items:center;
+
+position:relative;
+
+transition:var(--transition);
+}
+
+.icon-btn:hover{
+
+transform:translateY(-2px);
+
+background:#172131;
+}
+
+.counter{
+
+position:absolute;
+
+top:-4px;
+right:-4px;
+
+min-width:22px;
+height:22px;
+
+border-radius:999px;
+
+background:var(--purple);
+
+display:grid;
+place-items:center;
+
+font-size:.75rem;
+font-weight:800;
+}
+
+/* ==========================================================================
+   MOBILE HEADER
+========================================================================== */
+
+.mobile-header{
+display:none;
+}
+
+/* ==========================================================================
+   PAGE WRAPPER
+========================================================================== */
+
+.cart-page{
+
+padding:32px 0 80px;
+}
+
+.breadcrumb{
+
+display:flex;
+align-items:center;
+gap:10px;
+
+margin-bottom:20px;
+
+font-size:.95rem;
+
+color:var(--text-muted);
+}
+
+.breadcrumb-divider{
+opacity:.4;
+}
+
+.cart-hero{
+
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+
+gap:30px;
+
+margin-bottom:28px;
+}
+
+.cart-hero h1{
+
+font-size:3rem;
+line-height:1;
+margin-bottom:12px;
+}
+
+.cart-hero p{
+
+color:var(--text-muted);
+
+max-width:700px;
+}
+
+.hero-actions{
+
+display:flex;
+gap:14px;
+}
+
+.btn{
+
+height:56px;
+
+padding:0 24px;
+
+border-radius:18px;
+
+font-weight:700;
+
+transition:var(--transition);
+}
+
+.btn-secondary{
+
+background:#111827;
+
+border:1px solid var(--line);
+
+color:white;
+}
+
+.btn-primary{
+
+border:none;
+
+background:
+linear-gradient(
+135deg,
+var(--purple),
+var(--purple-light)
+);
+
+color:white;
+}
+
+/* ==========================================================================
+   SHIPPING PROGRESS
+========================================================================== */
+
+.shipping-progress{
+
+padding:24px;
+
+margin-bottom:28px;
+}
+
+.shipping-progress-top{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin-bottom:18px;
+}
+
+.shipping-progress-bar{
+
+height:14px;
+
+background:#0f1722;
+
+border-radius:999px;
+
+overflow:hidden;
+
+border:1px solid var(--line);
+}
+
+.shipping-progress-fill{
+
+height:100%;
+
+width:72%;
+
+background:
+linear-gradient(
+90deg,
+#22c55e,
+#4ade80
+);
+}
+
+.shipping-meta{
+
+margin-top:12px;
+
+display:flex;
+justify-content:space-between;
+
+font-size:.92rem;
+
+color:var(--text-muted);
+}
+
+/* ==========================================================================
+   CART GRID
+========================================================================== */
+
+.cart-layout{
+
+display:grid;
+
+grid-template-columns:
+1.7fr
+.8fr;
+
+gap:28px;
+
+align-items:start;
+}
+
+/* ==========================================================================
+   CART ITEMS WRAPPER
+========================================================================== */
+
+.cart-items-card{
+overflow:hidden;
+}
+
+.cart-table-header{
+
+display:grid;
+
+grid-template-columns:
+2fr
+.8fr
+.8fr
+.8fr
+.5fr;
+
+padding:24px;
+
+border-bottom:1px solid var(--line);
+
+font-size:.9rem;
+font-weight:700;
+
+letter-spacing:.08em;
+}
+
+/* ==========================================================================
+   DYNAMIC CART ITEM
+========================================================================== */
+
+.cart-item{
+
+display:grid;
+
+grid-template-columns:
+2fr
+.8fr
+.8fr
+.8fr
+.5fr;
+
+gap:20px;
+
+padding:24px;
+
+align-items:center;
+
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.product-column{
+
+display:flex;
+gap:18px;
+}
+
+.product-image{
+
+width:130px;
+height:130px;
+
+border-radius:22px;
+
+overflow:hidden;
+
+flex-shrink:0;
+
+background:#111827;
+}
+
+.product-image img{
+
+height:100%;
+object-fit:cover;
+}
+
+.product-details{
+
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.product-brand{
+
+font-size:.85rem;
+
+color:var(--text-muted);
+}
+
+.product-title{
+
+font-size:1.08rem;
+
+font-weight:800;
+
+line-height:1.4;
+}
+
+.product-sku{
+
+font-size:.84rem;
+
+color:var(--text-muted);
+}
+
+.product-variant{
+
+font-size:.92rem;
+}
+
+.product-badges{
+
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+
+margin-top:4px;
+}
+
+.badge{
+
+padding:7px 10px;
+
+border-radius:999px;
+
+font-size:.78rem;
+
+font-weight:700;
+}
+
+.badge-stock{
+
+background:
+rgba(34,197,94,.12);
+
+color:#86efac;
+}
+
+.badge-sale{
+
+background:
+rgba(239,68,68,.12);
+
+color:#fca5a5;
+}
+
+.price-column{
+
+font-weight:800;
+}
+
+.old-price{
+
+display:block;
+
+margin-top:6px;
+
+font-size:.85rem;
+
+color:var(--text-muted);
+
+text-decoration:line-through;
+}
+
+.qty-column{
+
+display:flex;
+align-items:center;
+}
+
+.qty-control{
+
+width:140px;
+height:52px;
+
+background:#111827;
+
+border:1px solid var(--line);
+
+border-radius:16px;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:0 8px;
+}
+
+.qty-control button{
+
+width:36px;
+height:36px;
+
+border:none;
+
+border-radius:12px;
+
+background:#1b2637;
+
+color:white;
+}
+
+.line-total{
+
+font-weight:900;
+font-size:1.1rem;
+}
+
+.actions-column{
+
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.item-action{
+
+background:none;
+border:none;
+
+color:var(--text-muted);
+
+font-size:.85rem;
+}
+
+/* ==========================================================================
+   CART ACTION BAR
+========================================================================== */
+
+.cart-action-bar{
+
+padding:24px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+gap:20px;
+}
+
+/* ==========================================================================
+   API HOOKS
+========================================================================== */
+
+/*
+[data-cart-count]
+[data-cart-subtotal]
+[data-cart-total]
+[data-cart-tax]
+[data-cart-discount]
+[data-cart-items]
+[data-cart-loading]
+[data-cart-empty]
+[data-cart-saveforlater]
+*/
+
+/* ==========================================================================
+   SAVED FOR LATER
+========================================================================== */
+
+.saved-section{
+
+margin-top:30px;
+padding:24px;
+}
+
+.saved-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin-bottom:24px;
+}
+
+.saved-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(3,1fr);
+
+gap:20px;
+}
+
+.saved-product{
+
+padding:20px;
+}
+
+.saved-thumb{
+
+height:220px;
+
+border-radius:18px;
+
+overflow:hidden;
+
+margin-bottom:18px;
+}
+
+/* ==========================================================================
+   LOADING STATE
+========================================================================== */
+
+.skeleton{
+
+position:relative;
+
+overflow:hidden;
+
+background:#182131;
+}
+
+.skeleton::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+left:-100%;
+
+width:100%;
+height:100%;
+
+background:
+linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.08),
+transparent
+);
+
+animation:skeleton 1.4s infinite;
+}
+
+@keyframes skeleton{
+
+100%{
+left:100%;
+}
+
+}
+
+/* ==========================================================================
+   EMPTY CART STATE
+========================================================================== */
+
+.empty-cart{
+
+padding:80px 40px;
+
+text-align:center;
+}
+
+.empty-icon{
+
+width:120px;
+height:120px;
+
+margin:auto;
+
+border-radius:30px;
+
+display:grid;
+place-items:center;
+
+background:
+rgba(139,92,246,.1);
+
+margin-bottom:25px;
+}
+
+.empty-cart h2{
+
+font-size:2rem;
+
+margin-bottom:15px;
+}
+
+.empty-cart p{
+
+max-width:650px;
+
+margin:auto;
+
+line-height:1.8;
+
+color:var(--text-muted);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+========================================================================== */
+
+@media(max-width:1200px){
+
+.cart-layout{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:900px){
+
+.header{
+display:none;
+}
+
+.mobile-header{
+display:block;
+}
+
+.cart-hero{
+flex-direction:column;
+}
+
+.cart-table-header{
+display:none;
+}
+
+.cart-item{
+grid-template-columns:1fr;
+}
+
+.saved-grid{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================================================
+ANNOUNCEMENT BAR
+========================================================= -->
+
+<section class="announcement-bar">
+
+<div class="announcement-inner">
+
+<div class="announcement-badge">
+LIMITED OFFER
+</div>
+
+<div>
+Free Worldwide Shipping On Orders Over $99
+</div>
+
+</div>
+
+</section>
+
+<!-- =========================================================
+PROMO BAR
+========================================================= -->
+
+<section class="promo-bar">
+
+<div class="promo-items">
+
+<div class="promo-item">
+🚚 Fast Delivery
+</div>
+
+<div class="promo-item">
+🔒 Secure Checkout
+</div>
+
+<div class="promo-item">
+↩ 30-Day Returns
+</div>
+
+<div class="promo-item">
+⭐ Premium Support
+</div>
+
+</div>
+
+</section>
+
+<!-- =========================================================
+DESKTOP HEADER
+========================================================= -->
+
+<header class="header">
+
+<div class="container">
+
+<div class="header-inner">
+
+<div class="header-left">
+
+<a href="/" class="logo">
+
+<div class="logo-icon">
+<span>S</span>
+</div>
+
+<div>
+ShopVista
+</div>
+
+</a>
+
+<nav class="nav">
+
+<a href="/">Home</a>
+
+<a href="/shop">Shop</a>
+
+<a href="/categories">Categories</a>
+
+<a href="/brands">Brands</a>
+
+<a href="/deals">Deals</a>
+
+<a href="/new">New Arrivals</a>
+
+<a href="/cart" class="nav-active">
+Cart
+</a>
+
+</nav>
+
+</div>
+
+<div class="header-right">
+
+<div class="search">
+
+<input
+type="search"
+placeholder="Search products..."
+>
+
+</div>
+
+<button class="icon-btn">
+♥
+</button>
+
+<button class="icon-btn">
+👤
+</button>
+
+<button class="icon-btn">
+
+<span class="counter"
+data-cart-count>
+3
+</span>
+
+🛒
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</header>
+<style>
+    /* =========================================================
+   SHOPVISTA CART ENTERPRISE SYSTEM
+   Unified CSS (PART 1–4 MERGED)
+========================================================= */
+
+/* =====================
+   ROOT TOKENS
+===================== */
+:root {
+  --bg: #0b0f14;
+  --bg-2: #0e141c;
+
+  --card: #121825;
+  --card-2: #0f1623;
+
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+
+  --brand: #8b5cf6;
+  --brand-2: #a855f7;
+  --green: #22c55e;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+
+  --border: rgba(255,255,255,.08);
+
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-lg: 26px;
+
+  --shadow: 0 12px 30px rgba(0,0,0,.35);
+  --max: 1600px;
+}
+
+/* =====================
+   RESET (CLEAN)
+===================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background: radial-gradient(circle at top, #0b0f14, #0e141c);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button, input {
+  font-family: inherit;
+}
+
+/* =====================
+   LAYOUT SYSTEM
+===================== */
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+/* =====================
+   HEADER (CART SAFE)
+===================== */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(11,15,20,.85);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  gap: 12px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 900;
+}
+
+.logo-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+}
+
+/* =====================
+   CART PAGE STRUCTURE
+===================== */
+
+.page {
+  padding: 28px 0 80px;
+}
+
+/* Breadcrumb */
+.breadcrumbs {
+  display: flex;
+  gap: 10px;
+  color: var(--muted);
+  font-size: .95rem;
+  margin-bottom: 18px;
+}
+
+/* =====================
+   CART GRID LAYOUT
+===================== */
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1.7fr .8fr;
+  gap: 26px;
+  align-items: start;
+}
+
+/* =====================
+   CARD SYSTEM
+===================== */
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+/* =====================
+   CART TABLE HEADER
+===================== */
+.cart-head {
+  display: grid;
+  grid-template-columns: 2fr .7fr .7fr .7fr;
+  padding: 20px;
+  font-weight: 700;
+  color: #cbd5e1;
+  border-bottom: 1px solid var(--border);
+}
+
+/* =====================
+   CART ITEM ROW (DYNAMIC SAFE)
+===================== */
+.cart-item {
+  display: grid;
+  grid-template-columns: 2fr .7fr .7fr .7fr;
+  align-items: center;
+  padding: 20px;
+  gap: 14px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  transition: .25s ease;
+}
+
+.cart-item:hover {
+  background: rgba(255,255,255,.02);
+}
+
+/* PRODUCT CELL */
+.cart-product {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.cart-product img {
+  width: 110px;
+  height: 110px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+/* INFO */
+.cart-title {
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.cart-meta {
+  font-size: .9rem;
+  color: var(--muted);
+}
+
+/* PRICE */
+.price {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+/* =====================
+   QUANTITY CONTROL
+===================== */
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 6px;
+  width: fit-content;
+}
+
+.qty button {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 10px;
+  background: #1f2937;
+  color: white;
+  cursor: pointer;
+}
+
+.qty span {
+  min-width: 26px;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* =====================
+   DELETE BUTTON
+===================== */
+.remove-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(239,68,68,.25);
+  background: rgba(239,68,68,.1);
+  color: var(--red);
+  cursor: pointer;
+}
+
+/* =====================
+   SUMMARY PANEL
+===================== */
+.summary {
+  position: sticky;
+  top: 100px;
+  padding: 20px;
+}
+
+.summary h2 {
+  margin-bottom: 16px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+  color: #cbd5e1;
+}
+
+.summary-total {
+  font-size: 1.2rem;
+  font-weight: 900;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+/* CTA */
+.checkout-btn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* =====================
+   EMPTY CART STATE
+===================== */
+.empty-cart {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+
+/* =====================
+   TRUST ROW
+===================== */
+.trust {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.trust-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 14px;
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+/* =====================
+   RECOMMENDATIONS
+===================== */
+.recommend {
+  margin-top: 40px;
+}
+
+.recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 16px;
+}
+
+.product-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.product-card img {
+  height: 220px;
+  object-fit: cover;
+}
+
+.product-card .content {
+  padding: 14px;
+}
+
+/* =====================
+   MOBILE FIXES
+===================== */
+@media (max-width: 1024px) {
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .summary {
+    position: relative;
+    top: 0;
+  }
+
+  .trust {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .recommend-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .cart-head {
+    display: none;
+  }
+
+  .cart-item {
+    grid-template-columns: 1fr;
+  }
+
+  .trust {
+    grid-template-columns: 1fr;
+  }
+
+  .recommend-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-product {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+</style>
+<!-- =========================================================
+MAIN PAGE
+========================================================= -->
+
+<main class="cart-page">
+
+<div class="container">
+
+<div class="breadcrumb">
+
+<a href="/">Home</a>
+
+<div class="breadcrumb-divider">/</div>
+
+<a href="/shop">Shop</a>
+
+<div class="breadcrumb-divider">/</div>
+
+<div>Shopping Cart</div>
+
+</div>
+
+<div class="cart-hero">
+
+<div>
+
+<h1>
+Your Shopping Cart
+</h1>
+
+<p>
+Review products, update quantities,
+apply discounts, estimate shipping,
+and proceed to secure checkout.
+</p>
+
+</div>
+
+<div class="hero-actions">
+
+<button class="btn btn-secondary">
+Continue Shopping
+</button>
+
+<button class="btn btn-primary">
+Checkout
+</button>
+
+</div>
+
+</div>
+
+<div class="shipping-progress card">
+
+<div class="shipping-progress-top">
+
+<h3>
+Free Shipping Progress
+</h3>
+
+<strong>
+$28.00 Away
+</strong>
+
+</div>
+
+<div class="shipping-progress-bar">
+
+<div class="shipping-progress-fill">
+
+</div>
+
+</div>
+
+<div class="shipping-meta">
+
+<span>
+Current Cart Value: $71.00
+</span>
+
+<span>
+Free Shipping At $99
+</span>
+
+</div>
+
+</div>
+
+<div class="cart-layout">
+
+<!-- LEFT COLUMN START -->
+
+<section>
+
+<div
+class="cart-items-card card"
+data-cart-items>
+
+<div class="cart-table-header">
+
+<div>PRODUCT</div>
+
+<div>PRICE</div>
+
+<div>QUANTITY</div>
+
+<div>TOTAL</div>
+
+<div>ACTIONS</div>
+
+</div>
+
+<!-- CART ITEM TEMPLATE START -->
+
+<article
+class="cart-item"
+data-cart-item-id="SKU_001">
+
+<div class="product-column">
+
+<div class="product-image">
+
+<img
+src="https://via.placeholder.com/500"
+alt=""
+>
+
+</div>
+
+<div class="product-details">
+
+<div class="product-brand">
+Premium Collection
+</div>
+
+<div class="product-title">
+Urban Explorer Backpack
+</div>
+
+<div class="product-sku">
+SKU: BP-10001
+</div>
+
+<div class="product-variant">
+Black / Large
+</div>
+
+<div class="product-badges">
+
+<div class="badge badge-stock">
+In Stock
+</div>
+
+<div class="badge badge-sale">
+20% OFF
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="price-column">
+
+$59.99
+
+<span class="old-price">
+$79.99
+</span>
+
+</div>
+
+<div class="qty-column">
+
+<div class="qty-control">
+
+<button>-</button>
+
+<span>1</span>
+
+<button>+</button>
+
+</div>
+
+</div>
+
+<div class="line-total">
+
+$59.99
+
+</div>
+
+<div class="actions-column">
+
+<button class="item-action">
+Save For Later
+</button>
+
+<button class="item-action">
+Move To Wishlist
+</button>
+
+<button class="item-action">
+Remove
+</button>
+
+</div>
+
+</article>
+
+<!-- MORE ITEMS WILL BE ADDED IN PART 2 -->
+
+<div class="cart-action-bar">
+
+<button class="btn btn-secondary">
+Continue Shopping
+</button>
+
+<button class="btn btn-primary">
+Update Cart
+</button>
+
+</div>
+
+</div>
+
+<!-- SAVED FOR LATER -->
+
+<section class="saved-section card">
+
+<div class="saved-header">
+
+<h2>
+Saved For Later
+</h2>
+
+<span>
+4 Items
+</span>
+
+</div>
+
+<div class="saved-grid">
+
+<!-- cards added in PART 2 -->
+
+</div>
+
+</section>
+
+</section>
+
+<!-- RIGHT SIDEBAR COMES IN PART 2 -->
+
+<aside id="checkout-sidebar-placeholder">
+
+<!-- PART 2 STARTS HERE -->
+
+</aside>
+
+</div>
+
+</div>
+
+</main>
+
+<!--
+=============================================================================
+END OF PART 1
+
+NEXT:
+PART 2
+
+Contains:
+- Enterprise Checkout Sidebar
+- Coupons
+- Gift Cards
+- Loyalty Rewards
+- Taxes
+- Shipping Calculator
+- Payment Methods
+- Order Notes
+- Gift Options
+- Summary Engine
+=============================================================================
+-->
+<button class="glass-btn">
+            Continue Shopping
+          </button>
+
+          <button class="primary-btn">
+            Update Cart
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- =====================================================
+           SAVED FOR LATER
+      ====================================================== -->
+
+      <section class="saved-section card">
+
+        <div class="saved-header">
+
+          <div class="saved-title-group">
+
+            <h2>Saved For Later</h2>
+
+            <span class="saved-count">
+              4 Items
+            </span>
+
+          </div>
+
+          <button class="glass-btn">
+            Move All To Cart
+          </button>
+
+        </div>
+
+        <div class="saved-grid">
+
+          <!-- SAVED ITEM 1 -->
+
+          <article class="saved-item">
+
+            <div class="saved-thumb">
+
+              <img
+                src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop"
+                alt="Running Sneakers">
+
+              <div class="saved-badge">
+                15% OFF
+              </div>
+
+            </div>
+
+            <div class="saved-body">
+
+              <div class="saved-brand">
+                ActiveFlex
+              </div>
+
+              <h3 class="saved-name">
+                Performance Running Sneakers
+              </h3>
+
+              <div class="saved-rating">
+
+                ★★★★★
+
+                <span>(184 Reviews)</span>
+
+              </div>
+
+              <div class="saved-pricing">
+
+                <strong>$89.99</strong>
+
+                <span>$109.99</span>
+
+              </div>
+
+              <div class="saved-actions">
+
+                <button class="primary-btn">
+                  Move To Cart
+                </button>
+
+                <button class="glass-btn">
+                  Remove
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- SAVED ITEM 2 -->
+
+          <article class="saved-item">
+
+            <div class="saved-thumb">
+
+              <img
+                src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop"
+                alt="Jacket">
+
+            </div>
+
+            <div class="saved-body">
+
+              <div class="saved-brand">
+                Urban Elite
+              </div>
+
+              <h3 class="saved-name">
+                Luxury Minimal Jacket
+              </h3>
+
+              <div class="saved-rating">
+
+                ★★★★★
+
+                <span>(97 Reviews)</span>
+
+              </div>
+
+              <div class="saved-pricing">
+
+                <strong>$129.99</strong>
+
+              </div>
+
+              <div class="saved-actions">
+
+                <button class="primary-btn">
+                  Move To Cart
+                </button>
+
+                <button class="glass-btn">
+                  Remove
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- SAVED ITEM 3 -->
+
+          <article class="saved-item">
+
+            <div class="saved-thumb">
+
+              <img
+                src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1200&auto=format&fit=crop"
+                alt="Headphones">
+
+            </div>
+
+            <div class="saved-body">
+
+              <div class="saved-brand">
+                AudioPro
+              </div>
+
+              <h3 class="saved-name">
+                Wireless ANC Headphones
+              </h3>
+
+              <div class="saved-rating">
+
+                ★★★★★
+
+                <span>(623 Reviews)</span>
+
+              </div>
+
+              <div class="saved-pricing">
+
+                <strong>$199.99</strong>
+
+              </div>
+
+              <div class="saved-actions">
+
+                <button class="primary-btn">
+                  Move To Cart
+                </button>
+
+                <button class="glass-btn">
+                  Remove
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- SAVED ITEM 4 -->
+
+          <article class="saved-item">
+
+            <div class="saved-thumb">
+
+              <img
+                src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1200&auto=format&fit=crop"
+                alt="Hoodie">
+
+            </div>
+
+            <div class="saved-body">
+
+              <div class="saved-brand">
+                StreetWear Co.
+              </div>
+
+              <h3 class="saved-name">
+                Essential Premium Hoodie
+              </h3>
+
+              <div class="saved-rating">
+
+                ★★★★☆
+
+                <span>(211 Reviews)</span>
+
+              </div>
+
+              <div class="saved-pricing">
+
+                <strong>$69.99</strong>
+
+              </div>
+
+              <div class="saved-actions">
+
+                <button class="primary-btn">
+                  Move To Cart
+                </button>
+
+                <button class="glass-btn">
+                  Remove
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+      <!-- =====================================================
+           RECENTLY VIEWED
+      ====================================================== -->
+
+      <section class="recently-viewed">
+
+        <div class="section-head">
+
+          <div>
+
+            <h2>Recently Viewed</h2>
+
+            <p>
+              Continue exploring products you recently visited.
+            </p>
+
+          </div>
+
+          <button class="glass-btn">
+            View History
+          </button>
+
+        </div>
+
+        <div class="product-grid">
+
+          <!-- PRODUCT 1 -->
+
+          <article class="product-card card">
+
+            <div class="product-thumb">
+
+              <img
+                src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1200&auto=format&fit=crop"
+                alt="Travel Bag">
+
+            </div>
+
+            <div class="product-meta">
+
+              <div class="product-category">
+                Travel
+              </div>
+
+              <h3>
+                Premium Travel Duffel Bag
+              </h3>
+
+              <p>
+                Water resistant design with reinforced handles.
+              </p>
+
+              <div class="product-bottom">
+
+                <div>
+
+                  <div class="product-price">
+                    $119.99
+                  </div>
+
+                  <small>
+                    Free Shipping
+                  </small>
+
+                </div>
+
+                <button class="add-btn">
+                  +
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- PRODUCT 2 -->
+
+          <article class="product-card card">
+
+            <div class="product-thumb">
+
+              <img
+                src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200&auto=format&fit=crop"
+                alt="Watch">
+
+            </div>
+
+            <div class="product-meta">
+
+              <div class="product-category">
+                Accessories
+              </div>
+
+              <h3>
+                Modern Smart Watch
+              </h3>
+
+              <p>
+                Health tracking and premium aluminum body.
+              </p>
+
+              <div class="product-bottom">
+
+                <div>
+
+                  <div class="product-price">
+                    $249.99
+                  </div>
+
+                </div>
+
+                <button class="add-btn">
+                  +
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- PRODUCT 3 -->
+
+          <article class="product-card card">
+
+            <div class="product-thumb">
+
+              <img
+                src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop"
+                alt="Shoes">
+
+            </div>
+
+            <div class="product-meta">
+
+              <div class="product-category">
+                Footwear
+              </div>
+
+              <h3>
+                Lifestyle Sport Sneakers
+              </h3>
+
+              <p>
+                Everyday comfort with responsive cushioning.
+              </p>
+
+              <div class="product-bottom">
+
+                <div class="product-price">
+                  $99.99
+                </div>
+
+                <button class="add-btn">
+                  +
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+          <!-- PRODUCT 4 -->
+
+          <article class="product-card card">
+
+            <div class="product-thumb">
+
+              <img
+                src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop"
+                alt="Fashion">
+
+            </div>
+
+            <div class="product-meta">
+
+              <div class="product-category">
+                Fashion
+              </div>
+
+              <h3>
+                Designer Cotton Overshirt
+              </h3>
+
+              <p>
+                Tailored silhouette with breathable cotton blend.
+              </p>
+
+              <div class="product-bottom">
+
+                <div class="product-price">
+                  $79.99
+                </div>
+
+                <button class="add-btn">
+                  +
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+      <!-- =====================================================
+           CROSS SELL SECTION
+      ====================================================== -->
+
+      <section class="cross-sell-section card">
+
+        <div class="cross-header">
+
+          <div>
+
+            <h2>
+              Complete Your Order
+            </h2>
+
+            <p>
+              Frequently purchased together with items in your cart.
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="cross-products">
+
+          <div class="cross-product">
+
+            <div class="cross-image">
+
+              <img
+                src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=1200&auto=format&fit=crop"
+                alt="Bottle">
+
+            </div>
+
+            <div class="cross-content">
+
+              <h3>
+                Insulated Travel Bottle
+              </h3>
+
+              <p>
+                Keeps beverages cold for 24 hours.
+              </p>
+
+            </div>
+
+            <div class="cross-price">
+              $29.99
+            </div>
+
+            <button class="primary-btn">
+              Add
+            </button>
+
+          </div>
+
+          <div class="cross-product">
+
+            <div class="cross-image">
+
+              <img
+                src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=1200&auto=format&fit=crop"
+                alt="Power Bank">
+
+            </div>
+
+            <div class="cross-content">
+
+              <h3>
+                Fast Charge Power Bank
+              </h3>
+
+              <p>
+                20,000mAh portable battery pack.
+              </p>
+
+            </div>
+
+            <div class="cross-price">
+              $49.99
+            </div>
+
+            <button class="primary-btn">
+              Add
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- PART 2 END -->
+      <!-- NEXT: ORDER SUMMARY SIDEBAR + TRUST SECTION +
+                 RECOMMENDATIONS + FOOTER -->
+<!-- =====================================================
+           ORDER SUMMARY SIDEBAR
+      ====================================================== -->
+
+      <aside class="summary">
+
+        <!-- ORDER SUMMARY -->
+
+        <section class="summary-card card">
+
+          <div class="summary-header">
+
+            <h2>Order Summary</h2>
+
+            <span class="summary-badge">
+              3 Items
+            </span>
+
+          </div>
+
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <strong>$149.97</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Product Discounts</span>
+            <strong class="green">− $10.00</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Shipping</span>
+            <strong class="green">FREE</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Estimated Tax</span>
+            <strong>$8.40</strong>
+          </div>
+
+          <div class="summary-row total">
+
+            <span>Total</span>
+
+            <strong>$148.37</strong>
+
+          </div>
+
+          <div class="saved-box">
+            🎉 You saved $10.00 on this order
+          </div>
+
+        </section>
+
+        <!-- PROMO CODE -->
+
+        <section class="summary-card card">
+
+          <h3>Promo Code</h3>
+
+          <div class="promo-content active">
+
+            <input
+              type="text"
+              placeholder="Enter coupon code">
+
+            <button class="apply-btn">
+              Apply
+            </button>
+
+          </div>
+
+          <div class="promo-list">
+
+            <div class="promo-chip">
+              SAVE10
+            </div>
+
+            <div class="promo-chip">
+              WELCOME15
+            </div>
+
+            <div class="promo-chip">
+              FREESHIP
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- GIFT CARD -->
+
+        <section class="summary-card card">
+
+          <h3>Gift Card</h3>
+
+          <div class="promo-content active">
+
+            <input
+              type="text"
+              placeholder="Gift card code">
+
+            <button class="apply-btn">
+              Redeem
+            </button>
+
+          </div>
+
+        </section>
+
+        <!-- SHIPPING ESTIMATOR -->
+
+        <section class="summary-card card">
+
+          <h3>Shipping Estimate</h3>
+
+          <div class="shipping-estimator">
+
+            <div class="form-group">
+
+              <label>
+                Country
+              </label>
+
+              <select>
+
+                <option>
+                  United States
+                </option>
+
+                <option>
+                  Canada
+                </option>
+
+                <option>
+                  United Kingdom
+                </option>
+
+                <option>
+                  Germany
+                </option>
+
+                <option>
+                  Australia
+                </option>
+
+              </select>
+
+            </div>
+
+            <div class="form-group">
+
+              <label>
+                ZIP / Postal Code
+              </label>
+
+              <input
+                type="text"
+                placeholder="10001">
+
+            </div>
+
+            <button class="glass-btn estimate-btn">
+              Calculate Shipping
+            </button>
+
+          </div>
+
+        </section>
+
+        <!-- REWARDS -->
+
+        <section class="summary-card card">
+
+          <h3>Loyalty Rewards</h3>
+
+          <div class="reward-box">
+
+            <div class="reward-points">
+              1,280 Points Available
+            </div>
+
+            <p>
+              Use points during checkout to reduce your order total.
+            </p>
+
+            <button class="glass-btn">
+              Apply Rewards
+            </button>
+
+          </div>
+
+        </section>
+
+        <!-- ORDER NOTES -->
+
+        <section class="summary-card card">
+
+          <h3>Order Notes</h3>
+
+          <textarea
+            rows="5"
+            placeholder="Special delivery instructions, gift note, or order comments..."></textarea>
+
+        </section>
+
+        <!-- GIFT OPTIONS -->
+
+        <section class="summary-card card">
+
+          <h3>Gift Options</h3>
+
+          <div class="gift-options">
+
+            <label class="gift-option">
+
+              <input type="checkbox">
+
+              <span>
+                Add Gift Wrap (+$4.99)
+              </span>
+
+            </label>
+
+            <label class="gift-option">
+
+              <input type="checkbox">
+
+              <span>
+                Include Printed Gift Message
+              </span>
+
+            </label>
+
+          </div>
+
+        </section>
+
+        <!-- PAYMENT METHODS -->
+
+        <section class="summary-card card">
+
+          <h3>Accepted Payments</h3>
+
+          <div class="payment-icons">
+
+            <div class="payment">
+              VISA
+            </div>
+
+            <div class="payment">
+              MC
+            </div>
+
+            <div class="payment">
+              AMEX
+            </div>
+
+            <div class="payment">
+              PayPal
+            </div>
+
+            <div class="payment">
+              Pay
+            </div>
+
+            <div class="payment">
+              GPay
+            </div>
+
+            <div class="payment">
+              Klarna
+            </div>
+
+            <div class="payment">
+              Stripe
+            </div>
+
+            <div class="payment">
+              ShopPay
+            </div>
+
+            <div class="payment">
+              BNPL
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- SECURITY -->
+
+        <section class="summary-card card">
+
+          <h3>Secure Checkout</h3>
+
+          <ul class="security-list">
+
+            <li>
+              SSL Encrypted Transactions
+            </li>
+
+            <li>
+              PCI DSS Compliant
+            </li>
+
+            <li>
+              Fraud Detection Protection
+            </li>
+
+            <li>
+              Secure Tokenized Payments
+            </li>
+
+          </ul>
+
+        </section>
+
+        <!-- CHECKOUT ACTIONS -->
+
+        <section class="summary-card card">
+
+          <button class="checkout-btn">
+            🔒 Proceed To Checkout
+          </button>
+
+          <button class="paypal-btn">
+            PayPal Express Checkout
+          </button>
+
+          <button class="glass-btn"
+                  style="width:100%;margin-top:12px;">
+            Checkout With Apple Pay
+          </button>
+
+          <div class="secure-note">
+
+            Your payment information is securely encrypted
+            and processed through PCI-compliant gateways.
+
+          </div>
+
+        </section>
+
+      </aside>
+
+    </div>
+
+    <!-- =====================================================
+         TRUST SECTION
+    ====================================================== -->
+
+    <section class="trust-section">
+
+      <div class="section-head">
+
+        <div>
+
+          <h2>
+            Shop With Confidence
+          </h2>
+
+          <p>
+            Trusted by thousands of customers worldwide.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="trust-grid">
+
+        <div class="trust-card card">
+
+          <div class="trust-icon">
+
+            🔒
+
+          </div>
+
+          <h3>
+            Secure Payments
+          </h3>
+
+          <p>
+            Bank-level encryption and fraud prevention.
+          </p>
+
+        </div>
+
+        <div class="trust-card card">
+
+          <div class="trust-icon">
+
+            🚚
+
+          </div>
+
+          <h3>
+            Fast Delivery
+          </h3>
+
+          <p>
+            Worldwide shipping with live tracking.
+          </p>
+
+        </div>
+
+        <div class="trust-card card">
+
+          <div class="trust-icon">
+
+            ↩️
+
+          </div>
+
+          <h3>
+            Easy Returns
+          </h3>
+
+          <p>
+            Hassle-free returns within 30 days.
+          </p>
+
+        </div>
+
+        <div class="trust-card card">
+
+          <div class="trust-icon">
+
+            💬
+
+          </div>
+
+          <h3>
+            24/7 Support
+          </h3>
+
+          <p>
+            Dedicated customer support team.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         CUSTOMER GUARANTEE
+    ====================================================== -->
+
+    <section class="guarantee-section card">
+
+      <div class="guarantee-inner">
+
+        <div>
+
+          <h2>
+            100% Satisfaction Guarantee
+          </h2>
+
+          <p>
+            If you're not completely satisfied with your purchase,
+            we'll make it right.
+          </p>
+
+        </div>
+
+        <button class="primary-btn">
+          Learn More
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- =====================================================
+         PART 3 END
+         NEXT:
+         PRODUCT RECOMMENDATIONS
+         RECENTLY BOUGHT TOGETHER
+         FOOTER
+         MOBILE CHECKOUT BAR
+    ====================================================== -->
+<!-- =====================================================
+     PRODUCT RECOMMENDATIONS
+====================================================== -->
+
+<section class="recommend-section">
+
+  <div class="section-header">
+
+    <div>
+
+      <span class="section-label">
+        Personalized For You
+      </span>
+
+      <h2>
+        Recommended Products
+      </h2>
+
+      <p>
+        Based on your cart contents, browsing history,
+        wishlist activity and trending purchases.
+      </p>
+
+    </div>
+
+    <button class="btn btn-secondary">
+      View All Products
+    </button>
+
+  </div>
+
+  <div class="recommend-grid">
+
+    <!-- PRODUCT -->
+
+    <article class="recommend-card card">
+
+      <div class="recommend-badge">
+        Bestseller
+      </div>
+
+      <div class="recommend-image">
+
+        <img
+          src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop"
+          alt="Running Shoes">
+
+      </div>
+
+      <div class="recommend-content">
+
+        <div class="recommend-brand">
+          Velocity
+        </div>
+
+        <h3>
+          Premium Running Sneakers
+        </h3>
+
+        <div class="recommend-rating">
+
+          ★★★★★
+          <span>(2,314 Reviews)</span>
+
+        </div>
+
+        <div class="recommend-price-row">
+
+          <div>
+
+            <div class="recommend-price">
+              $129.99
+            </div>
+
+            <div class="recommend-old-price">
+              $159.99
+            </div>
+
+          </div>
+
+          <button class="icon-add-btn">
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+
+    <!-- PRODUCT -->
+
+    <article class="recommend-card card">
+
+      <div class="recommend-badge">
+        Trending
+      </div>
+
+      <div class="recommend-image">
+
+        <img
+          src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1200&auto=format&fit=crop"
+          alt="Hoodie">
+
+      </div>
+
+      <div class="recommend-content">
+
+        <div class="recommend-brand">
+          StreetFlex
+        </div>
+
+        <h3>
+          Oversized Essential Hoodie
+        </h3>
+
+        <div class="recommend-rating">
+
+          ★★★★★
+          <span>(1,102 Reviews)</span>
+
+        </div>
+
+        <div class="recommend-price-row">
+
+          <div>
+
+            <div class="recommend-price">
+              $69.99
+            </div>
+
+          </div>
+
+          <button class="icon-add-btn">
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+
+    <!-- PRODUCT -->
+
+    <article class="recommend-card card">
+
+      <div class="recommend-badge">
+        New
+      </div>
+
+      <div class="recommend-image">
+
+        <img
+          src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop"
+          alt="Jacket">
+
+      </div>
+
+      <div class="recommend-content">
+
+        <div class="recommend-brand">
+          North Peak
+        </div>
+
+        <h3>
+          Waterproof Utility Jacket
+        </h3>
+
+        <div class="recommend-rating">
+
+          ★★★★★
+          <span>(842 Reviews)</span>
+
+        </div>
+
+        <div class="recommend-price-row">
+
+          <div>
+
+            <div class="recommend-price">
+              $149.99
+            </div>
+
+          </div>
+
+          <button class="icon-add-btn">
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+
+    <!-- PRODUCT -->
+
+    <article class="recommend-card card">
+
+      <div class="recommend-badge">
+        Limited
+      </div>
+
+      <div class="recommend-image">
+
+        <img
+          src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop"
+          alt="Headphones">
+
+      </div>
+
+      <div class="recommend-content">
+
+        <div class="recommend-brand">
+          Sonic Pro
+        </div>
+
+        <h3>
+          Wireless ANC Headphones
+        </h3>
+
+        <div class="recommend-rating">
+
+          ★★★★★
+          <span>(4,201 Reviews)</span>
+
+        </div>
+
+        <div class="recommend-price-row">
+
+          <div>
+
+            <div class="recommend-price">
+              $249.99
+            </div>
+
+          </div>
+
+          <button class="icon-add-btn">
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+<!-- =====================================================
+     FREQUENTLY BOUGHT TOGETHER
+====================================================== -->
+
+<section class="bundle-section card">
+
+  <div class="bundle-header">
+
+    <div>
+
+      <span class="section-label">
+        AI Product Bundle
+      </span>
+
+      <h2>
+        Frequently Bought Together
+      </h2>
+
+    </div>
+
+  </div>
+
+  <div class="bundle-products">
+
+    <div class="bundle-product">
+
+      <img
+        src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop"
+        alt="Product">
+
+      <h4>
+        Running Sneakers
+      </h4>
+
+      <strong>
+        $129.99
+      </strong>
+
+    </div>
+
+    <div class="bundle-plus">+</div>
+
+    <div class="bundle-product">
+
+      <img
+        src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop"
+        alt="Product">
+
+      <h4>
+        Athletic Socks
+      </h4>
+
+      <strong>
+        $14.99
+      </strong>
+
+    </div>
+
+    <div class="bundle-plus">+</div>
+
+    <div class="bundle-product">
+
+      <img
+        src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1200&auto=format&fit=crop"
+        alt="Product">
+
+      <h4>
+        Sports Hoodie
+      </h4>
+
+      <strong>
+        $59.99
+      </strong>
+
+    </div>
+
+    <div class="bundle-total">
+
+      <div>
+        Bundle Price
+      </div>
+
+      <h3>
+        $184.97
+      </h3>
+
+      <small>
+        Save $20.00
+      </small>
+
+      <button class="btn btn-primary">
+        Add Bundle To Cart
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =====================================================
+     NEWSLETTER CTA
+====================================================== -->
+
+<section class="newsletter-cta card">
+
+  <div class="newsletter-cta-content">
+
+    <div>
+
+      <span class="section-label">
+        VIP Rewards Club
+      </span>
+
+      <h2>
+        Get Exclusive Discounts
+      </h2>
+
+      <p>
+        Join our newsletter and receive early access
+        to promotions, flash sales and product launches.
+      </p>
+
+    </div>
+
+    <form class="newsletter-inline-form">
+
+      <input
+        type="email"
+        placeholder="Enter your email address">
+
+      <button
+        type="submit"
+        class="btn btn-primary">
+
+        Subscribe
+
+      </button>
+
+    </form>
+
+  </div>
+
+</section>
+
+</main>
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
+
+<footer class="site-footer">
+
+  <div class="footer-top">
+
+    <div class="footer-brand">
+
+      <div class="footer-logo">
+
+        <div class="logo-badge">
+          S
+        </div>
+
+        <span>
+          ShopVista
+        </span>
+
+      </div>
+
+      <p>
+        Enterprise commerce platform designed for
+        modern retail experiences with secure checkout,
+        global fulfillment and customer-first support.
+      </p>
+
+      <div class="social-links">
+
+        <a href="#">
+          Facebook
+        </a>
+
+        <a href="#">
+          Instagram
+        </a>
+
+        <a href="#">
+          X
+        </a>
+
+        <a href="#">
+          LinkedIn
+        </a>
+
+      </div>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>
+        Shop
+      </h3>
+
+      <ul>
+
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Trending</a></li>
+        <li><a href="#">Collections</a></li>
+        <li><a href="#">Deals</a></li>
+        <li><a href="#">Gift Cards</a></li>
+
+      </ul>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>
+        Customer Service
+      </h3>
+
+      <ul>
+
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">FAQ</a></li>
+
+      </ul>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>
+        Company
+      </h3>
+
+      <ul>
+
+        <li><a href="#">About</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Partners</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Investors</a></li>
+
+      </ul>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h3>
+        Legal
+      </h3>
+
+      <ul>
+
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Cookies</a></li>
+        <li><a href="#">Accessibility</a></li>
+        <li><a href="#">Compliance</a></li>
+
+      </ul>
+
+    </div>
+
+  </div>
+
+  <div class="footer-middle">
+
+    <div class="payment-methods">
+
+      <span>Visa</span>
+      <span>Mastercard</span>
+      <span>Amex</span>
+      <span>PayPal</span>
+      <span>Apple Pay</span>
+      <span>Google Pay</span>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+
+    <div>
+      © 2026 ShopVista Commerce Platform.
+      All Rights Reserved.
+    </div>
+
+    <div>
+
+      SSL Secured · PCI DSS Compliant · GDPR Ready
+
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- =====================================================
+     MOBILE CHECKOUT BAR
+====================================================== -->
+
+<div class="mobile-checkout-bar">
+
+  <div class="mobile-summary">
+
+    <div>
+
+      <small>
+        Grand Total
+      </small>
+
+      <h3>
+        $1,286.42
+      </h3>
+
+    </div>
+
+    <div class="mobile-savings">
+
+      Save $142.00
+
+    </div>
+
+  </div>
+
+  <button class="btn btn-primary mobile-checkout-btn">
+
+    Secure Checkout
+
+  </button>
+
+</div>
+
+<!-- =====================================================
+     DRAWERS / MODALS PLACEHOLDERS
+====================================================== -->
+
+<div id="coupon-modal"></div>
+
+<div id="giftcard-modal"></div>
+
+<div id="shipping-estimator-modal"></div>
+
+<div id="saved-for-later-drawer"></div>
+
+<div id="wishlist-drawer"></div>
+
+<div id="product-recommendation-drawer"></div>
+
+<div id="cart-item-edit-modal"></div>
+
+<div id="inventory-warning-modal"></div>
+
+<div id="checkout-auth-modal"></div>
+
+<div id="address-book-modal"></div>
+
+<div id="tax-breakdown-modal"></div>
+
+<div id="subscription-upsell-modal"></div>
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    renderEnterpriseCart();
+
+});
+
+function renderEnterpriseCart(){
+
+    const container =
+        document.getElementById("cartItemsContainer");
+
+    if(!container) return;
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem("ss_cart")
+        ) || [];
+
+    if(cart.length === 0){
+
+        container.innerHTML = `
+            <div class="empty-cart">
+                <h2>Your Cart Is Empty</h2>
+                <p>Add products from the shop.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    let subtotal = 0;
+
+    container.innerHTML = cart.map(item => {
+
+        const lineTotal =
+            item.price * item.qty;
+
+        subtotal += lineTotal;
+
+        return `
+
+        <div class="cart-item"
+             data-id="${item.id}">
+
+            <div class="product-cell">
+
+                <div class="product-image">
+
+                    <img
+                        src="${item.img}"
+                        alt="${item.title}"
+                    >
+
+                </div>
+
+                <div class="product-info">
+
+                    <div class="brand">
+                        ShopVista
+                    </div>
+
+                    <div class="product-title">
+                        ${item.title}
+                    </div>
+
+                    <div class="variant">
+                        SKU: ${item.id}
+                    </div>
+
+                    <div class="stock">
+                        In Stock
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="price">
+                    $${item.price.toFixed(2)}
+                </div>
+
+            </div>
+
+            <div class="qty-wrapper">
+
+                <div class="qty-box">
+
+                    <button
+                        class="qty-btn minus"
+                        onclick="decreaseQty('${item.id}')">
+                        −
+                    </button>
+
+                    <div class="qty-number">
+                        ${item.qty}
+                    </div>
+
+                    <button
+                        class="qty-btn plus"
+                        onclick="increaseQty('${item.id}')">
+                        +
+                    </button>
+
+                </div>
+
+                <button
+                    class="delete-btn"
+                    onclick="removeCartItem('${item.id}')">
+
+                    Remove
+
+                </button>
+
+            </div>
+
+            <div class="line-total">
+
+                $${lineTotal.toFixed(2)}
+
+            </div>
+
+        </div>
+
+        `;
+
+    }).join("");
+
+    const discount = 0;
+
+    const total =
+        subtotal - discount;
+
+    document.getElementById(
+        "subtotalAmount"
+    ).textContent =
+        "$" + subtotal.toFixed(2);
+
+    document.getElementById(
+        "discountAmount"
+    ).textContent =
+        "$" + discount.toFixed(2);
+
+    document.getElementById(
+        "grandTotal"
+    ).textContent =
+        "$" + total.toFixed(2);
+
+    document.getElementById(
+        "mobileTotal"
+    ).textContent =
+        "$" + total.toFixed(2);
+
+}
+
+function increaseQty(id){
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem("ss_cart")
+        ) || [];
+
+    const item =
+        cart.find(x => x.id === id);
+
+    if(item){
+
+        item.qty++;
+
+        localStorage.setItem(
+            "ss_cart",
+            JSON.stringify(cart)
+        );
+
+        renderEnterpriseCart();
+    }
+}
+
+function decreaseQty(id){
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem("ss_cart")
+        ) || [];
+
+    const item =
+        cart.find(x => x.id === id);
+
+    if(item){
+
+        item.qty--;
+
+        if(item.qty <= 0){
+
+            const idx =
+                cart.indexOf(item);
+
+            cart.splice(idx,1);
+        }
+
+        localStorage.setItem(
+            "ss_cart",
+            JSON.stringify(cart)
+        );
+
+        renderEnterpriseCart();
+    }
+}
+
+function removeCartItem(id){
+
+    let cart =
+        JSON.parse(
+            localStorage.getItem("ss_cart")
+        ) || [];
+
+    cart =
+        cart.filter(
+            x => x.id !== id
+        );
+
+    localStorage.setItem(
+        "ss_cart",
+        JSON.stringify(cart)
+    );
+
+    renderEnterpriseCart();
+}
+
+</script>
+
+<!-- =====================================================
+     API INTEGRATION HOOKS
+====================================================== -->
+
+>
+
+</body>
+</html>

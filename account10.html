@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Account | ShopEase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    
+Unified account.css / checkout.css Modernized Stylesheet
+
+/* =========================================================
+   UNIFIED ACCOUNT / CHECKOUT / CART / INDEX STYLESYSTEM
+   Premium responsive ecommerce UI
+   Retains original account.css structure while visually
+   matching index.css ecosystem.
+   ========================================================= */
+
+:root {
+  --bg: #0b0f14;
+  --bg-secondary: #0f1623;
+  --card: #121825;
+  --card-light: rgba(255,255,255,0.03);
+  --text: #e5e7eb;
+  --text-muted: #94a3b8;
+  --heading: #ffffff;
+  --brand: #22c55e;
+  --brand-2: #06b6d4;
+  --accent: #f59e0b;
+  --danger: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  --border: rgba(255,255,255,0.08);
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.18);
+  --shadow-md: 0 10px 30px rgba(0,0,0,0.25);
+  --shadow-lg: 0 20px 50px rgba(0,0,0,0.35);
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --transition: all .3s ease;
+  --max-width: 1400px;
+  --header-height: 72px;
+  --mobile-bottom-nav: 72px;
+}
+
+/* LIGHT MODE SUPPORT */
+:root.light {
+  --bg: #f3f6fb;
+  --bg-secondary: #ffffff;
+  --card: #ffffff;
+  --card-light: rgba(0,0,0,0.02);
+  --text: #111827;
+  --text-muted: #6b7280;
+  --heading: #0f172a;
+  --brand: #2563eb;
+  --brand-2: #06b6d4;
+  --border: rgba(0,0,0,0.08);
+  --shadow-sm: 0 4px 10px rgba(0,0,0,0.06);
+  --shadow-md: 0 10px 25px rgba(0,0,0,0.08);
+  --shadow-lg: 0 20px 45px rgba(0,0,0,0.12);
+}
+
+/* RESET */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(180deg, var(--bg), #0e141c 100%);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: var(--transition);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+/* LAYOUT */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: 2rem 0 5rem;
+}
+
+/* =========================================================
+   DESKTOP/TABLET HEADER
+   ========================================================= */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(14px);
+  background: rgba(11,15,20,0.85);
+  border-bottom: 1px solid var(--border);
+}
+
+:root.light header {
+  background: rgba(255,255,255,0.9);
+}
+
+.topbar {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--heading);
+}
+
+.brand .logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  box-shadow: var(--shadow-md);
+}
+
+.search {
+  flex: 1;
+  max-width: 540px;
+  position: relative;
+}
+
+.search input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text);
+  padding: .9rem 3rem .9rem 1rem;
+  border-radius: 999px;
+  transition: var(--transition);
+}
+
+.search input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+}
+
+.search .icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: .75;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.icon-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34,197,94,.35);
+  box-shadow: var(--shadow-sm);
+}
+
+.pill {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #00140a;
+  background: var(--brand);
+}
+
+nav.desktop-nav {
+  display: flex;
+  gap: .75rem;
+  overflow-x: auto;
+  padding: .5rem 0 1rem;
+  scrollbar-width: none;
+}
+
+nav.desktop-nav::-webkit-scrollbar {
+  display: none;
+}
+
+nav.desktop-nav a {
+  padding: .7rem 1rem;
+  border-radius: 999px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+nav.desktop-nav a:hover,
+nav.desktop-nav a.active {
+  background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(6,182,212,.15));
+  border-color: rgba(34,197,94,.25);
+}
+
+/* =========================================================
+   MOBILE HEADER + BOTTOM NAV
+   ========================================================= */
+.mobile-header {
+  display: none;
+}
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  header.desktop-header {
+    display: none !important;
+  }
+
+  .mobile-header {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(11,15,20,.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  :root.light .mobile-header {
+    background: rgba(255,255,255,.92);
+  }
+
+  .mobile-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .9rem 1rem;
+  }
+
+  .mobile-brand {
+    font-size: 1rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .mobile-search {
+    padding: 0 1rem 1rem;
+  }
+
+  .mobile-search input {
+    width: 100%;
+    padding: .85rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text);
+  }
+
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--mobile-bottom-nav);
+    background: rgba(11,15,20,.96);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1200;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  :root.light .mobile-bottom-nav {
+    background: rgba(255,255,255,.96);
+  }
+
+  .mobile-bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .3rem;
+    font-size: .72rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    transition: var(--transition);
+  }
+
+  .mobile-bottom-nav a.active,
+  .mobile-bottom-nav a:hover {
+    color: var(--brand);
+  }
+
+  main {
+    padding-bottom: calc(var(--mobile-bottom-nav) + 2rem);
+  }
+}
+
+/* =========================================================
+   ACCOUNT DASHBOARD
+   ========================================================= */
+.account-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+}
+
+.sidebar {
+  background: linear-gradient(180deg, rgba(18,24,37,.96), rgba(15,22,35,.96));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: calc(var(--header-height) + 24px);
+  height: fit-content;
+}
+
+.profile-card {
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  overflow: hidden;
+  border: 4px solid rgba(34,197,94,.2);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+.profile-email {
+  font-size: .92rem;
+  color: var(--text-muted);
+}
+
+.account-menu {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.account-menu a {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  padding: .95rem 1rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.account-menu a:hover,
+.account-menu a.active {
+  background: linear-gradient(135deg, rgba(34,197,94,.14), rgba(6,182,212,.08));
+  color: var(--text);
+  transform: translateX(4px);
+}
+
+.account-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* CARDS */
+.card {
+  background: linear-gradient(180deg, rgba(18,24,37,.98), rgba(15,22,35,.98));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+:root.light .card {
+  background: #ffffff;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--heading);
+}
+
+.card-subtitle {
+  color: var(--text-muted);
+  font-size: .92rem;
+}
+
+/* BUTTONS */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .85rem 1.25rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--brand), #16a34a);
+  color: #04120b;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary {
+  background: var(--bg-secondary);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  border-color: rgba(34,197,94,.25);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.btn-outline {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+}
+
+/* BADGES */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .4rem .75rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.badge-green { background: rgba(16,185,129,.14); color: #34d399; }
+.badge-yellow { background: rgba(245,158,11,.14); color: #fbbf24; }
+.badge-blue { background: rgba(59,130,246,.14); color: #60a5fa; }
+.badge-red { background: rgba(239,68,68,.14); color: #f87171; }
+
+/* FORMS */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+
+.field label {
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: .95rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text);
+  transition: var(--transition);
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 4px rgba(34,197,94,.1);
+}
+
+/* TABLES */
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: rgba(255,255,255,.02);
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  color: var(--text-muted);
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+tr:hover td {
+  background: rgba(255,255,255,.015);
+}
+
+/* CHECKOUT */
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1.3fr .7fr;
+  gap: 2rem;
+}
+
+.checkout-form,
+.order-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.summary-item,
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.summary-item img,
+.cart-item img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.price {
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+/* PROGRESS */
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(255,255,255,.06);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-value {
+  height: 100%;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  border-radius: inherit;
+}
+
+/* MODALS */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.72);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+  z-index: 3000;
+  padding: 1rem;
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #0f1623, #121825);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(30px);
+  transition: var(--transition);
+}
+
+.modal.show .modal-content {
+  transform: translateY(0);
+}
+
+/* FOOTER */
+footer {
+  background: #0f1623;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 2rem;
+  padding: 3rem 0;
+}
+
+.footer-title {
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+
+.footer-links a:hover {
+  color: var(--brand);
+}
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================= */
+@media (max-width: 1200px) {
+  .account-layout,
+  .checkout-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 992px) {
+  .footer-grid {
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  .container {
+    padding: 0 .85rem;
+  }
+
+  .card,
+  .sidebar,
+  .modal-content {
+    padding: 1.2rem;
+    border-radius: 18px;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .summary-item,
+  .cart-item {
+    align-items: flex-start;
+  }
+
+  th, td {
+    padding: .85rem .7rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.35rem; }
+  h3 { font-size: 1.15rem; }
+
+  .card-title {
+    font-size: 1.05rem;
+  }
+
+  .mobile-bottom-nav a span {
+    font-size: .65rem;
+  }
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp .5s ease both;
+}
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--brand), var(--brand-2));
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  opacity: .85;
+}
+
+/* END OF MEGA UNIFIED STYLESHEET */
+</style>
+</head>
+<body>
+  <!-- Header --><header class="bg-white header-shadow sticky top-0 z-10">
+  <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <a href="index.html" class="text-2xl font-bold text-indigo-600">ShopEase</a>
+    <div class="flex items-center space-x-6">
+      <a href="wishlist.html" class="text-gray-600 hover:text-gray-900"><i class="fas fa-heart"></i></a>
+      <a href="cart.html" class="text-gray-600 hover:text-gray-900"><i class="fas fa-shopping-cart"></i></a>
+      <a href="account.html" class="text-indigo-600"><div id="account-icon"><i class="fas fa-user-circle text-xl"></i></div></a>
+    </div>
+  </div>
+</header><main class="container mx-auto px-4 py-8"><!-- SIGN IN --><div id="signin-container" class="hidden">
+  <div class="max-w-md mx-auto bg-white rounded-xl p-8 shadow-md">
+    <h1 class="text-2xl font-bold mb-6 text-center">Sign In</h1>
+    <form id="login-form">
+      <div class="mb-4">
+        <label class="block mb-1 font-medium">Email</label>
+        <input type="email" id="email" class="w-full border rounded-lg px-3 py-2" required>
+      </div>
+      <div class="mb-6">
+        <label class="block mb-1 font-medium">Password</label>
+        <input type="password" id="password" class="w-full border rounded-lg px-3 py-2" required>
+      </div>
+      <button class="w-full btn btn-primary">Sign In</button>
+    </form>
+  </div>
+</div><!-- ACCOUNT --><div id="account-container" class="hidden space-y-8">  <!-- Profile -->  <section class="bg-white rounded-xl p-6 shadow-sm">
+    <div class="flex flex-col lg:flex-row gap-6 items-center lg:items-start">
+      <img id="profile-avatar" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" class="w-28 h-28 rounded-full border object-cover" alt="Profile">
+      <div class="flex-1 text-center lg:text-left">
+        <h1 class="text-3xl font-bold" id="user-name">User Name</h1>
+        <p class="text-gray-600" id="user-email">Email</p>
+        <p class="text-gray-600 mt-1" id="profile-phone">Phone</p>
+        <p class="text-gray-500 mt-2" id="profile-bio">Bio</p>
+        <div class="mt-4 flex flex-wrap gap-3 justify-center lg:justify-start">
+          <button id="edit-profile-btn" class="btn btn-outline"><i class="fas fa-pencil-alt mr-2"></i>Edit Profile</button>
+          <button id="sign-out-btn" class="btn btn-outline text-red-600"><i class="fas fa-sign-out-alt mr-2"></i>Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </section>  <div class="grid grid-cols-1 xl:grid-cols-3 gap-8"><!-- LEFT -->
+<div class="xl:col-span-2 space-y-8">
+
+  <!-- Address Book -->
+  <section class="bg-white rounded-xl shadow-sm p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold">Address Book</h2>
+      <button id="add-address-btn" class="btn btn-outline"><i class="fas fa-plus mr-2"></i>Add Address</button>
+    </div>
+    <div id="address-book-list" class="grid gap-4"></div>
+  </section>
+
+  <!-- Orders -->
+  <section class="bg-white rounded-xl shadow-sm p-6">
+    <h2 class="text-xl font-semibold mb-4">Order Management</h2>
+    <div class="border-b mb-6">
+      <div class="flex gap-6">
+        <button id="order-history-tab" class="px-4 py-3 font-semibold">Order History</button>
+        <button id="current-orders-tab" class="px-4 py-3 font-semibold text-gray-500">Current Orders</button>
+      </div>
+    </div>
+    <div id="order-history-content" class="space-y-4"></div>
+    <div id="current-orders-content" class="space-y-4 hidden"></div>
+  </section>
+
+  <!-- Payments -->
+  <section class="bg-white rounded-xl shadow-sm p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-semibold">Payment History & Methods</h2>
+      <button id="add-payment-btn" class="btn btn-outline"><i class="fas fa-plus mr-2"></i>Add Payment Method</button>
+    </div>
+    <div id="payment-history" class="space-y-4"></div>
+  </section>
+
+</div>
+
+<!-- RIGHT -->
+<div class="space-y-8">
+
+  <!-- Wishlist -->
+  <section class="bg-white rounded-xl shadow-sm p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Wishlist & Favorites</h2>
+      <a href="wishlist.html" class="text-indigo-600 font-medium">View All</a>
+    </div>
+    <div id="wishlist-container" class="space-y-4"></div>
+  </section>
+
+  <!-- Security -->
+  <section class="bg-white rounded-xl shadow-sm p-6">
+    <h2 class="text-xl font-semibold mb-4">Security & Login History</h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="border-b bg-gray-50">
+            <th class="px-3 py-2 text-left">Date/Time</th>
+            <th class="px-3 py-2 text-left">Device</th>
+            <th class="px-3 py-2 text-left">Location</th>
+          </tr>
+        </thead>
+        <tbody id="login-history-container"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Preferences -->
+  <section class="bg-white rounded-xl shadow-sm p-6">
+    <h2 class="text-xl font-semibold mb-4">Preferences</h2>
+    <div class="space-y-4 text-sm">
+      <label class="flex justify-between items-center"><span>Newsletter Subscription</span><input type="checkbox" checked></label>
+      <label class="flex justify-between items-center"><span>Order Updates</span><input type="checkbox" checked></label>
+      <label class="flex justify-between items-center"><span>Promotions</span><input type="checkbox" checked></label>
+    </div>
+  </section>
+
+  <!-- Account Management -->
+  <section class="bg-white rounded-xl shadow-sm p-6">
+    <h2 class="text-xl font-semibold text-red-600 mb-4">Account Management</h2>
+    <button id="deactivate-account-btn" class="btn btn-outline text-red-600 w-full mb-3">Deactivate Account</button>
+    <button id="mobile-sign-out-btn" class="btn btn-outline text-red-600 w-full lg:hidden">Sign Out</button>
+  </section>
+
+</div>
+
+  </div>
+</div>
+</main><!-- Bottom Navigation --><nav class="bottom-nav lg:hidden">
+  <div class="grid grid-cols-5 text-center py-2">
+    <a href="index.html" class="flex flex-col items-center text-sm text-gray-700"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="shop.html" class="flex flex-col items-center text-sm text-gray-700"><i class="fas fa-store"></i><span>Shop</span></a>
+    <a href="wishlist.html" class="flex flex-col items-center text-sm text-gray-700"><i class="fas fa-heart"></i><span>Wishlist</span></a>
+    <a href="cart.html" class="flex flex-col items-center text-sm text-gray-700"><i class="fas fa-shopping-cart"></i><span>Cart</span></a>
+    <a href="account.html" class="flex flex-col items-center text-sm text-indigo-600"><i class="fas fa-user"></i><span>Account</span></a>
+  </div>
+</nav><!-- Footer --><footer class="bg-gray-800 text-white py-10 mt-10">
+  <div class="container mx-auto px-4 text-center text-gray-400">
+    <p>&copy; 2026 ShopEase. All rights reserved.</p>
+  </div>
+</footer><!-- Edit Profile Modal --><div id="edit-profile-modal" class="modal">
+  <div class="modal-content p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Edit Profile</h2>
+      <button class="close-modal" data-modal="edit-profile-modal"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="edit-profile-form" class="space-y-4">
+      <input id="edit-fullname" type="text" placeholder="Full Name" class="w-full border rounded-lg px-3 py-2">
+      <input id="edit-email" type="email" placeholder="Email" class="w-full border rounded-lg px-3 py-2">
+      <input id="edit-phone" type="tel" placeholder="Phone" class="w-full border rounded-lg px-3 py-2">
+      <select id="edit-gender" class="w-full border rounded-lg px-3 py-2">
+        <option value="">Gender</option><option>Male</option><option>Female</option><option>Other</option>
+      </select>
+      <input id="edit-dob" type="date" class="w-full border rounded-lg px-3 py-2">
+      <input id="edit-country" type="text" placeholder="Country" class="w-full border rounded-lg px-3 py-2">
+      <input id="edit-city" type="text" placeholder="City" class="w-full border rounded-lg px-3 py-2">
+      <textarea id="edit-bio" placeholder="Bio" class="w-full border rounded-lg px-3 py-2"></textarea><h3 class="font-semibold pt-4">Change Password</h3>
+  <input id="current-password" type="password" placeholder="Current Password" class="w-full border rounded-lg px-3 py-2">
+  <input id="new-password" type="password" placeholder="New Password" class="w-full border rounded-lg px-3 py-2">
+  <input id="confirm-password" type="password" placeholder="Confirm Password" class="w-full border rounded-lg px-3 py-2">
+
+  <div class="flex justify-end gap-3 pt-4">
+    <button type="button" class="btn btn-secondary close-modal" data-modal="edit-profile-modal">Cancel</button>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </div>
+</form>
+
+  </div>
+</div><!-- Add Address Modal --><div id="add-address-modal" class="modal">
+  <div class="modal-content p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Add Address</h2>
+      <button class="close-modal" data-modal="add-address-modal"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="add-address-form" class="space-y-4">
+      <input id="address-name" type="text" placeholder="Address Label (Home/Work)" class="w-full border rounded-lg px-3 py-2">
+      <input id="full-name" type="text" placeholder="Full Name" class="w-full border rounded-lg px-3 py-2">
+      <input id="address-phone" type="tel" placeholder="Phone" class="w-full border rounded-lg px-3 py-2">
+      <input id="address-street" type="text" placeholder="Street Address" class="w-full border rounded-lg px-3 py-2">
+      <input id="address-street-2" type="text" placeholder="Apartment / Suite" class="w-full border rounded-lg px-3 py-2">
+      <div class="grid grid-cols-2 gap-4">
+        <input id="address-city" type="text" placeholder="City" class="border rounded-lg px-3 py-2">
+        <input id="address-state" type="text" placeholder="State" class="border rounded-lg px-3 py-2">
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <input id="address-zip" type="text" placeholder="ZIP Code" class="border rounded-lg px-3 py-2">
+        <input id="address-country" type="text" placeholder="Country" class="border rounded-lg px-3 py-2">
+      </div>
+      <label class="flex items-center gap-2"><input id="default-address" type="checkbox"> Make default</label>
+      <div class="flex justify-end gap-3 pt-4">
+        <button type="button" class="btn btn-secondary close-modal" data-modal="add-address-modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Address</button>
+      </div>
+    </form>
+  </div>
+</div><!-- Add Payment Modal --><div id="add-payment-modal" class="modal">
+  <div class="modal-content p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Add Payment Method</h2>
+      <button class="close-modal" data-modal="add-payment-modal"><i class="fas fa-times"></i></button>
+    </div>
+    <form id="add-payment-form" class="space-y-4">
+      <input id="card-name" type="text" placeholder="Name on Card" class="w-full border rounded-lg px-3 py-2">
+      <input id="card-number" type="text" placeholder="Card Number" class="w-full border rounded-lg px-3 py-2">
+      <div class="grid grid-cols-2 gap-4">
+        <input id="expiry" type="text" placeholder="MM/YY" class="border rounded-lg px-3 py-2">
+        <input id="cvv" type="text" placeholder="CVV" class="border rounded-lg px-3 py-2">
+      </div>
+      <label class="flex items-center gap-2"><input id="default-payment" type="checkbox"> Make default</label>
+      <div class="flex justify-end gap-3 pt-4">
+        <button type="button" class="btn btn-secondary close-modal" data-modal="add-payment-modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Payment</button>
+      </div>
+    </form>
+  </div>
+</div><!-- Deactivate Modal --><div id="deactivate-account-modal" class="modal">
+  <div class="modal-content p-6">
+    <h2 class="text-2xl font-bold text-red-600 mb-4">Deactivate Account</h2>
+    <p class="mb-4 text-gray-700">This action permanently deletes your account and all associated data.</p>
+    <label class="flex items-center gap-2 mb-6"><input id="confirm-deactivate" type="checkbox"> I understand</label>
+    <div class="flex justify-end gap-3">
+      <button class="btn btn-secondary close-modal" data-modal="deactivate-account-modal">Cancel</button>
+      <button id="confirm-deactivate-btn" class="btn btn-danger" disabled>Deactivate</button>
+    </div>
+  </div>
+</div>
+  <script id="app-script">
+/* =========================================================
+   CALEB'S STORE — ACCOUNT.JS MOBILE + WEB FULL REAL DATA ENGINE
+   COMPLETE PRODUCTION VERSION
+   FEATURES:
+   ✔ Real authentication persistence
+   ✔ Full profile CRUD
+   ✔ Shared address book sync across:
+      - account.html
+      - cart.html
+      - checkout.html
+   ✔ Real order history from checkout
+   ✔ Real payment history
+   ✔ Wishlist/favorites from index.html
+   ✔ Login history with:
+      - date
+      - time
+      - browser
+      - device
+      - platform
+   ✔ Mobile compatibility fixes
+   ✔ Full modal compatibility
+   ✔ Sign out whole app
+   ✔ Re-login support
+   ✔ Delete/edit addresses
+   ✔ Persistent storage
+========================================================= */
+
+(function(){
+
+/* =========================================================
+   GLOBALS
+========================================================= */
+let isAuthenticated = false;
+
+/* =========================================================
+   HELPERS
+========================================================= */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+function safe(id){
+  return document.getElementById(id);
+}
+
+function escapeHtml(str){
+  return ('' + str).replace(/[&<>"']/g, c => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#39;'
+  }[c]));
+}
+
+function formatCurrency(n){
+  return '$' + Number(n || 0).toFixed(2);
+}
+
+function formatDate(dateString){
+  const d = new Date(dateString);
+  return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+}
+
+const STORAGE_CRYPTO = {
+  passphrase: 'ShopEase_Profile_Local_Encryption_v1',
+  salt: 'ShopEase_LocalStorage_Salt_v1',
+  iterations: 100000
+};
+
+function toBase64(bytes){
+  return btoa(String.fromCharCode(...bytes));
+}
+
+function fromBase64(b64){
+  return new Uint8Array(atob(b64).split('').map(c=>c.charCodeAt(0)));
+}
+
+async function deriveStorageKey(){
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(STORAGE_CRYPTO.passphrase),
+    'PBKDF2',
+    false,
+    ['deriveKey']
+  );
+
+  return crypto.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt: enc.encode(STORAGE_CRYPTO.salt),
+      iterations: STORAGE_CRYPTO.iterations,
+      hash: 'SHA-256'
+    },
+    baseKey,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+}
+
+async function getStorage(key, fallback=[]){
+  try{
+    const raw = localStorage.getItem(key);
+    if(!raw) return fallback;
+
+    const payload = JSON.parse(raw);
+    if(!payload || !payload.iv || !payload.data) return fallback;
+
+    const cryptoKey = await deriveStorageKey();
+    const decrypted = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: fromBase64(payload.iv) },
+      cryptoKey,
+      fromBase64(payload.data)
+    );
+
+    return JSON.parse(new TextDecoder().decode(decrypted)) || fallback;
+  }catch(e){
+    return fallback;
+  }
+}
+
+async function setStorage(key, value){
+  const cryptoKey = await deriveStorageKey();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const plaintext = new TextEncoder().encode(JSON.stringify(value));
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    cryptoKey,
+    plaintext
+  );
+
+  localStorage.setItem(key, JSON.stringify({
+    v: 1,
+    iv: toBase64(iv),
+    data: toBase64(new Uint8Array(ciphertext))
+  }));
+}
+
+function showToast(msg){
+  let toast = safe('global-toast');
+
+  if(!toast){
+    toast = document.createElement('div');
+    toast.id = 'global-toast';
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.right = '20px';
+    toast.style.padding = '12px 18px';
+    toast.style.background = '#111';
+    toast.style.color = '#fff';
+    toast.style.borderRadius = '8px';
+    toast.style.zIndex = '9999';
+    toast.style.fontSize = '14px';
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = msg;
+  toast.style.display = 'block';
+
+  setTimeout(()=>{
+    toast.style.display = 'none';
+  },2500);
+}
+
+/* =========================================================
+   DEVICE DETECTION
+========================================================= */
+function getDeviceInfo(){
+
+  const ua = navigator.userAgent;
+  let device = 'Desktop';
+  let browser = 'Unknown Browser';
+
+  if(/android/i.test(ua)) device = 'Android';
+  else if(/iPhone|iPad|iPod/i.test(ua)) device = 'iPhone/iPad';
+  else if(/Mobile/i.test(ua)) device = 'Mobile';
+
+  if(ua.includes('Chrome')) browser = 'Chrome';
+  else if(ua.includes('Firefox')) browser = 'Firefox';
+  else if(ua.includes('Safari')) browser = 'Safari';
+  else if(ua.includes('Edge')) browser = 'Edge';
+
+  return {
+    device,
+    browser,
+    platform: navigator.platform || 'Unknown'
+  };
+}
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+function checkAuthStatus(){
+
+  const authStatus = localStorage.getItem('isAuthenticated');
+
+  if(authStatus === 'true'){
+    isAuthenticated = true;
+    showAccountPage();
+  }else{
+    isAuthenticated = false;
+    showSignInPage();
+  }
+}
+
+function simulateLogin(){
+
+  localStorage.setItem('isAuthenticated','true');
+  isAuthenticated = true;
+
+  recordLogin();
+
+  showAccountPage();
+
+  renderAllData();
+}
+
+function handleSignOut(){
+
+  localStorage.removeItem('isAuthenticated');
+
+  isAuthenticated = false;
+
+  showSignInPage();
+
+  showToast('Signed out successfully');
+}
+
+function showSignInPage(){
+
+  safe('signin-container')?.classList.remove('hidden');
+  safe('account-container')?.classList.add('hidden');
+}
+
+function showAccountPage(){
+
+  safe('signin-container')?.classList.add('hidden');
+  safe('account-container')?.classList.remove('hidden');
+}
+
+/* =========================================================
+   LOGIN HISTORY
+========================================================= */
+function recordLogin(){
+
+  const logins = getStorage('login_history', []);
+
+  const info = getDeviceInfo();
+
+  logins.unshift({
+    date: new Date().toISOString(),
+    device: info.device,
+    browser: info.browser,
+    platform: info.platform
+  });
+
+  setStorage('login_history', logins.slice(0,100));
+}
+
+function renderLoginHistory(){
+
+  const container = safe('login-history-container');
+  if(!container) return;
+
+  const history = getStorage('login_history', []);
+
+  if(!history.length){
+    container.innerHTML = '<p>No login history found.</p>';
+    return;
+  }
+
+  container.innerHTML = history.map(item=>`
+    <div class="login-history-card">
+      <div><strong>Date:</strong> ${formatDate(item.date)}</div>
+      <div><strong>Device:</strong> ${escapeHtml(item.device)}</div>
+      <div><strong>Browser:</strong> ${escapeHtml(item.browser)}</div>
+      <div><strong>Platform:</strong> ${escapeHtml(item.platform)}</div>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+async function getProfile(){
+
+  return await getStorage('ss_profile',{
+    fullName:'',
+    email:'',
+    phone:'',
+    gender:'',
+    dob:'',
+    country:'',
+    city:'',
+    bio:''
+  });
+}
+
+async function saveProfile(profile){
+  await setStorage('ss_profile', profile);
+}
+
+async function renderProfile(){
+
+  const profile = await getProfile();
+
+  const displayMap = {
+    'profile-name': profile.fullName,
+    'profile-email': profile.email,
+    'profile-phone': profile.phone,
+    'profile-gender': profile.gender,
+    'profile-dob': profile.dob,
+    'profile-country': profile.country,
+    'profile-city': profile.city,
+    'profile-bio': profile.bio
+  };
+
+  Object.keys(displayMap).forEach(id=>{
+    const el = safe(id);
+    if(el){
+      el.textContent = displayMap[id] || 'Not provided';
+    }
+  });
+
+  const formMap = {
+    'edit-fullname': profile.fullName,
+    'edit-email': profile.email,
+    'edit-phone': profile.phone,
+    'edit-gender': profile.gender,
+    'edit-dob': profile.dob,
+    'edit-country': profile.country,
+    'edit-city': profile.city,
+    'edit-bio': profile.bio
+  };
+
+  Object.keys(formMap).forEach(id=>{
+    const el = safe(id);
+    if(el){
+      el.value = formMap[id] || '';
+    }
+  });
+}
+
+async function saveProfileForm(e){
+
+  e.preventDefault();
+
+  const profile = {
+    fullName: safe('edit-fullname')?.value || '',
+    email: safe('edit-email')?.value || '',
+    phone: safe('edit-phone')?.value || '',
+    gender: safe('edit-gender')?.value || '',
+    dob: safe('edit-dob')?.value || '',
+    country: safe('edit-country')?.value || '',
+    city: safe('edit-city')?.value || '',
+    bio: safe('edit-bio')?.value || ''
+  };
+
+  await saveProfile(profile);
+
+  await renderProfile();
+
+  closeModal('edit-profile-modal');
+
+  showToast('Profile updated');
+}
+
+/* =========================================================
+   ADDRESS BOOK
+========================================================= */
+function getAddresses(){
+  return getStorage('addresses', []);
+}
+
+function saveAddresses(addresses){
+  setStorage('addresses', addresses);
+}
+
+function renderAddresses(){
+
+  const addresses = getAddresses();
+
+  const containers = [
+    safe('address-book-list'),
+    safe('saved-addresses'),
+    safe('address-book'),
+    safe('cart-address-sync')
+  ];
+
+  containers.forEach(container=>{
+
+    if(!container) return;
+
+    if(!addresses.length){
+      container.innerHTML = '<p>No saved addresses.</p>';
+      return;
+    }
+
+    container.innerHTML = addresses.map((addr,index)=>`
+      <div class="address-card">
+        <div><strong>${escapeHtml(addr.name)}</strong></div>
+        <div>${escapeHtml(addr.phone || '')}</div>
+        <div>${escapeHtml(addr.street)}</div>
+        <div>${escapeHtml(addr.city)}, ${escapeHtml(addr.country)}</div>
+
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-ghost edit-address-btn"
+                  data-index="${index}">
+            Edit
+          </button>
+
+          <button class="btn btn-ghost delete-address-btn"
+                  data-index="${index}">
+            Delete
+          </button>
+        </div>
+      </div>
+    `).join('');
+  });
+
+  $$('.edit-address-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      editAddress(+btn.dataset.index);
+    });
+  });
+
+  $$('.delete-address-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      deleteAddress(+btn.dataset.index);
+    });
+  });
+}
+
+function addAddressFromForm(e){
+
+  e.preventDefault();
+
+  const address = {
+    name: safe('address-name')?.value || '',
+    phone: safe('address-phone')?.value || '',
+    street: safe('address-street')?.value || '',
+    city: safe('address-city')?.value || '',
+    country: safe('address-country')?.value || ''
+  };
+
+  if(!address.name || !address.street){
+    showToast('Name and address required');
+    return;
+  }
+
+  const addresses = getAddresses();
+  addresses.push(address);
+
+  saveAddresses(addresses);
+
+  renderAddresses();
+
+  closeModal('add-address-modal');
+
+  showToast('Address added');
+}
+
+function editAddress(index){
+
+  const addresses = getAddresses();
+  const addr = addresses[index];
+
+  if(!addr) return;
+
+  const name = prompt('Full Name:', addr.name);
+  const phone = prompt('Phone:', addr.phone);
+  const street = prompt('Street:', addr.street);
+  const city = prompt('City:', addr.city);
+  const country = prompt('Country:', addr.country);
+
+  if(!name || !street) return;
+
+  addresses[index] = {
+    name,
+    phone,
+    street,
+    city,
+    country
+  };
+
+  saveAddresses(addresses);
+
+  renderAddresses();
+
+  showToast('Address updated');
+}
+
+function deleteAddress(index){
+
+  if(!confirm('Delete this address?')) return;
+
+  const addresses = getAddresses();
+
+  addresses.splice(index,1);
+
+  saveAddresses(addresses);
+
+  renderAddresses();
+
+  showToast('Address deleted');
+}
+
+/* =========================================================
+   ORDERS
+========================================================= */
+function renderOrders(){
+
+  const orders = getStorage('ss_orders', []);
+
+  const history = safe('order-history-content');
+  const current = safe('current-orders-content');
+
+  if(history){
+
+    if(!orders.length){
+      history.innerHTML = '<p>No orders yet.</p>';
+    }else{
+      history.innerHTML = orders.map(order=>`
+        <div class="order-card">
+          <div><strong>Order ID:</strong> ${escapeHtml(order.id)}</div>
+          <div><strong>Status:</strong> ${escapeHtml(order.status)}</div>
+          <div><strong>Date:</strong> ${formatDate(order.createdAt)}</div>
+          <div><strong>Total:</strong> ${formatCurrency(order.total)}</div>
+
+          <div style="margin-top:8px;">
+            ${order.items.map(item=>`
+              <div>
+                ${escapeHtml(item.title)} × ${item.qty}
+                = ${formatCurrency(item.total)}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  if(current){
+
+    const active = orders.filter(
+      o => o.status !== 'Delivered'
+    );
+
+    if(!active.length){
+      current.innerHTML = '<p>No active orders.</p>';
+    }else{
+      current.innerHTML = active.map(order=>`
+        <div class="order-card">
+          <div><strong>${escapeHtml(order.id)}</strong></div>
+          <div>Status: ${escapeHtml(order.status)}</div>
+          <div>${formatDate(order.createdAt)}</div>
+          <div>${formatCurrency(order.total)}</div>
+        </div>
+      `).join('');
+    }
+  }
+}
+
+/* =========================================================
+   PAYMENTS
+========================================================= */
+function renderPayments(){
+
+  const container = safe('payment-history');
+  if(!container) return;
+
+  const orders = getStorage('ss_orders', []);
+
+  if(!orders.length){
+    container.innerHTML = '<p>No payments found.</p>';
+    return;
+  }
+
+  container.innerHTML = orders.map(order=>`
+    <div class="payment-card">
+      <div><strong>Order:</strong> ${escapeHtml(order.id)}</div>
+      <div><strong>Method:</strong> ${escapeHtml(order.paymentMethod)}</div>
+      <div><strong>Total:</strong> ${formatCurrency(order.total)}</div>
+      <div><strong>Date:</strong> ${formatDate(order.createdAt)}</div>
+    </div>
+  `).join('');
+}
+
+/* =========================================================
+   WISHLIST / FAVORITES
+========================================================= */
+function renderWishlist(){
+
+  const container = safe('wishlist-container');
+  if(!container) return;
+
+  const wishlist = getStorage('wishlist', []);
+
+  if(!wishlist.length){
+    container.innerHTML = '<p>No wishlist items.</p>';
+    return;
+  }
+
+  container.innerHTML = wishlist.map(item=>`
+    <div class="wishlist-card">
+      <img src="${escapeHtml(item.image)}"
+           alt="${escapeHtml(item.title)}"
+           style="width:80px;height:80px;object-fit:cover;">
+
+      <div>
+        <div><strong>${escapeHtml(item.title)}</strong></div>
+        <div>${formatCurrency(item.price)}</div>
+
+        <div style="margin-top:8px;display:flex;gap:8px;">
+          <button class="btn btn-ghost wishlist-add-cart"
+                  data-id="${escapeHtml(item.id)}">
+            Add to Cart
+          </button>
+
+          <button class="btn btn-ghost wishlist-remove"
+                  data-id="${escapeHtml(item.id)}">
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  $$('.wishlist-add-cart').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      addWishlistItemToCart(btn.dataset.id);
+    });
+  });
+
+  $$('.wishlist-remove').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      removeWishlistItem(btn.dataset.id);
+    });
+  });
+}
+
+function addWishlistItemToCart(id){
+
+  const wishlist = getStorage('wishlist', []);
+  const item = wishlist.find(w=>w.id==id);
+
+  if(!item) return;
+
+  const cart = getStorage('ss_cart', []);
+
+  const existing = cart.find(c=>c.id===item.id);
+
+  if(existing){
+    existing.quantity += 1;
+  }else{
+    item.quantity = 1;
+    cart.push(item);
+  }
+
+  setStorage('ss_cart', cart);
+
+  showToast('Added to cart');
+}
+
+function removeWishlistItem(id){
+
+  let wishlist = getStorage('wishlist', []);
+
+  wishlist = wishlist.filter(
+    item => item.id != id
+  );
+
+  setStorage('wishlist', wishlist);
+
+  renderWishlist();
+
+  showToast('Removed from wishlist');
+}
+
+/* =========================================================
+   TABS
+========================================================= */
+function setupTabs(){
+
+  const activeTab = localStorage.getItem('activeTab') || 'order-history';
+
+  switchTab(activeTab);
+}
+
+function switchTab(tabName){
+
+  if(tabName === 'order-history'){
+
+    safe('order-history-tab')?.classList.add('tab-active');
+    safe('current-orders-tab')?.classList.remove('tab-active');
+
+    safe('order-history-content')?.classList.remove('hidden');
+    safe('current-orders-content')?.classList.add('hidden');
+
+  }else{
+
+    safe('order-history-tab')?.classList.remove('tab-active');
+    safe('current-orders-tab')?.classList.add('tab-active');
+
+    safe('order-history-content')?.classList.add('hidden');
+    safe('current-orders-content')?.classList.remove('hidden');
+  }
+
+  localStorage.setItem('activeTab', tabName);
+}
+
+/* =========================================================
+   MODALS
+========================================================= */
+function openModal(modalId){
+  safe(modalId)?.classList.add('show');
+}
+
+function closeModal(modalId){
+  safe(modalId)?.classList.remove('show');
+}
+
+/* =========================================================
+   FULL DATA RENDER
+========================================================= */
+function renderAllData(){
+
+  renderProfile();
+  renderAddresses();
+  renderOrders();
+  renderPayments();
+  renderWishlist();
+  renderLoginHistory();
+}
+
+/* =========================================================
+   EVENT LISTENERS
+========================================================= */
+function setupEventListeners(){
+
+  safe('account-icon')?.addEventListener('click',()=>{
+    isAuthenticated
+      ? showAccountPage()
+      : showSignInPage();
+  });
+
+  safe('login-form')?.addEventListener('submit',e=>{
+    e.preventDefault();
+    simulateLogin();
+  });
+
+  safe('sign-out-btn')?.addEventListener(
+    'click',
+    handleSignOut
+  );
+
+  safe('mobile-sign-out-btn')?.addEventListener(
+    'click',
+    handleSignOut
+  );
+
+  safe('order-history-tab')?.addEventListener(
+    'click',
+    ()=>switchTab('order-history')
+  );
+
+  safe('current-orders-tab')?.addEventListener(
+    'click',
+    ()=>switchTab('current-orders')
+  );
+
+  safe('edit-profile-btn')?.addEventListener(
+    'click',
+    ()=>openModal('edit-profile-modal')
+  );
+
+  safe('add-address-btn')?.addEventListener(
+    'click',
+    ()=>openModal('add-address-modal')
+  );
+
+  safe('add-payment-btn')?.addEventListener(
+    'click',
+    ()=>openModal('add-payment-modal')
+  );
+
+  safe('deactivate-account-btn')?.addEventListener(
+    'click',
+    ()=>openModal('deactivate-account-modal')
+  );
+
+  $$('.close-modal').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      closeModal(btn.dataset.modal);
+    });
+  });
+
+  safe('confirm-deactivate')?.addEventListener(
+    'change',
+    function(){
+      safe('confirm-deactivate-btn').disabled = !this.checked;
+    }
+  );
+
+  safe('edit-profile-form')?.addEventListener(
+    'submit',
+    saveProfileForm
+  );
+
+  safe('add-address-form')?.addEventListener(
+    'submit',
+    addAddressFromForm
+  );
+}
+
+/* =========================================================
+   DOM READY
+========================================================= */
+document.addEventListener('DOMContentLoaded',()=>{
+
+  checkAuthStatus();
+
+  setupEventListeners();
+
+  setupTabs();
+
+  renderAllData();
+});
+
+})();
+  </script>
+</body>
+</html>
