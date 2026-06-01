@@ -1292,7 +1292,140 @@ footer{
           </button>
 
         </div>
+<style>
+    .summary-row.total{
+  margin-top:24px;
+  padding-top:24px;
+  border-top:1px solid var(--line);
+  font-size:1.25rem;
+  font-weight:900;
+}
 
+.summary-row .green{
+  color:#86efac;
+  font-weight:800;
+}
+
+.saved-box{
+  margin-top:20px;
+  padding:16px;
+  border-radius:18px;
+  background:rgba(34,197,94,.1);
+  border:1px solid rgba(34,197,94,.18);
+  color:#86efac;
+  font-weight:700;
+}
+
+.checkout-btn{
+  width:100%;
+  height:58px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(135deg,var(--purple),var(--purple-2));
+  color:white;
+  font-weight:800;
+  font-size:1rem;
+  cursor:pointer;
+  margin-top:24px;
+  transition:.25s ease;
+  box-shadow:0 10px 30px rgba(168,85,247,.35);
+}
+
+.checkout-btn:hover{
+  transform:translateY(-2px);
+}
+
+.paypal-btn{
+  width:100%;
+  height:56px;
+  border:none;
+  border-radius:18px;
+  margin-top:14px;
+  background:linear-gradient(135deg,var(--yellow),var(--yellow-2));
+  color:#18181b;
+  font-weight:900;
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.paypal-btn:hover{
+  transform:translateY(-2px);
+}
+
+.secure-note{
+  margin-top:18px;
+  text-align:center;
+  color:#9eb0c8;
+  font-size:.92rem;
+  line-height:1.6;
+}
+
+.promo-toggle{
+  width:100%;
+  margin-top:22px;
+  background:#111827;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.promo-content{
+  margin-top:16px;
+  display:none;
+  gap:12px;
+}
+
+.promo-content.active{
+  display:flex;
+}
+
+.promo-content input{
+  flex:1;
+  height:52px;
+  background:#101827;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:0 16px;
+  color:white;
+  outline:none;
+}
+
+.apply-btn{
+  height:52px;
+  border:none;
+  border-radius:16px;
+  padding:0 18px;
+  background:#1f2937;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.payment-icons{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+}
+
+.payment{
+  height:56px;
+  border-radius:16px;
+  background:#101827;
+  border:1px solid var(--line);
+  display:grid;
+  place-items:center;
+  font-weight:800;
+  color:#d8e4f5;
+}
+
+</style>
         <!-- ACTIONS -->
         <div class="cart-actions">
 
@@ -1459,6 +1592,1039 @@ footer{
   </div>
 
 </section>
+<div id="checkoutItems"></div>
+<!-- =========================================================
+     REAL-TIME MOBILE STICKY CHECKOUT
+========================================================= -->
+
+<div class="mobile-checkout" id="mobileCheckout">
+
+  <div class="mobile-total">
+
+    <div>
+
+      <div
+        style="
+          color:#8fa0b8;
+          font-size:.9rem;
+        ">
+        Total
+      </div>
+
+      <h3 id="mobileGrandTotal">
+        $0.00
+      </h3>
+
+    </div>
+
+    <div
+      id="mobileSavings"
+      style="
+        color:#86efac;
+        font-weight:700;
+      ">
+      No discounts applied
+    </div>
+
+  </div>
+
+  <button
+    id="mobileCheckoutBtn"
+    class="checkout-btn">
+
+    🔒 Proceed to Checkout
+
+  </button>
+
+</div>
+<style>  
+/* =========================================================  
+   MOBILE STICKY CHECKOUT  
+========================================================= */  .mobile-checkout
+{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+
+z-index:9999;  
+
+padding:16px;  
+
+display:none;  
+
+align-items:center;  
+justify-content:space-between;  
+gap:12px;  
+
+background:rgba(12,17,27,.96);  
+
+backdrop-filter:blur(14px);  
+
+border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+.mobile-total
+{
+flex:1;
+
+display:flex;  
+align-items:center;  
+justify-content:space-between;  
+
+gap:16px;
+
+}
+
+.mobile-total h3
+{
+margin:0;
+}
+
+@media(max-width:768px)
+{
+.mobile-checkout
+{
+display:flex;
+}
+
+body  
+{  
+    padding-bottom:120px;  
+}
+
+}
+</style>
+
+<script>
+
+/* =========================================================
+   SYNC MOBILE STICKY WITH ORDER SUMMARY
+========================================================= */
+
+function syncMobileSummary()
+{
+    const summaryTotal =
+        document.getElementById(
+            "summaryTotal"
+        );
+
+    const savedAmount =
+        document.getElementById(
+            "savedAmount"
+        );
+
+    const mobileTotal =
+        document.getElementById(
+            "mobileGrandTotal"
+        );
+
+    const mobileSavings =
+        document.getElementById(
+            "mobileSavings"
+        );
+
+    if(summaryTotal && mobileTotal)
+    {
+        mobileTotal.textContent =
+            summaryTotal.textContent;
+    }
+
+    if(savedAmount && mobileSavings)
+    {
+        mobileSavings.textContent =
+            savedAmount.textContent;
+    }
+}
+
+/* =========================================================
+   AUTO SYNC
+========================================================= */
+
+const summaryObserver =
+new MutationObserver(() =>
+{
+    syncMobileSummary();
+});
+
+const summaryTotalEl =
+document.getElementById(
+    "summaryTotal"
+);
+
+const savedAmountEl =
+document.getElementById(
+    "savedAmount"
+);
+
+if(summaryTotalEl)
+{
+    summaryObserver.observe(
+        summaryTotalEl,
+        {
+            childList:true,
+            subtree:true,
+            characterData:true
+        }
+    );
+}
+
+if(savedAmountEl)
+{
+    summaryObserver.observe(
+        savedAmountEl,
+        {
+            childList:true,
+            subtree:true,
+            characterData:true
+        }
+    );
+}
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () =>
+    {
+        syncMobileSummary();
+    }
+);
+
+/* =========================================================
+   CHECKOUT BUTTON
+========================================================= */
+
+const mobileCheckoutBtn =
+document.getElementById(
+    "mobileCheckoutBtn"
+);
+
+if(mobileCheckoutBtn)
+{
+    mobileCheckoutBtn.addEventListener(
+        "click",
+        () =>
+        {
+            const cart =
+                JSON.parse(
+                    localStorage.getItem(
+                        "ss_cart"
+                    ) || "[]"
+                );
+
+            if(!cart.length)
+            {
+                alert(
+                    "Your cart is empty."
+                );
+                return;
+            }
+
+            localStorage.setItem(
+                "ss_checkout",
+                JSON.stringify(cart)
+            );
+
+            window.location.href =
+                "checkout.html";
+        }
+    );
+}
+
+</script>
+<script>
+/* ==========================================================
+   LUXORA ENTERPRISE CART BACKEND
+   Version: 1.0.0
+   ========================================================== */
+
+(() => {
+    "use strict";
+
+    /* ==========================================================
+       CONFIG
+    ========================================================== */
+
+    const CONFIG = {
+        storageKeys: {
+            cart: "luxora_cart",
+            wishlist: "luxora_wishlist",
+            checkout: "luxora_checkout",
+            analytics: "luxora_analytics",
+            currency: "luxora_currency"
+        },
+
+        shipping: {
+            freeThreshold: 50,
+            standard: 0,
+            express: 9.99
+        },
+
+        taxRate: 0.075,
+
+        currencies: {
+            USD: 1,
+            EUR: 0.92,
+            GBP: 0.79
+        },
+
+        coupons: {
+            SAVE10: {
+                type: "percent",
+                value: 10
+            },
+
+            SAVE20: {
+                type: "percent",
+                value: 20
+            },
+
+            WELCOME5: {
+                type: "fixed",
+                value: 5
+            }
+        }
+    };
+
+    /* ==========================================================
+       EVENT BUS
+    ========================================================== */
+
+    class EventBus {
+        constructor() {
+            this.events = {};
+        }
+
+        on(event, callback) {
+            if (!this.events[event]) {
+                this.events[event] = [];
+            }
+
+            this.events[event].push(callback);
+        }
+
+        emit(event, data = null) {
+            if (!this.events[event]) return;
+
+            this.events[event].forEach(callback => callback(data));
+        }
+    }
+
+    const eventBus = new EventBus();
+
+    /* ==========================================================
+       STORAGE MANAGER
+    ========================================================== */
+
+    class StorageManager {
+
+        static get(key, fallback = null) {
+            try {
+                const value = localStorage.getItem(key);
+
+                return value
+                    ? JSON.parse(value)
+                    : fallback;
+
+            } catch {
+                return fallback;
+            }
+        }
+
+        static set(key, value) {
+            localStorage.setItem(
+                key,
+                JSON.stringify(value)
+            );
+        }
+
+        static remove(key) {
+            localStorage.removeItem(key);
+        }
+
+        static clear() {
+            localStorage.clear();
+        }
+    }
+
+    /* ==========================================================
+       ANALYTICS MANAGER
+    ========================================================== */
+
+    class AnalyticsManager {
+
+        static track(event, payload = {}) {
+
+            const analytics =
+                StorageManager.get(
+                    CONFIG.storageKeys.analytics,
+                    []
+                );
+
+            analytics.push({
+                event,
+                payload,
+                timestamp: Date.now()
+            });
+
+            StorageManager.set(
+                CONFIG.storageKeys.analytics,
+                analytics
+            );
+
+            console.log(
+                "[Analytics]",
+                event,
+                payload
+            );
+        }
+    }
+
+    /* ==========================================================
+       INVENTORY MANAGER
+    ========================================================== */
+
+    class InventoryManager {
+
+        constructor() {
+            this.inventory = {};
+        }
+
+        setStock(productId, qty) {
+            this.inventory[productId] = qty;
+        }
+
+        getStock(productId) {
+            return this.inventory[productId] || 0;
+        }
+
+        isAvailable(productId, qty) {
+            return this.getStock(productId) >= qty;
+        }
+    }
+
+    const inventoryManager =
+        new InventoryManager();
+
+    /* ==========================================================
+       TAX MANAGER
+    ========================================================== */
+
+    class TaxManager {
+
+        static calculate(amount) {
+            return amount *
+                CONFIG.taxRate;
+        }
+    }
+
+    /* ==========================================================
+       SHIPPING MANAGER
+    ========================================================== */
+
+    class ShippingManager {
+
+        static calculate(
+            subtotal,
+            method = "standard"
+        ) {
+
+            if (
+                subtotal >=
+                CONFIG.shipping.freeThreshold &&
+                method === "standard"
+            ) {
+                return 0;
+            }
+
+            return method === "express"
+                ? CONFIG.shipping.express
+                : CONFIG.shipping.standard;
+        }
+    }
+
+    /* ==========================================================
+       COUPON MANAGER
+    ========================================================== */
+
+    class CouponManager {
+
+        static validate(code) {
+
+            return CONFIG.coupons[
+                code.toUpperCase()
+            ] || null;
+        }
+
+        static apply(code, subtotal) {
+
+            const coupon =
+                this.validate(code);
+
+            if (!coupon) {
+                return {
+                    valid: false,
+                    discount: 0
+                };
+            }
+
+            let discount = 0;
+
+            if (
+                coupon.type === "percent"
+            ) {
+                discount =
+                    subtotal *
+                    coupon.value /
+                    100;
+            }
+
+            if (
+                coupon.type === "fixed"
+            ) {
+                discount =
+                    coupon.value;
+            }
+
+            return {
+                valid: true,
+                discount
+            };
+        }
+    }
+
+    /* ==========================================================
+       CURRENCY MANAGER
+    ========================================================== */
+
+    class CurrencyManager {
+
+        constructor() {
+            this.current =
+                StorageManager.get(
+                    CONFIG.storageKeys.currency,
+                    "USD"
+                );
+        }
+
+        set(currency) {
+            this.current = currency;
+
+            StorageManager.set(
+                CONFIG.storageKeys.currency,
+                currency
+            );
+        }
+
+        convert(amount) {
+
+            return amount *
+                CONFIG.currencies[
+                    this.current
+                ];
+        }
+
+        format(amount) {
+
+            return new Intl.NumberFormat(
+                "en-US",
+                {
+                    style: "currency",
+                    currency: this.current
+                }
+            ).format(
+                this.convert(amount)
+            );
+        }
+    }
+
+    const currencyManager =
+        new CurrencyManager();
+
+    /* ==========================================================
+       WISHLIST MANAGER
+    ========================================================== */
+
+    class WishlistManager {
+
+        constructor() {
+
+            this.items =
+                StorageManager.get(
+                    CONFIG.storageKeys.wishlist,
+                    []
+                );
+        }
+
+        save() {
+
+            StorageManager.set(
+                CONFIG.storageKeys.wishlist,
+                this.items
+            );
+        }
+
+        add(product) {
+
+            if (
+                !this.items.find(
+                    p => p.id === product.id
+                )
+            ) {
+                this.items.push(product);
+
+                this.save();
+            }
+        }
+
+        remove(id) {
+
+            this.items =
+                this.items.filter(
+                    p => p.id !== id
+                );
+
+            this.save();
+        }
+    }
+
+    const wishlist =
+        new WishlistManager();
+
+    /* ==========================================================
+       CART MANAGER
+    ========================================================== */
+
+    class CartManager {
+
+        constructor() {
+
+            this.items =
+                StorageManager.get(
+                    CONFIG.storageKeys.cart,
+                    []
+                );
+
+            this.coupon = null;
+        }
+
+        save() {
+
+            StorageManager.set(
+                CONFIG.storageKeys.cart,
+                this.items
+            );
+
+            eventBus.emit(
+                "cartUpdated",
+                this.items
+            );
+        }
+
+        add(product, qty = 1) {
+
+            const existing =
+                this.items.find(
+                    item =>
+                        item.id === product.id
+                );
+
+            if (existing) {
+
+                existing.qty += qty;
+
+            } else {
+
+                this.items.push({
+                    ...product,
+                    qty
+                });
+            }
+
+            AnalyticsManager.track(
+                "add_to_cart",
+                product
+            );
+
+            this.save();
+        }
+
+        remove(id) {
+
+            this.items =
+                this.items.filter(
+                    item => item.id !== id
+                );
+
+            this.save();
+        }
+
+        update(id, qty) {
+
+            const item =
+                this.items.find(
+                    p => p.id === id
+                );
+
+            if (item) {
+
+                item.qty = qty;
+
+                if (
+                    item.qty <= 0
+                ) {
+                    this.remove(id);
+                }
+            }
+
+            this.save();
+        }
+
+        clear() {
+
+            this.items = [];
+
+            this.save();
+        }
+
+        getSubtotal() {
+
+            return this.items.reduce(
+                (sum, item) =>
+                    sum +
+                    item.price *
+                    item.qty,
+                0
+            );
+        }
+
+        getShipping(
+            method = "standard"
+        ) {
+
+            return ShippingManager
+                .calculate(
+                    this.getSubtotal(),
+                    method
+                );
+        }
+
+        getTax(
+            method = "standard"
+        ) {
+
+            const subtotal =
+                this.getSubtotal();
+
+            const shipping =
+                this.getShipping(
+                    method
+                );
+
+            return TaxManager
+                .calculate(
+                    subtotal +
+                    shipping
+                );
+        }
+
+        getDiscount() {
+
+            if (
+                !this.coupon
+            ) {
+                return 0;
+            }
+
+            return CouponManager
+                .apply(
+                    this.coupon,
+                    this.getSubtotal()
+                )
+                .discount;
+        }
+
+        getTotal(
+            method = "standard"
+        ) {
+
+            return (
+                this.getSubtotal() +
+                this.getShipping(
+                    method
+                ) +
+                this.getTax(
+                    method
+                ) -
+                this.getDiscount()
+            );
+        }
+
+        applyCoupon(code) {
+
+            const result =
+                CouponManager.apply(
+                    code,
+                    this.getSubtotal()
+                );
+
+            if (
+                result.valid
+            ) {
+
+                this.coupon = code;
+
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    const cart =
+        new CartManager();
+
+    /* ==========================================================
+       ORDER MANAGER
+    ========================================================== */
+
+    class OrderManager {
+
+        createOrder(
+            customer,
+            shippingMethod
+        ) {
+
+            return {
+                id:
+                    "ORD-" +
+                    Date.now(),
+
+                customer,
+
+                items:
+                    cart.items,
+
+                subtotal:
+                    cart.getSubtotal(),
+
+                shipping:
+                    cart.getShipping(
+                        shippingMethod
+                    ),
+
+                tax:
+                    cart.getTax(
+                        shippingMethod
+                    ),
+
+                total:
+                    cart.getTotal(
+                        shippingMethod
+                    ),
+
+                createdAt:
+                    new Date()
+                        .toISOString()
+            };
+        }
+    }
+
+    const orderManager =
+        new OrderManager();
+
+    /* ==========================================================
+       CHECKOUT MANAGER
+    ========================================================== */
+
+    class CheckoutManager {
+
+        save(data) {
+
+            StorageManager.set(
+                CONFIG.storageKeys.checkout,
+                data
+            );
+        }
+
+        load() {
+
+            return StorageManager.get(
+                CONFIG.storageKeys.checkout,
+                {}
+            );
+        }
+
+        placeOrder(
+            customer,
+            shippingMethod
+        ) {
+
+            const order =
+                orderManager
+                    .createOrder(
+                        customer,
+                        shippingMethod
+                    );
+
+            AnalyticsManager.track(
+                "purchase",
+                order
+            );
+
+            cart.clear();
+
+            return order;
+        }
+    }
+
+    const checkout =
+        new CheckoutManager();
+
+    /* ==========================================================
+       NOTIFICATION SYSTEM
+    ========================================================== */
+
+    class NotificationSystem {
+
+        static show(
+            message,
+            type = "success"
+        ) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+            div.className =
+                "luxora-toast " +
+                type;
+
+            div.textContent =
+                message;
+
+            document.body.appendChild(
+                div
+            );
+
+            setTimeout(() => {
+
+                div.remove();
+
+            }, 3000);
+        }
+    }
+
+    /* ==========================================================
+       UI RENDERER
+    ========================================================== */
+
+    class UIRenderer {
+
+        static renderMiniCart() {
+
+            const count =
+                cart.items.reduce(
+                    (a, b) =>
+                        a + b.qty,
+                    0
+                );
+
+            document
+                .querySelectorAll(
+                    ".cart-count"
+                )
+                .forEach(el => {
+                    el.textContent =
+                        count;
+                });
+        }
+
+        static renderTotals() {
+
+            document
+                .querySelectorAll(
+                    ".cart-total"
+                )
+                .forEach(el => {
+
+                    el.textContent =
+                        currencyManager
+                            .format(
+                                cart.getTotal()
+                            );
+                });
+        }
+
+        static refresh() {
+
+            this.renderMiniCart();
+
+            this.renderTotals();
+        }
+    }
+
+    /* ==========================================================
+       AUTO SYNC
+    ========================================================== */
+
+    eventBus.on(
+        "cartUpdated",
+        () => {
+            UIRenderer.refresh();
+        }
+    );
+
+    window.addEventListener(
+        "storage",
+        () => {
+            UIRenderer.refresh();
+        }
+    );
+
+    /* ==========================================================
+       GLOBAL API
+    ========================================================== */
+
+    window.Luxora = {
+
+        cart,
+        wishlist,
+        checkout,
+
+        inventoryManager,
+        currencyManager,
+        orderManager,
+
+        StorageManager,
+        CouponManager,
+        ShippingManager,
+        TaxManager,
+        AnalyticsManager,
+
+        NotificationSystem,
+        UIRenderer
+    };
+
+    /* ==========================================================
+       BOOT
+    ========================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
+            UIRenderer.refresh();
+        }
+    );
+
+})();
+</script>
+
 <!-- Enterprise JS -->
 
 <script src="js/cart.enterprise.js"></script>
@@ -1696,6 +2862,14 @@ function removeCartItem(id){
     renderEnterpriseCart();
 }
 
+window.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    cart.renderCart();
+
+  }
+);
 </script>
 
 </body>
