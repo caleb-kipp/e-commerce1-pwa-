@@ -1180,175 +1180,39 @@ footer{
 </style>
 </head>
 
-<body>
-
-<!-- =========================================================
-     DESKTOP HEADER
-========================================================= -->
-
-<header>
+<body<section class="page">
 
   <div class="container">
 
-    <div class="topbar">
-
-      <div class="left-top">
-
-        <a href="#" class="logo">
-
-          <div class="logo-badge">
-            <span>S</span>
-          </div>
-
-          <div>ShopVista</div>
-
-        </a>
-
-        <nav>
-          <a href="#">Home</a>
-          <a href="#">Shop</a>
-          <a href="#">Categories</a>
-          <a href="#">Deals</a>
-          <a href="#">New Arrivals</a>
-          <a href="#">About Us</a>
-        </nav>
-
-      </div>
-
-      <div class="right-top">
-
-        <div class="search">
-
-          <input type="text" placeholder="Search products..." />
-
-          <svg width="20" height="20" fill="none" stroke="white" stroke-width="2"
-          viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="7"/>
-            <path d="M20 20L17 17"/>
-          </svg>
-
-        </div>
-
-        <div class="icon-btn">
-
-          <svg width="20" height="20" fill="none" stroke="white" stroke-width="2"
-          viewBox="0 0 24 24">
-            <path d="M20 21a8 8 0 10-16 0"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-
-        </div>
-
-        <div class="icon-btn">
-
-          <svg width="20" height="20" fill="none" stroke="white" stroke-width="2"
-          viewBox="0 0 24 24">
-            <path d="M12 21s-7-4.35-7-10a4 4 0 017-2 4 4 0 017 2c0 5.65-7 10-7 10z"/>
-          </svg>
-
-        </div>
-
-        <div class="icon-btn">
-
-          <span class="badge">3</span>
-
-          <svg width="20" height="20" fill="none" stroke="white" stroke-width="2"
-          viewBox="0 0 24 24">
-            <circle cx="9" cy="21" r="1"/>
-            <circle cx="20" cy="21" r="1"/>
-            <path d="M1 1h4l2.7 13.4a2 2 0 002 1.6h9.7a2 2 0 002-1.7L23 6H6"/>
-          </svg>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</header>
-
-<!-- =========================================================
-     MOBILE HEADER
-========================================================= -->
-
-<div class="mobile-header">
-
-  <div class="mobile-header-inner">
-
-    <div style="display:flex;align-items:center;gap:12px">
-
-      <div class="icon-btn" style="width:44px;height:44px">
-
-        <svg width="18" height="18" fill="none" stroke="white" stroke-width="2"
-        viewBox="0 0 24 24">
-          <path d="M15 18l-6-6 6-6"/>
-        </svg>
-
-      </div>
-
-      <h2>Cart (3)</h2>
-
-    </div>
-
-    <div class="mobile-actions">
-
-      <div class="icon-btn" style="width:44px;height:44px">
-
-        <svg width="18" height="18" fill="none" stroke="white" stroke-width="2"
-        viewBox="0 0 24 24">
-          <circle cx="11" cy="11" r="7"/>
-          <path d="M20 20L17 17"/>
-        </svg>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-<!-- =========================================================
-     PAGE
-========================================================= -->
-
-<section class="page">
-
-  <div class="container">
-
-    <!-- Breadcrumbs -->
-
+    <!-- BREADCRUMB -->
     <div class="breadcrumbs">
-
-      <a href="#">Home</a>
-
+      <a href="index.html">Home</a>
       <span>/</span>
-
       <div>Cart</div>
-
     </div>
 
-    <!-- Page Header -->
-
+    <!-- PAGE HEADER -->
     <div class="page-head">
 
       <div>
+        <h1 id="cartPageTitle">
+          Your Cart (0)
+        </h1>
 
-        <h1>Your Cart (3)</h1>
-
-        <p>Review your selected items and proceed securely to checkout.</p>
-
+        <p>
+          Review your selected items and proceed securely to checkout.
+        </p>
       </div>
 
       <div class="head-actions">
 
-        <button class="glass-btn">
+        <button class="glass-btn"
+                onclick="window.location='index.html'">
           Continue Shopping
         </button>
 
-        <button class="primary-btn">
+        <button class="primary-btn"
+                id="checkoutBtnTop">
           Checkout Now
         </button>
 
@@ -1356,358 +1220,211 @@ footer{
 
     </div>
 
-    <!-- Shipping Banner -->
-
+    <!-- SHIPPING BANNER -->
     <div class="shipping-banner card">
 
       <div class="shipping-left">
 
         <div class="shipping-icon">
-
-          <svg width="28" height="28" fill="none" stroke="#86efac" stroke-width="2"
-          viewBox="0 0 24 24">
-            <path d="M1 3h15v13H1z"/>
-            <path d="M16 8h4l3 3v5h-7z"/>
-            <circle cx="5.5" cy="18.5" r="2"/>
-            <circle cx="18.5" cy="18.5" r="2"/>
-          </svg>
-
+          🚚
         </div>
 
         <div>
 
-          <h3>Free shipping unlocked!</h3>
+          <h3 id="shippingMessage">
+            Add products to unlock shipping benefits
+          </h3>
 
-          <p>You are eligible for free shipping on this order.</p>
+          <p id="shippingSubMessage">
+            Shipping cost calculated at checkout.
+          </p>
 
         </div>
 
       </div>
 
-      <div class="shipping-pill">
-        FREE DELIVERY
+      <div class="shipping-pill"
+           id="shippingStatus">
+        CART EMPTY
       </div>
 
     </div>
 
-    <!-- MAIN -->
-
+    <!-- MAIN LAYOUT -->
     <div class="main-layout">
 
-      <!-- =====================================================
-           LEFT COLUMN
-      ====================================================== -->
-
+      <!-- LEFT COLUMN -->
       <div class="cart-card card">
 
         <div class="table-head">
+
           <div>PRODUCT</div>
           <div>PRICE</div>
           <div>QUANTITY</div>
           <div>TOTAL</div>
-        </div>
-
-        <!-- ITEM -->
-
-        <div class="cart-item">
-
-          <div class="product-cell">
-
-            <div class="product-image">
-
-              <div class="discount-badge">
-                -20%
-              </div>
-
-              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop" />
-
-            </div>
-
-            <div class="product-info">
-
-              <div class="brand">ShopVista Premium</div>
-
-              <div class="product-title">
-                Urban Explorer Backpack
-              </div>
-
-              <div class="variant">
-                Color: Black • Size: Large
-              </div>
-
-              <div class="stock">
-                In Stock
-              </div>
-
-            </div>
-
-          </div>
-
-          <div>
-
-            <div class="price">$59.99</div>
-            <span class="old-price">$79.99</span>
-
-          </div>
-
-          <div class="qty-wrapper">
-
-            <div class="qty-box">
-
-              <button class="qty-btn minus">−</button>
-
-              <div class="qty-number">1</div>
-
-              <button class="qty-btn plus">+</button>
-
-            </div>
-
-            <button class="delete-btn">
-
-              <svg width="18" height="18" fill="none" stroke="#ef4444"
-              stroke-width="2" viewBox="0 0 24 24">
-                <path d="M3 6h18"/>
-                <path d="M8 6V4h8v2"/>
-                <path d="M19 6l-1 14H6L5 6"/>
-              </svg>
-
-            </button>
-
-          </div>
-
-          <div class="line-total">
-            $59.99
-          </div>
 
         </div>
 
-        <!-- ITEM -->
+        <!-- DYNAMIC CART ITEMS -->
+        <div id="cartItemsContainer">
 
-        <div class="cart-item">
-
-          <div class="product-cell">
-
-            <div class="product-image">
-
-              <div class="discount-badge">
-                HOT
-              </div>
-
-              <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop" />
-
-            </div>
-
-            <div class="product-info">
-
-              <div class="brand">StreetFlex</div>
-
-              <div class="product-title">
-                Classic White Sneakers
-              </div>
-
-              <div class="variant">
-                Color: White • Size: 42
-              </div>
-
-              <div class="stock">
-                In Stock
-              </div>
-
-            </div>
-
-          </div>
-
-          <div>
-
-            <div class="price">$49.99</div>
-
-          </div>
-
-          <div class="qty-wrapper">
-
-            <div class="qty-box">
-
-              <button class="qty-btn minus">−</button>
-
-              <div class="qty-number">1</div>
-
-              <button class="qty-btn plus">+</button>
-
-            </div>
-
-            <button class="delete-btn">
-
-              <svg width="18" height="18" fill="none" stroke="#ef4444"
-              stroke-width="2" viewBox="0 0 24 24">
-                <path d="M3 6h18"/>
-                <path d="M8 6V4h8v2"/>
-                <path d="M19 6l-1 14H6L5 6"/>
-              </svg>
-
-            </button>
-
-          </div>
-
-          <div class="line-total">
-            $49.99
-          </div>
+          <!-- cart.enterprise.js injects items here -->
 
         </div>
 
-        <!-- ITEM -->
+        <!-- EMPTY CART -->
+        <div id="emptyCartState"
+             style="display:none;padding:60px;text-align:center;">
 
-        <div class="cart-item">
+          <h2>Your cart is empty</h2>
 
-          <div class="product-cell">
+          <p style="margin-top:12px;color:#8fa0b8;">
+            Browse products and add items to your cart.
+          </p>
 
-            <div class="product-image">
+          <button
+              class="primary-btn"
+              style="margin-top:20px;"
+              onclick="window.location='index.html'">
 
-              <img src="https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1200&auto=format&fit=crop" />
+            Start Shopping
 
-            </div>
-
-            <div class="product-info">
-
-              <div class="brand">Minimal Studio</div>
-
-              <div class="product-title">
-                Minimal Leather Watch
-              </div>
-
-              <div class="variant">
-                Color: Brown • Strap: Leather
-              </div>
-
-              <div class="stock">
-                In Stock
-              </div>
-
-            </div>
-
-          </div>
-
-          <div>
-
-            <div class="price">$39.99</div>
-
-          </div>
-
-          <div class="qty-wrapper">
-
-            <div class="qty-box">
-
-              <button class="qty-btn minus">−</button>
-
-              <div class="qty-number">1</div>
-
-              <button class="qty-btn plus">+</button>
-
-            </div>
-
-            <button class="delete-btn">
-
-              <svg width="18" height="18" fill="none" stroke="#ef4444"
-              stroke-width="2" viewBox="0 0 24 24">
-                <path d="M3 6h18"/>
-                <path d="M8 6V4h8v2"/>
-                <path d="M19 6l-1 14H6L5 6"/>
-              </svg>
-
-            </button>
-
-          </div>
-
-          <div class="line-total">
-            $39.99
-          </div>
+          </button>
 
         </div>
 
         <!-- ACTIONS -->
-
         <div class="cart-actions">
 
-          <button class="glass-btn">
+          <button class="glass-btn"
+                  onclick="window.location='index.html'">
+
             ← Continue Shopping
+
           </button>
 
-          <button class="primary-btn">
+          <button class="primary-btn"
+                  id="updateCartBtn">
+
             Update Cart
+
           </button>
 
         </div>
 
       </div>
 
-      <!-- =====================================================
-           RIGHT COLUMN
-      ====================================================== -->
-
+      <!-- RIGHT COLUMN -->
       <div class="summary">
-
-        <!-- SUMMARY -->
 
         <div class="summary-card card">
 
           <h2>Order Summary</h2>
 
           <div class="summary-row">
+
+            <span>Items</span>
+
+            <strong id="summaryItems">
+              0
+            </strong>
+
+          </div>
+
+          <div class="summary-row">
+
             <span>Subtotal</span>
-            <strong>$149.97</strong>
+
+            <strong id="summarySubtotal">
+              $0.00
+            </strong>
+
           </div>
 
           <div class="summary-row">
+
             <span>Discount</span>
-            <strong class="green">− $10.00</strong>
+
+            <strong class="green"
+                    id="summaryDiscount">
+              $0.00
+            </strong>
+
           </div>
 
           <div class="summary-row">
+
             <span>Shipping</span>
-            <strong class="green">FREE</strong>
+
+            <strong id="summaryShipping">
+              Calculated
+            </strong>
+
           </div>
 
           <div class="summary-row total">
+
             <span>Total</span>
-            <strong>$139.97</strong>
+
+            <strong id="summaryTotal">
+              $0.00
+            </strong>
+
           </div>
 
-          <div class="saved-box">
-            🎉 You saved $10.00 on this order
+          <div class="saved-box"
+               id="savedAmount">
+
+            No discounts applied
+
           </div>
 
-          <button class="checkout-btn">
+          <button class="checkout-btn"
+                  id="checkoutBtn">
+
             🔒 Proceed to Checkout
+
           </button>
 
           <button class="paypal-btn">
+
             PayPal Checkout
+
           </button>
 
           <div class="secure-note">
+
             Secure Checkout — Your payment information is encrypted.
+
           </div>
 
-          <!-- Promo -->
+          <!-- PROMO -->
 
-          <div class="promo-toggle" id="promoToggle">
+          <div class="promo-toggle"
+               id="promoToggle">
 
             <span>Have a promo code?</span>
-
             <span>+</span>
 
           </div>
 
-          <div class="promo-content" id="promoContent">
+          <div class="promo-content"
+               id="promoContent">
 
-            <input type="text" placeholder="Enter promo code">
+            <input type="text"
+                   id="promoCodeInput"
+                   placeholder="Enter promo code">
 
-            <button class="apply-btn">
+            <button class="apply-btn"
+                    id="applyPromoBtn">
+
               Apply
+
             </button>
 
           </div>
 
-          <!-- Payment -->
+          <!-- PAYMENT -->
 
           <div class="payment-icons">
 
@@ -1725,479 +1442,259 @@ footer{
 
     </div>
 
-    <!-- =====================================================
-         TRUST SECTION
-    ====================================================== -->
-
+    <!-- TRUST SECTION -->
     <section class="trust-section">
 
-      <div class="trust-grid">
-
-        <div class="trust-card card">
-
-          <div class="trust-icon">
-
-            <svg width="28" height="28" fill="none" stroke="#a855f7"
-            stroke-width="2" viewBox="0 0 24 24">
-              <rect x="3" y="11" width="18" height="11" rx="2"/>
-              <path d="M7 11V7a5 5 0 0110 0v4"/>
-            </svg>
-
-          </div>
-
-          <h3>Secure Payments</h3>
-
-          <p>
-            256-bit SSL encryption keeps your payment information protected.
-          </p>
-
-        </div>
-
-        <div class="trust-card card">
-
-          <div class="trust-icon">
-
-            <svg width="28" height="28" fill="none" stroke="#a855f7"
-            stroke-width="2" viewBox="0 0 24 24">
-              <path d="M1 3h15v13H1z"/>
-              <path d="M16 8h4l3 3v5h-7z"/>
-            </svg>
-
-          </div>
-
-          <h3>Free Shipping</h3>
-
-          <p>
-            Free shipping available on all orders over $50 worldwide.
-          </p>
-
-        </div>
-
-        <div class="trust-card card">
-
-          <div class="trust-icon">
-
-            <svg width="28" height="28" fill="none" stroke="#a855f7"
-            stroke-width="2" viewBox="0 0 24 24">
-              <path d="M21 12a9 9 0 11-9-9"/>
-              <path d="M21 3v9h-9"/>
-            </svg>
-
-          </div>
-
-          <h3>Easy Returns</h3>
-
-          <p>
-            Hassle-free 30 day return policy for all eligible products.
-          </p>
-
-        </div>
-
-        <div class="trust-card card">
-
-          <div class="trust-icon">
-
-            <svg width="28" height="28" fill="none" stroke="#a855f7"
-            stroke-width="2" viewBox="0 0 24 24">
-              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-            </svg>
-
-          </div>
-
-          <h3>24/7 Support</h3>
-
-          <p>
-            Our customer success team is available anytime you need help.
-          </p>
-
-        </div>
-
-      </div>
+      <!-- keep your existing trust cards -->
 
     </section>
 
-    <!-- =====================================================
-         RECOMMENDATIONS
-    ====================================================== -->
-
+    <!-- RECOMMENDATIONS -->
     <section class="recommend">
 
-      <div class="section-head">
-
-        <h2>You May Also Like</h2>
-
-        <button class="glass-btn">
-          View All
-        </button>
-
-      </div>
-
-      <div class="product-grid">
-
-        <!-- CARD -->
-
-        <div class="product-card card">
-
-          <div class="product-thumb">
-
-            <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop">
-
-          </div>
-
-          <div class="product-meta">
-
-            <h3>Modern Running Sneakers</h3>
-
-            <p>Premium comfort and lightweight design.</p>
-
-            <div class="product-bottom">
-
-              <div class="product-price">$89.99</div>
-
-              <button class="add-btn">+</button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- CARD -->
-
-        <div class="product-card card">
-
-          <div class="product-thumb">
-
-            <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=1200&auto=format&fit=crop">
-
-          </div>
-
-          <div class="product-meta">
-
-            <h3>Luxury Minimal Jacket</h3>
-
-            <p>Modern fit with premium tailoring.</p>
-
-            <div class="product-bottom">
-
-              <div class="product-price">$129.99</div>
-
-              <button class="add-btn">+</button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- CARD -->
-
-        <div class="product-card card">
-
-          <div class="product-thumb">
-
-            <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1200&auto=format&fit=crop">
-
-          </div>
-
-          <div class="product-meta">
-
-            <h3>Wireless Audio Headphones</h3>
-
-            <p>Immersive sound with active noise cancellation.</p>
-
-            <div class="product-bottom">
-
-              <div class="product-price">$199.99</div>
-
-              <button class="add-btn">+</button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- CARD -->
-
-        <div class="product-card card">
-
-          <div class="product-thumb">
-
-            <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1200&auto=format&fit=crop">
-
-          </div>
-
-          <div class="product-meta">
-
-            <h3>Streetwear Essential Hoodie</h3>
-
-            <p>Ultra-soft premium cotton blend.</p>
-
-            <div class="product-bottom">
-
-              <div class="product-price">$69.99</div>
-
-              <button class="add-btn">+</button>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
+      <!-- keep existing recommendation cards -->
 
     </section>
 
   </div>
 
 </section>
+<!-- Enterprise JS -->
 
-<!-- =========================================================
-     FOOTER
-========================================================= -->
+<script src="js/cart.enterprise.js"></script>
 
-<footer>
-
-  <div class="container">
-
-    <div class="footer-inner">
-
-      <div class="footer-grid">
-
-        <!-- BRAND -->
-
-        <div class="footer-brand">
-
-          <a href="#" class="logo">
-
-            <div class="logo-badge">
-              <span>S</span>
-            </div>
-
-            <div>ShopVista</div>
-
-          </a>
-
-          <p>
-            Premium modern commerce experience with fast shipping,
-            secure checkout, and curated products for modern lifestyles.
-          </p>
-
-          <div class="socials">
-
-            <div class="social">f</div>
-            <div class="social">x</div>
-            <div class="social">in</div>
-            <div class="social">ig</div>
-
-          </div>
-
-        </div>
-
-        <!-- SHOP -->
-
-        <div class="footer-col">
-
-          <h3>SHOP</h3>
-
-          <div class="footer-links">
-
-            <a href="#">All Products</a>
-            <a href="#">New Arrivals</a>
-            <a href="#">Trending</a>
-            <a href="#">Best Sellers</a>
-            <a href="#">Sale Collection</a>
-
-          </div>
-
-        </div>
-
-        <!-- CUSTOMER -->
-
-        <div class="footer-col">
-
-          <h3>CUSTOMER SERVICE</h3>
-
-          <div class="footer-links">
-
-            <a href="#">Contact Us</a>
-            <a href="#">Track Order</a>
-            <a href="#">Returns</a>
-            <a href="#">Shipping Info</a>
-            <a href="#">FAQs</a>
-
-          </div>
-
-        </div>
-
-        <!-- COMPANY -->
-
-        <div class="footer-col">
-
-          <h3>COMPANY</h3>
-
-          <div class="footer-links">
-
-            <a href="#">About</a>
-            <a href="#">Careers</a>
-            <a href="#">Press</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms</a>
-
-          </div>
-
-        </div>
-
-        <!-- NEWSLETTER -->
-
-        <div class="newsletter">
-
-          <h3>NEWSLETTER</h3>
-
-          <p>
-            Subscribe to receive updates, access to exclusive deals,
-            and early product launches.
-          </p>
-
-          <div class="newsletter-form">
-
-            <input type="email" placeholder="Enter your email">
-
-            <button class="subscribe-btn">
-              Subscribe
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- FOOTER BOTTOM -->
-
-      <div class="footer-bottom">
-
-        <div>
-          © 2026 ShopVista. All rights reserved.
-        </div>
-
-        <div class="secure-badge">
-          🔒 Secure Site
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</footer>
-
-<!-- =========================================================
-     MOBILE STICKY CHECKOUT
-========================================================= -->
-
-<div class="mobile-checkout">
-
-  <div class="mobile-total">
-
-    <div>
-
-      <div style="color:#8fa0b8;font-size:.9rem">
-        Total
-      </div>
-
-      <h3>$139.97</h3>
-
-    </div>
-
-    <div style="color:#86efac;font-weight:700">
-      You saved $10
-    </div>
-
-  </div>
-
-  <button class="checkout-btn">
-    🔒 Proceed to Checkout
-  </button>
-
-</div>
-
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
-
+</body>
 <script>
 
-/* =========================================================
-   PROMO TOGGLE
-========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
 
-const promoToggle = document.getElementById("promoToggle");
-const promoContent = document.getElementById("promoContent");
-
-promoToggle.addEventListener("click", () => {
-
-  promoContent.classList.toggle("active");
+    renderEnterpriseCart();
 
 });
 
-/* =========================================================
-   QUANTITY BUTTONS
-========================================================= */
+function renderEnterpriseCart(){
 
-document.querySelectorAll(".qty-box").forEach(box => {
+    const container =
+        document.getElementById("cartItemsContainer");
 
-  const minus = box.querySelector(".minus");
-  const plus = box.querySelector(".plus");
-  const number = box.querySelector(".qty-number");
+    if(!container) return;
 
-  let qty = 1;
+    const cart =
+        JSON.parse(
+            localStorage.getItem("ss_cart")
+        ) || [];
 
-  plus.addEventListener("click", () => {
+    if(cart.length === 0){
 
-    qty++;
-    number.innerText = qty;
+        container.innerHTML = `
+            <div class="empty-cart">
+                <h2>Your Cart Is Empty</h2>
+                <p>Add products from the shop.</p>
+            </div>
+        `;
 
-  });
-
-  minus.addEventListener("click", () => {
-
-    if(qty > 1){
-
-      qty--;
-      number.innerText = qty;
-
+        return;
     }
 
-  });
+    let subtotal = 0;
 
-});
+    container.innerHTML = cart.map(item => {
 
-/* =========================================================
-   DELETE ITEM
-========================================================= */
+        const lineTotal =
+            item.price * item.qty;
 
-document.querySelectorAll(".delete-btn").forEach(btn => {
+        subtotal += lineTotal;
 
-  btn.addEventListener("click", () => {
+        return `
 
-    const item = btn.closest(".cart-item");
+        <div class="cart-item"
+             data-id="${item.id}">
 
-    item.style.opacity = "0";
-    item.style.transform = "translateY(10px)";
+            <div class="product-cell">
 
-    setTimeout(() => {
+                <div class="product-image">
 
-      item.remove();
+                    <img
+                        src="${item.img}"
+                        alt="${item.title}"
+                    >
 
-    }, 250);
+                </div>
 
-  });
+                <div class="product-info">
 
-});
+                    <div class="brand">
+                        ShopVista
+                    </div>
+
+                    <div class="product-title">
+                        ${item.title}
+                    </div>
+
+                    <div class="variant">
+                        SKU: ${item.id}
+                    </div>
+
+                    <div class="stock">
+                        In Stock
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="price">
+                    $${item.price.toFixed(2)}
+                </div>
+
+            </div>
+
+            <div class="qty-wrapper">
+
+                <div class="qty-box">
+
+                    <button
+                        class="qty-btn minus"
+                        onclick="decreaseQty('${item.id}')">
+                        −
+                    </button>
+
+                    <div class="qty-number">
+                        ${item.qty}
+                    </div>
+
+                    <button
+                        class="qty-btn plus"
+                        onclick="increaseQty('${item.id}')">
+                        +
+                    </button>
+
+                </div>
+
+                <button
+                    class="delete-btn"
+                    onclick="removeCartItem('${item.id}')">
+
+                    Remove
+
+                </button>
+
+            </div>
+
+            <div class="line-total">
+
+                $${lineTotal.toFixed(2)}
+
+            </div>
+
+        </div>
+
+        `;
+
+    }).join("");
+
+    const discount = 0;
+
+    const total =
+        subtotal - discount;
+
+    document.getElementById(
+        "subtotalAmount"
+    ).textContent =
+        "$" + subtotal.toFixed(2);
+
+    document.getElementById(
+        "discountAmount"
+    ).textContent =
+        "$" + discount.toFixed(2);
+
+    document.getElementById(
+        "grandTotal"
+    ).textContent =
+        "$" + total.toFixed(2);
+
+    document.getElementById(
+        "mobileTotal"
+    ).textContent =
+        "$" + total.toFixed(2);
+
+}
+
+function increaseQty(id){
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem("ss_cart")
+        ) || [];
+
+    const item =
+        cart.find(x => x.id === id);
+
+    if(item){
+
+        item.qty++;
+
+        localStorage.setItem(
+            "ss_cart",
+            JSON.stringify(cart)
+        );
+
+        renderEnterpriseCart();
+    }
+}
+
+function decreaseQty(id){
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem("ss_cart")
+        ) || [];
+
+    const item =
+        cart.find(x => x.id === id);
+
+    if(item){
+
+        item.qty--;
+
+        if(item.qty <= 0){
+
+            const idx =
+                cart.indexOf(item);
+
+            cart.splice(idx,1);
+        }
+
+        localStorage.setItem(
+            "ss_cart",
+            JSON.stringify(cart)
+        );
+
+        renderEnterpriseCart();
+    }
+}
+
+function removeCartItem(id){
+
+    let cart =
+        JSON.parse(
+            localStorage.getItem("ss_cart")
+        ) || [];
+
+    cart =
+        cart.filter(
+            x => x.id !== id
+        );
+
+    localStorage.setItem(
+        "ss_cart",
+        JSON.stringify(cart)
+    );
+
+    renderEnterpriseCart();
+}
 
 </script>
 
