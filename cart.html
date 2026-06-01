@@ -1512,13 +1512,25 @@ footer{
 
           </div>
 
-          <button class="checkout-btn"
-                  id="checkoutBtn">
+       <button onclick="goToCheckout()">
+    Proceed To Checkout
+</button>
+<script>
+function goToCheckout(){
 
-            🔒 Proceed to Checkout
+    const cart =
+        JSON.parse(
+            localStorage.getItem("ss_cart")
+        ) || [];
 
-          </button>
+    if(cart.length === 0){
+        alert("Your cart is empty");
+        return;
+    }
 
+    window.location.href =
+        "checkout.html";
+}</script>
           <button class="paypal-btn">
 
             PayPal Checkout
