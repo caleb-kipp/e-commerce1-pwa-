@@ -1,0 +1,176 @@
+:root{
+  --bg:#0f1115;
+  --surface:#171b22;
+  --card:#1d2330;
+
+  --text:#ffffff;
+  --text-secondary:#d1d5db;
+  --text-muted:#9ca3af;
+
+  --border:rgba(255,255,255,.10);
+
+  --primary:#22c55e;
+  --primary-hover:#16a34a;
+
+  --accent:#f59e0b;
+  --danger:#ef4444;
+
+  --shadow:0 8px 24px rgba(0,0,0,.25);
+}
+:root.light{
+
+  --bg:#f7f8fa;
+  --surface:#ffffff;
+  --card:#ffffff;
+
+  --text:#111827;
+  --text-secondary:#374151;
+  --text-muted:#6b7280;
+
+  --border:rgba(0,0,0,.08);
+
+  --primary:#16a34a;
+  --primary-hover:#15803d;
+
+  --accent:#f59e0b;
+  --danger:#dc2626;
+
+  --shadow:0 8px 24px rgba(0,0,0,.08);
+}
+/* BODY */
+
+html,
+body{
+  background:var(--bg);
+  color:var(--text);
+  transition:.3s ease;
+}
+
+/* CONTAINERS */
+
+.section,
+.card,
+.p-card,
+.mini-product,
+.mini-card,
+.modal-content,
+.panel,
+.viewer,
+footer,
+.sx-product{
+
+  background:var(--card);
+  color:var(--text);
+
+  border:1px solid var(--border);
+
+  transition:.3s ease;
+}
+
+/* HEADINGS */
+
+h1,h2,h3,h4,h5,h6{
+  color:var(--text);
+  font-weight:700;
+}
+
+/* PARAGRAPHS */
+
+p,
+span,
+label,
+small{
+  color:var(--text-secondary);
+}
+
+/* LINKS */
+
+a{
+  color:inherit;
+}
+
+/* SEARCH */
+
+.search input{
+  background:var(--surface);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.search input::placeholder{
+  color:var(--text-muted);
+}
+
+/* MODALS */
+
+.modal,
+.product-modal{
+  backdrop-filter:blur(10px);
+}
+
+.modal-content{
+  background:var(--card);
+}
+
+/* BUTTONS */
+
+.btn-primary{
+  background:var(--primary);
+  color:#fff;
+}
+
+.btn-primary:hover{
+  background:var(--primary-hover);
+}
+
+.btn-ghost{
+  background:transparent;
+  color:var(--text);
+  border:1px solid var(--border);
+}
+.mini-product,
+.p-card,
+.sx-product{
+
+  background:var(--card);
+
+  border:1px solid var(--border);
+
+  box-shadow:var(--shadow);
+}
+
+.mini-product h4,
+.p-card h4,
+.sx-product span{
+
+  color:var(--text);
+
+  font-weight:600;
+}
+
+.price,
+strong{
+
+  color:var(--accent);
+
+  font-weight:800;
+}
+.modal-content{
+
+  background:var(--card);
+
+  color:var(--text);
+
+  border:1px solid var(--border);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.4);
+}
+
+#mTitle{
+  color:var(--text);
+}
+
+#mPrice{
+  color:var(--accent);
+}
