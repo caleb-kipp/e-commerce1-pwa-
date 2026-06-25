@@ -1971,6 +1971,132 @@ img {
     padding: 10px 40px 10px 12px;
   }
 }
+  /* ====================================
+   FIX WHATS NEW & TRENDING VISIBILITY
+   ==================================== */
+
+/* Remove gradient overlays */
+.sx-product,
+.mini-product{
+    position:relative;
+    overflow:hidden;
+    background:var(--card);
+}
+
+.sx-product::before,
+.sx-product::after,
+.mini-product::before,
+.mini-product::after{
+    display:none !important;
+    content:none !important;
+}
+
+/* Product container */
+.sx-product,
+.mini-product{
+    flex:0 0 110px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.08);
+    background:var(--card);
+    text-decoration:none;
+    transition:.25s ease;
+}
+
+/* Hover */
+.sx-product:hover,
+.mini-product:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 18px rgba(0,0,0,.25);
+}
+
+/* ====================================
+   IMAGE TAKES 2/3 OF CARD
+   ==================================== */
+
+.sx-product img,
+.mini-product img{
+    width:100%;
+    height:95px;
+    object-fit:cover;
+    display:block;
+    border-radius:12px 12px 0 0;
+}
+
+/* ====================================
+   PRODUCT TEXT
+   ==================================== */
+
+.sx-product span,
+.mini-product h4{
+    display:block;
+    color:var(--text) !important;
+    font-size:12px;
+    font-weight:600;
+    line-height:1.3;
+    padding:4px 6px 0;
+    height:32px;
+    overflow:hidden;
+}
+
+/* Price */
+.sx-product strong,
+.mini-product .price{
+    display:block;
+    color:#22c55e !important;
+    font-size:13px;
+    font-weight:800;
+    padding:0 6px 6px;
+}
+
+/* ====================================
+   FORCE HEADINGS VISIBLE
+   ==================================== */
+
+h1,h2,h3,h4,h5,h6{
+    color:var(--text) !important;
+    opacity:1 !important;
+    visibility:visible !important;
+}
+
+/* Section titles */
+.sx-title-row h2{
+    font-size:18px;
+    font-weight:800;
+    color:var(--text) !important;
+}
+
+/* ====================================
+   DARK THEME
+   ==================================== */
+
+:root{
+    --card:#121825;
+    --text:#f8fafc;
+}
+
+/* ====================================
+   LIGHT THEME
+   ==================================== */
+
+:root.light{
+    --card:#ffffff;
+    --text:#111827;
+}
+
+:root.light .sx-product,
+:root.light .mini-product{
+    border:1px solid rgba(0,0,0,.08);
+}
+
+:root.light .sx-product span,
+:root.light .mini-product h4{
+    color:#111827 !important;
+}
+
+:root.light .sx-product strong,
+:root.light .mini-product .price{
+    color:#16a34a !important;
+}
 </style>
 <script>
 let endTime = Date.now() + (12 * 60 * 60 * 1000);
