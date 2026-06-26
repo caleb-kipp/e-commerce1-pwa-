@@ -954,6 +954,124 @@ header {
       localStorage.removeItem("theme");
     }
   });
+  html,
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      #6d28d9 0%,      /* Deep Purple */
+      #8b5cf6 15%,     /* Purple */
+      #c084fc 35%,     /* Light Purple */
+      #f472b6 55%,     /* Pink */
+      #fbcfe8 75%,     /* Soft Pink */
+      #f8fafc 92%,     /* Very Light */
+      #ffffff 100%     /* White */
+    );
+
+  background-attachment: fixed;
+}
+html,
+body {
+  min-height: 100%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #4f46e5 0%,
+      #7c3aed 20%,
+      #a855f7 40%,
+      #ec4899 60%,
+      #f9a8d4 80%,
+      #fdf2f8 92%,
+      #ffffff 100%
+    );
+
+  background-attachment: fixed;
+}
+body {
+  background:
+    linear-gradient(
+      180deg,
+      #312e81 0%,
+      #4c1d95 12%,
+      #6d28d9 25%,
+      #9333ea 40%,
+      #c026d3 55%,
+      #ec4899 70%,
+      #fde2f3 90%,
+      #ffffff 100%
+    );
+}
+.p-card,
+.mini-card,
+.sx-product,
+.row .p-card {
+  background: rgba(15, 22, 35, 0.92);
+  backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,.15),
+    0 2px 10px rgba(255,255,255,.04);
+}
+.section {
+  margin: 20px 0;
+  padding: 18px;
+
+  background: rgba(255,255,255,.18);
+  backdrop-filter: blur(16px);
+
+  border-radius: 20px;
+
+  border: 1px solid rgba(255,255,255,.25);
+}
+h1,h2,h3,h4 {
+  color: #111827;
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+.section h2 {
+  font-size: 1.4rem;
+  position: relative;
+}
+
+.section h2::after {
+  content: "";
+  display: block;
+
+  width: 60px;
+  height: 4px;
+
+  margin-top: 6px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    #8b5cf6,
+    #ec4899
+  );
+}
+body::before{
+  content:"";
+
+  position:fixed;
+  inset:0;
+
+  background:
+    radial-gradient(circle at 20% 20%, rgba(236,72,153,.35), transparent 35%),
+    radial-gradient(circle at 80% 10%, rgba(139,92,246,.35), transparent 35%),
+    radial-gradient(circle at 50% 60%, rgba(168,85,247,.25), transparent 40%);
+
+  pointer-events:none;
+  z-index:-1;
+}
 </script>
 <style>
 .icon-btn {
