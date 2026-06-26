@@ -1252,61 +1252,111 @@ openCartBtn.addEventListener('click', () => {
   </div>
 
 
-  <!-- FLASH SALES -->
-  <section class="sx-block">
 
-    <div class="sx-title-row">
+<!-- FLASH SALES -->
+<div class="home-carousel-section">
 
-      <h2>⚡ Flash Sales</h2>
+  <div class="home-carousel-header">
+
+    <div>
+      <h2 class="home-carousel-title">
+        ⚡ Flash Sales
+      </h2>
+
+      <p class="home-carousel-subtitle">
+        Limited-time discounts on popular products.
+      </p>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px">
 
       <div class="sx-countdown">
-
         <span id="sxHour">12</span> :
         <span id="sxMin">45</span> :
         <span id="sxSec">30</span>
+      </div>
 
+      <div class="carousel-ctl">
+        <button class="btn btn-ghost"
+                data-scroll="prev"
+                data-target="#rowFlashSales">◀</button>
+
+        <button class="btn btn-ghost"
+                data-scroll="next"
+                data-target="#rowFlashSales">▶</button>
       </div>
 
     </div>
-        
-<div class="sx-product-row" id="flashSalesRow"></div>
 
+  </div>
 
-</section>
+  <div id="rowFlashSales" class="row"></div>
+
+</div>
+
 
 <!-- WHAT'S NEW -->
-<section class="sx-block">
+<div class="home-carousel-section">
 
-  <div class="sx-title-row">
-    <h2>✨ What's New</h2>
-  </div>
+  <div class="home-carousel-header">
 
-<div class="sx-product-row" id="whatsNewRow"></div>
+    <div>
+      <h2 class="home-carousel-title">
+        ✨ What's New
+      </h2>
 
-  </section>
-
-
-        <!-- TRENDING -->
-<section class="sx-block">
-
-  <div class="sx-title-row">
-    <h2>🔥 Trending</h2>
-  </div>
-
-<div class="sx-product-row" id="trendingRow"></div>
-
-
-
-</section>
-
-      <!-- products -->
-
+      <p class="home-carousel-subtitle">
+        Recently added products and latest arrivals.
+      </p>
     </div>
 
-  </section>
+    <div class="carousel-ctl">
+      <button class="btn btn-ghost"
+              data-scroll="prev"
+              data-target="#rowWhatsNew">◀</button>
 
-</section>
+      <button class="btn btn-ghost"
+              data-scroll="next"
+              data-target="#rowWhatsNew">▶</button>
+    </div>
 
+  </div>
+
+  <div id="rowWhatsNew" class="row"></div>
+
+</div>
+
+
+<!-- TRENDING -->
+<div class="home-carousel-section">
+
+  <div class="home-carousel-header">
+
+    <div>
+      <h2 class="home-carousel-title">
+        🔥 Trending
+      </h2>
+
+      <p class="home-carousel-subtitle">
+        Most viewed and fastest growing products.
+      </p>
+    </div>
+
+    <div class="carousel-ctl">
+      <button class="btn btn-ghost"
+              data-scroll="prev"
+              data-target="#rowTrending">◀</button>
+
+      <button class="btn btn-ghost"
+              data-scroll="next"
+              data-target="#rowTrending">▶</button>
+    </div>
+
+  </div>
+
+  <div id="rowTrending" class="row"></div>
+
+</div>
 <style>
 /* ----------------------------------
    Home Product Sections
@@ -2060,7 +2110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     padding:2px 4px;
   }
 }
-</style> 
+</style>
     <!-- HERO: big left image (50%), four right cards (2x2) (50%), looping accessible slider -->
     <section class="hero" aria-label="Hero and featured">
       <div class="hero-left" id="heroSlider" aria-roledescription="carousel" aria-label="Promotions" tabindex="0">
