@@ -1325,17 +1325,16 @@ openCartBtn.addEventListener('click', () => {
   <div id="rowWhatsNew" class="row"></div>
 
 </div>
+<!-- ======================================
+     TRENDING
+====================================== -->
 
-
-<!-- TRENDING -->
 <div class="home-carousel-section">
 
   <div class="home-carousel-header">
 
     <div>
-      <h2 class="home-carousel-title">
-        🔥 Trending
-      </h2>
+      <h2 class="home-carousel-title">🔥 Trending</h2>
 
       <p class="home-carousel-subtitle">
         Most viewed and fastest growing products.
@@ -1343,21 +1342,118 @@ openCartBtn.addEventListener('click', () => {
     </div>
 
     <div class="carousel-ctl">
+
       <button class="btn btn-ghost"
               data-scroll="prev"
-              data-target="#rowTrending">◀</button>
+              data-target="#rowTrending">
+        ◀
+      </button>
 
       <button class="btn btn-ghost"
               data-scroll="next"
-              data-target="#rowTrending">▶</button>
+              data-target="#rowTrending">
+        ▶
+      </button>
+
     </div>
 
   </div>
 
-  <div id="rowTrending" class="row"></div>
+  <div class="trending-container">
+
+    <div id="rowTrending"></div>
+
+  </div>
 
 </div>
 <style>
+/* ======================================
+   TRENDING CONTAINER
+====================================== */
+
+.trending-container{
+
+  width:100%;
+
+  border-radius:24px;
+
+  padding:12px;
+
+  background:
+  linear-gradient(
+    180deg,
+    rgba(255,255,255,.95),
+    rgba(248,250,252,.98)
+  );
+
+  box-shadow:
+  0 8px 30px rgba(0,0,0,.08);
+
+  overflow:hidden;
+}
+</style>
+<script>
+/* ======================================
+   TRENDING AUTO SCROLL
+====================================== */
+
+const trendingRow =
+document.getElementById("rowTrending");
+
+let trendingAuto;
+
+function startTrendingAutoScroll(){
+
+  trendingAuto = setInterval(()=>{
+
+    const card =
+    trendingRow.querySelector(".p-card");
+
+    if(!card) return;
+
+    const step =
+    card.offsetWidth + 14;
+
+    const maxScroll =
+    trendingRow.scrollWidth -
+    trendingRow.clientWidth;
+
+    if(
+      trendingRow.scrollLeft + step >= maxScroll
+    ){
+
+      trendingRow.scrollTo({
+        left:0,
+        behavior:"smooth"
+      });
+
+    }else{
+
+      trendingRow.scrollBy({
+        left:step,
+        behavior:"smooth"
+      });
+
+    }
+
+  },5000);
+
+}
+
+startTrendingAutoScroll();
+
+/* Pause while hovering */
+
+trendingRow.addEventListener(
+  "mouseenter",
+  ()=>clearInterval(trendingAuto)
+);
+
+trendingRow.addEventListener(
+  "mouseleave",
+  startTrendingAutoScroll
+);
+</script><style>
 /* ----------------------------------
    Home Product Sections
 ---------------------------------- */
@@ -2014,103 +2110,7 @@ document.addEventListener("DOMContentLoaded", () => {
   #rowWhatsNew{
     grid-template-columns:repeat(6,1fr);
   }
-}
-/* ==================================
-   TRENDING
-================================== */
-
-#rowTrending{
-  display:grid;
-  gap:12px;
-}
-
-/* Mobile */
-
-@media (max-width:768px){
-
-  #rowTrending{
-    grid-template-columns:
-      1.4fr
-      1fr
-      1fr
-      1.4fr;
-
-    grid-auto-rows:120px;
-  }
-
-  #rowTrending .p-card:nth-child(1){
-    grid-row:span 2;
-  }
-
-  #rowTrending .p-card:nth-child(6){
-    grid-row:span 2;
-  }
-
-  #rowTrending .p-card img{
-    height:70px;
-    object-fit:cover;
-  }
-
-  #rowTrending .p-card:nth-child(1) img,
-  #rowTrending .p-card:nth-child(6) img{
-    height:160px;
-  }
-
-  #rowTrending .p-meta h4{
-    font-size:11px;
-  }
-}
-
-/* Desktop */
-
-@media (min-width:769px){
-
-  #rowTrending{
-    grid-template-columns:
-      240px
-      repeat(4,1fr)
-      240px;
-
-    align-items:start;
-  }
-
-  #rowTrending .p-card:nth-child(1),
-  #rowTrending .p-card:nth-child(6){
-    height:360px;
-  }
-
-  #rowTrending .p-card:nth-child(1) img,
-  #rowTrending .p-card:nth-child(6) img{
-    height:240px;
-  }
-
-  #rowTrending .p-card img{
-    height:150px;
-  }
-}
-@media (max-width:480px){
-
-  .p-meta{
-    padding:4px;
-  }
-
-  .p-meta h4{
-    font-size:10px !important;
-    line-height:1.15;
-    height:24px;
-    overflow:hidden;
-  }
-
-  .price-row{
-    font-size:10px;
-  }
-
-  .pill{
-    font-size:9px;
-    padding:2px 4px;
-  }
-}
-  /* ==================================
+}  /* ==================================
    WHAT'S NEW SHOWCASE
 ================================== */
 
@@ -2165,134 +2165,63 @@ document.addEventListener("DOMContentLoaded", () => {
     height:80px;
   }
 }
-/* ==================================
-   TRENDING SHOWCASE
-================================== */
-
-.trending-showcase{
-  display:flex;
-  gap:12px;
-
-  width:100%;
+#rowTrending{
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:180px;
+  gap:10px;
 
   overflow-x:auto;
+  overflow-y:hidden;
+
+  scroll-snap-type:x mandatory;
   scrollbar-width:none;
 }
 
-.trending-showcase::-webkit-scrollbar{
+#rowTrending::-webkit-scrollbar{
   display:none;
 }
-.trend-large{
-  flex:0 0 32%;
 
-  min-height:340px;
+#rowTrending .p-card{
+  height:250px;
 
-  border-radius:18px;
-  overflow:hidden;
+  scroll-snap-align:start;
 
   background:var(--card);
 
   border:1px solid rgba(255,255,255,.08);
-}
-
-.trend-large img{
-  width:100%;
-  height:75%;
-  object-fit:cover;
-}
-
-.trend-large .info{
-  padding:10px;
-}
-.trend-grid{
-  flex:0 0 32%;
-
-  min-height:340px;
-
-  display:grid;
-
-  grid-template-columns:repeat(2,1fr);
-  grid-template-rows:repeat(2,1fr);
-
-  gap:8px;
-
-  padding:10px;
-
-  background:var(--card);
 
   border-radius:18px;
-
-  border:1px solid rgba(255,255,255,.08);
-}
-
-.trend-grid .mini{
-  background:rgba(255,255,255,.03);
-
-  border-radius:12px;
 
   overflow:hidden;
 }
 
-.trend-grid .mini img{
+#rowTrending .p-card img{
   width:100%;
-  height:100px;
+  height:160px;
   object-fit:cover;
 }
 
-.trend-grid .mini .title{
-  padding:6px;
+#rowTrending .p-meta{
+  padding:8px;
+}
+
+#rowTrending .p-meta h4{
   font-size:12px;
-  text-align:center;
-}
-.trend-large-right{
-  flex:0 0 32%;
-}
-.trending-extra{
-  flex:0 0 250px;
-
-  min-height:340px;
-
-  border-radius:18px;
-
+  line-height:1.2;
+  height:30px;
   overflow:hidden;
-
-  background:var(--card);
-
-  border:1px solid rgba(255,255,255,.08);
 }
 
-.trending-extra img{
-  width:100%;
-  height:220px;
-  object-fit:cover;
+#rowTrending .helper{
+  font-size:11px;
+  color:var(--muted);
 }
-@media(max-width:768px){
 
-  .trend-large,
-  .trend-grid,
-  .trend-large-right{
-
-    flex:0 0 260px;
-    min-height:280px;
-  }
-
-  .trend-grid{
-    gap:6px;
-    padding:6px;
-  }
-
-  .trend-grid .mini img{
-    height:70px;
-  }
-
-  .trend-grid .mini .title{
-    font-size:10px;
-  }
-
-  .trend-large img{
-    height:180px;
-  }
-  }
+#rowTrending .price-row{
+  margin-top:4px;
+  font-size:12px;
+}
 </style>
     <!-- HERO: big left image (50%), four right cards (2x2) (50%), looping accessible slider -->
     <section class="hero" aria-label="Hero and featured">
