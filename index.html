@@ -2110,6 +2110,189 @@ document.addEventListener("DOMContentLoaded", () => {
     padding:2px 4px;
   }
 }
+  /* ==================================
+   WHAT'S NEW SHOWCASE
+================================== */
+
+.whatsnew-wrapper{
+  width:100%;
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  padding:12px;
+  overflow:hidden;
+}
+
+#rowWhatsNew{
+  display:grid;
+
+  grid-auto-flow:column;
+  grid-template-rows:repeat(2, 1fr);
+
+  gap:10px;
+
+  overflow-x:auto;
+  overflow-y:hidden;
+
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+}
+
+#rowWhatsNew::-webkit-scrollbar{
+  display:none;
+}
+
+#rowWhatsNew .p-card{
+  width:120px;
+  min-height:180px;
+  scroll-snap-align:start;
+}
+
+#rowWhatsNew .p-card img{
+  height:100px;
+  width:100%;
+  object-fit:cover;
+}
+
+@media(max-width:768px){
+
+  #rowWhatsNew .p-card{
+    width:90px;
+    min-height:150px;
+  }
+
+  #rowWhatsNew .p-card img{
+    height:80px;
+  }
+}
+/* ==================================
+   TRENDING SHOWCASE
+================================== */
+
+.trending-showcase{
+  display:flex;
+  gap:12px;
+
+  width:100%;
+
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+
+.trending-showcase::-webkit-scrollbar{
+  display:none;
+}
+.trend-large{
+  flex:0 0 32%;
+
+  min-height:340px;
+
+  border-radius:18px;
+  overflow:hidden;
+
+  background:var(--card);
+
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.trend-large img{
+  width:100%;
+  height:75%;
+  object-fit:cover;
+}
+
+.trend-large .info{
+  padding:10px;
+}
+.trend-grid{
+  flex:0 0 32%;
+
+  min-height:340px;
+
+  display:grid;
+
+  grid-template-columns:repeat(2,1fr);
+  grid-template-rows:repeat(2,1fr);
+
+  gap:8px;
+
+  padding:10px;
+
+  background:var(--card);
+
+  border-radius:18px;
+
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.trend-grid .mini{
+  background:rgba(255,255,255,.03);
+
+  border-radius:12px;
+
+  overflow:hidden;
+}
+
+.trend-grid .mini img{
+  width:100%;
+  height:100px;
+  object-fit:cover;
+}
+
+.trend-grid .mini .title{
+  padding:6px;
+  font-size:12px;
+  text-align:center;
+}
+.trend-large-right{
+  flex:0 0 32%;
+}
+.trending-extra{
+  flex:0 0 250px;
+
+  min-height:340px;
+
+  border-radius:18px;
+
+  overflow:hidden;
+
+  background:var(--card);
+
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.trending-extra img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+@media(max-width:768px){
+
+  .trend-large,
+  .trend-grid,
+  .trend-large-right{
+
+    flex:0 0 260px;
+    min-height:280px;
+  }
+
+  .trend-grid{
+    gap:6px;
+    padding:6px;
+  }
+
+  .trend-grid .mini img{
+    height:70px;
+  }
+
+  .trend-grid .mini .title{
+    font-size:10px;
+  }
+
+  .trend-large img{
+    height:180px;
+  }
+  }
 </style>
     <!-- HERO: big left image (50%), four right cards (2x2) (50%), looping accessible slider -->
     <section class="hero" aria-label="Hero and featured">
