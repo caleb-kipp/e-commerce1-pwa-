@@ -1214,7 +1214,122 @@ body::before{
     }
 
 }
-  
+  /* =========================================================
+   GITHUB PAGES — FINAL PRODUCT VISIBILITY FIX
+   MUST BE THE LAST CSS IN THE DOCUMENT
+   ========================================================= */
+
+.home-carousel-section,
+.trending-container,
+.whatsnew-wrapper,
+.section,
+.products-wrapper {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Horizontal product sections */
+#rowFlashSales,
+#rowWhatsNew,
+#rowTrending,
+#rowMenFeatured,
+#rowWomenFeatured,
+.product-row,
+.carousel {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 220px;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  visibility: visible;
+  opacity: 1;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+#rowFlashSales::-webkit-scrollbar,
+#rowWhatsNew::-webkit-scrollbar,
+#rowTrending::-webkit-scrollbar,
+#rowMenFeatured::-webkit-scrollbar,
+#rowWomenFeatured::-webkit-scrollbar,
+.product-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* Prevent product cards from collapsing */
+#rowFlashSales > .p-card,
+#rowWhatsNew > .p-card,
+#rowTrending > .p-card,
+#rowMenFeatured > .p-card,
+#rowWomenFeatured > .p-card,
+.product-row > .p-card {
+  display: flex;
+  flex: 0 0 180px;
+  flex-direction: column;
+  width: 180px;
+  min-width: 180px;
+  min-height: 240px;
+  visibility: visible;
+  opacity: 1;
+  overflow: hidden;
+}
+
+/* Main category product grid */
+.products-grid,
+.product-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  visibility: visible;
+  opacity: 1;
+}
+
+.products-grid > *,
+.product-grid > *,
+.product-item,
+.product-card,
+.p-card {
+  min-width: 0;
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Images must have visible dimensions */
+.p-card img,
+.product-card img,
+.product-item img {
+  display: block;
+  width: 100%;
+  min-height: 120px;
+  object-fit: cover;
+}
+
+/* Mobile: exactly two category products per row */
+@media (max-width: 767px) {
+  .products-grid,
+  .product-grid,
+  .section .products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  #rowFlashSales > .p-card,
+  #rowWhatsNew > .p-card,
+  #rowTrending > .p-card,
+  #rowMenFeatured > .p-card,
+  #rowWomenFeatured > .p-card {
+    flex-basis: 140px;
+    width: 140px;
+    min-width: 140px;
+  }
+}
 </style>
 <script>
 openCartBtn.addEventListener('click', () => {
