@@ -4154,6 +4154,440 @@ html {
     width: 100%;
     display: block;
 }
+/* =========================================================
+   LUXEAURA — PRODUCT DISPLAY RECOVERY OVERRIDE
+   PLACE THIS AS THE FINAL CSS IN THE STYLESHEET
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. CORE PRODUCT VISIBILITY
+   --------------------------------------------------------- */
+
+.p-card,
+.product-card,
+.product-item,
+.sx-product {
+  visibility: visible;
+  opacity: 1;
+  min-width: 0;
+  min-height: 1px;
+  transform: none;
+}
+
+.p-card {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.p-card img,
+.product-card img,
+.product-item img,
+.sx-product img {
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  max-width: 100%;
+}
+
+/* Prevent generic .row rules from collapsing product sections */
+.section .row {
+  width: 100%;
+  min-width: 0;
+  min-height: 1px;
+}
+
+/* ---------------------------------------------------------
+   2. STANDARD CATEGORY PRODUCT SECTIONS
+   --------------------------------------------------------- */
+
+.product-grid,
+.products-grid,
+.products-wrapper,
+.category-products,
+.products-section .row {
+  width: 100%;
+  min-width: 0;
+}
+
+.product-grid,
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.products-grid > *,
+.product-grid > * {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------
+   3. FLASH SALES — HORIZONTAL CAROUSEL
+   --------------------------------------------------------- */
+
+#rowFlashSales {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 180px;
+  grid-template-columns: none;
+  gap: 12px;
+
+  width: 100%;
+  height: auto;
+  min-height: 250px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding: 4px 2px 12px;
+
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+#rowFlashSales::-webkit-scrollbar {
+  display: none;
+}
+
+#rowFlashSales > .p-card {
+  display: flex;
+  width: 180px;
+  height: auto;
+  min-height: 240px;
+  scroll-snap-align: start;
+}
+
+#rowFlashSales > .p-card > img {
+  width: 100%;
+  height: 160px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+/* ---------------------------------------------------------
+   4. WHAT'S NEW — HORIZONTAL CAROUSEL
+   --------------------------------------------------------- */
+
+#rowWhatsNew {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 150px;
+  grid-template-columns: none;
+  grid-template-rows: none;
+
+  gap: 12px;
+  width: 100%;
+  min-height: 220px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding: 4px 2px 12px;
+
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+#rowWhatsNew::-webkit-scrollbar {
+  display: none;
+}
+
+#rowWhatsNew > .p-card {
+  display: flex;
+  width: 150px;
+  height: auto;
+  min-height: 210px;
+  scroll-snap-align: start;
+}
+
+#rowWhatsNew > .p-card > img {
+  width: 100%;
+  height: 130px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+/* ---------------------------------------------------------
+   5. TRENDING PRODUCTS — HORIZONTAL CAROUSEL
+   --------------------------------------------------------- */
+
+#rowTrending {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 180px;
+  grid-template-columns: none;
+
+  gap: 12px;
+  width: 100%;
+  min-height: 260px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding: 4px 2px 12px;
+
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+#rowTrending::-webkit-scrollbar {
+  display: none;
+}
+
+#rowTrending > .p-card {
+  display: flex;
+  width: 180px;
+  height: auto;
+  min-height: 250px;
+  scroll-snap-align: start;
+}
+
+#rowTrending > .p-card > img {
+  width: 100%;
+  height: 160px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+/* ---------------------------------------------------------
+   6. MEN'S & WOMEN'S FEATURED
+   Supports several likely existing class/name variations
+   --------------------------------------------------------- */
+
+.mens-featured,
+.men-featured,
+.mens-featured-row,
+.womens-featured,
+.women-featured,
+.womens-featured-row,
+.featured-products-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 160px;
+  grid-template-columns: none;
+
+  gap: 12px;
+  width: 100%;
+  min-height: 220px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  padding: 4px 2px 12px;
+
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.mens-featured::-webkit-scrollbar,
+.men-featured::-webkit-scrollbar,
+.mens-featured-row::-webkit-scrollbar,
+.womens-featured::-webkit-scrollbar,
+.women-featured::-webkit-scrollbar,
+.womens-featured-row::-webkit-scrollbar,
+.featured-products-row::-webkit-scrollbar {
+  display: none;
+}
+
+.mens-featured > .p-card,
+.men-featured > .p-card,
+.mens-featured-row > .p-card,
+.womens-featured > .p-card,
+.women-featured > .p-card,
+.womens-featured-row > .p-card,
+.featured-products-row > .p-card {
+  display: flex;
+  width: 160px;
+  min-width: 160px;
+  height: auto;
+  scroll-snap-align: start;
+}
+
+/* ---------------------------------------------------------
+   7. PRODUCT CARD CONTENT
+   --------------------------------------------------------- */
+
+.p-meta {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.p-meta h3,
+.p-meta h4,
+.p-meta h5,
+.p-meta h2 {
+  display: block;
+  overflow: hidden;
+  margin: 4px 0;
+  color: var(--text, #111827);
+  line-height: 1.35;
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+/* ---------------------------------------------------------
+   8. MOBILE — STANDARD PRODUCTS: EXACTLY 2 PER ROW
+   --------------------------------------------------------- */
+
+@media (max-width: 767px) {
+
+  /* Standard category grids only */
+  .product-grid,
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+  }
+
+  .product-grid > *,
+  .products-grid > * {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Flash Sales */
+  #rowFlashSales {
+    grid-auto-columns: minmax(125px, 42vw);
+    min-height: 210px;
+  }
+
+  #rowFlashSales > .p-card {
+    width: 100%;
+    min-width: 0;
+    min-height: 200px;
+  }
+
+  #rowFlashSales > .p-card > img {
+    height: 120px;
+  }
+
+  /* What's New */
+  #rowWhatsNew {
+    grid-auto-columns: minmax(115px, 38vw);
+    min-height: 195px;
+  }
+
+  #rowWhatsNew > .p-card {
+    width: 100%;
+    min-width: 0;
+    min-height: 185px;
+  }
+
+  #rowWhatsNew > .p-card > img {
+    height: 110px;
+  }
+
+  /* Trending */
+  #rowTrending {
+    grid-auto-columns: minmax(130px, 42vw);
+    min-height: 220px;
+  }
+
+  #rowTrending > .p-card {
+    width: 100%;
+    min-width: 0;
+    min-height: 210px;
+  }
+
+  #rowTrending > .p-card > img {
+    height: 125px;
+  }
+
+  /* Men's and Women's Featured */
+  .mens-featured,
+  .men-featured,
+  .mens-featured-row,
+  .womens-featured,
+  .women-featured,
+  .womens-featured-row,
+  .featured-products-row {
+    grid-auto-columns: minmax(115px, 38vw);
+    min-height: 200px;
+  }
+
+  .mens-featured > .p-card,
+  .men-featured > .p-card,
+  .mens-featured-row > .p-card,
+  .womens-featured > .p-card,
+  .women-featured > .p-card,
+  .womens-featured-row > .p-card,
+  .featured-products-row > .p-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Product card images */
+  .product-grid .p-card > img,
+  .products-grid .p-card > img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+}
+
+/* ---------------------------------------------------------
+   9. VERY SMALL ANDROID SCREENS
+   --------------------------------------------------------- */
+
+@media (max-width: 420px) {
+
+  .product-grid,
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .p-meta {
+    padding: 7px;
+  }
+
+  .p-meta h3,
+  .p-meta h4,
+  .p-meta h5 {
+    font-size: 0.78rem;
+  }
+}
+
+/* ---------------------------------------------------------
+   10. DO NOT HIDE POPULATED PRODUCT CONTAINERS
+   --------------------------------------------------------- */
+
+#rowFlashSales:not(:empty),
+#rowWhatsNew:not(:empty),
+#rowTrending:not(:empty),
+.product-grid:not(:empty),
+.products-grid:not(:empty),
+.mens-featured:not(:empty),
+.womens-featured:not(:empty),
+.featured-products-row:not(:empty) {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------
+   11. ACCESSIBILITY
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .p-card,
+  .p-card img {
+    transition: none;
+  }
+}
+  
 </style>
 
 <!-- Payment badges / SEO note / accessibility touches visible -->
