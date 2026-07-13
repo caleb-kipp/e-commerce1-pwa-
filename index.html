@@ -1104,6 +1104,117 @@ body::before{
   min-width: 16px;
   text-align: center;
 }
+/* =====================================================
+   FINAL PRODUCT RENDER REPAIR
+   ===================================================== */
+
+
+.row,
+#rowFlashSales,
+#rowWhatsNew,
+#rowTrending,
+#rowMensFeatured,
+#rowWomensFeatured {
+    display:flex;
+    width:100%;
+    min-height:120px;
+    gap:12px;
+    overflow-x:auto;
+}
+
+
+.p-card,
+.product-card,
+.sx-product {
+
+    display:flex;
+    flex-direction:column;
+
+    flex:0 0 auto;
+
+    width:180px;
+
+    visibility:visible;
+    opacity:1;
+
+    background:var(--card,#fff);
+
+    overflow:hidden;
+
+}
+
+
+.p-card img,
+.product-card img,
+.sx-product img {
+
+    width:100%;
+    height:auto;
+
+    aspect-ratio:1/1;
+
+    object-fit:cover;
+
+    display:block;
+
+}
+
+
+
+.p-meta {
+
+    display:block;
+
+    padding:10px;
+
+}
+
+
+
+#rowFlashSales .p-card,
+#rowWhatsNew .p-card,
+#rowTrending .p-card {
+
+    width:160px;
+
+}
+
+
+
+@media(max-width:768px){
+
+    .products-grid,
+    .product-grid {
+
+        display:grid;
+
+        grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+        gap:8px;
+
+    }
+
+
+    .products-grid .p-card,
+    .product-grid .p-card {
+
+        width:100%;
+
+    }
+
+
+
+    #rowFlashSales .p-card,
+    #rowWhatsNew .p-card,
+    #rowTrending .p-card {
+
+        width:130px;
+
+    }
+
+}
+  
 </style>
 <script>
 openCartBtn.addEventListener('click', () => {
