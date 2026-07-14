@@ -3775,6 +3775,43 @@ if (toggle) {
   }
 }
 </style>
+  <style>
+  .section .row:not(#rowFlashSales):not(#rowWhatsNew):not(#rowTrending),
+  .product-grid,
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .section .row:not(#rowFlashSales):not(#rowWhatsNew):not(#rowTrending) > .p-card,
+  .product-grid > .product-card,
+  .products-grid > .product-item {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+  }
+
+  .section .row:not(#rowFlashSales):not(#rowWhatsNew):not(#rowTrending) .p-card {
+    min-height: 0;
+    border-radius: 12px;
+  }
+
+  .section .row:not(#rowFlashSales):not(#rowWhatsNew):not(#rowTrending) .p-card > img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1.08;
+    object-fit: cover;
+  }
+
+  .section .row:not(#rowFlashSales):not(#rowWhatsNew):not(#rowTrending) .p-meta {
+    padding: 8px;
+  }
+    </style>
 
 <script>
 /* =========================================================
