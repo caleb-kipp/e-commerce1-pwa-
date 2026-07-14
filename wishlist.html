@@ -1,0 +1,2647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LuxeAura — My Wishlist</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* =========================================================
+   FURNIHOME / STORE WISHLIST — LIGHT PROFESSIONAL THEME
+   Existing HTML structure and class names retained
+   ========================================================= */
+
+:root{
+  --bg:#f7f8fa;
+  --bg-2:#ffffff;
+
+  --card:#ffffff;
+  --card-2:#fafafa;
+
+  --muted:#6b7280;
+  --text:#111827;
+  --text-soft:#374151;
+
+  --line:#e5e7eb;
+  --line-soft:#eef0f3;
+
+  --brand:#111827;
+  --brand-2:#374151;
+
+  --cyan:#0891b2;
+  --green:#16a34a;
+  --amber:#d97706;
+  --red:#dc2626;
+
+  --accent:#f59e0b;
+
+  --shadow:
+    0 1px 2px rgba(15,23,42,.03),
+    0 8px 24px rgba(15,23,42,.06);
+
+  --shadow-hover:
+    0 18px 45px rgba(15,23,42,.10);
+
+  --radius:16px;
+  --radius-lg:22px;
+  --radius-sm:10px;
+
+  --max:1440px;
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  min-height:100vh;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0,
+      #f8f9fb 320px,
+      #f5f6f8 100%
+    );
+  color:var(--text);
+  font-family:'Inter',Arial,sans-serif;
+  overflow-x:hidden;
+  line-height:1.5;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+img{
+  width:100%;
+  display:block;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  -webkit-tap-highlight-color:transparent;
+}
+
+.container{
+  width:100%;
+  max-width:var(--max);
+  margin:auto;
+  padding:0 28px;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar{
+  width:9px;
+  height:9px;
+}
+
+::-webkit-scrollbar-track{
+  background:#f3f4f6;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#cbd0d8;
+  border-radius:999px;
+  border:2px solid #f3f4f6;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:#9ca3af;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:999;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 2px 12px rgba(15,23,42,.03);
+}
+
+.topbar{
+  min-height:78px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+
+.left-top{
+  display:flex;
+  align-items:center;
+  gap:34px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-weight:800;
+  letter-spacing:-.3px;
+  font-size:1.2rem;
+  color:var(--text);
+}
+
+.logo-badge{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  background:var(--brand);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  box-shadow:0 8px 20px rgba(17,24,39,.15);
+}
+
+.logo-badge span{
+  font-size:1rem;
+  font-weight:800;
+}
+
+nav{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+nav a{
+  padding:10px 14px;
+  border-radius:9px;
+  font-size:.94rem;
+  font-weight:500;
+  color:#4b5563;
+  transition:
+    background .2s ease,
+    color .2s ease;
+}
+
+nav a:hover{
+  color:var(--text);
+  background:#f3f4f6;
+}
+
+nav .sale{
+  color:#dc2626;
+  font-weight:700;
+}
+
+.right-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.search{
+  position:relative;
+}
+
+.search input{
+  width:310px;
+  height:46px;
+  padding:0 48px 0 17px;
+  color:var(--text);
+  background:#f8f9fa;
+  border:1px solid #dfe3e8;
+  border-radius:10px;
+  outline:none;
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease,
+    background .2s ease;
+}
+
+.search input::placeholder{
+  color:#9ca3af;
+}
+
+.search input:focus{
+  background:#fff;
+  border-color:#9ca3af;
+  box-shadow:0 0 0 3px rgba(17,24,39,.06);
+}
+
+.search svg{
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#6b7280;
+  opacity:.85;
+}
+
+.icon-btn{
+  width:46px;
+  height:46px;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid var(--line);
+  color:var(--text);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    transform .2s ease;
+  position:relative;
+}
+
+.icon-btn:hover{
+  transform:translateY(-1px);
+  background:#f8f9fa;
+  border-color:#d1d5db;
+}
+
+.badge{
+  position:absolute;
+  top:-6px;
+  right:-6px;
+  min-width:21px;
+  height:21px;
+  padding:0 5px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:#dc2626;
+  color:#fff;
+  font-size:.68rem;
+  font-weight:800;
+  border:2px solid #fff;
+}
+
+/* =========================================================
+   MOBILE HEADER
+   ========================================================= */
+
+.mobile-header{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:999;
+  background:rgba(255,255,255,.97);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+
+.mobile-header-inner{
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+}
+
+.mobile-header h2{
+  font-size:1.1rem;
+  color:var(--text);
+}
+
+.mobile-icons{
+  display:flex;
+  gap:9px;
+}
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+.page{
+  padding:38px 0 110px;
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:260px minmax(0,1fr) 300px;
+  gap:24px;
+  align-items:start;
+}
+
+/* =========================================================
+   GENERAL CARD
+   ========================================================= */
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  position:sticky;
+  top:104px;
+  height:max-content;
+}
+
+.side-card{
+  padding:20px;
+}
+
+.side-title{
+  font-size:.95rem;
+  font-weight:800;
+  color:var(--text);
+  margin-bottom:16px;
+  letter-spacing:-.1px;
+}
+
+.account-links{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.account-link{
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-radius:10px;
+  color:#4b5563;
+  background:transparent;
+  border:1px solid transparent;
+  transition:.2s ease;
+  cursor:pointer;
+}
+
+.account-link:hover{
+  color:var(--text);
+  background:#f7f8fa;
+}
+
+.account-link.active{
+  color:var(--text);
+  font-weight:700;
+  background:#f3f4f6;
+  border-color:#e5e7eb;
+}
+
+.account-link span{
+  color:#9ca3af;
+}
+
+.alert-box{
+  padding:20px;
+  border-radius:14px;
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+}
+
+.alert-box h3{
+  font-size:1rem;
+  color:var(--text);
+  margin-bottom:8px;
+}
+
+.alert-box p{
+  color:var(--muted);
+  font-size:.9rem;
+  line-height:1.65;
+  margin-bottom:16px;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.primary-btn{
+  min-height:48px;
+  border:none;
+  outline:none;
+  cursor:pointer;
+  background:var(--brand);
+  color:#fff;
+  border-radius:10px;
+  padding:0 22px;
+  font-weight:700;
+  transition:
+    background .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease;
+  box-shadow:0 7px 18px rgba(17,24,39,.12);
+}
+
+.primary-btn:hover{
+  transform:translateY(-1px);
+  background:#000;
+  box-shadow:0 10px 24px rgba(17,24,39,.17);
+}
+
+.secondary-btn{
+  min-height:48px;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid #d9dde3;
+  color:var(--text);
+  padding:0 20px;
+  cursor:pointer;
+  font-weight:600;
+  transition:.2s ease;
+}
+
+.secondary-btn:hover{
+  background:#f8f9fa;
+  border-color:#bfc5ce;
+}
+
+.insight-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.insight{
+  padding:14px;
+  border-radius:11px;
+  background:#f8f9fa;
+  border:1px solid var(--line-soft);
+}
+
+.insight p{
+  color:var(--text-soft);
+  line-height:1.55;
+  font-size:.9rem;
+}
+
+.insight strong{
+  color:var(--text);
+}
+
+.view-insights{
+  margin-top:15px;
+  color:var(--text);
+  font-weight:700;
+  display:inline-flex;
+  gap:7px;
+  align-items:center;
+}
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.main-content{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.page-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  padding:4px 0 8px;
+}
+
+.page-header h1{
+  font-size:2.5rem;
+  line-height:1.1;
+  letter-spacing:-1.2px;
+  margin-bottom:9px;
+  color:var(--text);
+}
+
+.page-header p{
+  color:var(--muted);
+  font-size:.98rem;
+}
+
+.header-actions{
+  display:flex;
+  gap:10px;
+}
+
+.glass-btn{
+  min-height:48px;
+  border-radius:10px;
+  border:1px solid #d9dde3;
+  background:#fff;
+  color:var(--text);
+  padding:0 20px;
+  cursor:pointer;
+  font-weight:650;
+  transition:.2s ease;
+}
+
+.glass-btn:hover{
+  transform:translateY(-1px);
+  background:#f8f9fa;
+  border-color:#bfc5ce;
+}
+
+.alert-banner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:20px 22px;
+  border-radius:14px;
+  background:#effaff;
+  border:1px solid #bae6fd;
+}
+
+.alert-banner h3{
+  margin-bottom:5px;
+  color:#0c4a6e;
+}
+
+.alert-banner p{
+  color:#475569;
+}
+
+.alert-link{
+  color:#0369a1;
+  font-weight:700;
+}
+
+/* =========================================================
+   BULK BAR
+   ========================================================= */
+
+.bulk-bar{
+  min-height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:14px 18px;
+}
+
+.bulk-left{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+.checkbox{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#4b5563;
+}
+
+.checkbox input{
+  width:17px;
+  height:17px;
+  accent-color:var(--brand);
+}
+
+.sort-select{
+  min-height:42px;
+  background:#fff;
+  border:1px solid #d9dde3;
+  color:var(--text);
+  border-radius:9px;
+  padding:0 38px 0 13px;
+  outline:none;
+}
+
+.sort-select:focus{
+  border-color:#9ca3af;
+}
+
+.view-toggle{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.toggle-btn{
+  width:42px;
+  height:42px;
+  border-radius:9px;
+  background:#fff;
+  color:#6b7280;
+  border:1px solid var(--line);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+}
+
+.toggle-btn:hover{
+  background:#f8f9fa;
+}
+
+.toggle-btn.active{
+  color:#fff;
+  background:var(--brand);
+  border-color:var(--brand);
+}
+
+/* =========================================================
+   WISHLIST ITEMS
+   ========================================================= */
+
+.wishlist{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.wishlist-card{
+  display:grid;
+  grid-template-columns:28px 150px minmax(0,1fr) auto;
+  gap:22px;
+  align-items:center;
+  padding:18px;
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease;
+}
+
+.wishlist-card:hover{
+  transform:translateY(-2px);
+  border-color:#d5d9df;
+  box-shadow:var(--shadow-hover);
+}
+
+.wishlist-checkbox{
+  display:flex;
+  justify-content:center;
+}
+
+.wishlist-checkbox input{
+  width:18px;
+  height:18px;
+  accent-color:var(--brand);
+}
+
+.product-image{
+  width:150px;
+  height:150px;
+  border-radius:13px;
+  overflow:hidden;
+  position:relative;
+  background:#f3f4f6;
+  border:1px solid #eef0f3;
+}
+
+.product-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .45s ease;
+}
+
+.wishlist-card:hover .product-image img{
+  transform:scale(1.04);
+}
+
+.discount-pill{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:#dc2626;
+  color:#fff;
+  border-radius:6px;
+  padding:6px 9px;
+  font-size:.72rem;
+  font-weight:800;
+  box-shadow:0 4px 12px rgba(220,38,38,.2);
+}
+
+.product-info{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.product-brand{
+  color:var(--muted);
+  font-size:.83rem;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+
+.product-title{
+  font-size:1.18rem;
+  line-height:1.35;
+  font-weight:750;
+  color:var(--text);
+}
+
+.variant{
+  color:#6b7280;
+  font-size:.91rem;
+}
+
+.price-row{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  flex-wrap:wrap;
+}
+
+.price{
+  font-size:1.35rem;
+  font-weight:800;
+  color:var(--text);
+}
+
+.old-price{
+  color:#9ca3af;
+  text-decoration:line-through;
+  font-size:.94rem;
+}
+
+.stock{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  width:max-content;
+  padding:7px 10px;
+  border-radius:7px;
+  font-weight:700;
+  font-size:.8rem;
+}
+
+.stock.green{
+  background:#ecfdf3;
+  color:#15803d;
+  border:1px solid #bbf7d0;
+}
+
+.stock.orange{
+  background:#fffbeb;
+  color:#b45309;
+  border:1px solid #fde68a;
+}
+
+.stock.gray{
+  background:#f3f4f6;
+  color:#6b7280;
+  border:1px solid #e5e7eb;
+}
+
+.shipping{
+  color:#6b7280;
+  font-size:.88rem;
+}
+
+.social-proof{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#9f1239;
+  font-size:.86rem;
+}
+
+/* =========================================================
+   PRODUCT ACTIONS
+   ========================================================= */
+
+.product-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  min-width:210px;
+}
+
+.action-row{
+  display:flex;
+  gap:9px;
+}
+
+.action-btn{
+  flex:1;
+  min-height:47px;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+  padding:0 16px;
+  transition:
+    transform .2s ease,
+    background .2s ease,
+    border-color .2s ease;
+}
+
+.action-btn.primary{
+  background:var(--brand);
+  color:#fff;
+}
+
+.action-btn.primary:hover{
+  background:#000;
+}
+
+.action-btn.secondary{
+  background:#fff;
+  border:1px solid #d9dde3;
+  color:var(--text);
+}
+
+.action-btn.secondary:hover{
+  background:#f8f9fa;
+  border-color:#bfc5ce;
+}
+
+.action-btn.notify{
+  background:#0891b2;
+  color:#fff;
+}
+
+.action-btn.notify:hover{
+  background:#0e7490;
+}
+
+.action-btn:hover{
+  transform:translateY(-1px);
+}
+
+.icon-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+.circle-icon{
+  width:42px;
+  height:42px;
+  border-radius:9px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:#6b7280;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.circle-icon:hover{
+  color:var(--text);
+  background:#f8f9fa;
+  border-color:#cfd4dc;
+}
+
+/* =========================================================
+   RIGHT SIDEBAR
+   ========================================================= */
+
+.rightbar{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  position:sticky;
+  top:104px;
+  height:max-content;
+}
+
+.summary-card{
+  padding:20px;
+}
+
+.summary-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.analytics{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.analytics-card{
+  padding:16px;
+  border-radius:11px;
+  background:#f8f9fa;
+  border:1px solid var(--line-soft);
+}
+
+.analytics-card h3{
+  font-size:1.55rem;
+  color:var(--text);
+  margin-bottom:5px;
+}
+
+.analytics-card p{
+  color:var(--muted);
+  font-size:.82rem;
+}
+
+.activity-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.activity{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:13px;
+  border-radius:11px;
+  background:#f8f9fa;
+  border:1px solid var(--line-soft);
+}
+
+.activity-icon{
+  width:39px;
+  height:39px;
+  border-radius:9px;
+  background:#fce7f3;
+  color:#be185d;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+}
+
+.activity p{
+  color:var(--text-soft);
+  line-height:1.45;
+  margin-bottom:4px;
+  font-size:.9rem;
+}
+
+.activity span{
+  color:var(--muted);
+  font-size:.79rem;
+}
+
+.pref-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.pref{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px;
+  border-radius:11px;
+  background:#f8f9fa;
+  border:1px solid var(--line-soft);
+}
+
+.switch{
+  width:50px;
+  height:28px;
+  border-radius:999px;
+  background:#d1d5db;
+  position:relative;
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.switch.active{
+  background:var(--brand);
+}
+
+.switch span{
+  position:absolute;
+  top:4px;
+  left:4px;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 2px 6px rgba(15,23,42,.2);
+  transition:.25s ease;
+}
+
+.switch.active span{
+  left:26px;
+}
+
+/* =========================================================
+   RECOMMENDATIONS
+   ========================================================= */
+
+.recommend-section{
+  margin-top:8px;
+  padding-top:12px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+}
+
+.section-title h2{
+  font-size:1.7rem;
+  letter-spacing:-.6px;
+  color:var(--text);
+}
+
+.carousel{
+  display:flex;
+  gap:16px;
+  overflow:auto;
+  scroll-snap-type:x proximity;
+  padding:4px 2px 14px;
+}
+
+.carousel-card{
+  flex:0 0 250px;
+  scroll-snap-align:start;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 4px 16px rgba(15,23,42,.04);
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    border-color .3s ease;
+}
+
+.carousel-card:hover{
+  transform:translateY(-3px);
+  border-color:#d5d9df;
+  box-shadow:var(--shadow-hover);
+}
+
+.carousel-image{
+  height:270px;
+  overflow:hidden;
+  background:#f3f4f6;
+}
+
+.carousel-image img{
+  height:100%;
+  object-fit:cover;
+  transition:transform .45s ease;
+}
+
+.carousel-card:hover img{
+  transform:scale(1.045);
+}
+
+.carousel-meta{
+  padding:17px;
+}
+
+.carousel-meta h3{
+  margin-bottom:7px;
+  line-height:1.4;
+  font-size:1rem;
+  color:var(--text);
+}
+
+.carousel-meta p{
+  color:var(--muted);
+  margin-bottom:12px;
+  font-size:.88rem;
+}
+
+.carousel-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.carousel-price{
+  font-size:1.15rem;
+  font-weight:800;
+  color:var(--text);
+}
+
+/* =========================================================
+   MOBILE SORT BAR
+   ========================================================= */
+
+.mobile-sort{
+  display:none;
+  position:sticky;
+  top:68px;
+  z-index:90;
+  background:rgba(255,255,255,.97);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:11px 18px;
+}
+
+.mobile-sort-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.mobile-sort select{
+  background:#fff;
+  border:1px solid #d9dde3;
+  border-radius:9px;
+  padding:9px 13px;
+  color:var(--text);
+}
+
+/* =========================================================
+   BOTTOM NAV
+   ========================================================= */
+
+.bottom-nav{
+  display:none;
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:999;
+  background:rgba(255,255,255,.98);
+  backdrop-filter:blur(16px);
+  border-top:1px solid var(--line);
+  box-shadow:0 -8px 24px rgba(15,23,42,.06);
+  padding:9px 0 11px;
+}
+
+.bottom-nav-inner{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+
+.bottom-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  color:#6b7280;
+  font-size:.72rem;
+  font-weight:500;
+}
+
+.bottom-item.active{
+  color:var(--text);
+  font-weight:700;
+}
+
+/* =========================================================
+   ACCESSIBILITY / FOCUS
+   ========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible{
+  outline:3px solid rgba(59,130,246,.2);
+  outline-offset:2px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1450px){
+
+  .layout{
+    grid-template-columns:240px minmax(0,1fr) 280px;
+    gap:20px;
+  }
+
+  .product-actions{
+    min-width:190px;
+  }
+
+}
+
+@media(max-width:1200px){
+
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar,
+  .rightbar{
+    position:relative;
+    top:0;
+  }
+
+  .sidebar{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .rightbar{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+}
+
+@media(max-width:900px){
+
+  header{
+    display:none;
+  }
+
+  .mobile-header{
+    display:block;
+  }
+
+  .mobile-sort{
+    display:block;
+  }
+
+  .bottom-nav{
+    display:block;
+  }
+
+  .page{
+    padding-top:22px;
+    padding-bottom:100px;
+  }
+
+  .container{
+    padding:0 16px;
+  }
+
+  .sidebar{
+    order:2;
+    display:flex;
+  }
+
+  .rightbar{
+    order:3;
+    display:flex;
+  }
+
+  .page-header{
+    flex-direction:column;
+  }
+
+  .header-actions{
+    width:100%;
+  }
+
+  .header-actions button{
+    flex:1;
+  }
+
+  .wishlist-card{
+    grid-template-columns:140px minmax(0,1fr);
+    gap:18px;
+  }
+
+  .wishlist-checkbox{
+    display:none;
+  }
+
+  .product-image{
+    width:140px;
+    height:150px;
+  }
+
+  .product-actions{
+    grid-column:1 / -1;
+    width:100%;
+    min-width:auto;
+  }
+
+  .icon-actions{
+    justify-content:flex-start;
+  }
+
+  .alert-banner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .bulk-bar{
+    display:none;
+  }
+
+  .page-header h1{
+    font-size:2.1rem;
+  }
+
+  .carousel{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    overflow:visible;
+  }
+
+  .carousel-card{
+    flex:unset;
+  }
+
+}
+
+@media(max-width:640px){
+
+  .carousel{
+    grid-template-columns:1fr;
+  }
+
+  .wishlist-card{
+    grid-template-columns:1fr;
+    padding:14px;
+  }
+
+  .product-image{
+    width:100%;
+    height:280px;
+  }
+
+  .action-row{
+    flex-direction:column;
+  }
+
+  .analytics{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .page-header h1{
+    font-size:1.85rem;
+  }
+
+  .header-actions{
+    flex-direction:column;
+  }
+
+  .section-title h2{
+    font-size:1.45rem;
+  }
+
+  .carousel-image{
+    height:320px;
+  }
+
+}
+
+@media(max-width:420px){
+
+  .analytics{
+    grid-template-columns:1fr;
+  }
+
+  .product-image{
+    height:240px;
+  }
+
+  .page-header h1{
+    font-size:1.7rem;
+  }
+
+}</style>
+</head>
+
+<body>
+
+<!-- ======================================================
+     DESKTOP HEADER
+====================================================== -->
+
+<header>
+
+  <div class="container">
+
+    <div class="topbar">
+
+      <div class="left-top">
+
+        <div class="logo">
+          <div class="logo-badge">
+            <span>L</span>
+          </div>
+          LuxeAura
+        </div>
+
+        <nav>
+          <a href="#">Shop</a>
+          <a href="#">New In</a>
+          <a href="#">Women</a>
+          <a href="#">Men</a>
+          <a href="#">Home</a>
+          <a href="#">Beauty</a>
+          <a href="#" class="sale">Sale</a>
+        </nav>
+
+      </div>
+
+      <div class="right-top">
+
+        <div class="search">
+
+          <input
+          type="text"
+          placeholder="Search products, brands, collections...">
+
+          <svg width="20" height="20" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+
+        </div>
+
+        <div class="icon-btn">👤</div>
+
+        <div class="icon-btn">
+          ❤
+          <div class="badge">3</div>
+        </div>
+
+        <div class="icon-btn">👜</div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+<!-- ======================================================
+     MOBILE HEADER
+====================================================== -->
+
+<div class="mobile-header">
+
+  <div class="mobile-header-inner">
+
+    <div class="mobile-icons">
+      <div class="icon-btn">←</div>
+    </div>
+
+    <h2>Wishlist</h2>
+
+    <div class="mobile-icons">
+      <div class="icon-btn">↗</div>
+      <div class="icon-btn">⋯</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ======================================================
+     MOBILE SORT BAR
+====================================================== -->
+
+<div class="mobile-sort">
+
+  <div class="mobile-sort-inner">
+
+    <select>
+      <option>Sort: Recently Added</option>
+      <option>Price Low to High</option>
+      <option>Price High to Low</option>
+      <option>Most Popular</option>
+    </select>
+
+    <div class="view-toggle">
+      <div class="toggle-btn active">☷</div>
+      <div class="toggle-btn">☰</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ======================================================
+     PAGE
+====================================================== -->
+
+<div class="page">
+
+  <div class="container">
+
+    <div class="layout">
+
+      <!-- ==================================================
+           LEFT SIDEBAR
+      =================================================== -->
+
+      <aside class="sidebar">
+
+        <div class="card side-card">
+
+          <div class="side-title">
+            Account
+          </div>
+
+          <div class="account-links">
+
+            <div class="account-link active">
+              <strong>My Wishlist</strong>
+              <span>10</span>
+            </div>
+
+            <div class="account-link">
+              <strong>Shared With Me</strong>
+              <span>2</span>
+            </div>
+
+            <div class="account-link">
+              <strong>Recently Viewed</strong>
+            </div>
+
+            <div class="account-link">
+              <strong>Account Settings</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="card side-card">
+
+          <div class="alert-box">
+
+            <h3>Back In Stock Alerts</h3>
+
+            <p>
+              Get instant notifications when your saved products
+              are back in stock or discounted.
+            </p>
+
+            <button class="primary-btn">
+              Turn On Alerts
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="card side-card">
+
+          <div class="side-title">
+            Wishlist Insights
+          </div>
+
+          <div class="insight-list">
+
+            <div class="insight">
+              <p>
+                You love
+                <strong>minimalist totes</strong>
+                — 4 items saved
+              </p>
+            </div>
+
+            <div class="insight">
+              <p>
+                You're into
+                <strong>neutral sneakers</strong>
+                — 3 items saved
+              </p>
+            </div>
+
+            <div class="insight">
+              <p>
+                You like
+                <strong>modern home accents</strong>
+                — 3 items saved
+              </p>
+            </div>
+
+          </div>
+
+          <a class="view-insights" href="#">
+            View all insights →
+          </a>
+
+        </div>
+
+      </aside>
+
+      <!-- ==================================================
+           MAIN CONTENT
+      =================================================== -->
+
+      <main class="main-content">
+
+        <!-- HEADER -->
+
+        <div class="page-header">
+
+          <div>
+
+            <h1>
+              My Wishlist
+            </h1>
+
+            <p>
+              10 curated items saved for later.
+            </p>
+
+          </div>
+
+          <div class="header-actions">
+
+            <button class="glass-btn">
+              Share Wishlist
+            </button>
+
+            <button class="primary-btn">
+              Add More Items
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- ALERT BANNER -->
+
+        <div class="alert-banner card">
+
+          <div>
+
+            <h3>
+              Get notified when items are back in stock or on sale
+            </h3>
+
+            <p>
+              Enable smart alerts and never miss a restock,
+              limited drop, or exclusive markdown.
+            </p>
+
+          </div>
+
+          <a href="#" class="alert-link">
+            Turn on alerts →
+          </a>
+
+        </div>
+
+        <!-- BULK BAR -->
+
+        <div class="bulk-bar card">
+
+          <div class="bulk-left">
+
+            <label class="checkbox">
+              <input type="checkbox">
+              <span>Select all</span>
+            </label>
+
+            <select class="sort-select">
+              <option>Recently Added</option>
+              <option>Price Low → High</option>
+              <option>Price High → Low</option>
+              <option>Most Popular</option>
+            </select>
+
+          </div>
+
+          <div class="view-toggle">
+
+            <div class="toggle-btn active">☷</div>
+            <div class="toggle-btn">☰</div>
+
+          </div>
+
+        </div>
+
+        <!-- ==================================================
+             WISHLIST ITEMS
+        =================================================== -->
+
+        <div class="wishlist">
+
+          <!-- ITEM -->
+
+          <div class="wishlist-card card">
+
+            <div class="wishlist-checkbox">
+              <input type="checkbox">
+            </div>
+
+            <div class="product-image">
+
+              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop">
+
+              <div class="discount-pill">
+                -18%
+              </div>
+
+            </div>
+
+            <div class="product-info">
+
+              <div class="product-brand">
+                LuxeAura
+              </div>
+
+              <div class="product-title">
+                The Everyday Tote
+              </div>
+
+              <div class="variant">
+                Taupe • Premium Italian Leather
+              </div>
+
+              <div class="price-row">
+                <div class="price">$129</div>
+                <div class="old-price">$159</div>
+              </div>
+
+              <div class="stock green">
+                ● In Stock
+              </div>
+
+              <div class="shipping">
+                Ships in 1–2 business days
+              </div>
+
+              <div class="social-proof">
+                🔥 24 people have this in cart
+              </div>
+
+            </div>
+
+            <div class="product-actions">
+
+              <div class="action-row">
+
+                <button class="action-btn primary">
+                  Add to Cart
+                </button>
+
+                <button class="action-btn secondary">
+                  Move to Bag
+                </button>
+
+              </div>
+
+              <div class="icon-actions">
+
+                <div class="circle-icon">❤</div>
+                <div class="circle-icon">⋯</div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ITEM -->
+
+          <div class="wishlist-card card">
+
+            <div class="wishlist-checkbox">
+              <input type="checkbox">
+            </div>
+
+            <div class="product-image">
+
+              <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop">
+
+              <div class="discount-pill">
+                Trending
+              </div>
+
+            </div>
+
+            <div class="product-info">
+
+              <div class="product-brand">
+                AudioPulse
+              </div>
+
+              <div class="product-title">
+                Wireless Noise Cancelling Headphones
+              </div>
+
+              <div class="variant">
+                Matte Black • Studio Edition
+              </div>
+
+              <div class="price-row">
+                <div class="price">$249</div>
+                <div class="old-price">$299</div>
+              </div>
+
+              <div class="stock orange">
+                ● Low stock — 3 left
+              </div>
+
+              <div class="shipping">
+                Estimated delivery by Friday
+              </div>
+
+              <div class="social-proof">
+                ⚡ 18 shoppers viewed today
+              </div>
+
+            </div>
+
+            <div class="product-actions">
+
+              <div class="action-row">
+
+                <button class="action-btn primary">
+                  Add to Cart
+                </button>
+
+                <button class="action-btn secondary">
+                  Compare
+                </button>
+
+              </div>
+
+              <div class="icon-actions">
+
+                <div class="circle-icon">❤</div>
+                <div class="circle-icon">⋯</div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ITEM -->
+
+          <div class="wishlist-card card">
+
+            <div class="wishlist-checkbox">
+              <input type="checkbox">
+            </div>
+
+            <div class="product-image">
+
+              <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200&auto=format&fit=crop">
+
+              <div class="discount-pill">
+                Limited
+              </div>
+
+            </div>
+
+            <div class="product-info">
+
+              <div class="product-brand">
+                MotionX
+              </div>
+
+              <div class="product-title">
+                Smart Fitness Watch
+              </div>
+
+              <div class="variant">
+                Silver • 44mm • LTE
+              </div>
+
+              <div class="price-row">
+                <div class="price">$199</div>
+                <div class="old-price">$229</div>
+              </div>
+
+              <div class="stock gray">
+                ● Out of stock
+              </div>
+
+              <div class="shipping">
+                Restock expected in 5–7 days
+              </div>
+
+              <div class="social-proof">
+                💖 81 people wishlisted this
+              </div>
+
+            </div>
+
+            <div class="product-actions">
+
+              <div class="action-row">
+
+                <button class="action-btn notify">
+                  Notify Me
+                </button>
+
+                <button class="action-btn secondary">
+                  Compare
+                </button>
+
+              </div>
+
+              <div class="icon-actions">
+
+                <div class="circle-icon">❤</div>
+                <div class="circle-icon">⋯</div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ITEM -->
+
+          <div class="wishlist-card card">
+
+            <div class="wishlist-checkbox">
+              <input type="checkbox">
+            </div>
+
+            <div class="product-image">
+
+              <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?q=80&w=1200&auto=format&fit=crop">
+
+              <div class="discount-pill">
+                Best Seller
+              </div>
+
+            </div>
+
+            <div class="product-info">
+
+              <div class="product-brand">
+                Aureline
+              </div>
+
+              <div class="product-title">
+                Neutral Street Sneakers
+              </div>
+
+              <div class="variant">
+                Cream White • Limited Capsule
+              </div>
+
+              <div class="price-row">
+                <div class="price">$178</div>
+                <div class="old-price">$210</div>
+              </div>
+
+              <div class="stock green">
+                ● In Stock
+              </div>
+
+              <div class="shipping">
+                Free express shipping included
+              </div>
+
+              <div class="social-proof">
+                🛒 34 people added today
+              </div>
+
+            </div>
+
+            <div class="product-actions">
+
+              <div class="action-row">
+
+                <button class="action-btn primary">
+                  Add to Cart
+                </button>
+
+                <button class="action-btn secondary">
+                  Move to Bag
+                </button>
+
+              </div>
+
+              <div class="icon-actions">
+
+                <div class="circle-icon">❤</div>
+                <div class="circle-icon">⋯</div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ==================================================
+             RECOMMENDATIONS
+        =================================================== -->
+
+        <section class="recommend-section">
+
+          <div class="section-title">
+
+            <h2>
+              You Might Also Love
+            </h2>
+
+            <a href="#" class="alert-link">
+              Explore all →
+            </a>
+
+          </div>
+
+          <div class="carousel">
+
+            <div class="carousel-card">
+
+              <div class="carousel-image">
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop">
+              </div>
+
+              <div class="carousel-meta">
+
+                <h3>
+                  Minimal Oversized Tee
+                </h3>
+
+                <p>
+                  Modern essentials collection
+                </p>
+
+                <div class="carousel-bottom">
+
+                  <div class="carousel-price">
+                    $64
+                  </div>
+
+                  <div class="circle-icon">❤</div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="carousel-card">
+
+              <div class="carousel-image">
+                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop">
+              </div>
+
+              <div class="carousel-meta">
+
+                <h3>
+                  Luxe Structured Blazer
+                </h3>
+
+                <p>
+                  Tailored premium fit
+                </p>
+
+                <div class="carousel-bottom">
+
+                  <div class="carousel-price">
+                    $248
+                  </div>
+
+                  <div class="circle-icon">❤</div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="carousel-card">
+
+              <div class="carousel-image">
+                <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=1200&auto=format&fit=crop">
+              </div>
+
+              <div class="carousel-meta">
+
+                <h3>
+                  Elevated Knit Hoodie
+                </h3>
+
+                <p>
+                  Lightweight luxury comfort
+                </p>
+
+                <div class="carousel-bottom">
+
+                  <div class="carousel-price">
+                    $118
+                  </div>
+
+                  <div class="circle-icon">❤</div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="carousel-card">
+
+              <div class="carousel-image">
+                <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop">
+              </div>
+
+              <div class="carousel-meta">
+
+                <h3>
+                  Cloud Runner Sneakers
+                </h3>
+
+                <p>
+                  Cushioned lifestyle edition
+                </p>
+
+                <div class="carousel-bottom">
+
+                  <div class="carousel-price">
+                    $159
+                  </div>
+
+                  <div class="circle-icon">❤</div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="carousel-card">
+
+              <div class="carousel-image">
+                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1200&auto=format&fit=crop">
+              </div>
+
+              <div class="carousel-meta">
+
+                <h3>
+                  Signature Layered Coat
+                </h3>
+
+                <p>
+                  New winter collection
+                </p>
+
+                <div class="carousel-bottom">
+
+                  <div class="carousel-price">
+                    $349
+                  </div>
+
+                  <div class="circle-icon">❤</div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- ==================================================
+           RIGHT SIDEBAR
+      =================================================== -->
+
+      <aside class="rightbar">
+
+        <!-- ANALYTICS -->
+
+        <div class="card summary-card">
+
+          <div class="summary-head">
+
+            <div>
+
+              <h2>
+                Wishlist Analytics
+              </h2>
+
+              <p style="color:var(--muted); margin-top:8px;">
+                Personalized wishlist performance
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="analytics">
+
+            <div class="analytics-card">
+              <h3>24</h3>
+              <p>Wishlist Items</p>
+            </div>
+
+            <div class="analytics-card">
+              <h3>$2.4k</h3>
+              <p>Saved Value</p>
+            </div>
+
+            <div class="analytics-card">
+              <h3>6</h3>
+              <p>Price Drops</p>
+            </div>
+
+            <div class="analytics-card">
+              <h3>3</h3>
+              <p>Restocked</p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- RECENT ACTIVITY -->
+
+        <div class="card summary-card">
+
+          <div class="summary-head">
+
+            <div>
+
+              <h2>
+                Recent Activity
+              </h2>
+
+            </div>
+
+          </div>
+
+          <div class="activity-list">
+
+            <div class="activity">
+
+              <div class="activity-icon">
+                🔥
+              </div>
+
+              <div>
+
+                <p>
+                  Price dropped 12% on Wireless Headphones
+                </p>
+
+                <span>
+                  1 hour ago
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="activity">
+
+              <div class="activity-icon">
+                📦
+              </div>
+
+              <div>
+
+                <p>
+                  Everyday Tote is back in stock
+                </p>
+
+                <span>
+                  3 hours ago
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="activity">
+
+              <div class="activity-icon">
+                ⚡
+              </div>
+
+              <div>
+
+                <p>
+                  2 wishlist items qualify for express shipping
+                </p>
+
+                <span>
+                  Yesterday
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- PREFERENCES -->
+
+        <div class="card summary-card">
+
+          <div class="summary-head">
+
+            <div>
+
+              <h2>
+                Preferences
+              </h2>
+
+              <p style="color:var(--muted); margin-top:8px;">
+                Configure smart alerts
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="pref-list">
+
+            <div class="pref">
+
+              <span>
+                Price Drop Alerts
+              </span>
+
+              <div class="switch active">
+                <span></span>
+              </div>
+
+            </div>
+
+            <div class="pref">
+
+              <span>
+                Restock Notifications
+              </span>
+
+              <div class="switch active">
+                <span></span>
+              </div>
+
+            </div>
+
+            <div class="pref">
+
+              <span>
+                AI Recommendations
+              </span>
+
+              <div class="switch active">
+                <span></span>
+              </div>
+
+            </div>
+
+            <div class="pref">
+
+              <span>
+                Weekly Wishlist Digest
+              </span>
+
+              <div class="switch">
+                <span></span>
+              </div>
+
+            </div>
+
+          </div>
+
+          <button
+          class="primary-btn"
+          style="margin-top:20px; width:100%;">
+            Save Preferences
+          </button>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ======================================================
+     MOBILE BOTTOM NAV
+====================================================== -->
+
+<div class="bottom-nav">
+
+  <div class="bottom-nav-inner">
+
+    <div class="bottom-item">
+      <div>🏠</div>
+      <span>Home</span>
+    </div>
+
+    <div class="bottom-item">
+      <div>🛍</div>
+      <span>Shop</span>
+    </div>
+
+    <div class="bottom-item active">
+      <div>❤</div>
+      <span>Wishlist</span>
+    </div>
+
+    <div class="bottom-item">
+      <div>👜</div>
+      <span>Bag</span>
+    </div>
+
+    <div class="bottom-item">
+      <div>👤</div>
+      <span>Account</span>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ======================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script>
+
+/* ======================================================
+   TOGGLE SWITCHES
+====================================================== */
+
+document.querySelectorAll('.switch').forEach(sw => {
+
+  sw.addEventListener('click', () => {
+    sw.classList.toggle('active');
+  });
+
+});
+
+/* ======================================================
+   WISHLIST REMOVE
+====================================================== */
+
+document.querySelectorAll('.circle-icon').forEach(icon => {
+
+  if(icon.innerText === '❤'){
+
+    icon.addEventListener('click', () => {
+
+      const card = icon.closest('.wishlist-card');
+
+      if(card){
+
+        card.style.transition = '.4s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+
+        setTimeout(() => {
+          card.remove();
+        },400);
+
+      }
+
+    });
+
+  }
+
+});
+
+/* ======================================================
+   ADD TO CART DEMO
+====================================================== */
+
+document.querySelectorAll('.action-btn.primary').forEach(btn => {
+
+  btn.addEventListener('click', () => {
+
+    const original = btn.innerHTML;
+
+    btn.innerHTML = 'Added ✓';
+
+    btn.style.opacity = '.9';
+
+    setTimeout(() => {
+      btn.innerHTML = original;
+    },2000);
+
+  });
+
+});
+
+/* ======================================================
+   NOTIFY BUTTON DEMO
+====================================================== */
+
+document.querySelectorAll('.notify').forEach(btn => {
+
+  btn.addEventListener('click', () => {
+
+    btn.innerHTML = 'Alerts Enabled ✓';
+
+    setTimeout(() => {
+      btn.innerHTML = 'Notify Me';
+    },2200);
+
+  });
+
+});
+
+/* ======================================================
+   FAKE SHARE BUTTON
+====================================================== */
+
+document.querySelectorAll('.glass-btn').forEach(btn => {
+
+  btn.addEventListener('click', () => {
+
+    alert('Wishlist share link copied!');
+
+  });
+
+});
+
+/* ======================================================
+   VIEW TOGGLE UI
+====================================================== */
+
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+
+  btn.addEventListener('click', () => {
+
+    btn.parentElement
+      .querySelectorAll('.toggle-btn')
+      .forEach(x => x.classList.remove('active'));
+
+    btn.classList.add('active');
+
+  });
+
+});
+
+/* ======================================================
+   SEARCH DEMO
+====================================================== */
+
+const searchInput = document.querySelector('.search input');
+
+if(searchInput){
+
+  searchInput.addEventListener('keyup', (e)=>{
+
+    const value = e.target.value.toLowerCase();
+
+    document.querySelectorAll('.wishlist-card').forEach(card=>{
+
+      const title = card.innerText.toLowerCase();
+
+      if(title.includes(value)){
+        card.style.display = 'grid';
+      }else{
+        card.style.display = 'none';
+      }
+
+    });
+
+  });
+
+}
+
+/* ======================================================
+   MOBILE ALERT DISMISS
+====================================================== */
+
+const banner = document.querySelector('.alert-banner');
+
+if(window.innerWidth < 768){
+
+  banner.addEventListener('click', ()=>{
+
+    banner.style.display='none';
+
+  });
+
+}
+
+</script>
+
+</body>
+</html>
