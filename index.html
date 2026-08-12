@@ -6362,7 +6362,118 @@ window.addEventListener("load",()=>{
 
   </div>
 
+<!-- HERO: big left image (50%), four right cards (2x2) (50%), looping accessible slider -->
+    <section class="hero" aria-label="Hero and featured">
+      <div class="hero-left" id="heroSlider" aria-roledescription="carousel" aria-label="Promotions" tabindex="0">
+        <img src="images/download-1.jpg" alt="Summer collection banner" loading="eager">
+        <div class="hero-overlay">
+          <div>
+            <h1 style="margin:0 0 6px">Feel Good. Look Great.</h1>
+            <p class="helper">Soft essentials, bold statements. Up to <strong>40% off</strong>.</p>
+            <div class="hero-ctas">
+              <button class="btn btn-primary" id="shopNow">Shop Now</button>
+              <button class="btn btn-ghost" id="learnMore">Learn More</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <article class="mini-card" aria-label="Card 1">
+          <img src="images/diningtable.jpg" alt="Eco tees" loading="lazy">
+          <div>
+            <h3 style="margin:6px 0">Eco Tees</h3>
+            <p class="helper">Breathable, organic, everyday staples.</p>
+          </div>
+          <div class="foot"><span class="pill">New</span><button class="btn btn-ghost" data-cat="tees">Explore</button></div>
+        </article>
+        <article class="mini-card" aria-label="Card 2">
+          <img src="images/dc6325d17f827ccfc274b04d65cd0421.jpg" alt="City sneakers" loading="lazy">
+          <div>
+            <h3 style="margin:6px 0">City Sneakers</h3>
+            <p class="helper">Comfort meets performance.</p>
+          </div>
+          <div class="foot"><span class="pill" style="background:var(--accent);color:#1f1300">Deal</span><button class="btn btn-ghost" data-cat="sneakers">Shop</button></div>
+        </article>
+        <article class="mini-card" aria-label="Card 3">
+          <img src="images/65761237_MzAwLTQwMC02NTVlNDMxMmMzLTE-338355277.jpg" alt="Athleisure sets" loading="lazy">
+          <div>
+            <h3 style="margin:6px 0">Athleisure Sets</h3>
+            <p class="helper">Mix, match, move.</p>
+          </div>
+          <div class="foot"><span class="pill" style="background:#60a5fa;color:#001229">Popular</span><button class="btn btn-ghost" data-cat="athleisure">Browse</button></div>
+        </article>
+        <article class="mini-card" aria-label="Card 4">
+          <img src="images/5ec68ce7dfef3e715640a318_cover-1230416600.jpg" alt="Accessories" loading="lazy">
+          <div>
+            <h3 style="margin:6px 0">Accessories</h3>
+            <p class="helper">Finish the look.</p>
+          </div>
+          <div class="foot"><span class="pill" style="background:#f472b6;color:#240013">Hot</span><button class="btn btn-ghost" data-cat="accessories">See More</button></div>
+        </article>
+      </div>
+    </section><!-- MEN FEATURED -->
+<section class="section" aria-labelledby="menHeading">
+  <h2 id="menHeading">Men • Featured</h2>
+  <div class="grid mw" id="menGrid" aria-label="Men product grid">
+    
+    <!-- Product Card -->
+    <div class="product-card">
+      <img src="images/kitchen.jpg" alt="Classic White Shirt" class="product-img">
+      <div class="product-info">
+        <h3 class="product-title">Classic White Shirt</h3>
+        <p class="product-price">$45.00</p>
+        <div class="product-rating" aria-label="4 out of 5 stars">
+          ★★★★☆
+        </div>
+        <div class="product-actions">
+          <button class="btn add-cart" onclick="addToCart('Classic White Shirt')">Add to Cart</button>
+          <button class="btn wishlist" onclick="addToWishlist('Classic White Shirt')">♡</button>
+          <button class="btn quickview" onclick="quickView('Classic White Shirt')">👁 Quick View</button>
+        </div>
+      </div>
+    </div>
 
+    <div class="product-card">
+      <img src="images/sofa1.jpg" alt="Leather Sneakers" class="product-img">
+      <div class="product-info">
+        <h3 class="product-title">Leather Sneakers</h3>
+        <p class="product-price">$89.99</p>
+        <div class="product-rating">★★★★★</div>
+        <div class="product-actions">
+          <button class="btn add-cart" onclick="addToCart('Leather Sneakers')">Add to Cart</button>
+          <button class="btn wishlist" onclick="addToWishlist('Leather Sneakers')">♡</button>
+          <button class="btn quickview" onclick="quickView('Leather Sneakers')">👁 Quick View</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add more product cards dynamically via JS if needed -->
+  </div>
+</section>
+<!-- JS -->
+<script>
+  function addToCart(product) {
+    alert(product + " added to cart!");
+    // integrate with cart system
+  }
+
+  function addToWishlist(product) {
+    alert(product + " added to wishlist!");
+    // integrate with wishlist system
+  }
+
+  function quickView(product) {
+    alert("Quick view of " + product);
+    // open product modal
+  }
+</script>
+
+<section class="section" aria-labelledby="womenHeading">
+  <h2 id="womenHeading">Women • Featured</h2>
+  <div class="grid mw" id="womenGrid" aria-label="Women grid with one big and four small cards">
+    <!-- populated via JS -->
+  </div>
+</section>
         
 <!-- FLASH SALES -->
 <div class="home-carousel-section">
@@ -6786,118 +6897,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
-    <!-- HERO: big left image (50%), four right cards (2x2) (50%), looping accessible slider -->
-    <section class="hero" aria-label="Hero and featured">
-      <div class="hero-left" id="heroSlider" aria-roledescription="carousel" aria-label="Promotions" tabindex="0">
-        <img src="images/download-1.jpg" alt="Summer collection banner" loading="eager">
-        <div class="hero-overlay">
-          <div>
-            <h1 style="margin:0 0 6px">Feel Good. Look Great.</h1>
-            <p class="helper">Soft essentials, bold statements. Up to <strong>40% off</strong>.</p>
-            <div class="hero-ctas">
-              <button class="btn btn-primary" id="shopNow">Shop Now</button>
-              <button class="btn btn-ghost" id="learnMore">Learn More</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="hero-right">
-        <article class="mini-card" aria-label="Card 1">
-          <img src="images/diningtable.jpg" alt="Eco tees" loading="lazy">
-          <div>
-            <h3 style="margin:6px 0">Eco Tees</h3>
-            <p class="helper">Breathable, organic, everyday staples.</p>
-          </div>
-          <div class="foot"><span class="pill">New</span><button class="btn btn-ghost" data-cat="tees">Explore</button></div>
-        </article>
-        <article class="mini-card" aria-label="Card 2">
-          <img src="images/dc6325d17f827ccfc274b04d65cd0421.jpg" alt="City sneakers" loading="lazy">
-          <div>
-            <h3 style="margin:6px 0">City Sneakers</h3>
-            <p class="helper">Comfort meets performance.</p>
-          </div>
-          <div class="foot"><span class="pill" style="background:var(--accent);color:#1f1300">Deal</span><button class="btn btn-ghost" data-cat="sneakers">Shop</button></div>
-        </article>
-        <article class="mini-card" aria-label="Card 3">
-          <img src="images/65761237_MzAwLTQwMC02NTVlNDMxMmMzLTE-338355277.jpg" alt="Athleisure sets" loading="lazy">
-          <div>
-            <h3 style="margin:6px 0">Athleisure Sets</h3>
-            <p class="helper">Mix, match, move.</p>
-          </div>
-          <div class="foot"><span class="pill" style="background:#60a5fa;color:#001229">Popular</span><button class="btn btn-ghost" data-cat="athleisure">Browse</button></div>
-        </article>
-        <article class="mini-card" aria-label="Card 4">
-          <img src="images/5ec68ce7dfef3e715640a318_cover-1230416600.jpg" alt="Accessories" loading="lazy">
-          <div>
-            <h3 style="margin:6px 0">Accessories</h3>
-            <p class="helper">Finish the look.</p>
-          </div>
-          <div class="foot"><span class="pill" style="background:#f472b6;color:#240013">Hot</span><button class="btn btn-ghost" data-cat="accessories">See More</button></div>
-        </article>
-      </div>
-    </section><!-- MEN FEATURED -->
-<section class="section" aria-labelledby="menHeading">
-  <h2 id="menHeading">Men • Featured</h2>
-  <div class="grid mw" id="menGrid" aria-label="Men product grid">
     
-    <!-- Product Card -->
-    <div class="product-card">
-      <img src="images/kitchen.jpg" alt="Classic White Shirt" class="product-img">
-      <div class="product-info">
-        <h3 class="product-title">Classic White Shirt</h3>
-        <p class="product-price">$45.00</p>
-        <div class="product-rating" aria-label="4 out of 5 stars">
-          ★★★★☆
-        </div>
-        <div class="product-actions">
-          <button class="btn add-cart" onclick="addToCart('Classic White Shirt')">Add to Cart</button>
-          <button class="btn wishlist" onclick="addToWishlist('Classic White Shirt')">♡</button>
-          <button class="btn quickview" onclick="quickView('Classic White Shirt')">👁 Quick View</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="product-card">
-      <img src="images/sofa1.jpg" alt="Leather Sneakers" class="product-img">
-      <div class="product-info">
-        <h3 class="product-title">Leather Sneakers</h3>
-        <p class="product-price">$89.99</p>
-        <div class="product-rating">★★★★★</div>
-        <div class="product-actions">
-          <button class="btn add-cart" onclick="addToCart('Leather Sneakers')">Add to Cart</button>
-          <button class="btn wishlist" onclick="addToWishlist('Leather Sneakers')">♡</button>
-          <button class="btn quickview" onclick="quickView('Leather Sneakers')">👁 Quick View</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add more product cards dynamically via JS if needed -->
-  </div>
-</section>
-<!-- JS -->
-<script>
-  function addToCart(product) {
-    alert(product + " added to cart!");
-    // integrate with cart system
-  }
-
-  function addToWishlist(product) {
-    alert(product + " added to wishlist!");
-    // integrate with wishlist system
-  }
-
-  function quickView(product) {
-    alert("Quick view of " + product);
-    // open product modal
-  }
-</script>
-
-<section class="section" aria-labelledby="womenHeading">
-  <h2 id="womenHeading">Women • Featured</h2>
-  <div class="grid mw" id="womenGrid" aria-label="Women grid with one big and four small cards">
-    <!-- populated via JS -->
-  </div>
-</section>
 <!-- Dynamic sections: New Arrivals, Best Sellers, Special Offers, Most Liked -->
 <section class="section" aria-label="Dynamic product rows">
   <div style="display:grid;gap:8px">
