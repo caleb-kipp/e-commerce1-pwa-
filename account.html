@@ -1290,9 +1290,81 @@ button,input,select{font-family:inherit;}
 
   content: "";
 
-  position: absolute;
+const STORAGE_CRYPTO = {
+  passphrase: 'ShopEase_Profile_Local_Encryption_v1',
+  salt: 'ShopEase_LocalStorage_Salt_v1',
+  iterations: 100000
+};
 
-  top: 20%;
+function toBase64(bytes){
+  return btoa(String.fromCharCode(...bytes));
+}
+
+function fromBase64(b64){
+  return new Uint8Array(atob(b64).split('').map(c=>c.charCodeAt(0)));
+}
+
+async function deriveStorageKey(){
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey(
+    'raw',
+    enc.encode(STORAGE_CRYPTO.passphrase),
+    'PBKDF2',
+    false,
+    ['deriveKey']
+  );
+
+  return crypto.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt: enc.encode(STORAGE_CRYPTO.salt),
+      iterations: STORAGE_CRYPTO.iterations,
+      hash: 'SHA-256'
+    },
+    baseKey,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+}
+
+async function getStorage(key, fallback=[]){
+  try{
+    const raw = localStorage.getItem(key);
+    if(!raw) return fallback;
+
+    const payload = JSON.parse(raw);
+    if(!payload || !payload.iv || !payload.data) return fallback;
+
+    const cryptoKey = await deriveStorageKey();
+    const decrypted = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: fromBase64(payload.iv) },
+      cryptoKey,
+      fromBase64(payload.data)
+    );
+
+    return JSON.parse(new TextDecoder().decode(decrypted)) || fallback;
+  }catch(e){
+    return fallback;
+  }
+}
+
+async function setStorage(key, value){
+  const cryptoKey = await deriveStorageKey();
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const plaintext = new TextEncoder().encode(JSON.stringify(value));
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    cryptoKey,
+    plaintext
+  );
+
+  localStorage.setItem(key, JSON.stringify({
+    v: 1,
+    iv: toBase64(iv),
+    data: toBase64(new Uint8Array(ciphertext))
+  }));
+}
 
   right: 0;
 
@@ -1434,22 +1506,8 @@ button,input,select{font-family:inherit;}
                 <div class="track-label">Confirmed</div>
               </div>
 
-              <div class="track-step active">
-                <div class="track-dot"></div>
-                <div class="track-label">Shipped</div>
-              </div>
-
-              <div class="track-step active">
-                <div class="track-dot"></div>
-                <div class="track-label">Out for Delivery</div>
-              </div>
-
-              <div class="track-step">
-                <div class="track-dot"></div>
-                <div class="track-label">Delivered</div>
-              </div>
-
-            </div>
+/* =========================================================
+   PROFILE
 
             <div class="quick-grid">
               <button class="quick-btn">Buy Again</button>
@@ -1465,7 +1523,7 @@ button,input,select{font-family:inherit;}
              WISHLIST
         ================================================== -->
 
-        <section class="section">
+async function saveProfileForm(e){
 
           <div class="section-head">
             <h2>Wishlist & Saved</h2>
@@ -1474,25 +1532,9 @@ button,input,select{font-family:inherit;}
 
           <div class="horizontal-scroll">
 
-            <div class="mini-card">
-              <div class="mini-image">
-                <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1200&auto=format&fit=crop">
-              </div>
-              <div class="mini-meta">
-                <h3>Wishlist</h3>
-                <p>15 items saved</p>
-              </div>
-            </div>
+  await saveProfile(profile);
 
-            <div class="mini-card">
-              <div class="mini-image">
-                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop">
-              </div>
-              <div class="mini-meta">
-                <h3>Saved for Later</h3>
-                <p>8 products waiting</p>
-              </div>
-            </div>
+  await renderProfile();
 
             <div class="mini-card">
               <div class="mini-image">
@@ -1963,7 +2005,7 @@ function showToast(message){
   document.body.appendChild(toast);
 
   setTimeout(() => {
-    toast.style.opacity = '0';
+4    toast.style.opacity = '0';
     toast.style.transition = '.3s ease';
   }, 2200);
 
